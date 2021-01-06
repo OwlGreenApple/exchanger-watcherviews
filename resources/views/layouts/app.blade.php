@@ -11,6 +11,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('assets/js/app.js') }}" defer></script>
+    <script src="{{ asset('assets/js/jquery-3.2.1.min.js') }}" async></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -18,6 +19,18 @@
 
     <!-- Styles -->
     <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+
+    <!-- Pricing -->
+    @if(Request::is('pricing')) 
+      <link href="{{ asset('assets/css/pricing.css') }}" rel="stylesheet">
+    @endif
+
+    <!-- Pricing -->
+    @if(Request::is('summary')) 
+      <link href="{{asset('assets/css/summary.css')}}" rel="stylesheet" >
+    @endif
+
 </head>
 <body>
     <div id="app">
@@ -52,6 +65,10 @@
                                 </li>
                             @endif
                         @else
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('pricing') }}">{{ __('Pricing') }}</a>
+                            </li>
+
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
