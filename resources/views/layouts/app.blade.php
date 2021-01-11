@@ -11,7 +11,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('assets/js/app.js') }}" defer></script>
-    <script src="{{ asset('assets/js/jquery-3.2.1.min.js') }}" async></script>
+    <script src="{{ asset('assets/js/jquery-3.2.1.min.js') }}"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -26,9 +26,15 @@
       <link href="{{ asset('assets/css/pricing.css') }}" rel="stylesheet">
     @endif
 
-    <!-- Pricing -->
-    @if(Request::is('summary')) 
+    <!-- Summary -->
+    @if(Request::is('summary') || Request::is('register')) 
       <link href="{{asset('assets/css/summary.css')}}" rel="stylesheet" >
+      <link href="{{asset('assets/css/custom-select.css')}}" rel="stylesheet" >
+
+      <!-- Intl Dialing Code -->
+      <link href="{{ asset('/assets/css/intl-input-custom.css') }}" rel="stylesheet" />
+      <link href="{{ asset('/assets/intl-tel-input/css/intlTelInput.min.css') }}" rel="stylesheet" />
+      <script type="text/javascript" src="{{ asset('/assets/intl-tel-input/js/intlTelInput.js') }}"></script> 
     @endif
 
 </head>
@@ -64,6 +70,11 @@
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
                             @endif
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('pricing') }}">{{ __('Pricing') }}</a>
+                            </li>
+
                         @else
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url('pricing') }}">{{ __('Pricing') }}</a>
@@ -96,5 +107,6 @@
             @yield('content')
         </main>
     </div>
+
 </body>
 </html>

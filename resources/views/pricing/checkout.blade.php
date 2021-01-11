@@ -153,14 +153,14 @@
         {
           $('#loader').hide();
           $('.div-loading').removeClass('background-load');
-          $(".notif").html('<div class="alert alert-danger">Harga paket tidak valid.</div>');
+          $(".notif").html('<div class="alert alert-danger">Invalid Package.</div>');
         }
 
       },
       error : function(xhr){
         $('#loader').hide();
         $('.div-loading').removeClass('background-load');
-        console.log(xhr,responseText);
+        console.log(xhr.responseText);
       }
     });
   }

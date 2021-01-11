@@ -12,6 +12,20 @@ function getPackage()
     return $package;
 }
 
+//ID PACKAGE VALIDATION
+function validationPackage($idpackage)
+{
+    $packageid = ["0","1","2"];
+    if(in_array($idpackage, $packageid))
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }    
+}
+
 //GET PACKAGE ADMIN FEE
 function getPackageFee($package)
 {

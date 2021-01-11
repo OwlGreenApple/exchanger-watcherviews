@@ -38,14 +38,14 @@
         <div class="card checkout-card card-step-1 filled" id="cardStep1">
         <div class="card-header">
           <div class="d-flex align-items-center">
-            <h2 class="h3" id="header-step1">1. <?php if ($is_login) { ?>Account verification<?php } else { ?>Create an account <?php } ?></h2>
+            <h2 class="h3" id="header-step1">1. <?php if ($is_login == false) { ?>Account verification<?php } else { ?>Create an account <?php } ?></h2>
           </div>
         </div>
         <!-- End Card Header -->
         <div class="card-body">
           <!-- Card Data Summary -->
           <div class="card-data-summary show" id="step-1">
-						<?php if ($is_login) { ?>
+						<?php if ($is_login == true) { ?>
             <p>Your order confirmation will be emailed to:</p>
             <span class="sumo-psuedo-link">{{Auth::user()->email}}</span>
 						<?php } else { ?>
@@ -73,10 +73,11 @@
                         </span>
                       </label>
                       <input type="text" id="phone" name="phone" class="form-control" required/>
-                      <span class="error phone"></span>
+                      
 
                       <input id="hidden_country_code" type="hidden" class="form-control" name="code_country" />
-                     <input name="data_country" type="hidden" /> 
+                      <input name="data_country" type="hidden" /> 
+                      <span class="error code_country"></span>
                     </div>
 
                     <div class="form-group">
@@ -121,6 +122,7 @@
                 <div class="mt-4 mb-3"><sb>Already Have An Account? <a href="" id="link-to-login">Log in Here</a></sb></div>
 							</div>
 							<div id="div-login" style="display:none;">
+                <span id="login-error"><!-- error login --></span>
 								<form class="add-contact" method="POST" id="form-login">
 										@csrf
 										 <div class="form-group">
@@ -197,7 +199,8 @@
       <tr>
         <td class="sumo-td-name">
           <div class="sumo-title">
-            <b><!-- <php echo session('order')['namapakettitle'] ?> -->Namapaketitle</b>
+            <!-- <b><php echo session('order')['namapakettitle'] ?></b> -->
+            <b><?php echo session('order')['namapaket'] ?></b>
             
           </div>
         </td>
@@ -273,7 +276,8 @@
         <tr>
           <td class="sumo-td-name">
             <div class="sumo-title">
-              <b><<!-- php echo session('order')['namapakettitle'] ?> --> Namapakettitle</b>
+              <!-- <b><php echo session('order')['namapakettitle'] ?></b> -->
+              <b><?php echo session('order')['namapaket'] ?></b>
               
             </div>
           </td>
@@ -354,15 +358,15 @@
                 
                 <li class="d-flex">
                   <img class="sumo-icon" width="auto" height="20px" src="https://appsumo2.b-cdn.net/static/images/svg/calendar.svg">
-                  <span style="font-style: italic;">Award winning developer, use our applications with ease in mind. We spent countless hours working hard to develop the best software & we committed to make it better each day.</span>
+                  <span class="pl-2" style="font-style: italic;">Award winning developer, use our applications with ease in mind. We spent countless hours working hard to develop the best software & we committed to make it better each day.</span>
                 </li>
                 <li class="d-flex">
                   <img class="sumo-icon" width="auto" height="20px" src="https://appsumo2.b-cdn.net/static/images/svg/lifebuoy.svg">
-                  <span style="font-style: italic;">Preferred customer support. We take pride in going above and beyond to solve issues and keep our customers happy.<br>Email or simply chat with our Customer support.</span>
+                  <span class="pl-2" style="font-style: italic;">Preferred customer support. We take pride in going above and beyond to solve issues and keep our customers happy.<br>Email or simply chat with our Customer support.</span>
                 </li>
                 <li class="d-flex">
                   <img class="sumo-icon" width="auto" height="20px" src="https://appsumo2.b-cdn.net/static/images/svg/message-text.svg">
-                  <span style="font-style: italic;">We give best deal and savings on pricing packages everytime, on top of that make sure you checked our Coupon page every now and then, to get more discounts & promotions.</span>
+                  <span class="pl-2" style="font-style: italic;">We give best deal and savings on pricing packages everytime, on top of that make sure you checked our Coupon page every now and then, to get more discounts & promotions.</span>
                 </li>
               </ul>
             </div>
@@ -489,25 +493,14 @@
 
 					var data = jQuery.parseJSON(result);
 					
-					if (data.success == '1') {
+					if (data.success == 1) {
 						$(".step-2").show();
             $(".bsub").show();
 						$("#step-1").html('<p>Your order confirmation will be emailed to:</p><span class="sumo-psuedo-link">'+data.email+'</span>');
-
-            if(data.status_upgrade == 1) //false which mean upgrade
-            {
-              $("input[name='status_upgrade']").prop('disabled',false);
-              // $(".upgrade").show();
-              $(".total_price").html('Rp '+'<strike>'+formatNumber(data.price)+'</strike> '+data.total);
-              // $("input[name='status_upgrade']").prop('disabled',false);
-            }
-           /* else
-            {
-               $(".upgrade").hide(); 
-            }*/
 					} 
-					else {
-						alert(data.message);
+					else 
+          {
+						$("#login-error").html('<div class="alert alert-danger">'+data.message+'</div>');
 					}
 				},
         error : function(xhr)
