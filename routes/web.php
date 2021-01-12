@@ -23,9 +23,6 @@ Route::get('/', function () {
 
 Auth::routes();
 
-//HOME OR DAHSBOARD
-Route::get('home', [Home::class, 'index'])->name('home');
-
 //ORDER
 Route::get('pricing',[Orders::class, 'index']);
 Route::get('thankyou',[Orders::class, 'thankyou']);
@@ -33,12 +30,15 @@ Route::post('payment',[Orders::class, 'payment']);
 Route::get('summary',[Orders::class, 'summary']);
 Route::post('submit-summary',[Orders::class, 'submit_summary']);
 
-
 //AUTH AJAX
 Route::post('register',[Register::class, 'register']);
 Route::post('loginajax',[Login::class, 'loginAjax']);// user login via ajax
 
-/*Route::group(['middleware' => ['web','auth']], function () {
-
+/*LOGIN USER*/
+Route::group(['middleware' => ['web','auth']], function () {
+  //HOME OR DAHSBOARD
+  Route::get('home', [Home::class, 'index'])->name('home');
+  Route::get('profile',[Home::class , 'profile']);
+  Route::post('update-profile',[Home::class , 'update_profile'])->middleware('profile');
+  Route::get('history-order',[Home::class, 'order_history']);
 });
-*/

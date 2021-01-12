@@ -81,35 +81,14 @@
     </div>
 </div>
 
-<script src="{{ asset('/assets/intl-tel-input/callback.js') }}" type="text/javascript"></script>
+<script type="text/javascript" src="{{ asset('/assets/intl-tel-input/callback.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/intl-tel-input/js/custom-intl.js') }}"></script> 
 <script type="text/javascript">
   $(function()
   {
-    getDataFromCountry();
-    countryChange();
-    fixLayoutInputPhoneCountry();
     agreement();
     registerAjax();
   });
-
-  function getDataFromCountry()
-  {
-     var data_country = $(".iti__selected-flag").attr('data-country');
-     $("input[name='data_country']").val(data_country);
-  }
-
-  function countryChange()
-  {
-     jQuery("#phone").on('countrychange', function(e, countryData){
-        var data_country = $(".iti__selected-flag").attr('data-country');
-        $("input[name='data_country']").val(data_country);
-    })
-  } 
-
-  function fixLayoutInputPhoneCountry()
-  {
-      $(".iti").addClass('w-100');
-  }
 
   function agreement(){
     $("input[name=agreement]").click(function(){

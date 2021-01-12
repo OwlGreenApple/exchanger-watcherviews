@@ -21,13 +21,19 @@
     <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
 
+    <!-- Data Table -->
+    <link href="{{ asset('/assets/DataTables/datatables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('/assets/DataTables/Responsive/css/responsive.dataTables.min.css') }}" rel="stylesheet">
+    <script defer type="text/javascript" src="{{ asset('/assets/DataTables/datatables.min.js') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('/assets/DataTables/Responsive/js/dataTables.responsive.min.js') }}"></script> 
+
     <!-- Pricing -->
     @if(Request::is('pricing')) 
       <link href="{{ asset('assets/css/pricing.css') }}" rel="stylesheet">
     @endif
 
     <!-- Summary -->
-    @if(Request::is('summary') || Request::is('register')) 
+    @if(Request::is('summary') || Request::is('register') || Request::is('profile')) 
       <link href="{{asset('assets/css/summary.css')}}" rel="stylesheet" >
       <link href="{{asset('assets/css/custom-select.css')}}" rel="stylesheet" >
 
@@ -39,6 +45,11 @@
 
 </head>
 <body>
+     <!--Loading Bar-->
+    <div class="div-loading">
+      <div id="loader" style="display: none;"></div>  
+    </div> 
+
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
@@ -78,6 +89,10 @@
                         @else
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url('pricing') }}">{{ __('Pricing') }}</a>
+                            </li> 
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('history-order') }}">Orders and Confirm</a>
                             </li>
 
                             <li class="nav-item dropdown">
@@ -86,6 +101,8 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ url('profile') }}">Profile</a>
+
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
