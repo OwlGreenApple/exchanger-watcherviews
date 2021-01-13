@@ -26,13 +26,14 @@ function validationPackage($idpackage)
     }    
 }
 
-//GET PACKAGE ADMIN FEE
-function getPackageFee($package)
+//GET CELEBFANS RATES (PRICE PER 100.000 COINS)
+function getPackageRate($package)
 {
     $pckg = [
-      getPackage()[0]['package'] => ['fee'=>35,'extra'=>10], //pro
-      getPackage()[1]['package'] => ['fee'=>25,'extra'=>20], //pro
-      getPackage()[2]['package'] => ['fee'=>15,'extra'=>30], //pro
+      'free' => 10000, //free
+      getPackage()[0]['package'] => 9000, //pro
+      getPackage()[1]['package'] => 8250, //master
+      getPackage()[2]['package'] => 7250, //super
     ];
 
     return $pckg[$package];

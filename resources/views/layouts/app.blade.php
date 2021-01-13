@@ -103,6 +103,12 @@
                               </li>
                             @else
                               <li class="nav-item">
+                                  <a class="nav-link" href="{{ url('buy-coins') }}">Buy Coins</a>
+                              </li> 
+                              <li class="nav-item">
+                                  <a class="nav-link" href="{{ url('buy-coins') }}">Exchange Coins</a>
+                              </li>
+                              <li class="nav-item">
                                   <a class="nav-link" href="{{ url('history-order') }}">Orders and Confirm</a>
                               </li>
                             @endif

@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisterController as Register;
 use App\Http\Controllers\Auth\LoginController as Login;
 use App\Http\Controllers\HomeController as Home;
 use App\Http\Controllers\OrderController as Orders;
+use App\Http\Controllers\CoinsController as Coins;
 use App\Http\Controllers\Admin\AdminController as Admin;
 
 /*
@@ -46,6 +47,9 @@ Route::group(['middleware' => ['web','auth']], function () {
 
   //ORDER
   Route::post('confirm-payment',[Orders::class, 'confirm_payment_order']); 
+
+  //BUY COINS
+  Route::get('buy-coins',[Coins::class, 'index']);
 });
 
 /*ADMIN USER*/

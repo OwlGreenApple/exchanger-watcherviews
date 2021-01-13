@@ -18,14 +18,6 @@
       <hr>
     </div>
 
-      @if (session('error') )
-      <div class="col-md-12 ">
-        <div id="pesan" class="alert alert-danger">
-            {{session('error')}}
-          </div>
-      </div>
-      @endif
-
     <div class="col-md-12">
       <form class="responsive" id="content">
         @if(count($orders) > 0)
