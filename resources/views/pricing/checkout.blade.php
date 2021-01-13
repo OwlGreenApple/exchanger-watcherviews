@@ -114,11 +114,11 @@
 
   function order(){
     $.ajax({
-      type: 'POST',
-      url: "{{url('payment')}}",
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       },
+      type: 'POST',
+      url: "{{url('payment')}}",
       data: {
        /* price : $("select[name='idproof'] option:selected").attr('data-price'),
         package : $("select[name='idproof'] option:selected").attr('data-paket'),*/

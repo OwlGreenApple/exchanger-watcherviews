@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
 use Carbon\Carbon;
 use App\Models\Orders;
-use Session, DB;
+use Session, DB, Storage;
 
 class OrderController extends Controller
 {
@@ -115,6 +115,7 @@ class OrderController extends Controller
       }
     }
 
+    //USER SUBMIT ORDER FROM SUMMARY PAGE
     public function submit_summary(Request $request)
     {
       $user = Auth::user();
@@ -140,6 +141,65 @@ class OrderController extends Controller
     public function thankyou()
     {
       return view('pricing.thankyou');   
+    }
+
+    //USER UPLOAD PAYMENT PROOF (BUKTI BAYAR)
+    public function confirm_payment_order(Request $request){
+      $user = Auth::user();
+
+      //konfirmasi pembayaran user
+      $order = Orders::where([['id',$request->id_confirm],['no_order',$request->no_order]])->first();
+
+      if(is_null($order))
+      {
+        $arr['status'] = 'error';
+        $arr['message'] = 'Invalid order.';
+        return response()->json($arr);
+      }
+
+      $folder = $user->email.'/buktibayar';
+
+      if($order->status==0)
+      {
+        $order->status = 1;
+
+        if($request->hasFile('buktibayar'))
+        {
+          $dir = 'bukti_bayar_celebfans/'.explode(' ',trim($user->name))[0].'-'.$user->id;
+          $filename = $order->no_order.'.jpg';
+          Storage::disk('s3')->put($dir."/".$filename, file_get_contents($request->file('buktibayar')), 'public');
+          $order->buktibayar = $dir."/".$filename;
+          
+        } else {
+          $arr['status'] = 'error';
+          $arr['message'] = 'Please upload your payment proof.';
+          return response()->json($arr);
+         /* $pathUrl = str_replace(url('/'), '', url()->previous());
+          return redirect($pathUrl)->with("error", "Upload file buktibayar terlebih dahulu");*/
+        }  
+
+        $order->note = $request->keterangan;
+
+        try{
+          $order->save();
+          $arr['status'] = 'success';
+        }
+        catch(QueryException $e)
+        {
+          // $e->getMessage();
+          $arr['status'] = 'error';
+          $arr['message'] = 'Sorry, currently our server is too busy, please try again later.';
+        }
+        
+      } else {
+        $arr['status'] = 'error';
+        $arr['message'] = 'Your order has or being confirm by admin.';
+         /* $pathUrl = str_replace(url('/'), '', url()->previous());
+          return redirect($pathUrl)->with("error", "Order telah atau sedang dikonfirmasi oleh admin.");*/
+      }
+
+      return response()->json($arr);
+      // return view('order.thankyou-confirm-payment');
     }
 
     //GENERATE ID FOR NO_ORDER

@@ -43,6 +43,11 @@
       <script type="text/javascript" src="{{ asset('/assets/intl-tel-input/js/intlTelInput.js') }}"></script> 
     @endif
 
+     <!-- Pricing -->
+    @if(Request::is('thankyou') || Request::is('thank-confirm')) 
+      <link href="{{ asset('assets/css/thankyou.css') }}" rel="stylesheet">
+    @endif
+
 </head>
 <body>
      <!--Loading Bar-->
@@ -91,9 +96,16 @@
                                 <a class="nav-link" href="{{ url('pricing') }}">{{ __('Pricing') }}</a>
                             </li> 
 
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url('history-order') }}">Orders and Confirm</a>
-                            </li>
+                            <!-- MILESTONE -->
+                            @if(Auth::user()->is_admin == 1)
+                              <li class="nav-item">
+                                  <a class="nav-link" href="{{ url('list-order') }}">Orders</a>
+                              </li>
+                            @else
+                              <li class="nav-item">
+                                  <a class="nav-link" href="{{ url('history-order') }}">Orders and Confirm</a>
+                              </li>
+                            @endif
 
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

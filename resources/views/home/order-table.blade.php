@@ -14,36 +14,25 @@
     <tbody>
        @foreach($orders as $order)
         <tr>
-          <td>{{$order->no_order}}</td>
-          <td>{{$order->package}}</td>
-          <td>{{$order->price}}</td>
-          <td>{{$order->total}}</td>
-          <td>{{$order->created_at}}</td>
-          <td>
-            @php
-              if($order->buktibayar !== null || $order->buktibayar !== "") 
-              {
-                $buktibayar = 1; 
-              }
-              else
-              {
-                $buktibayar = 0;
-              }
-            @endphp
-
-            @if($buktibayar == 1)
-              {{ $buktibayar }}
+          <td>{{$order['no_order']}}</td>
+          <td>{{$order['package']}}</td>
+          <td>{{ number_format($order['price']) }}</td>
+          <td>{{ number_format($order['total']) }}</td>
+          <td>{{$order['created_at']}}</td>
+          <td class="text-center">
+            @if($order['buktibayar'] !== 0)
+              <a class="open_proof" data-href="{!! Storage::disk('s3')->url($order['buktibayar']) !!}">View</a>
             @else
               -
             @endif
           </td>
-          <td>-</td>
-          <td>
-            @if($order->status==0)
-              <button type="button" class="btn btn-primary btn-confirm" data-toggle="modal" data-target="#confirm-payment" data-id="{{$order->id}}" data-no-order="{{$order->no_order}}" data-package="{{$order->package}}" data-total="{{$order->grand_total}}" data-discount="{{$order->discount}}" data-date="{{$order->created_at}}" data-keterangan="" style="font-size: 13px; padding: 5px 8px;">
+          <td>{{$order['note']}}</td>
+          <td class="text-center">
+            @if($order['status']==0)
+              <button type="button" class="btn btn-primary btn-confirm" data-toggle="modal" data-target="#confirm-payment" data-id="{{$order['id']}}" data-no-order="{{$order['no_order']}}" data-package="{{$order['package']}}" data-total="{{$order['total']}}" data-date="{{$order['created_at']}}" data-keterangan="" style="font-size: 13px; padding: 5px 8px;">
                 Confirm Payment
               </button>
-            @elseif($order->status==1)
+            @elseif($order['status']==1)
               <b style="color: orange">Waiting Admin Confirmation</b>
             @else 
                 <b style="color: green">Confirmed</b>

@@ -89,23 +89,30 @@ class HomeController extends Controller
             }
             else
             {
-              $buktibayar = 1;
+              $buktibayar = $row->buktibayar;
             }
 
             $data[] = array(
+              'id'=>$row->id,
               'no_order'=>$row->no_order,
               'package'=>$row->package,
               'price'=>$row->price,
               'total'=>$row->total,
               'created_at'=>$row->created_at,
               'buktibayar'=>$buktibayar,
+              'note'=>$row->note,
+              'status'=>$row->status
             );
           }
         }
 
-        dd($data);
+        return view('home.orders',['orders'=>$data]);
+    }
 
-        return view('home.orders',['orders'=>$orders]);
+    //THANK YOU PAGE FOR USER CONFIRM ORDER
+    public function confirm_thank_you()
+    {
+      return view('home.thankyou-confirm-payment');
     }
 
 /* end home controller class */

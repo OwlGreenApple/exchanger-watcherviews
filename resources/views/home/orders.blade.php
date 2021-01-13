@@ -10,7 +10,7 @@
       
       <h5>
         Show you previous history orders
-        <button type="button" class="btn btn-primary btn-confirm" data-toggle="modal" data-target="#transfer-information" style="font-size: 13px; padding: 5px 8px;">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#transfer-information" style="font-size: 13px; padding: 5px 8px;">
           Payment / Transfer information
         </button>        
       </h5>
@@ -28,7 +28,7 @@
 
     <div class="col-md-12">
       <form class="responsive" id="content">
-        @if($orders->count() > 0)
+        @if(count($orders) > 0)
           @include('home.order-table')
         @else
           <div class="alert bg-dashboard cardlist">
@@ -95,9 +95,12 @@
         </h5>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
-      <form id="formUpload" enctype="multipart/form-data" method="POST" action="{{ url('order-confirm-payment') }}">
+
+      <span id="error_msg"><!-- error --></span>
+
+      <form id="formUpload">
         <div class="modal-body">
-          @csrf
+         
           <input type="hidden" name="id_confirm" id="id_confirm">
 
           <div class="form-group">
@@ -126,15 +129,6 @@
             <span class="col-md-6 col-12" id="mod-total"></span>
           </div>
 
-          <div class="form-group" id="div-discount">
-            <label class="col-md-3 col-12">
-              <b>Discount</b>
-            </label>
-
-            <span class="col-md-6 col-12" id="mod-discount">
-            </span>
-          </div>
-
           <div class="form-group">
             <label class="col-md-3 col-12">
               <b>Date</b> 
@@ -158,12 +152,12 @@
               <b>Notes</b> 
             </label>
             <div class="col-md-12 col-12">
-              <textarea class="form-control" name="keterangan"></textarea>
+              <textarea maxlength="190" class="form-control" name="keterangan" placeholder="Max : 190 characters"></textarea>
             </div>
           </div>
         </div>
         <div class="modal-footer" id="foot">
-          <input type="submit" class="btn btn-primary" id="btn-confirm-ok" value="Confirm">
+          <input type="button" class="btn btn-primary" id="btn-confirm-ok" value="Confirm">
           <button class="btn" data-dismiss="modal">
             Cancel
           </button>
@@ -174,39 +168,39 @@
   </div>
 </div>
 
+<!-- Modal Show Payment proof -->
+<div class="modal fade" id="payment-proof" role="dialog">
+  <div class="modal-dialog">
+    
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modaltitle">
+          Your payment proof
+        </h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <img class="w-100" id="pyproof" />
+      </div>
+      <div class="modal-footer" id="foot">
+        <button class="btn" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+      
+  </div>
+</div>
 
 <script type="text/javascript">
 
   $(document).ready(function() {
-    // refresh_page();
     viewDetail();
-    searchOrder();
+    submit_payment();
     confirm_payment();
+    display_payment();
   });
-
-  /*function refresh_page(){
-    $.ajax({
-      type : 'GET',
-      url : "<php echo url('/order/load-order') ?>",
-      dataType: 'html',
-      beforeSend: function() {
-        $('#loader').show();
-        $('.div-loading').addClass('background-load');
-      },
-      success: function(result) {
-        $('#loader').hide();
-        $('.div-loading').removeClass('background-load');
-        $('#content').html(result);
-        // $('#pager').html(data.pager);
-      },
-      error : function(xhr)
-      {
-        $('#loader').hide();
-        $('.div-loading').removeClass('background-load');
-        console.log(xhr.responseText);
-      }
-    });
-  }*/
 
   function viewDetail()
   {
@@ -216,11 +210,61 @@
     });
   }
   
-  function searchOrder()
+  function submit_payment()
   {
-     $( "body" ).on( "click", ".btn-search", function() {
-      currentPage = '';
-      // refresh_page();
+    $( "body" ).on( "click", "#btn-confirm-ok", function() 
+    {
+      var idconf = $(".btn-confirm").attr('data-id');
+      var no_order = $(".btn-confirm").attr('data-no-order');
+      var data = new FormData($("#formUpload")[0]);
+
+      data.append('id_confirm',idconf);
+      data.append('no_order',no_order);
+     
+      $.ajax({
+         headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        type : 'POST',
+        url : "{{ url('confirm-payment') }}",
+        data : data,
+        contentType: false,
+        processData: false,
+        dataType: 'json',
+        beforeSend: function() {
+          $('#loader').show();
+          $('.div-loading').addClass('background-load');
+        },
+        success: function(result) {
+        
+          if(result.status == "error")
+          {
+            $('#loader').hide();
+            $('.div-loading').removeClass('background-load');
+            $("#error_msg").html('<div class="alert alert-danger">'+result.message+'</div>')
+          }
+          else
+          {
+            location.href="{{ url('thank-confirm') }}";
+          }
+         
+        },
+        error : function(xhr)
+        {
+          $('#loader').hide();
+          $('.div-loading').removeClass('background-load');
+          console.log(xhr.responseText);
+        }
+      });
+    });
+  }
+
+  function display_payment()
+  {
+    $("body").on("click",".open_proof", function(){
+      var img = $(this).attr('data-href');
+      $("#pyproof").attr('src',img);
+      $("#payment-proof").modal();
     });
   }
   
@@ -249,29 +293,6 @@
       $('#mod-keterangan').html(keterangan);
     });
   }
-
-  // $( "body" ).on( "click", "#btn-confirm-ok", function() 
-  // {
-    // confirm_payment();
-  // });
-
-  $( "body" ).on( "click", ".popup-newWindow", function()
-  {
-    event.preventDefault();
-    window.open($(this).attr("href"), "popupWindow", "width=600,height=600,scrollbars=yes");
-  });
-
-  $( "body" ).on( "click", ".btn-delete", function() {
-    $('#id_delete').val($(this).attr('data-id'));
-  });
-
-  $( "body" ).on( "click", "#btn-delete-ok", function() {
-    delete_order();
-  });
-
-  $(document).on('click', '.checkAll', function (e) {
-    $('input:checkbox').not(this).prop('checked', this.checked);
-  });
 
 </script>
 @endsection

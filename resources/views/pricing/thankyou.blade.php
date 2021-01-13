@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<link href="{{ asset('assets/css/thankyou.css') }}" rel="stylesheet">
+
   <div class="container konten">
     <div class="offset-sm-2 col-sm-8">
       <div class="card h-80 card-payment" style="margin-bottom: 50px">
