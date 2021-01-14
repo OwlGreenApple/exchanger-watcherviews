@@ -77,7 +77,7 @@ class HomeController extends Controller
 
     public function order_history()
     {
-        $orders = Orders::where('user_id',Auth::id())->get();
+        $orders = Orders::where('user_id',Auth::id())->orderBy('id','desc')->get();
         $data = array();
 
         if($orders->count() > 0)
@@ -96,6 +96,7 @@ class HomeController extends Controller
               'id'=>$row->id,
               'no_order'=>$row->no_order,
               'package'=>$row->package,
+              'purchased_coins'=>$row->purchased_coins,
               'price'=>$row->price,
               'total'=>$row->total,
               'created_at'=>$row->created_at,

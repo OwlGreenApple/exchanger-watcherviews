@@ -13,13 +13,13 @@
                 <div class="col-12 col-md-12">
                   <label class="text">Select Package:</label>
                   <select class="form-control" name="idproof" >
-                    @php $pg = 0 @endphp
+                    @php $pg = 1 @endphp
                     <option data-price="{!! getPackage()[$pg]['price'] !!}" id-paket="{{ $pg }}" data-paket="{!! getPackage()[$pg]['package'] !!}" selected>{!! strtoupper(getPackage()[$pg]['package']) !!} - IDR {!! str_replace(",",".",number_format(getPackage()[$pg]['price'])) !!}</option>   
 
-                    @php $pg = 1 @endphp
+                    @php $pg = 2 @endphp
                     <option data-price="{!! getPackage()[$pg]['price'] !!}" id-paket="{{ $pg }}" data-paket="{!! getPackage()[$pg]['package'] !!}">{!! strtoupper(getPackage()[$pg]['package']) !!} - IDR {!! str_replace(",",".",number_format(getPackage()[$pg]['price'])) !!}</option>  
 
-                    @php $pg = 2 @endphp
+                    @php $pg = 3 @endphp
                     <option data-price="{!! getPackage()[$pg]['price'] !!}" id-paket="{{ $pg }}" data-paket="{!! getPackage()[$pg]['package'] !!}">{!! strtoupper(getPackage()[$pg]['package']) !!} - IDR {!! str_replace(",",".",number_format(getPackage()[$pg]['price'])) !!}</option>  
 
                     <!-- <option data-price="getPackage()[$pg]['price']" data-paket="getPackage()[$pg]['package'] !!}" value=" $id "  if($id==$pg) selected endif> getActivProofPackage()[$pg]['package']  - IDR  str_replace(",",".",number_format(getActivProofPackage()[$pg]['price']))  -  str_replace(",",".",number_format(getActivProofPackage()[$pg]['credit']))  Credit</option>   -->

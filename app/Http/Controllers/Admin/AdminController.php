@@ -10,6 +10,7 @@ use Illuminate\Database\QueryException;
 use App\Models\User;
 use App\Models\Orders;
 use Storage;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
@@ -35,6 +36,7 @@ class AdminController extends Controller
               'id'=>$row->id,
               'no_order'=>$row->no_order,
               'package'=>$row->package,
+              'purchased_coins'=>$row->purchased_coins,
               'price'=>$row->price,
               'total'=>$row->total,
               'created_at'=>$row->created_at,
@@ -63,6 +65,38 @@ class AdminController extends Controller
        {
           $order->status = 2;
           $order->save();
+          $status = true;
+          $user = User::find($order->user_id);
+       }
+       catch(QueryException $e)
+       {
+          //$e->getMessage();
+          $status = false;
+       }
+
+       if($status == true && $order->package_id <> 0)
+       {
+          if($user->valid_until == "" || $user->valid_until == null)
+          {
+             $valid_until = Carbon::now()->addYear();
+          }
+          else
+          {
+             $valid_until = Carbon::parse($user->valid_until)->addYear();
+          }
+          
+          $user->membership = $order->package;
+          $user->valid_until = $valid_until;
+       } 
+
+       if($status == true && $order->package_id == 0)
+       {
+          $user->credits += $order->purchased_coins;
+       }
+
+       try
+       {
+          $user->save(); 
        }
        catch(QueryException $e)
        {

@@ -2,6 +2,7 @@
   <tr>
     <td>{{$order['no_order']}}</td>
     <td>{{$order['package']}}</td>
+    <td>{{ number_format($order['purchased_coins']) }}</td>
     <td>{{ number_format($order['price']) }}</td>
     <td>{{ number_format($order['total']) }}</td>
     <td>{{$order['created_at']}}</td>

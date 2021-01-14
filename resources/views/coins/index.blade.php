@@ -16,10 +16,12 @@
       <div class="col-md-8">
           <div class="card">
               <div class="card-body">
-                 <div><input id="total_coins" placeholder="min 500,000 coins" class="form-control w-50" /></div>
-                 <div id="rate" data-price="{!! getPackageRate('free') !!}">Price : Rp {!! str_replace(",",".",number_format(getPackageRate('free'))) !!} /100.000 coins</div>
-                 <div id="">Total : Rp <span id="total">0</span></div>
-                 <div class="btn btn-primary">Purchase</div>
+                 <span id="status_msg"><!-- message --></span>
+                 <div><input id="total_coins" class="form-control w-50" /></div>
+                 <small>Coins must be multiplied of 100,000</small>
+                 <div id="rate" data-price="{!! getPackageRate($user->membership) !!}">Price : Rp {!! str_replace(",",".",number_format(getPackageRate($user->membership))) !!} /100.000 coins</div>
+                 <div>Total : Rp <span id="total">0</span></div>
+                 <div id="purchase" class="btn btn-primary">Purchase</div>
               </div>
           </div>
       </div>
@@ -31,11 +33,11 @@
 
   $(document).ready(function(){
     check_coins();
-    check_multiply();
+    buy_coins();
   });
 
   /*DELAY ON KEYUP*/
-/*  function delay(callback, ms) {
+  function delay(callback, ms) {
     var timer = 0;
     return function() {
       var context = this, args = arguments;
@@ -44,54 +46,168 @@
         callback.apply(context, args);
       }, ms || 0);
     };
-  }  */
+  }  
 
-  function check_coins()
+  function buy_coins()
   {
-    $("#total_coins").on('keyup', function(){
-      var n = parseInt($(this).val().replace(/\D/g,''),10);
-      if(isNaN(n) == true)
+    $("#purchase").click(function(){
+      var coins = $("#total_coins").val();
+
+      if(coins_validity(coins) == true)
       {
-        $(this).val(0);
+         coins = coins.toString().replace(/(\,)/g,"");
+         coins = parseInt(coins);
+         purchase(coins);
       }
-      else
+      
+    });
+  }
+
+  function purchase(coins)
+  {
+    $.ajax({
+       headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+
+      type : 'POST',
+      url : "{{ url('purchase-coins') }}",
+      data : {"coins":coins},
+      dataType: 'json',
+      beforeSend: function() {
+        $('#loader').show();
+        $('.div-loading').addClass('background-load');
+      },
+      success: function(result) {
+      
+        $('#loader').hide();
+        $('.div-loading').removeClass('background-load');
+
+        if(result.msg == 1)
+        {
+          $("#status_msg").html('<div class="alert alert-danger">Sorry, our server is too busy, please try again later.</div>')
+        }
+        else if(result.msg == 2)
+        {
+          //serverside validation
+          $("#status_msg").html('<div class="alert alert-danger">'+result.message+'</div>')
+        }
+        else
+        {
+          location.href="{{ url('thankyou') }}";
+        }
+      },
+      error : function(xhr)
       {
-       $(this).val(n.toLocaleString());
+        $('#loader').hide();
+        $('.div-loading').removeClass('background-load');
+        console.log(xhr.responseText);
       }
     });
   }
 
-  function check_min_coin()
-  {
-    setTimeout(function(){
-        var min_coins = $(this).val();
-        console.log(min_coins);
-       /* min_coins = min_coins.replace(".","");
-        min_coins = parseInt(min_coins);
+  function check_coins()
+  { 
+    var min = 500000; //coins
+    var min_price = min/100000;
+    var price = "{{ getPackageRate($user->membership) }}";
+    price = parseInt(price);
+    var total_price = price * min_price; 
+    $("#total_coins").val(min.toLocaleString());
+    $("#total").html(formatNumber(total_price));
 
-        if(min_coins < 500000) { 
-          alert('minimum to buy is 500.000');
-          $(this).val('');
-          return false;
-        }*/
-      },900);
+    //PROCESS
+    $("#total_coins").on('keyup keypress', function()
+    {
+      var n = parseInt($(this).val().replace(/\D/g,''),10);
+      var len = $(this).val().toString().length;
+      console.log(len);
+  
+      if(isNaN(n) == true)
+      {
+        $(this).val(min.toLocaleString());
+      }
+      else if(n < min)
+      {
+        $(this).val(min.toLocaleString());
+      } 
+      else if(len >= 12)
+      {
+        var previous_price = $(this).val();
+        previous_price = previous_price.toString().replace(/\,/g,'');
+        var digit = [
+          previous_price.charAt(0),
+          previous_price.charAt(1),
+          previous_price.charAt(2),
+          previous_price.charAt(3),
+        ]
+        
+        var revert = digit[0]+digit[1]+digit[2]+digit[3]+'00000';
+        revert = parseInt(revert);
+
+        $(this).val(revert.toLocaleString());
+        calculate_coins(revert,price);
+        
+      }
+      else
+      {
+        $(this).val(n.toLocaleString());
+        calculate_coins(n,price);
+      }
+    });
+  }
+
+  function calculate_coins(coins,price)
+  {
+    var coin = coins;
+    var sum = coin/100000;
+    var total = sum * price;
+    
+    total = total.toLocaleString('fullwide', {useGrouping:false});
+    $("#price").attr('data-price',total);
+    $("#total").html(formatNumber(total));
+  }
+
+  function check_min_coin(min_coins)
+  {
+    min_coins = min_coins.toString().replace(/(\,)/g,"");
+    min_coins = parseInt(min_coins);
+
+    if(min_coins < 500000) { 
+      return false;
+    }
+    else
+    {
+      return true;
+    }
   } 
 
-  function check_multiply(coins)
+  function coins_validity(coins)
   {
-     var price = "{{ getPackageRate('free') }}";
-     price = parseInt(price);
+     if(coins === undefined)
+     {
+        return false;
+     }
+
+     if(check_min_coin(coins) == false)
+     {
+        alert('Minimum coins for purchasing is 500,000');
+        return false;
+     }
+
+     coins = coins.toString().replace(/(\,)/g,"");
      var coin = parseInt(coins);
      var total_coin = coin%100000;
       
-     if(total_coin > 0){
-      alert('Should multiple of 100.000');
-      return false;
+     if(total_coin > 0)
+     {
+       alert('The amount of coins must multiplied of 100,000');
+       return false;
      }
-
-     var sum = coin/100000;
-     var total = sum * price;
-     $("#total").html(total);
+     else
+     {
+       return true;
+     }
   }
 
   function formatNumber(num) 
@@ -106,6 +222,7 @@
        return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
     }
   }
+
 </script>
 
 @endsection

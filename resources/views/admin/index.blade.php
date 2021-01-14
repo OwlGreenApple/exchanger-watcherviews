@@ -17,6 +17,7 @@
               <thead align="center">
                 <th>No Order</th>
                 <th>Package</th>
+                <th>Purchased Coins</th>
                 <th>Price</th>
                 <th>Total</th>
                 <th>Date</th>

@@ -83,7 +83,7 @@ class OrderController extends Controller
     }
 
     // IF USER HAS LOGGED IN
-    private function payment_login($data,$log = null)
+    public function payment_login($data,$log = null)
     {
       $dt = Carbon::now();
       $str = 'ACT'.$dt->format('ymd').'-'.$dt->format('Hi');
@@ -97,6 +97,12 @@ class OrderController extends Controller
         $order->package_id = (int)$data['idpaket'];
         $order->package = $data["namapaket"];
         $order->package_title = $data["namapaket"];
+
+        if(isset($data["purchased_coins"]))
+        {
+          $order->purchased_coins = $data["purchased_coins"];
+        }
+
         $order->price = $data["price"];
         $order->total = $data["total"];
         $order->save();
@@ -108,7 +114,7 @@ class OrderController extends Controller
         $response['msg'] = 1;
       }
 
-      //if user order after login then $log = null
+      //if user doing order after login then $log = null
       if($log == null)
       {
         return response()->json($response);

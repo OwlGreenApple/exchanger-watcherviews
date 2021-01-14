@@ -18,7 +18,7 @@
             Admin kami akan membantu anda max 1x24 jam
           </p>
           <p class="card-text">
-            <a class="btn btn-success btn-confirm-thankyou" href="{{url('order')}}">
+            <a class="btn btn-success btn-confirm-thankyou" href="{{url('history-order')}}">
               KONFIRMASI TRANSFER BANK
              </a>
           </p>

@@ -3,6 +3,7 @@
     <thead align="center">
       <th>No Order</th>
       <th>Package</th>
+      <th>Purchased coins</th>
       <th>Price</th>
       <th>Total</th>
       <th>Date</th>
@@ -16,6 +17,7 @@
         <tr>
           <td>{{$order['no_order']}}</td>
           <td>{{$order['package']}}</td>
+          <td>{{ number_format($order['purchased_coins']) }}</td>
           <td>{{ number_format($order['price']) }}</td>
           <td>{{ number_format($order['total']) }}</td>
           <td>{{$order['created_at']}}</td>
@@ -51,7 +53,8 @@
   function tables()
   {
     $("#order-table").DataTable({
-      "lengthMenu": [ 10, 25, 50, 75, 100, 250, 500 ]
+      "lengthMenu": [ 10, 25, 50, 75, 100, 250, 500 ],
+      "aaSorting" : []
     });
   }
 </script>
