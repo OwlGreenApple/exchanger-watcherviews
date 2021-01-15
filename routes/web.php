@@ -51,6 +51,9 @@ Route::group(['middleware' => ['web','auth']], function () {
   //BUY COINS
   Route::get('buy-coins',[Coins::class, 'index']);
   Route::post('purchase-coins',[Coins::class, 'purchase_coins']);
+
+  //EXCHANGE COINS
+  Route::get('exchange-coins',[Coins::class, 'exchange']);
 });
 
 /*ADMIN USER*/

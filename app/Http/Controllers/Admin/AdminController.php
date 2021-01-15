@@ -74,9 +74,10 @@ class AdminController extends Controller
           $status = false;
        }
 
+       //if user order membership package
        if($status == true && $order->package_id <> 0)
        {
-          if($user->valid_until == "" || $user->valid_until == null)
+          if($user->valid_until == "" || $user->valid_until == null && ($user->membership == null || $user->membership == ""))
           {
              $valid_until = Carbon::now()->addYear();
           }
@@ -89,6 +90,7 @@ class AdminController extends Controller
           $user->valid_until = $valid_until;
        } 
 
+       // if user buyig coins
        if($status == true && $order->package_id == 0)
        {
           $user->credits += $order->purchased_coins;

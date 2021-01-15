@@ -44,4 +44,20 @@ function getPackageRate($package = null)
     return $pckg[$package];
 }
 
+//EXCHNAGE COINS RATE VIEWS/1000
+function getExchangeRate($x)
+{
+    $rate = [
+      1=>['duration'=>30,'coins'=>400000],
+      2=>['duration'=>45,'coins'=>460000],
+      3=>['duration'=>60,'coins'=>520000],
+      4=>['duration'=>90,'coins'=>640000],
+      5=>['duration'=>120,'coins'=>760000],
+      6=>['duration'=>150,'coins'=>880000],
+      7=>['duration'=>180,'coins'=>1000000]
+    ];
+
+    return $rate[$x];
+}
+
 ?>

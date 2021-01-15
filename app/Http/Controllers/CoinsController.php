@@ -75,5 +75,13 @@ class CoinsController extends Controller
       return $shop->payment_login($order);
     }
 
+    /**** EXCHANGE ****/
+
+    public function exchange()
+    {
+      $user = Auth::user();
+      return view('coins.exchange',['user'=>$user]);
+    }
+
 /*end class*/
 }

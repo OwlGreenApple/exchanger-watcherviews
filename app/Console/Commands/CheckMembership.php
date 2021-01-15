@@ -39,6 +39,7 @@ class CheckMembership extends Command
      */
     public function handle()
     {
+
         $users = User::where('membership','<>',null)->get();
         $today = Carbon::today();
 
@@ -46,8 +47,11 @@ class CheckMembership extends Command
           foreach ($users as $row):
 
             $user = User::find($row->id);
-            $valid_until = Carbon::parse($user->valid_until);
-            if($valid_until->gte($today))
+            $valid_until = Carbon::parse($user->valid_until)->setTime(0, 0, 0);
+
+            // dd($valid_until);
+
+            if($today->gte($valid_until))
             {
               $user->membership = null;
               $user->save();
