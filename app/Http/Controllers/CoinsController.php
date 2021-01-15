@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
 use App\Models\User;
 use App\Models\Orders;
+use App\Models\Exchange;
 use App\Http\Controllers\OrderController as Shop;
 
 class CoinsController extends Controller
@@ -81,6 +82,60 @@ class CoinsController extends Controller
     {
       $user = Auth::user();
       return view('coins.exchange',['user'=>$user]);
+    }
+
+    //SUBMIT EXCHANGE COINS
+    public function submit_exchange(Request $request)
+    {
+      $views = strip_tags($request->total_views);
+      $id_exchange = strip_tags($request->exchange);
+
+      $success = false;
+      $rate = getExchangeRate($id_exchange);
+      $total_views = $views * 1000;
+      $credit = $views * $rate['coins'];
+
+      try
+      {
+        $exc = new Exchange;
+        $exc->user_id = Auth::id();
+        $exc->duration = $rate['duration'];
+        $exc->coins_value = $rate['coins'];
+        $exc->id_exchange = $id_exchange;
+        $exc->total_views = $total_views;
+        $exc->save();
+        $success = true;
+      }
+      catch(QueryException $e)
+      {
+        // $e->getMessage();
+        $data['msg'] = 1;
+        return response()->json($data);
+      }
+
+      //cut user coins if eligible
+      try
+      {
+        $user = User::find(Auth::id());
+        $user->credits -= $credit;
+        $user->save();
+        $data['msg'] = 0;
+        $data['credit'] = $user->credits;
+      }
+      catch(QueryException $e)
+      {
+        // $e->getMessage();
+        $data['msg'] = 1;
+      }
+
+      return response()->json($data);
+    }
+
+    //DATATABLE EXCHANGE COINS
+    public function exchange_table()
+    {
+      $exc = Exchange::where('user_id',Auth::id())->orderBy('id')->get();
+      return view('coins.exchange-table',['data'=>$exc]);
     }
 
 /*end class*/

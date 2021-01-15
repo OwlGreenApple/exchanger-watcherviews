@@ -54,6 +54,8 @@ Route::group(['middleware' => ['web','auth']], function () {
 
   //EXCHANGE COINS
   Route::get('exchange-coins',[Coins::class, 'exchange']);
+  Route::post('exchange-submit-coins',[Coins::class, 'submit_exchange'])->middleware('exchange');
+  Route::get('exchange-table',[Coins::class, 'exchange_table']);
 });
 
 /*ADMIN USER*/

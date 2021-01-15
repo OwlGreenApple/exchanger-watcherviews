@@ -33,18 +33,21 @@
                       @endif
                     </div>
                     @endfor
+                    <div class="error exchange"></div>
 
-                    <div class="mt-3 mb-2">Your Coins : <b>{{ number_format($user->credits) }}</b></div>
+                    <div class="mt-3 mb-2">Your Coins : <b id="current_coins">{{ number_format($user->credits) }}</b></div>
                    
                     <div class="col-lg-3 col-md-4 col-sm-12 col-12 px-0 mt-2 form-inline">
                       <div class="form-group">
                         <input type="number" min="1" max="999" value="1" name="total_views" />
                         <label>&nbsp;X 1000 Views</label>
                       </div>
+                      <div class="error total_views"></div>
                      
                     </div>
                     <div class="mt-2 mb-2">Exchange Coins : <b id="total">0</b></div>
-                    <button id="purchase" type="submit" class="btn btn-primary">Purchase</button>
+
+                    <button type="button" id="purchase" type="submit" class="btn btn-primary">Purchase</button>
                   </form>
 
               </div>
@@ -55,13 +58,13 @@
   <div class="row justify-content-center mt-3 bg-white py-2">
     <h5><b>Exchange Transaction</b></h5>
     <div class="col-lg-12 table-responsive">
-      <table id="exchanged_coins" class="table">
+      <table id="exchanged_coins" class="table table-striped table-bordered">
         <thead align="center">
-          <th>Num</th>
+          <th>Created</th>
           <th>Duration</th>
-          <th>Coins</th>
+          <th>Coins Rate</th>
           <th>Views</th>
-          <th>Allocate</th>
+          <th>Status</th>
         </thead>
         <tbody id="content"></tbody>
       </table>
@@ -69,6 +72,31 @@
 
   </div>
 
+</div>
+
+<!-- Modal allocate -->
+<div class="modal fade" id="allocate" role="dialog">
+  <div class="modal-dialog">
+    
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modaltitle">
+          Allocate Views
+        </h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer" id="foot">
+        <button class="btn" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+      
+  </div>
 </div>
 
 <script type="text/javascript">
@@ -80,10 +108,11 @@
       "aaSorting" : [],
       "destroy" : true
     });
-    // format_coins();
+
+    display_table();
     calculate_coins();
     get_total_coins();
-    // buy_coins();
+    exchange_coins();
   });
 
   function get_total_coins()
@@ -117,35 +146,40 @@
     };
   } 
 
-  function format_coins()
+  function display_table()
   { 
-    var min = 1;
-    var total_coins = $("input[name='exchange']:checked").attr('data-coins');
-    $("#total_views").val(min.toLocaleString());
-    $("#total").html(formatNumber(total_coins));
-
-    $("#total_views").keyup(function(){
-      var val = $(this).val();
-      $(this).val(formatNumber(val));
+    $.ajax({
+      type : 'GET',
+      url : "{{ url('exchange-table') }}",
+      dataType: 'html',
+      beforeSend: function() {
+        $('#loader').show();
+        $('.div-loading').addClass('background-load');
+      },
+      success: function(result) {
+      
+        $('#loader').hide();
+        $('.div-loading').removeClass('background-load');
+        $("#content").html(result);
+      },
+      error : function(xhr)
+      {
+        $('#loader').hide();
+        $('.div-loading').removeClass('background-load');
+        console.log(xhr.responseText);
+      }
     });
   }
 
-  function buy_coins()
+  function exchange_coins()
   {
     $("#purchase").click(function(){
-      var coins = $("#total_coins").val();
-
-      if(coins_validity(coins) == true)
-      {
-         coins = coins.toString().replace(/(\,)/g,"");
-         coins = parseInt(coins);
-         purchase(coins);
-      }
-      
+      var data = $("#submit_exchange").serializeArray();
+      purchase(data);
     });
   }
 
-  function purchase(coins)
+  function purchase(data)
   {
     $.ajax({
        headers: {
@@ -153,8 +187,8 @@
       },
 
       type : 'POST',
-      url : "{{ url('purchase-coins') }}",
-      data : {"coins":coins},
+      url : "{{ url('exchange-submit-coins') }}",
+      data : data,
       dataType: 'json',
       beforeSend: function() {
         $('#loader').show();
@@ -172,11 +206,18 @@
         else if(result.msg == 2)
         {
           //serverside validation
-          $("#status_msg").html('<div class="alert alert-danger">'+result.message+'</div>')
+          $(".error").show();
+          $(".exchange").html(result.exchange);
+          $(".total_views").html(result.total_views);
         }
         else
         {
-          location.href="{{ url('thankyou') }}";
+           $(".error").hide();
+           $("#status_msg").html('<div class="alert alert-success">Your coins has been exchanged successfully.</div>')
+            $("#current_coins").html(formatNumber(result.credit));
+            $("input[name='total_views']").val(1);
+            calculate_coins();
+            display_table();
         }
       },
       error : function(xhr)

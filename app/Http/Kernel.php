@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
         //custom
         'profile' => \App\Http\Middleware\CheckUserProfile::class,
         'is_admin' => \App\Http\Middleware\AdminUser::class,
+        'exchange' => \App\Http\Middleware\CheckExchange::class,
     ];
 }
