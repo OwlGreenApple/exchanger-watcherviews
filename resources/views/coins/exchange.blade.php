@@ -34,18 +34,48 @@
                     </div>
                     @endfor
                     <div class="error exchange"></div>
-
-                    <div class="mt-3 mb-2">Your Coins : <b id="current_coins">{{ number_format($user->credits) }}</b></div>
                    
-                    <div class="col-lg-3 col-md-4 col-sm-12 col-12 px-0 mt-2 form-inline">
+                    <div class="col-lg-5 col-md-4 col-sm-12 col-12 px-0 mt-2">
+
                       <div class="form-group">
-                        <input type="number" min="1" max="999" value="1" name="total_views" />
-                        <label>&nbsp;X 1000 Views</label>
+                        <label>Link Video</label>
+                        <input type="text" class="form-control" name="link_video" />
                       </div>
-                      <div class="error total_views"></div>
+                      <div class="error link_video"></div>
+
+                      <div class="form-group">
+                        <label>Views</label>
+                        <input type="text" class="form-control" name="views" />
+                       <!--  <input type="number" min="1" max="999" value="1" name="total_views" />
+                        <label>&nbsp;X 1000 Views</label> -->
+                      </div>
+                      <div class="error views"></div>
+
+                      <div class="form-group form-inline">
+                        <label class="mr-2">Drip-Feed</label>
+                        <input type="checkbox" name="drip" />
+                      </div>
+                      <div class="error link_video"></div>
+
+                      <div class="form-group runs">
+                        <label>Runs</label>
+                        <input type="text" class="form-control" name="runs" value="1" />
+                      </div>
+                      <div class="error runs"></div>
+
+                      <div class="form-group form-inline">
+                        <label class="mr-2">Total Views</label>
+                        <div id="total_views" class="form-control"></div>
+                      </div>
                      
                     </div>
-                    <div class="mt-2 mb-2">Exchange Coins : <b id="total">0</b></div>
+
+                    <div class="mt-2 mb-2 input-group col-lg-7">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Total Coins Charge :</span>
+                      </div> 
+                      <b class="form-control" id="total">0</b>
+                    </div>
 
                     <button type="button" id="purchase" type="submit" class="btn btn-primary">Purchase</button>
                   </form>
@@ -63,8 +93,12 @@
           <th>Created</th>
           <th>Duration</th>
           <th>Coins Rate</th>
+          <th>Youtube Link</th>
           <th>Views</th>
-          <th>Status</th>
+          <th>Drip</th>
+          <th>Total Coins</th>
+          <th>Total Views</th>
+         <!--  <th>Status</th> -->
         </thead>
         <tbody id="content"></tbody>
       </table>
@@ -74,7 +108,7 @@
 
 </div>
 
-<!-- Modal allocate -->
+<!-- Modal allocate coins -->
 <div class="modal fade" id="allocate" role="dialog">
   <div class="modal-dialog">
     
@@ -87,6 +121,18 @@
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
       <div class="modal-body">
+
+        <form>
+         <div class="form-check-inline">
+            <label class="form-check-label">
+              <input type="radio" class="form-check-input" name="allocate" checked/>Direct
+            </label>
+         </div>
+         <div class="form-check-inline">
+            <label class="form-check-label">
+              <input type="radio" class="form-check-input" name="allocate">Drip
+            </label>
+         </div>
 
       </div>
       <div class="modal-footer" id="foot">
@@ -113,24 +159,85 @@
     calculate_coins();
     get_total_coins();
     exchange_coins();
+    check_drip();
+    calculate_drip();
   });
 
-  function get_total_coins()
+  function check_drip()
   {
-    $("input[name='total_views']").on("mouseup keyup",function(){
-        calculate_coins();
-    });
-
-    $("input[name='exchange']").change(function(){
-        calculate_coins();
+    $(".runs").hide();
+    $("input[name='drip']").click(function(){
+      var views = $("input[name='views']").val();
+      drip(views);
     });
   }
 
-  function calculate_coins()
+  function drip(views)
   {
-    var total_views = $("input[name='total_views']").val();
+    var drip = $("input[name='drip']").is(':checked');
+    var runs = 1;
+    if(drip == true)
+    {
+      $(".runs").show();
+      $("input[name='drip']").val(1);
+    }
+    else
+    {
+      $(".runs").hide();
+      $("input[name='runs']").val(runs);
+      $("input[name='drip']").val(0);
+    }
+    drip_formula(runs,views)
+  }
+
+  function calculate_drip()
+  {
+    $("input[name='runs']").on("keypress keyup",function(){
+        var val = $(this).val();
+        var views = $("input[name='views']").val();
+        drip_formula(val,views);
+    });
+  }
+
+  function drip_formula(runs,views)
+  {
+     calculate_coins(runs);
+     var calculate = runs * views;
+     $("#total_views").html(calculate);
+  }
+
+  function get_total_coins()
+  {
+    $("input[name='views']").on("keypress keyup",function(){
+        var runs = $("input[name='runs']").val();
+        drip_formula(runs,$(this).val())
+    });
+
+    $("input[name='exchange']").change(function(){
+        var runs = $("input[name='runs']").val();
+        var views = $("input[name='views']").val();
+        drip_formula(runs,views)
+    });
+  }
+
+  function calculate_coins(runs)
+  {
+    var total_coins;
+    var total_views = $("input[name='views']").val();
     var coins_price = $("input[name='exchange']:checked").attr('data-coins');
-    var total_coins = total_views * coins_price;
+    coins_price = coins_price/1000;
+
+    var drip = $("input[name='drip']").is(':checked');
+    if(drip == true)
+    {
+      total_coins = total_views * coins_price * runs;
+
+    }
+    else
+    {
+      total_coins = total_views * coins_price;
+    }
+
     $("#total").html(formatNumber(total_coins));
   } 
 

@@ -87,13 +87,16 @@ class CoinsController extends Controller
     //SUBMIT EXCHANGE COINS
     public function submit_exchange(Request $request)
     {
-      $views = strip_tags($request->total_views);
+      // dd($request->all());
+      $views = strip_tags($request->views);
       $id_exchange = strip_tags($request->exchange);
+      $drip = strip_tags($request->runs);
+      $ytlink = strip_tags($request->link_video);
 
       $success = false;
       $rate = getExchangeRate($id_exchange);
-      $total_views = $views * 1000;
-      $credit = $views * $rate['coins'];
+      $total_views = $views * $drip;
+      $credit = $total_views * ($rate['coins']/1000);
 
       try
       {
@@ -102,6 +105,12 @@ class CoinsController extends Controller
         $exc->duration = $rate['duration'];
         $exc->coins_value = $rate['coins'];
         $exc->id_exchange = $id_exchange;
+        $exc->yt_link = $ytlink;
+        $exc->views = $views;
+        if($request->drip !== null):
+          $exc->drip = $drip;
+        endif;
+        $exc->total_coins = $credit;
         $exc->total_views = $total_views;
         $exc->save();
         $success = true;

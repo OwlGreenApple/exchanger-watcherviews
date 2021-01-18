@@ -14,11 +14,12 @@ class CheckUsersCredit implements Rule
      * @return void
      */
 
-    public $idpackage;
+    public $idpackage, $views;
 
-    public function __construct($idpackage)
+    public function __construct($idpackage,$views)
     {
         $this->idpackage = $idpackage;
+        $this->views = intval($views);
     }
 
     /**
@@ -32,10 +33,26 @@ class CheckUsersCredit implements Rule
     {
         $user = User::find(Auth::id());
         $current_credits = $user->credits;
-        $coins_rate = getExchangeRate($this->idpackage)['coins'];
-        $value = $value * $coins_rate;
-        $credits = $current_credits - $value;
+        $coins_rate = intval(getExchangeRate($this->idpackage)['coins'])/1000;
+        $views = $this->views;
 
+        /*
+           in case $views > 0 then 
+           $value = $request->runs else
+           $value = $request->views
+        */
+
+        if($views > 0)
+        {
+          $value = $value * $views * $coins_rate;
+          $credits = $current_credits - $value;
+        }
+        else
+        {
+          $value = $value * $coins_rate;
+          $credits = $current_credits - $value;
+        }
+       
         if($credits < 0)
         {
           return false;
