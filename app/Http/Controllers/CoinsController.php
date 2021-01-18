@@ -107,7 +107,7 @@ class CoinsController extends Controller
         $exc->id_exchange = $id_exchange;
         $exc->yt_link = $ytlink;
         $exc->views = $views;
-        if($request->drip !== null):
+        if($request->drip == "1"):
           $exc->drip = $drip;
         endif;
         $exc->total_coins = $credit;

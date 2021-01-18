@@ -40,34 +40,32 @@
                       <div class="form-group">
                         <label>Link Video</label>
                         <input type="text" class="form-control" name="link_video" />
+                        <div class="error link_video"></div>
                       </div>
-                      <div class="error link_video"></div>
-
+                      
                       <div class="form-group">
                         <label>Views</label>
                         <input type="text" class="form-control" name="views" />
+                        <div class="error views"></div>
                        <!--  <input type="number" min="1" max="999" value="1" name="total_views" />
                         <label>&nbsp;X 1000 Views</label> -->
                       </div>
-                      <div class="error views"></div>
-
+                      
                       <div class="form-group form-inline">
                         <label class="mr-2">Drip-Feed</label>
                         <input type="checkbox" name="drip" />
                       </div>
-                      <div class="error link_video"></div>
-
+                      
                       <div class="form-group runs">
                         <label>Runs</label>
                         <input type="text" class="form-control" name="runs" value="1" />
+                        <div class="error errruns"></div>
                       </div>
-                      <div class="error runs"></div>
 
                       <div class="form-group form-inline">
                         <label class="mr-2">Total Views</label>
                         <div id="total_views" class="form-control"></div>
                       </div>
-                     
                     </div>
 
                     <div class="mt-2 mb-2 input-group col-lg-7">
@@ -211,6 +209,7 @@
     $("input[name='views']").on("keypress keyup",function(){
         var runs = $("input[name='runs']").val();
         drip_formula(runs,$(this).val())
+        $(this).val(formatting($(this).val()));
     });
 
     $("input[name='exchange']").change(function(){
@@ -218,6 +217,23 @@
         var views = $("input[name='views']").val();
         drip_formula(runs,views)
     });
+  }
+
+  function formatting(num)
+  {
+      // console.log(num);
+      num = num.toString().replace(/(\.)/g,"");
+      num = parseInt(num);
+      var max_views = 10000;
+
+      if(num > max_views)
+      {
+        return formatNumber(max_views);
+      }
+      else
+      {
+        return formatNumber(num);
+      }
   }
 
   function calculate_coins(runs)
@@ -315,14 +331,16 @@
           //serverside validation
           $(".error").show();
           $(".exchange").html(result.exchange);
-          $(".total_views").html(result.total_views);
+          $(".link_video").html(result.link_video);
+          $(".views").html(result.views);
+          $(".errruns").html(result.runs);
         }
         else
         {
            $(".error").hide();
            $("#status_msg").html('<div class="alert alert-success">Your coins has been exchanged successfully.</div>')
             $("#current_coins").html(formatNumber(result.credit));
-            $("input[name='total_views']").val(1);
+            $("input").val("");
             calculate_coins();
             display_table();
         }
