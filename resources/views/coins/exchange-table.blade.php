@@ -6,7 +6,13 @@
       <td class="text-center" style="width:10%">{{ number_format($row->coins_value) }}/1000 views</td>
       <td class="text-center" style="width:10%">{{ $row->yt_link }}</td>
       <td class="text-center" style="width:20%">{{ number_format($row->views) }}</td>
-      <td class="text-center" style="width:10%">{{ number_format($row->drip) }}</td>
+      <td class="text-center" style="width:10%">
+        @if($row->drip > 0)
+          {{ number_format($row->drip) }}
+        @else
+          -
+        @endif
+      </td>
       <td class="text-center" style="width:20%">{{ number_format($row->total_coins) }}</td>
       <td class="text-center" style="width:20%">{{ number_format($row->total_views) }}</td>
     <!--   <td class="text-center">

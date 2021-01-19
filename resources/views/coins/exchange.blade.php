@@ -51,6 +51,7 @@
                         <label>&nbsp;X 1000 Views</label> -->
                       </div>
                       
+                      @if(Auth::user()->membership == 'super')
                       <div class="form-group form-inline">
                         <label class="mr-2">Drip-Feed</label>
                         <input type="checkbox" name="drip" />
@@ -61,6 +62,7 @@
                         <input type="text" class="form-control" name="runs" value="1" />
                         <div class="error errruns"></div>
                       </div>
+                      @endif
 
                       <div class="form-group form-inline">
                         <label class="mr-2">Total Views</label>
@@ -106,43 +108,6 @@
 
 </div>
 
-<!-- Modal allocate coins -->
-<div class="modal fade" id="allocate" role="dialog">
-  <div class="modal-dialog">
-    
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modaltitle">
-          Allocate Views
-        </h5>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-      <div class="modal-body">
-
-        <form>
-         <div class="form-check-inline">
-            <label class="form-check-label">
-              <input type="radio" class="form-check-input" name="allocate" checked/>Direct
-            </label>
-         </div>
-         <div class="form-check-inline">
-            <label class="form-check-label">
-              <input type="radio" class="form-check-input" name="allocate">Drip
-            </label>
-         </div>
-
-      </div>
-      <div class="modal-footer" id="foot">
-        <button class="btn" data-dismiss="modal">
-          Close
-        </button>
-      </div>
-    </div>
-      
-  </div>
-</div>
-
 <script type="text/javascript">
 
   $(document).ready(function()
@@ -157,8 +122,11 @@
     calculate_coins();
     get_total_coins();
     exchange_coins();
+    <?php if(Auth::user()->membership == 'super'): ?>
     check_drip();
+    <?php endif; ?>
     calculate_drip();
+    drip_formula(1,100);
   });
 
   // GLOBAL VARIABLE
@@ -188,7 +156,7 @@
       $("input[name='runs']").val(runs);
       $("input[name='drip']").val(0);
     }
-    drip_formula(runs,views)
+    drip_formula(runs,views);
   }
 
   function calculate_drip()
@@ -213,8 +181,6 @@
      {
         runs = 1;
      }
-
-     console.log(runs);
      calculate_coins(runs);
      var calculate = runs * views;
      $("#total_views").html(formatNumber(calculate));
@@ -222,6 +188,9 @@
 
   function calculate_coins(runs)
   {
+    if(runs === undefined){
+      runs = 1;
+    }
     var total_coins;
     var total_views = $("input[name='views']").val();
     var coins_price = $("input[name='exchange']:checked").attr('data-coins');
@@ -405,8 +374,9 @@
            $(".error").hide();
            $("#status_msg").html('<div class="alert alert-success">Your coins has been exchanged successfully.</div>')
             $("#current_coins").html(formatNumber(result.credit));
-            $("input").val("");
-            calculate_coins();
+            $("input[name='link_video']").val("");
+            $("input[name='views']").val(100);
+            calculate_coins(1);
             display_table();
         }
       },

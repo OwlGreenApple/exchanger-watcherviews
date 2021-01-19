@@ -17,6 +17,7 @@ class CreateDripsTable extends Migration
             $table->id();
             $table->BigInteger('exchange_id');
             $table->DateTime('schedule');
+            $table->Integer('drip');
             $table->timestamps();
             $table->boolean('status')->default(0);
         });

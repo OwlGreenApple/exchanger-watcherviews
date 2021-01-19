@@ -17,6 +17,7 @@ class CheckExchange
      * @param  \Closure  $next
      * @return mixed
      */
+    
     public function handle(Request $request, Closure $next)
     {
         $maxvalue = 10000;
