@@ -9,6 +9,14 @@
 
                 <div class="card-body">
                   <form class="add-contact" id="form-register">
+
+                    @if(Cookie::get('referral') !== null)
+                    <div class="form-group">
+                      <label>Referral</label>
+                      <div class="form-control">{{ Cookie::get('referral') }}</div>                    
+                    </div>
+                    @endif
+
                     <div class="form-group">
                       <label>Name*</label>
                       <input type="text" name="username" class="form-control" placeholder="Input Your Name" required />
@@ -113,13 +121,16 @@
         return false;
       }
 
+      var data = $("#form-register").serializeArray();
+      data.push({'name':'referral','value': "{{Cookie::get('referral')}}" });
+
       $.ajax({
         type: 'POST',
         url: "{{url('register')}}",
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
-        data: $("#form-register").serializeArray(),
+        data: ,
         dataType: 'text',
         beforeSend: function() {
           $('#loader').show();

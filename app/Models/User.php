@@ -22,7 +22,9 @@ class User extends Authenticatable
         'password',
         'phone',
         'code_country',
-        'gender'
+        'gender',
+        'referal_id',
+        'referal_link'
     ];
 
     /**

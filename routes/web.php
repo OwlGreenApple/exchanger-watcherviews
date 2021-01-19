@@ -36,6 +36,9 @@ Route::post('submit-summary',[Orders::class, 'submit_summary']);
 Route::post('register',[Register::class, 'register']);
 Route::post('loginajax',[Login::class, 'loginAjax']);// user login via ajax
 
+//REFERRAL FORM
+Route::get('referral-reg/{link}',[Home::class, 'referral_register']);
+
 /*LOGIN USER*/
 Route::group(['middleware' => ['web','auth']], function () {
   //HOME OR DAHSBOARD
@@ -44,6 +47,10 @@ Route::group(['middleware' => ['web','auth']], function () {
   Route::post('update-profile',[Home::class , 'update_profile'])->middleware('profile');
   Route::get('history-order',[Home::class, 'order_history']);
   Route::get('thank-confirm',[Home::class, 'confirm_thank_you']);
+
+  //REFERRAL
+  Route::get('referral',[Home::class, 'referral']);
+  Route::get('referral-link',[Home::class, 'generate_referral_link']);
 
   //ORDER
   Route::post('confirm-payment',[Orders::class, 'confirm_payment_order']); 
