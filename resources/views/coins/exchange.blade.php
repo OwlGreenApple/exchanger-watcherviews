@@ -45,7 +45,7 @@
                       
                       <div class="form-group">
                         <label>Views</label>
-                        <input type="text" class="form-control" name="views" />
+                        <input type="text" class="form-control" name="views" value="100" />
                         <div class="error views"></div>
                        <!--  <input type="number" min="1" max="999" value="1" name="total_views" />
                         <label>&nbsp;X 1000 Views</label> -->
@@ -161,19 +161,22 @@
     calculate_drip();
   });
 
+  // GLOBAL VARIABLE
+  const max_value = 10000;
+
   function check_drip()
   {
     $(".runs").hide();
     $("input[name='drip']").click(function(){
       var views = $("input[name='views']").val();
-      drip(views);
+      drip_display(views);
     });
   }
 
-  function drip(views)
+  function drip_display(views)
   {
-    var drip = $("input[name='drip']").is(':checked');
     var runs = 1;
+    var drip = $("input[name='drip']").is(':checked');
     if(drip == true)
     {
       $(".runs").show();
@@ -194,46 +197,27 @@
         var val = $(this).val();
         var views = $("input[name='views']").val();
         drip_formula(val,views);
+        $(this).val(formatting(val));
     });
   }
 
   function drip_formula(runs,views)
   {
+     views = parseInt(views.toString().replace(/(\.)/g,""));
+     var drip = $("input[name='drip']").is(':checked');
+
+     if(drip == true){
+        runs = formatted_runs(runs);
+     }
+     else
+     {
+        runs = 1;
+     }
+
+     console.log(runs);
      calculate_coins(runs);
      var calculate = runs * views;
-     $("#total_views").html(calculate);
-  }
-
-  function get_total_coins()
-  {
-    $("input[name='views']").on("keypress keyup",function(){
-        var runs = $("input[name='runs']").val();
-        drip_formula(runs,$(this).val())
-        $(this).val(formatting($(this).val()));
-    });
-
-    $("input[name='exchange']").change(function(){
-        var runs = $("input[name='runs']").val();
-        var views = $("input[name='views']").val();
-        drip_formula(runs,views)
-    });
-  }
-
-  function formatting(num)
-  {
-      // console.log(num);
-      num = num.toString().replace(/(\.)/g,"");
-      num = parseInt(num);
-      var max_views = 10000;
-
-      if(num > max_views)
-      {
-        return formatNumber(max_views);
-      }
-      else
-      {
-        return formatNumber(num);
-      }
+     $("#total_views").html(formatNumber(calculate));
   }
 
   function calculate_coins(runs)
@@ -256,6 +240,45 @@
 
     $("#total").html(formatNumber(total_coins));
   } 
+
+  function formatted_runs(runs)
+  {
+    runs = formatting(runs);
+    runs = runs.toString().replace(/(\.)/g,"");
+    runs = parseInt(runs);
+    return runs;
+  }
+
+  function get_total_coins()
+  {
+    $("input[name='views']").on("keypress keyup",function(){
+        var runs = formatted_runs($("input[name='runs']").val());
+        drip_formula(runs,$(this).val())
+        $(this).val(formatting($(this).val()));
+    });
+
+    $("input[name='exchange']").change(function(){
+        var runs = $("input[name='runs']").val();
+        var views = $("input[name='views']").val();
+        drip_formula(runs,views)
+    });
+  }
+
+  function formatting(num)
+  {
+      // console.log(num);
+      num = num.toString().replace(/(\.)/g,"");
+      num = parseInt(num);
+
+      if(num > max_value)
+      {
+        return formatNumber(max_value);
+      }
+      else
+      {
+        return formatNumber(num);
+      }
+  }
 
   /*DELAY ON KEYUP*/
   function delay(callback, ms) {
@@ -298,8 +321,50 @@
   {
     $("#purchase").click(function(){
       var data = $("#submit_exchange").serializeArray();
-      purchase(data);
+
+      if(validator() == true)
+      {
+        purchase(data);
+      }
     });
+  }
+
+  function validator()
+  {
+    var link_video = $("input[name='link_video']").val();
+    var views = $("input[name='views']").val();
+    var drip = $("input[name='drip']").is(':checked');
+    var runs = $("input[name='runs']").val();
+
+    if(link_video.toString().length == 0)
+    {
+      alert('Field youtube link cannot be empty');
+      return false;
+    }
+    else if(views.toString().length == 0)
+    {
+      alert('Field views cannot be empty');
+      return false;
+    }
+    else if(views < 100)
+    {
+      alert('Field views at least 100');
+      return false;
+    }
+    else if(drip == true && runs < 1)
+    {
+      alert('Field runs at least 1');
+      return false;
+    }
+    else if(drip == true && runs.toString().length == 0)
+    {
+      alert('Field runs cannot be empty');
+      return false;
+    }
+    else
+    {
+      return true;
+    }
   }
 
   function purchase(data)

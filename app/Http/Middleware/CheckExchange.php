@@ -19,15 +19,17 @@ class CheckExchange
      */
     public function handle(Request $request, Closure $next)
     {
+        $maxvalue = 10000;
         $rules = [
           'exchange'=>['required','numeric','min:1','max:7'],
           'link_video'=>['required',new ValidYoutubeLink],
-          'views'=>['bail','required','numeric','min:100','max:90000',new CheckUsersCredit($request->exchange,0)]
+          'views'=>['bail','required','numeric','min:100','max:'.$maxvalue.'',new CheckUsersCredit($request->exchange,0)]
         ];
 
         if($request->drip == "1")
         {
-           $rules['runs'] = ['bail','required','numeric','min:1','max:10000',new CheckUsersCredit($request->exchange,$request->views)];
+           $rules['views'] = ['bail','required','numeric','min:100','max:'.$maxvalue.''];
+           $rules['runs'] = ['bail','required','numeric','min:1','max:'.$maxvalue.'',new CheckUsersCredit($request->exchange,$request->views)];
         }
 
         $validator = Validator::make($request->all(),$rules);
