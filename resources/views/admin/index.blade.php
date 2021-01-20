@@ -13,7 +13,7 @@
 
     <div class="col-md-12">
       <form class="responsive">
-          <table class="table responsive" id="order-table">
+          <table class="table" id="order-table">
               <thead align="center">
                 <th>No Order</th>
                 <th>Package</th>

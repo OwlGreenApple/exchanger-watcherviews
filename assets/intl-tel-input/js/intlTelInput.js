@@ -936,7 +936,7 @@
                     this.customDialCode.innerHTML = data_code;
                    
                      // for hidden input
-                    if ( (this.options.pageHiddenInput == 'register') || (this.options.pageHiddenInput == 'summary') || (this.options.pageHiddenInput == 'profile') )
+                    if ( (this.options.pageHiddenInput == 'register') || (this.options.pageHiddenInput == 'summary') || (this.options.pageHiddenInput == 'profile') || (this.options.pageHiddenInput == 'referral-reg') )
                     {
                         document.getElementById('hidden_country_code').value=data_code;
                     }

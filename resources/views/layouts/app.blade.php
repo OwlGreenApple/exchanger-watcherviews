@@ -33,7 +33,7 @@
     @endif
 
     <!-- Summary -->
-    @if(Request::is('summary') || Request::is('register') || Request::is('profile')) 
+    @if(Request::is('summary') || Request::is('register') || Request::is('profile') || Request::segment(1) == 'referral-reg') 
       <link href="{{asset('assets/css/summary.css')}}" rel="stylesheet" >
       <link href="{{asset('assets/css/custom-select.css')}}" rel="stylesheet" >
 
@@ -124,7 +124,10 @@
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ url('profile') }}">Profile</a>
-                                    <a class="dropdown-item" href="{{ url('referral') }}">Referral</a>
+                                    @if(Auth::user()->is_admin == 0)
+                                      <a class="dropdown-item" href="{{ url('referral') }}">Referral</a>
+                                      <a class="dropdown-item" href="{{ url('transaction') }}">History Transaction</a>
+                                    @endif
 
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();

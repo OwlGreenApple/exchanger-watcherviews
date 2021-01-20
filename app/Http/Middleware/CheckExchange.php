@@ -20,6 +20,13 @@ class CheckExchange
     
     public function handle(Request $request, Closure $next)
     {
+        $reqs = [
+          'exchange'=>$request->exchange,
+          'link_video'=>$request->link_video,
+          'views'=>(int)str_replace(".","",$request->views),
+          'runs'=>(int)str_replace(".","",$request->runs),
+        ];
+
         $maxvalue = 10000;
         $rules = [
           'exchange'=>['required','numeric','min:1','max:7'],
@@ -33,7 +40,7 @@ class CheckExchange
            $rules['runs'] = ['bail','required','numeric','min:1','max:'.$maxvalue.'',new CheckUsersCredit($request->exchange,$request->views)];
         }
 
-        $validator = Validator::make($request->all(),$rules);
+        $validator = Validator::make($reqs,$rules);
 
         if($validator->fails() == true)
         {
@@ -48,7 +55,8 @@ class CheckExchange
 
            return response()->json($errors);
         }
-       
-        return $next($request);
+
+        $req = new Request($reqs);
+        return $next($req);
     }
 }

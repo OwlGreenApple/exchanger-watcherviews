@@ -23,8 +23,8 @@ class User extends Authenticatable
         'phone',
         'code_country',
         'gender',
-        'referal_id',
-        'referal_link'
+        'referral_id',
+        'referral_link'
     ];
 
     /**

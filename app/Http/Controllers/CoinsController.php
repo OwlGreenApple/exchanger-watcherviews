@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Orders;
 use App\Models\Exchange;
 use App\Models\Drips;
+use App\Models\Transaction;
 use App\Http\Controllers\OrderController as Shop;
 use Carbon\Carbon;
 
@@ -90,9 +91,9 @@ class CoinsController extends Controller
     public function submit_exchange(Request $request)
     {
       // dd($request->all());
-      $views = strip_tags($request->views);
+      $views = strip_tags((int)str_replace(".","",$request->views));
+      $drip = strip_tags((int)str_replace(".","",$request->runs));
       $id_exchange = strip_tags($request->exchange);
-      $drip = strip_tags($request->runs);
       $ytlink = strip_tags($request->link_video);
 
       $success = false;
@@ -124,7 +125,6 @@ class CoinsController extends Controller
         $exc->total_views = $total_views;
         $exc->save();
         $exchange_id = $exc->id;
-        $success = true;
       }
       catch(QueryException $e)
       {
@@ -141,11 +141,21 @@ class CoinsController extends Controller
         $user->save();
         $data['msg'] = 0;
         $data['credit'] = $user->credits;
+        $success = true;
       }
       catch(QueryException $e)
       {
         // $e->getMessage();
         $data['msg'] = 1;
+      }
+
+      if($success == true)
+      {
+        $trans = new Transaction;
+        $trans->user_id = Auth::id();
+        $trans->kredit = $credit;
+        $trans->source = "exchange-coins";
+        $trans->save();
       }
 
       //if user request drip and membership = super

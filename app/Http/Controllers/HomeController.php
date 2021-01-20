@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\QueryException;
 use App\Models\User;
 use App\Models\Orders;
+use App\Models\Transaction;
 use Storage, Cookie;
 
 class HomeController extends Controller
@@ -128,7 +129,13 @@ class HomeController extends Controller
        {
           $referral_link = null;
        }
-       return view('referral.index',['user'=>$user,'referral_link'=>$referral_link]);
+     
+       $data = [
+        'user'=>User::where('referral_id',$user->id)->get(),
+        'referral_link'=>$referral_link
+       ];
+
+       return view('referral.index',$data);
     }
 
     //CREATE USER REFERRAL LINK
@@ -154,33 +161,44 @@ class HomeController extends Controller
     public function referral_register($referral_link)
     {
       $ref = User::where('referral_link',$referral_link)->first();
+
       if(!is_null($ref))
       {
-        $this->setCookie($referral_link);
+        $this->setCookie($ref->name,$ref->id);
       }
-      return view('auth.register');
+      else
+      {
+        return redirect('/register');
+      }
+
+      if(Cookie::get('referral') == null && Cookie::get('refid') == null)
+      {
+        $referral = [
+          'ref_name'=>$ref->name,
+          'ref_id'=>$ref->id
+        ];
+      }
+      else
+      {
+        $referral = [
+          'ref_name'=>Cookie::get('referral'),
+          'ref_id'=>Cookie::get('refid')
+        ];
+      }
+
+      return view('auth.register',$referral);
     } 
 
-    private function setCookie($referral_link)
+    private function setCookie($referral_link,$referral_id)
     {
       if(!empty($referral_link))
       {
           Cookie::queue(Cookie::make('referral', $referral_link, 1440*1));
+          Cookie::queue(Cookie::make('refid', $referral_id, 1440*1));
       } else {
           return redirect('/');
       }
     }
-
-   /* private function delCookie($cookie_email,$cookie_pass)
-    {
-      if(!empty($cookie_email) && !empty($cookie_pass))
-      {
-          Cookie::queue(Cookie::forget('email'));
-          Cookie::queue(Cookie::forget('password'));
-      } else {
-          return redirect()->route('login');
-      }
-    }*/
 
     //GENERATE USER REFERRAL LINK
     public function createRandomLinkName(){
@@ -199,6 +217,13 @@ class HomeController extends Controller
     public function generateRandomLinkName(){
         $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
         return substr(str_shuffle($permitted_chars), 0, 8);
+    }
+
+    /*TRANSACTION*/
+    public function transaction()
+    {
+      $trans = Transaction::where('user_id',Auth::id())->orderBy('id','desc')->get();
+      return view('home.transaction',['transaction'=>$trans]);
     }
 
 /* end home controller class */

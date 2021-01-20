@@ -7,6 +7,10 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Database\QueryException;
+use Carbon\Carbon;
+use App\Models\Transaction;
+use App\Models\User;
 use Cookie;
 
 class LoginController extends Controller
@@ -40,16 +44,6 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
-
-   /* public function authenticated(){
-      if ($request->ajax()) {
-            Auth::loginUsingId($user->id);
-            return response()->json([
-                'success' => 1,
-                'email' => $request->email,
-            ]);
-        }
-    }*/
 
     public function loginAjax(Request $request)
     {
@@ -102,6 +96,129 @@ class LoginController extends Controller
         } else {
             return redirect()->route('login');
         }
+    }
+
+    //IF USER SUCCESSFULLY LOGIN
+    public function authenticated()
+    {
+       return $this->get_daily_bonus();
+    }
+
+    //CHECK USER LOGIN BONUS DAILY
+    public function get_daily_bonus()
+    {
+      $user = Auth::user();
+      $already_get_bonus = false; 
+      $total_login = $user->total_login;
+      $get_bonus = Carbon::createFromFormat('Y-m-d H:i:s', $user->date_bonus);
+
+      if (is_null($user->updated_at)){
+        $last_activity = Carbon::now()->subDays(7);
+      }
+      else {
+        $last_activity = Carbon::createFromFormat('Y-m-d H:i:s', $user->updated_at);
+      }
+
+      //determine user get bonus or not
+      if ( $last_activity->diffInDays(Carbon::now()) >= 1 && $last_activity->diffInDays(Carbon::now()) < 2  ) {
+        $already_get_bonus = false; // blm dapat bonus
+      }
+      else if ( $last_activity->diffInDays(Carbon::now()) < 1  ) {
+        $already_get_bonus = true;
+      }
+      else if ( $last_activity->diffInDays(Carbon::now()) >= 2  ) {
+        $already_get_bonus = false;
+      }
+
+      /*FIRST CHECK*/
+      //TO PREVENT IF USER LOGIN AND THEN LOGOUT SEVERAL TIMES TO GET BONUSES
+      if($get_bonus->diffInDays(Carbon::now()) < 1)
+      {
+         $eligible = false;
+         $user->date_bonus = Carbon::now();
+         $user->save();  
+         return redirect('home');
+      }
+
+      /*SECOND CHECK*/
+      //check if user last login eligible to get bonus
+      if($already_get_bonus == true)
+      {
+          $total_login++;
+          $this->giftDaily($total_login);
+          if($total_login > 7)
+          {
+              $total_login = 1;
+          }
+      }
+      else
+      {
+          return redirect('home');
+      }
+      
+      try 
+      {
+        $user->total_login= $total_login;
+        $user->date_bonus = Carbon::now();
+        $user->save();  
+        return redirect('home');
+      }
+      catch (QueryException $e) {
+        /*$res['error'] = true;
+        $res['message'] = $e->getMessage();*/
+        return redirect('login');
+      }
+    }
+
+    private function giftDaily($total_login)
+    {
+      $user = User::find(Auth::id());
+      $credit = 0;
+
+      if($total_login == 1)
+      {
+        $credit = 2000;
+      }
+      elseif($total_login == 2)
+      {
+        $credit = 4000;
+      }
+      elseif($total_login == 3)
+      {
+        $credit = 6000;
+      }
+      elseif($total_login == 4)
+      {
+        $credit = 8000;
+      }
+      elseif($total_login == 5)
+      {
+        $credit = 10000;
+      }
+      elseif($total_login == 6)
+      {
+        $credit = 15000;
+      }
+      elseif($total_login == 7)
+      {
+        $credit = 20000;
+      }
+
+      try
+      {
+        $user->credits += $credit;
+        $user->save();
+
+        $trans = new Transaction;
+        $trans->user_id = Auth::id();
+        $trans->debit = $credit;
+        $trans->source = "daily-".$total_login."-bonus";
+        $trans->save();
+      }
+      catch(QueryException $e)
+      {
+        //$e->getMessage();
+      }
     }
 
 /* end AUTH */

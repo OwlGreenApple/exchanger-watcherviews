@@ -9,14 +9,15 @@
 
                 <div class="card-body">
                   <form class="add-contact" id="form-register">
-
-                    @if(Cookie::get('referral') !== null)
+                   
+                    @if($ref_name !== null)
                     <div class="form-group">
                       <label>Referral</label>
-                      <div class="form-control">{{ Cookie::get('referral') }}</div>                    
+                      <div class="form-control">{{ $ref_name }}</div>    
+                      <span class="error referral" role="alert"></span>         
                     </div>
                     @endif
-
+                   
                     <div class="form-group">
                       <label>Name*</label>
                       <input type="text" name="username" class="form-control" placeholder="Input Your Name" required />
@@ -122,7 +123,7 @@
       }
 
       var data = $("#form-register").serializeArray();
-      data.push({'name':'referral','value': "{{Cookie::get('referral')}}" });
+      data.push({'name':'referral','value': "{{ $ref_id }}" });
 
       $.ajax({
         type: 'POST',
@@ -130,29 +131,27 @@
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
-        data: ,
-        dataType: 'text',
+        data: data,
+        dataType: 'json',
         beforeSend: function() {
           $('#loader').show();
           $('.div-loading').addClass('background-load');
         },
-        success: function(result) {
-          $('#loader').hide();
-          $('.div-loading').removeClass('background-load');
-
-          var data = jQuery.parseJSON(result);
-
+        success: function(data) {
           if (data.success == 1) 
           {
             $(".error").hide();
             location.href="{{url('home')}}"
           } 
           else {
+             $('#loader').hide();
+             $('.div-loading').removeClass('background-load');
              $(".error").show();
              $(".username").html(data.username);
              $(".email").html(data.email);
              $(".code_country").html(data.code_country);
              $(".phone").html(data.phone);
+             $(".referral").html(data.referral);
           }
         },
         error: function(xhr,attr,throwable)

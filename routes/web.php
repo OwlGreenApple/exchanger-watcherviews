@@ -52,6 +52,9 @@ Route::group(['middleware' => ['web','auth']], function () {
   Route::get('referral',[Home::class, 'referral']);
   Route::get('referral-link',[Home::class, 'generate_referral_link']);
 
+  //TRANSACTION
+  Route::get('transaction',[Home::class, 'transaction']);
+
   //ORDER
   Route::post('confirm-payment',[Orders::class, 'confirm_payment_order']); 
 

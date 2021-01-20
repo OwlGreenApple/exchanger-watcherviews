@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\QueryException;
 use App\Models\User;
 use App\Models\Orders;
+use App\Models\Transaction;
 use Storage;
 use Carbon\Carbon;
 
@@ -61,21 +62,11 @@ class AdminController extends Controller
     public function confirm_order(Request $request)
     {
        $order = Orders::find($request->id_confirm);
-       try 
-       {
-          $order->status = 2;
-          $order->save();
-          $status = true;
-          $user = User::find($order->user_id);
-       }
-       catch(QueryException $e)
-       {
-          //$e->getMessage();
-          $status = false;
-       }
+       $order->status = 2;
+       $user = User::find($order->user_id);
 
        //if user order membership package
-       if($status == true && $order->package_id <> 0)
+       if($order->package_id <> 0)
        {
           if($user->valid_until == "" || $user->valid_until == null && ($user->membership == null || $user->membership == ""))
           {
@@ -90,15 +81,31 @@ class AdminController extends Controller
           $user->valid_until = $valid_until;
        } 
 
-       // if user buyig coins
-       if($status == true && $order->package_id == 0)
+       // BUYING COINS
+       if($order->package_id == 0)
        {
           $user->credits += $order->purchased_coins;
+
+          //referral gift
+          $ref_id = $user->referral_id; 
+          if($ref_id > 0)
+          {
+             $purchased_coins = $order->purchased_coins;
+             $this->gift_referral($ref_id,$purchased_coins,$user->name);
+          }
+
+          //COINS TRANSACTIONS
+          $trans = new Transaction;
+          $trans->user_id = $user->id;
+          $trans->debit = $order->purchased_coins;
+          $trans->source = "buying-coins";
+          $trans->save();
        }
 
        try
        {
-          $user->save(); 
+          $user->save();
+          $order->save(); 
        }
        catch(QueryException $e)
        {
@@ -107,6 +114,37 @@ class AdminController extends Controller
 
        $data = self::get_order_data();
        return view('admin.table',['orders'=>$data]);
+    }
+
+    //IF REFERRAL USER BUYING COINS THEN REFERRER GET 10% BONUS COINS
+    private function gift_referral($ref_id,$purchased_coins,$userbuy)
+    {
+      $refuser = User::find($ref_id);
+
+      //PREVENT IF REFERRER USER BANNED (if someday this feature add on) OR DELETED.
+      if(is_null($refuser))
+      {
+        return;
+      }
+
+      $gift_coins = $purchased_coins / 10;
+      $refuser->credits += $gift_coins;
+
+      try
+      {
+        $refuser->save();
+        //coins transaction
+        $trans = new Transaction;
+        $trans->user_id = $ref_id;
+        $trans->debit = $gift_coins;
+        $trans->source = "referral-gift-buying-".$userbuy;
+        $trans->save();
+      }
+      catch(QueryException $e)
+      {
+        //$e->getMessage();
+      }
+      
     }
 
 /* END ADMIN CONTROLLER */

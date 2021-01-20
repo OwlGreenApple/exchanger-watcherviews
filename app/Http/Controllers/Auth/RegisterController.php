@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use App\Models\Transaction;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -15,7 +16,9 @@ use App\Rules\CheckPlusCode;
 use App\Rules\CheckCallCode;
 use App\Rules\InternationalTel;
 use App\Rules\CheckUserPhone;
+use App\Rules\CheckUserId;
 use Illuminate\Http\Request;
+use Cookie;
 
 class RegisterController extends Controller
 {
@@ -64,12 +67,23 @@ class RegisterController extends Controller
         ]);*/
 
         return Validator::make($data, [
-            'username' => ['required','string','max:255'],
-            'email' => ['required','string', 'email', 'max:255', 'unique:users'],
+            'username' => ['required','string','min:3','max:50'],
+            'email' => ['required','string', 'email', 'max:50', 'unique:users'],
             'code_country' => ['required',new CheckPlusCode,new CheckCallCode],
-            'phone' => ['required','numeric','digits_between:6,18',new InternationalTel,new CheckUserPhone($data['code_country'],null)]
+            'phone' => ['required','numeric','digits_between:6,18',new InternationalTel,new CheckUserPhone($data['code_country'],null)],
+            'referral'=>[new CheckUserId]
         ]);
     }
+
+     public function showRegistrationForm()
+     {
+        
+        $referral = [
+          'ref_name'=>Cookie::get('referral'),
+          'ref_id'=>Cookie::get('refid')
+        ];
+        return view('auth.register',$referral);
+     }
 
     /**
      * Create a new user instance after a valid registration.
@@ -88,6 +102,7 @@ class RegisterController extends Controller
           'code_country'=>strip_tags($data['data_country']),
           'password' => Hash::make($generated_password),
           'gender'=>strip_tags($data['gender']),
+          'referral_id'=>strip_tags($data['referral']),
         ]);
 
         Mail::to($data['email'])->send(new RegisteredEmail($generated_password,$data['username']));
@@ -109,6 +124,7 @@ class RegisterController extends Controller
               'email'=>$err->first('email'),
               'code_country'=>$err->first('code_country'),
               'phone'=>$err->first('phone'),
+              'referral'=>$err->first('referral'),
             ];
             return response()->json($errors);
         }
@@ -124,36 +140,94 @@ class RegisterController extends Controller
         $signup = $this->create($data);
         $order = null;
 
+        //LOGIN USER ID
         Auth::loginUsingId($signup->id);
+
+        //COINS GIFT
+        if($data['referral'] <> null)
+        {
+          $this->ref_coins_gift($data['referral'],$signup);
+        }
+
+        //DELETE COOKIE REFERRAL
+        if(Cookie::get('referral') <> null || Cookie::get('refid') <> null)
+        {
+            $this->delCookie();
+        }
         return response()->json([
             'success' => 1,
             'email' => $signup->email,
         ]);
     }
 
+    //REGISTER USERS -- ALL REGISTER VIA AJAX
     public function register(Request $request)
     {   
         $req = $request->all();
-        
-        //REGISTER VIA AJAX
         if($request->ajax() == true)
         {
           return $this->ajax_validator($req,$request);
         }
-
-        //REGISTER VIA FORM
-        $signup = $this->create($req);
-        $order = null;
-        
-        Auth::loginUsingId($signup->id);
-        if ($request->ajax()) {
-            return response()->json([
-                'success' => 1,
-                'email' => $signup->email,
-            ]);
+        else
+        {
+          return redirect('login');
         }
-        else {
-          return redirect('home');
+    }
+
+    //DELETE REFERRAL COOKIE WHEN REFERRAL USER SUCCESSFULLY REGISTERED
+    private function delCookie()
+    {
+      Cookie::queue(Cookie::forget('referral'));
+      Cookie::queue(Cookie::forget('refid'));
+    }
+
+    private function ref_coins_gift($userid,$newuser)
+    {
+        $coins = 0;
+        $user = User::find($userid);
+        $referal = User::where('referral_id',$userid)->get()->count();
+        if($referal == 0)
+        {
+           return;
+        }
+
+        $formula = $referal % 5;
+
+        if($formula == 1)
+        {
+          $coins = 10000;
+        }
+        elseif($formula == 2)
+        {
+          $coins = 12000;
+        }
+        elseif($formula == 3)
+        {
+          $coins = 14000;
+        }
+        elseif($formula == 4)
+        {
+          $coins = 16000;
+        }
+        else
+        {
+          $coins = 18000;
+        }
+
+        try{
+          $user->credits += $coins;
+          $user->save();
+
+          //note to database transaction coins.
+          $trans = new Transaction;
+          $trans->user_id = $userid;
+          $trans->debit = $coins;
+          $trans->source = "referral-gift-user-".$newuser->name;
+          $trans->save();
+        }
+        catch(QueryException $e)
+        {
+          //$e->getMessage();
         }
     }
 

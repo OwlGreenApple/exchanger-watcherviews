@@ -122,9 +122,7 @@
     calculate_coins();
     get_total_coins();
     exchange_coins();
-    <?php if(Auth::user()->membership == 'super'): ?>
     check_drip();
-    <?php endif; ?>
     calculate_drip();
     drip_formula(1,100);
   });
@@ -182,6 +180,12 @@
         runs = 1;
      }
      calculate_coins(runs);
+
+     if(views > max_value)
+     {
+       views = max_value;
+     }
+
      var calculate = runs * views;
      $("#total_views").html(formatNumber(calculate));
   }
@@ -191,10 +195,17 @@
     if(runs === undefined){
       runs = 1;
     }
+
     var total_coins;
     var total_views = $("input[name='views']").val();
     var coins_price = $("input[name='exchange']:checked").attr('data-coins');
     coins_price = coins_price/1000;
+    total_views = total_views.toString().replace(/(\.)/g,"");
+    total_views = parseInt(total_views);
+
+    if(total_views > max_value){
+      total_views = max_value;
+    }
 
     var drip = $("input[name='drip']").is(':checked');
     if(drip == true)
@@ -221,12 +232,22 @@
   function get_total_coins()
   {
     $("input[name='views']").on("keypress keyup",function(){
-        var runs = formatted_runs($("input[name='runs']").val());
+        var run_value =$("input[name='runs']").val();
+        if(run_value === undefined)
+        {
+          run_value = 1;
+        }
+        var runs = formatted_runs(run_value);
         drip_formula(runs,$(this).val())
         $(this).val(formatting($(this).val()));
     });
 
     $("input[name='exchange']").change(function(){
+        var run_value =$("input[name='runs']").val();
+        if(run_value === undefined)
+        {
+          run_value = 1;
+        }
         var runs = $("input[name='runs']").val();
         var views = $("input[name='views']").val();
         drip_formula(runs,views)
@@ -302,8 +323,8 @@
   {
     var link_video = $("input[name='link_video']").val();
     var views = $("input[name='views']").val();
-    var drip = $("input[name='drip']").is(':checked');
     var runs = $("input[name='runs']").val();
+    var drip = $("input[name='drip']").is(':checked');
 
     if(link_video.toString().length == 0)
     {
@@ -315,7 +336,7 @@
       alert('Field views cannot be empty');
       return false;
     }
-    else if(views < 100)
+    else if(formatted_runs(views) < 100)
     {
       alert('Field views at least 100');
       return false;
@@ -376,6 +397,8 @@
             $("#current_coins").html(formatNumber(result.credit));
             $("input[name='link_video']").val("");
             $("input[name='views']").val(100);
+            $("input[name='runs']").val(1);
+            $("#total_views").html(100);
             calculate_coins(1);
             display_table();
         }
