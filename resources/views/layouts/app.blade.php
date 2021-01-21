@@ -126,7 +126,7 @@
                                     <a class="dropdown-item" href="{{ url('profile') }}">Profile</a>
                                     @if(Auth::user()->is_admin == 0)
                                       <a class="dropdown-item" href="{{ url('referral') }}">Referral</a>
-                                      <a class="dropdown-item" href="{{ url('transaction') }}">History Transaction</a>
+                                      <a class="dropdown-item" href="{{ url('transaction') }}">Coins Transaction</a>
                                     @endif
 
                                     <a class="dropdown-item" href="{{ route('logout') }}"

@@ -6,7 +6,7 @@
   <div class="row">
     <div class="col-md-12">
 
-      <h2><b>History Transaction</b></h2>  
+      <h2><b>Coins Transaction</b></h2>  
     
       <hr>
     </div>
