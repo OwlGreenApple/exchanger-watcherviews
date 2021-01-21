@@ -12,17 +12,17 @@
     </div>
   </div>
 
-  <div class="col-lg-9 justify-content-center mt-3 mx-auto bg-white py-2">
+  <div class="col-lg-10 justify-content-center mt-3 mx-auto bg-white py-2">
     <h5 class="text-center"><b>Transaction List</b></h5>
     
     <div class="table-responsive">
       <table id="transaction_list" class="table table-striped table-bordered">
         <thead align="center">
-          <th>No</th>
-          <th>Debit</th>
-          <th>Credit</th>
-          <th>Source</th>
-          <th>Date</th>
+          <th width="10%">No</th>
+          <th width="25%">Debit</th>
+          <th width="25%">Credit</th>
+          <th width="20%">Source</th>
+          <th width="20%">Date</th>
          <!--  <th>Status</th> -->
         </thead>
         <tbody>

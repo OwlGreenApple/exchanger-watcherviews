@@ -19,7 +19,7 @@
     </div>
 
     <div class="col-md-12">
-      <form class="responsive" id="content">
+      <form class="table-responsive" id="content">
         @if(count($orders) > 0)
           @include('home.order-table')
         @else

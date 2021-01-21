@@ -24,7 +24,8 @@ class User extends Authenticatable
         'code_country',
         'gender',
         'referral_id',
-        'referral_link'
+        'referral_link',
+        'date_bonus'
     ];
 
     /**

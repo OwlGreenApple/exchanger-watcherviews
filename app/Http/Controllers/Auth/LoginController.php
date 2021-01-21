@@ -110,7 +110,7 @@ class LoginController extends Controller
       $user = Auth::user();
       $already_get_bonus = false; 
       $total_login = $user->total_login;
-      $get_bonus = Carbon::createFromFormat('Y-m-d H:i:s', $user->date_bonus);
+      $get_bonus = Carbon::parse($user->date_bonus)->setTime(0, 0, 0); //set time to 00:00:00
 
       if (is_null($user->updated_at)){
         $last_activity = Carbon::now()->subDays(7);
@@ -122,44 +122,43 @@ class LoginController extends Controller
       //determine user get bonus or not
       if ( $last_activity->diffInDays(Carbon::now()) >= 1 && $last_activity->diffInDays(Carbon::now()) < 2  ) {
         $already_get_bonus = false; // blm dapat bonus
-      }
-      else if ( $last_activity->diffInDays(Carbon::now()) < 1  ) {
-        $already_get_bonus = true;
+        $user->date_bonus = Carbon::now();
       }
       else if ( $last_activity->diffInDays(Carbon::now()) >= 2  ) {
         $already_get_bonus = false;
+        $total_login = 0;
+        $user->date_bonus = Carbon::now();
       }
-
-      /*FIRST CHECK*/
-      //TO PREVENT IF USER LOGIN AND THEN LOGOUT SEVERAL TIMES TO GET BONUSES
-      if($get_bonus->diffInDays(Carbon::now()) < 1)
+      else if ( $last_activity->diffInDays(Carbon::now()) < 1  ) 
       {
-         $eligible = false;
-         $user->date_bonus = Carbon::now();
-         $user->save();  
-         return redirect('home');
+        $already_get_bonus = true;
       }
 
-      /*SECOND CHECK*/
       //check if user last login eligible to get bonus
-      if($already_get_bonus == true)
+      //TO PREVENT IF USER LOGIN AND THEN LOGOUT SEVERAL TIMES TO GET BONUSES
+      if($already_get_bonus == true && $get_bonus->diffInDays(Carbon::now()) > 0)
       {
-          $total_login++;
-          $this->giftDaily($total_login);
-          if($total_login > 7)
-          {
-              $total_login = 1;
-          }
+          //SET COINS GIFT
+         $total_login++;
+         //SET BACK TO 1 IF TOTAL LOGIN REACH MAX TERMS
+         if($total_login > 7)
+         {
+            $total_login = 1;
+         }  
+         $this->giftDaily($total_login); 
       }
       else
-      {
+      {   
+          //if user login 2 days after last login then total login become 0
+          $user->total_login= $total_login;
+          $user->save();  
           return redirect('home');
       }
-      
+
       try 
       {
         $user->total_login= $total_login;
-        $user->date_bonus = Carbon::now();
+        $user->date_bonus = Carbon::now(); //noted if user get bonuses already
         $user->save();  
         return redirect('home');
       }

@@ -26,6 +26,12 @@ class CheckUserId implements Rule
      */
     public function passes($attribute, $value)
     {
+        //NORMAL REGISTER IF NO REFERRAL
+        if($value == 0)
+        {
+          return true;
+        }
+
         $user = User::find($value);
         if(is_null($user))
         {

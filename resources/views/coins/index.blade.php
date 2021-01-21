@@ -36,6 +36,9 @@
     buy_coins();
   });
 
+  //GLOBAL VARIABLE
+  var min = 500000; //coins
+
   /*DELAY ON KEYUP*/
   function delay(callback, ms) {
     var timer = 0;
@@ -55,7 +58,7 @@
 
       if(coins_validity(coins) == true)
       {
-         coins = coins.toString().replace(/(\,)/g,"");
+         coins = coins.toString().replace(/(\.)/g,"");
          coins = parseInt(coins);
          purchase(coins);
       }
@@ -108,7 +111,6 @@
 
   function check_coins()
   { 
-    var min = 500000; //coins
     var min_price = min/100000;
     var price = "{{ getPackageRate($user->membership) }}";
     price = parseInt(price);
@@ -119,22 +121,14 @@
     //PROCESS
     $("#total_coins").on('keyup keypress', function()
     {
-      var n = parseInt($(this).val().replace(/\D/g,''),10);
-      var len = $(this).val().toString().length;
-      console.log(len);
+      // var n = parseInt($(this).val().replace(/\D/g,''),10);
+      var n = $(this).val().toString().replace(/(\.)/g,"");
+      var len = n.length;
+      var cvt = parseInt(n);
   
-      if(isNaN(n) == true)
+      if(len >= 9)
       {
-        $(this).val(min.toLocaleString());
-      }
-      else if(n < min)
-      {
-        $(this).val(min.toLocaleString());
-      } 
-      else if(len >= 12)
-      {
-        var previous_price = $(this).val();
-        previous_price = previous_price.toString().replace(/\,/g,'');
+        var previous_price = n;
         var digit = [
           previous_price.charAt(0),
           previous_price.charAt(1),
@@ -145,14 +139,14 @@
         var revert = digit[0]+digit[1]+digit[2]+digit[3]+'00000';
         revert = parseInt(revert);
 
-        $(this).val(revert.toLocaleString());
+        // $(this).val(revert.toLocaleString());
+        $(this).val(formatNumber(revert));
         calculate_coins(revert,price);
-        
       }
       else
       {
-        $(this).val(n.toLocaleString());
-        calculate_coins(n,price);
+        $(this).val(formatNumber(cvt));
+        calculate_coins(cvt,price);
       }
     });
   }
@@ -163,17 +157,17 @@
     var sum = coin/100000;
     var total = sum * price;
     
-    total = total.toLocaleString('fullwide', {useGrouping:false});
+    // total = total.toLocaleString('fullwide', {useGrouping:false});
     $("#price").attr('data-price',total);
     $("#total").html(formatNumber(total));
   }
 
   function check_min_coin(min_coins)
   {
-    min_coins = min_coins.toString().replace(/(\,)/g,"");
+    min_coins = min_coins.toString().replace(/(\.)/g,"");
     min_coins = parseInt(min_coins);
 
-    if(min_coins < 500000) { 
+    if(min_coins < min) { 
       return false;
     }
     else
@@ -195,7 +189,7 @@
         return false;
      }
 
-     coins = coins.toString().replace(/(\,)/g,"");
+     coins = coins.toString().replace(/(\.)/g,"");
      var coin = parseInt(coins);
      var total_coin = coin%100000;
       
@@ -212,7 +206,6 @@
 
   function formatNumber(num) 
   {
-    num = parseInt(num);
     if(isNaN(num) == true)
     {
        return '';

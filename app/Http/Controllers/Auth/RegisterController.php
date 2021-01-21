@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Auth\LoginController as Login;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use App\Models\Transaction;
@@ -18,6 +19,7 @@ use App\Rules\InternationalTel;
 use App\Rules\CheckUserPhone;
 use App\Rules\CheckUserId;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Cookie;
 
 class RegisterController extends Controller
@@ -95,6 +97,12 @@ class RegisterController extends Controller
     {
         $generated_password = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'),0,10);
 
+        //if normal register
+        if($data['referral'] == null || empty($data['referral']) || $data['referral'] =="")
+        {
+           $data['referral'] = 0;
+        }
+
         $user = User::create([
           'name' => strip_tags($data['username']),
           'email' => strip_tags($data['email']),
@@ -103,6 +111,7 @@ class RegisterController extends Controller
           'password' => Hash::make($generated_password),
           'gender'=>strip_tags($data['gender']),
           'referral_id'=>strip_tags($data['referral']),
+          'date_bonus'=> Carbon::createFromFormat('Y-m-d H:i:s', '1970-01-01 00:00:00')
         ]);
 
         Mail::to($data['email'])->send(new RegisteredEmail($generated_password,$data['username']));
@@ -143,7 +152,11 @@ class RegisterController extends Controller
         //LOGIN USER ID
         Auth::loginUsingId($signup->id);
 
-        //COINS GIFT
+        //COINS GIFT DAILY
+        $log = new Login;
+        $log->get_daily_bonus();
+
+        //COINS GIFT REFERRAL
         if($data['referral'] <> null)
         {
           $this->ref_coins_gift($data['referral'],$signup);
@@ -175,10 +188,11 @@ class RegisterController extends Controller
     }
 
     //DELETE REFERRAL COOKIE WHEN REFERRAL USER SUCCESSFULLY REGISTERED
-    private function delCookie()
+    public function delCookie()
     {
       Cookie::queue(Cookie::forget('referral'));
       Cookie::queue(Cookie::forget('refid'));
+      return;
     }
 
     private function ref_coins_gift($userid,$newuser)

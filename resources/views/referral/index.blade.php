@@ -19,11 +19,15 @@
                 <div id="message"><!--  --></div>
                 <div class="input-group mb-3">
                   <input id="ref_link" class="form-control" readonly="readonly" value="{{ $referral_link }}" />
-                  <div class="input-group-append">
-                    <button class="btn btn-primary btn-sm btn-copy">Copy Link</button>
+                  <div id="append-button" class="input-group-append">
+                    @if(Auth::user()->referral_link !== null)
+                      <button class="btn btn-primary btn-sm btn-copy">Copy Link</button>
+                    @endif
                   </div>
                 </div>
-                <button id="generate_link" class="btn btn-primary btn-sm">Generate Link</button>
+                @if(Auth::user()->referral_link == null)
+                  <button id="generate_link" class="btn btn-primary btn-sm">Generate Link</button>
+                @endif
               </div>
           </div>
       </div>
@@ -117,6 +121,8 @@
           {
             $("#ref_link").val(result.link);
             $("#message").html("<div class='alert alert-primary'>Your referral link has been generated, please copy link on below.</div>")
+            $("#append-button").html('<button class="btn btn-primary btn-sm btn-copy">Copy Link</button>');
+            $("#generate_link").remove();
           }
           else
           {

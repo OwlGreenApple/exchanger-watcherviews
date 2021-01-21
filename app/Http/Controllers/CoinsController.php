@@ -28,7 +28,6 @@ class CoinsController extends Controller
       $user = Auth::user();
       $coins = strip_tags($request->coins);
       $pricing = getPackageRate($user->membership);
-
       $coins_len = strlen($coins);
 
       //VALIDATION TO PREVENT IF USER PUT 0 MORE THAN 9 DIGITS (HUNDRED THOUSANDS)
@@ -149,6 +148,7 @@ class CoinsController extends Controller
         $data['msg'] = 1;
       }
 
+       //PUT EXCHANGE TO TRANSACTION
       if($success == true)
       {
         $trans = new Transaction;
@@ -156,6 +156,17 @@ class CoinsController extends Controller
         $trans->kredit = $credit;
         $trans->source = "exchange-coins";
         $trans->save();
+      }
+
+      //SEND TO WATCHERVIEWS API
+      if($request->drip !== "1")
+      {
+        $api = [
+                'ytlink'=>$ytlink,
+                'duration'=>$rate['duration'],
+                'views'=>$total_views,
+              ];
+        self::add_youtube_link($api);
       }
 
       //if user request drip and membership = super
@@ -205,13 +216,17 @@ class CoinsController extends Controller
 
     /*** API ***/
 
-    public static function add_youtube_link($data)
+    public static function add_youtube_link(array $cels)
     {
       $curl = curl_init();
+      $url = 'http://45.32.124.17/add-video-fromcelebfans';
       $data = array(
-          'mail'=>$mail,
-          'emaildata'=>$emaildata,
-          'subject'=>$subject,
+          'key_celebfans'=>'f6a055c556be9d36a68ce3f632f25d70b7168399dec581ae98c7f3ea3c950bc5787c6e3310bf32d3',
+          'coin_get' => self::coin_get($cels['duration']),
+          'link' => $cels['ytlink'],
+          'time' => $cels['duration'],
+          'maximum_watch' => $cels['views'], //view
+          'description' => 'add video from celebfans'
       );
 
       curl_setopt_array($curl, array(
@@ -230,12 +245,29 @@ class CoinsController extends Controller
       $err = curl_error($curl);
       curl_close($curl);
 
+      // dd($response);
+
       if ($err) {
         echo "cURL Error #:" . $err;
       } else {
-        //echo $response;
         return json_decode($response,true);
       }
+    }
+
+    //FOR COIN GET getExchangeRate => \Helpers\CustomHelper.php
+    private static function coin_get($sec)
+    {
+        $data = [
+          getExchangeRate(1)['duration']=>400,
+          getExchangeRate(2)['duration']=>600,
+          getExchangeRate(3)['duration']=>800,
+          getExchangeRate(4)['duration']=>1200,
+          getExchangeRate(5)['duration']=>1600,
+          getExchangeRate(6)['duration']=>2000,
+          getExchangeRate(7)['duration']=>2400
+        ];
+
+        return $data[$sec];
     }
 
 /*end class*/

@@ -1,5 +1,5 @@
 
-<table class="table responsive" id="order-table">
+<table class="order-column compact stripe" id="order-table">
     <thead align="center">
       <th>No Order</th>
       <th>Package</th>

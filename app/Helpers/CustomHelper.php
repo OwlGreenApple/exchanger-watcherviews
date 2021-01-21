@@ -44,7 +44,12 @@ function getPackageRate($package = null)
     return $pckg[$package];
 }
 
-//EXCHNAGE COINS RATE VIEWS/1000
+//EXCHANGE COINS RATE VIEWS/1000
+/*
+  use on : CoinsController::exchange
+  use on : CoinsController::submit_exchange
+  use on : CoinsController::coin_get
+*/
 function getExchangeRate($x)
 {
     $rate = [

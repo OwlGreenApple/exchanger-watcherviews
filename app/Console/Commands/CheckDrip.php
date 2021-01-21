@@ -42,7 +42,7 @@ class CheckDrip extends Command
     {
         $drips = Drips::where('drips.status',0)
                 ->leftJoin('exchanges','exchanges.id','=','drips.exchange_id')
-                ->select('drips.*','exchanges.yt_link')
+                ->select('drips.id','drips.schedule','drips.status','exchanges.yt_link','exchanges.duration','exchanges.views')
                 ->get();
 
         if($drips->count() > 0):
@@ -55,10 +55,14 @@ class CheckDrip extends Command
                   $drp->status = 1;
                   $drp->save();
 
-                  /*
-                    waiting API
-                    Coins::add_youtube_link($data)
-                  */
+                  $data = [
+                    'ytlink'=>$row->yt_link,
+                    'duration'=>$row->duration,
+                    'views'=>$row->views,
+                  ];
+
+                  /* API WATCHERVIEW */
+                  Coins::add_youtube_link($data);
               }
           }
         endif;

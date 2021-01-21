@@ -9,6 +9,7 @@ use Illuminate\Database\QueryException;
 use App\Models\User;
 use App\Models\Orders;
 use App\Models\Transaction;
+use App\Http\Controllers\Auth\RegisterController as Reg;
 use Storage, Cookie;
 
 class HomeController extends Controller
@@ -76,6 +77,7 @@ class HomeController extends Controller
         return response()->json($response);
     }
 
+    //DISPLAY ORDER HISTORY
     public function order_history()
     {
         $orders = Orders::where('user_id',Auth::id())->orderBy('id','desc')->get();
@@ -160,41 +162,52 @@ class HomeController extends Controller
 
     public function referral_register($referral_link)
     {
-      $ref = User::where('referral_link',$referral_link)->first();
+        $ref = User::where('referral_link',$referral_link)->first();
 
-      if(!is_null($ref))
-      {
-        $this->setCookie($ref->name,$ref->id);
-      }
-      else
-      {
-        return redirect('/register');
-      }
+        if(!is_null($ref))
+        {
+          $this->setCookie($ref->name,$ref->id);
+        }
+        else
+        {
+          return redirect('/register');
+        }
 
-      if(Cookie::get('referral') == null && Cookie::get('refid') == null)
-      {
-        $referral = [
-          'ref_name'=>$ref->name,
-          'ref_id'=>$ref->id
-        ];
-      }
-      else
-      {
-        $referral = [
-          'ref_name'=>Cookie::get('referral'),
-          'ref_id'=>Cookie::get('refid')
-        ];
-      }
+        //IF PREVIOUS COOKIE AVAILABLE USE THIS TO REPLACE WITH NEW COOKIE
+        if(Cookie::get('referral') !== null && Cookie::get('refid') !== null)
+        {
+            $referral = [
+              'ref_name'=>$ref->name,
+              'ref_id'=>$ref->id
+            ];
+            return view('auth.register',$referral);
+        }
 
-      return view('auth.register',$referral);
+        //IF NEW REFERRAL WITH NEW COOKIE
+        if(Cookie::get('referral') == null && Cookie::get('refid') == null)
+        {
+          $referral = [
+            'ref_name'=>$ref->name,
+            'ref_id'=>$ref->id
+          ];
+        }
+        else
+        {
+          $referral = [
+            'ref_name'=>Cookie::get('referral'),
+            'ref_id'=>Cookie::get('refid')
+          ];
+        }
+
+        return view('auth.register',$referral);
     } 
 
     private function setCookie($referral_link,$referral_id)
     {
       if(!empty($referral_link))
       {
-          Cookie::queue(Cookie::make('referral', $referral_link, 1440*1));
-          Cookie::queue(Cookie::make('refid', $referral_id, 1440*1));
+          Cookie::queue(Cookie::make('referral', $referral_link, 1440*30));
+          Cookie::queue(Cookie::make('refid', $referral_id, 1440*30));
       } else {
           return redirect('/');
       }
