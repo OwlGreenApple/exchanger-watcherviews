@@ -200,7 +200,7 @@ class CoinsController extends Controller
         for($x=1;$x<=$exc->drip;$x++):
            //TIME DRIP (4 HOURS 15 MINUTES AND 5 HOURS RANDOMLY) 
           $drip = [255,300];
-          $random = rand(0,1);
+          $random = mt_rand(0,1);
           $drip = $drip[$random];
           $current_time = $current_time->addMinutes($drip);
 
