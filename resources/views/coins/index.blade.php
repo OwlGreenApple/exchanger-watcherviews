@@ -116,7 +116,7 @@
     var price = "{{ getPackageRate($user->membership) }}";
     price = parseInt(price);
     var total_price = price * min_price; 
-    $("#total_coins").val(min.toLocaleString());
+    $("#total_coins").val(formatNumber(min));
     $("#total").html(formatNumber(total_price));
 
     //PROCESS

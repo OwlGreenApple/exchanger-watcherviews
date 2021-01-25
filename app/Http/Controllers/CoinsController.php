@@ -224,7 +224,7 @@ class CoinsController extends Controller
     public static function add_youtube_link(array $cels)
     {
       $curl = curl_init();
-      $url = 'http://45.32.124.17/add-video-fromcelebfans';
+      $url = 'https://watcherviews.com/dashboard/add-video-fromcelebfans';
       $data = array(
           'key_celebfans'=>'f6a055c556be9d36a68ce3f632f25d70b7168399dec581ae98c7f3ea3c950bc5787c6e3310bf32d3',
           'coin_get' => self::coin_get($cels['duration']),
@@ -234,21 +234,23 @@ class CoinsController extends Controller
           'description' => 'add video from celebfans'
       );
 
-      curl_setopt_array($curl, array(
-        CURLOPT_URL => $url,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 30,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => "POST",
-        CURLOPT_POSTREDIR => 3,
-        CURLOPT_POSTFIELDS => json_encode($data),
-        CURLOPT_HTTPHEADER => array('Content-Type:application/json'),
+      $data_string = json_encode($data);
+      $ch = curl_init($url);
+      curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($ch, CURLOPT_VERBOSE, 0);
+      curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
+      curl_setopt($ch, CURLOPT_TIMEOUT, 360);
+      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+      curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+      curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+      'Content-Type: application/json'
       ));
 
-      $response = curl_exec($curl);
-      $err = curl_error($curl);
-      curl_close($curl);
+      $response = curl_exec($ch);
+      $err = curl_error($ch);
+      curl_close($ch);
 
       // dd($response);
 
