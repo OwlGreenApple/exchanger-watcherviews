@@ -158,7 +158,7 @@ class CoinsController extends Controller
         $trans->save();
       }
 
-      //SEND TO WATCHERVIEWS API
+      //SEND TO WATCHERVIEWS API IF CASE VIDEO NOT DRIP
       if($request->drip !== "1")
       {
         $api = [
@@ -171,7 +171,11 @@ class CoinsController extends Controller
 
       //if user request drip and membership = super
       if($request->drip == "1" && $user->membership == 'super'):
-          return $this->fetch_drip($exchange_id);
+          $ret = [
+            'credit'=>$data['credit'],
+            'exchange_id'=>$exchange_id
+          ];
+          return $this->fetch_drip($ret);
       endif;
 
       return response()->json($data);
@@ -185,30 +189,31 @@ class CoinsController extends Controller
     }
 
     //FETCH USER DRIP INTO DATABASE FOR CRON JOB SCHEDULES
-    private function fetch_drip($exchange_id)
+    private function fetch_drip(array $ret)
     {
-      $exc = Exchange::find($exchange_id);
-      $drip = [255,300]; //TIME DRIP (4 HOURS 15 INUTES AND 5 HOURS)
-      $random = rand(0,1);
-      $drip = $drip[$random];
+      $exc = Exchange::find($ret['exchange_id']);
       $current_time = Carbon::now();
       $data['msg'] = 0;
 
       if(!is_null($exc))
       {
-        $current_time = $current_time->addMinutes($drip);
         for($x=1;$x<=$exc->drip;$x++):
+           //TIME DRIP (4 HOURS 15 MINUTES AND 5 HOURS RANDOMLY) 
+          $drip = [255,300];
+          $random = rand(0,1);
+          $drip = $drip[$random];
+          $current_time = $current_time->addMinutes($drip);
+
           $drp = new Drips;
-          $drp->exchange_id = $exchange_id;
+          $drp->exchange_id = $ret['exchange_id'];
           $drp->schedule = $current_time;
           $drp->drip = $drip;
           $drp->save();
-
-          $current_time->addMinutes($drip);
         endfor;
+        $data['credit'] = $ret['credit'];
       }
       else{
-          $data['msg'] = 1;
+        $data['msg'] = 1;
       }
 
       return response()->json($data);

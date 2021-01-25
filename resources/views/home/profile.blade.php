@@ -11,9 +11,14 @@
                   <span id="server-error"><!-- error server --></span>
                   <form class="add-contact" id="form-register">
 
-                    <div class="form-group">
-                      <label>Email</label>
-                       <div class="form-control bg-secondary text-white">{{ $user->email }}</div>
+                    <div class="form-group form-inline">
+                      <label>Email : </label>
+                       <div class="form-control bg-secondary text-white ml-2">{{ $user->email }}</div>
+                    </div>
+
+                    <div class="form-group form-inline">
+                      <label>Membership : </label>
+                       <div class="ml-2">@if($user->membership == null || $user->membership =="") Free @else {{ $user->membership }} @endif</div>
                     </div>
 
                     <div class="form-group">

@@ -53,7 +53,7 @@
                       
                       @if(Auth::user()->membership == 'super')
                       <div class="form-group form-inline">
-                        <label class="mr-2">Drip-Feed</label>
+                        <label class="mr-2">Drip-Feed <i class="ml-2 fa fa-question-circle question" aria-hidden="true" title="If you check this box, your video will display every 4 - 5 hours depend how many runs you entered."></i></label>
                         <input type="checkbox" name="drip" />
                       </div>
                       
@@ -125,10 +125,16 @@
     check_drip();
     calculate_drip();
     drip_formula(1,100);
+    tooltips();
   });
 
   // GLOBAL VARIABLE
   const max_value = 10000;
+
+  function tooltips()
+  {
+    $('.question').tooltip();
+  }
 
   function check_drip()
   {

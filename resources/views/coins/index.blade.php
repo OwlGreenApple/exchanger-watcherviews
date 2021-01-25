@@ -83,16 +83,17 @@
       },
       success: function(result) {
       
-        $('#loader').hide();
-        $('.div-loading').removeClass('background-load');
-
         if(result.msg == 1)
         {
+          $('#loader').hide();
+          $('.div-loading').removeClass('background-load');
           $("#status_msg").html('<div class="alert alert-danger">Sorry, our server is too busy, please try again later.</div>')
         }
         else if(result.msg == 2)
         {
           //serverside validation
+          $('#loader').hide();
+          $('.div-loading').removeClass('background-load');
           $("#status_msg").html('<div class="alert alert-danger">'+result.message+'</div>')
         }
         else

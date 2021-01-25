@@ -27,6 +27,9 @@
     <script defer type="text/javascript" src="{{ asset('/assets/DataTables/datatables.min.js') }}"></script>
     <script defer type="text/javascript" src="{{ asset('/assets/DataTables/Responsive/js/dataTables.responsive.min.js') }}"></script> 
 
+     <!-- Font Awesome 5 -->
+    <link href="{{ asset('/assets/font-awesome-5/all.css') }}" rel="stylesheet" />
+
     <!-- Pricing -->
     @if(Request::is('pricing')) 
       <link href="{{ asset('assets/css/pricing.css') }}" rel="stylesheet">
