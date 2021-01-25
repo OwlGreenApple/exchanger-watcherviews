@@ -98,7 +98,7 @@ class RegisterController extends Controller
         $generated_password = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'),0,10);
 
         //if normal register
-        if($data['referral'] == null || empty($data['referral']) || $data['referral'] =="")
+        if(!isset($data['referral']) ||$data['referral'] == null || empty($data['referral']) || $data['referral'] =="")
         {
            $data['referral'] = 0;
         }
@@ -139,6 +139,10 @@ class RegisterController extends Controller
         }
         else
         {
+            if(!isset($data['referral']))
+            {
+              $data['referral'] = null;
+            }
             return $this->register_ajax($data);
         }
     }

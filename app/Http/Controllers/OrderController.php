@@ -141,7 +141,7 @@ class OrderController extends Controller
       ];
 
       $order = $this->payment_login($data,1);
-      return view('pricing.thankyou');    
+      return redirect('thankyou');    
     }
 
     public function thankyou()
