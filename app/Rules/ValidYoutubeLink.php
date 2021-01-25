@@ -25,7 +25,8 @@ class ValidYoutubeLink implements Rule
      */
     public function passes($attribute, $value)
     {
-        $match = preg_match("/^https\:\/\/(www)\.(youtube)\.(com)\/watch\?v\=.+/i", $value);
+        $match = preg_match("/^https\:\/\/(www)\.(youtube)\.(com)\/watch\?v\=.+|^https\:\/\/(youtu)\.be\/.+/i", $value);
+
         if($match == 0)
         {
           return false;
