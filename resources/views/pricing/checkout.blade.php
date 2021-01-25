@@ -8,10 +8,10 @@
         <div class="card cardpad">
 
           <form id="proof_order">
-              <h2 class="Daftar-Disini">Choose Your Package</h2>
+              <h2 class="Daftar-Disini">Upgrade Your Membership</h2>
               <div class="form-group">
                 <div class="col-12 col-md-12">
-                  <label class="text">Select Package:</label>
+                  <label class="text">Select Membership:</label>
                   <select class="form-control" name="idproof" >
                     @php $pg = 1 @endphp
                     <option data-price="{!! getPackage()[$pg]['price'] !!}" id-paket="{{ $pg }}" data-paket="{!! getPackage()[$pg]['package'] !!}" selected>{!! strtoupper(getPackage()[$pg]['package']) !!} - IDR {!! str_replace(",",".",number_format(getPackage()[$pg]['price'])) !!}</option>   

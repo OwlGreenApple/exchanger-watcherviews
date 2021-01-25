@@ -36,14 +36,14 @@
     @endif
 
     <!-- Summary -->
-    @if(Request::is('summary') || Request::is('register') || Request::is('profile') || Request::segment(1) == 'referral-reg') 
+    @if(Request::is('summary') || Request::is('register') || Request::is('profile')  || Request::segment(1) == 'referral-reg') 
       <link href="{{asset('assets/css/summary.css')}}" rel="stylesheet" >
       <link href="{{asset('assets/css/custom-select.css')}}" rel="stylesheet" >
-
+   
       <!-- Intl Dialing Code -->
       <link href="{{ asset('/assets/css/intl-input-custom.css') }}" rel="stylesheet" />
       <link href="{{ asset('/assets/intl-tel-input/css/intlTelInput.min.css') }}" rel="stylesheet" />
-      <script type="text/javascript" src="{{ asset('/assets/intl-tel-input/js/intlTelInput.js') }}"></script> 
+      <script type="text/javascript" src="{{ asset('/assets/intl-tel-input/js/intlTelInput.js') }}"></script>
     @endif
 
      <!-- Pricing -->
@@ -91,12 +91,12 @@
                             @endif
 
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url('pricing') }}">{{ __('Pricing') }}</a>
+                                <a class="nav-link" href="{{ url('pricing') }}">{{ __('Memberships') }}</a>
                             </li>
 
                         @else
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url('pricing') }}">{{ __('Pricing') }}</a>
+                                <a class="nav-link" href="{{ url('pricing') }}">{{ __('Memberships') }}</a>
                             </li> 
 
                             <!-- MILESTONE -->
@@ -108,11 +108,15 @@
                               <li class="nav-item">
                                   <a class="nav-link" href="{{ url('buy-coins') }}">Buy Coins</a>
                               </li> 
-                              <li class="nav-item">
-                                  <a class="nav-link" href="{{ url('exchange-coins') }}">Exchange Coins</a>
-                              </li>
-                              <li class="nav-item">
-                                  <a class="nav-link" href="{{ url('history-order') }}">Orders and Confirm</a>
+                              <li class="nav-item dropdown">
+                                  <a id="coinsDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    Views
+                                  </a>
+
+                                  <div class="dropdown-menu" aria-labelledby="coinsDropdown">
+                                    <a class="dropdown-item" href="{{ url('exchange-coins') }}">Order Views</a>
+                                    <a class="dropdown-item" href="{{ url('transaction') }}">Coins Transaction</a> 
+                                  </div>
                               </li>
                             @endif
 
@@ -129,7 +133,7 @@
                                     <a class="dropdown-item" href="{{ url('profile') }}">Profile</a>
                                     @if(Auth::user()->is_admin == 0)
                                       <a class="dropdown-item" href="{{ url('referral') }}">Referral</a>
-                                      <a class="dropdown-item" href="{{ url('transaction') }}">Coins Transaction</a>
+                                      <a class="dropdown-item" href="{{ url('history-order') }}">Orders History</a>
                                     @endif
 
                                     <a class="dropdown-item" href="{{ route('logout') }}"
