@@ -87,23 +87,7 @@
 
   <div class="row justify-content-center mt-3 bg-white py-2">
     <h5><b>Exchange Transaction</b></h5>
-    <div class="col-lg-12 table-responsive">
-      <table id="exchanged_coins" class="table table-striped table-bordered">
-        <thead align="center">
-          <th>Created</th>
-          <th>Duration</th>
-          <th>Coins Rate</th>
-          <th>Youtube Link</th>
-          <th>Views</th>
-          <th>Drip</th>
-          <th>Total Coins</th>
-          <th>Total Views</th>
-         <!--  <th>Status</th> -->
-        </thead>
-        <tbody id="content"></tbody>
-      </table>
-  </div>
-
+    <div class="col-lg-12 table-responsive" id="content"><!-- datatable --></div>
   </div>
 
 </div>
@@ -112,12 +96,6 @@
 
   $(document).ready(function()
   {
-    let table = $("#exchanged_coins").DataTable({
-      "lengthMenu": [ 10, 25, 50, 75, 100, 250, 500 ],
-      "aaSorting" : [],
-      "destroy" : true
-    });
-
     display_table();
     calculate_coins();
     get_total_coins();

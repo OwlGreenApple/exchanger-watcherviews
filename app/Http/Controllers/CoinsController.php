@@ -184,7 +184,7 @@ class CoinsController extends Controller
     //DATATABLE EXCHANGE COINS
     public function exchange_table()
     {
-      $exc = Exchange::where('user_id',Auth::id())->orderBy('id')->get();
+      $exc = Exchange::where('user_id',Auth::id())->orderBy('id','desc')->get();
       return view('coins.exchange-table',['data'=>$exc]);
     }
 
