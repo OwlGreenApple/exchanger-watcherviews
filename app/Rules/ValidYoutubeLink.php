@@ -3,6 +3,7 @@
 namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Foundation\Bootstrap\HandleExceptions;
 
 class ValidYoutubeLink implements Rule
 {
@@ -25,9 +26,11 @@ class ValidYoutubeLink implements Rule
      */
     public function passes($attribute, $value)
     {
-        $match = preg_match("/^https\:\/\/(www)\.(youtube)\.(com)\/watch\?v\=.+|^https\:\/\/(youtu)\.be\/.+/i", $value);
+        /*$match = preg_match("/^https\:\/\/(www)\.(youtube)\.(com)\/watch\?v\=.+|^https\:\/\/(youtu)\.be\/.+/i", $value);*/
 
-        if($match == 0)
+        $match = @file_get_contents("https://www.youtube.com/oembed?url=".$value."&format=json");
+
+        if($match == false)
         {
           return false;
         }

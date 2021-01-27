@@ -18,7 +18,7 @@
 
                     <div class="form-group form-inline">
                       <label>Membership : </label>
-                       <div class="ml-2">@if($user->membership == null || $user->membership =="") Free @else {{ $user->membership }} @endif</div>
+                       <div class="ml-2">@if($user->membership == null || $user->membership =="") Free @else <div class="badge badge-success">{{ $user->membership }}</div> Berlaku hingga : <b>{{ Date("d-M-Y H:i:s",strtotime($user->valid_until)) }}</b> @endif</div>
                     </div>
 
                     <div class="form-group">
