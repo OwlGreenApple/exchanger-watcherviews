@@ -9,8 +9,9 @@ use Illuminate\Database\QueryException;
 use App\Models\User;
 use App\Models\Orders;
 use App\Models\Transaction;
+use App\Models\Contacts;
 use App\Http\Controllers\Auth\RegisterController as Reg;
-use Storage, Cookie;
+use Storage, Cookie, Validator;
 
 class HomeController extends Controller
 {
@@ -237,6 +238,78 @@ class HomeController extends Controller
     {
       $trans = Transaction::where('user_id',Auth::id())->orderBy('id','desc')->get();
       return view('home.transaction',['transaction'=>$trans]);
+    }
+
+    /*CONTACT*/
+    public function contact()
+    {
+      return view('home.contact');
+    }
+
+    // SAVE CONTACT FROM USER
+    public function save_contact(Request $request)
+    {
+      $user = Auth::user();
+      $filter = [
+        'judul'=>strip_tags($request->title),
+        'pesan'=>strip_tags($request->message)
+      ];
+
+      if($user->is_admin == 0)
+      {
+        $rules['judul'] = ['required','string','min:4','max:100'];
+      }
+
+      $rules['pesan'] = ['required','string','min:4','max:190'] ;
+      
+
+      $validator = Validator::make($filter,$rules);
+      if($validator->fails() == true)
+      {
+        $err = $validator->errors();
+        $response = [
+            'error'=>2,
+            'title'=>$err->first('judul'),
+            'message'=>$err->first('pesan'),
+        ];
+      }
+      else
+      {
+
+        //USER SEND QUESTION
+        if($user->is_admin == 0)
+        {
+          $ct = new Contacts;
+          $ct->user_id = Auth::id();
+          $ct->title = $filter['judul'];
+          $ct->message = $filter['pesan'];
+        }
+        else
+        {
+          //ADMIN REPLY TO USER
+          $ct = Contacts::find($request->id_contacts);
+          $ct->reply = $filter['pesan'];
+        }
+
+        try
+        {
+          $ct->save();
+          $response['error'] = 0;
+        }
+        catch(QueryException $e)
+        {
+          $response['error'] = 1;
+        }
+      }
+
+      return response()->json($response);
+    }
+
+    //DATATABLE FOR CONTACT PAGE
+    public function contact_table()
+    {
+      $contacts = Contacts::where('contacts.user_id',Auth::id())->orderBy('id','desc')->get();
+      return view('home.contact-table',['data'=>$contacts]);
     }
 
 /* end home controller class */

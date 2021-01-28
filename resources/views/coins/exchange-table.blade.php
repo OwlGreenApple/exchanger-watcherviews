@@ -1,4 +1,4 @@
-@if($data->count() > 0)
+@if(count($data) > 0)
   <table id="exchanged_coins" class="table table-striped table-bordered">
     <thead align="center">
       <th>Created</th>
@@ -9,7 +9,7 @@
       <th>Drip</th>
       <th>Total Coins</th>
       <th>Total Views</th>
-     <!--  <th>Status</th> -->
+      <th>Status</th>
     </thead>
     <tbody>
       @foreach($data as $row)
@@ -28,15 +28,15 @@
           </td>
           <td class="text-center" style="width:20%">{{ number_format($row->total_coins) }}</td>
           <td class="text-center" style="width:20%">{{ number_format($row->total_views) }}</td>
-        <!--   <td class="text-center">
-            if($row->status == 0)
-              <button type="button" class="btn btn-primary btn-allocate btn-sm" data-toggle="modal" data-target="#allocate">
-                Allocate Coins
-              </button>
-            else 
-                <b class="text-success">Allocated</b>
-            endif
-          </td> -->
+          <td class="text-center">
+            @if($row->process == $row->drip && $row->process !== null)
+                Complete
+            @elseif($row->process !== $row->drip && $row->process !== null)
+                <span class="text-primary">Process</span>
+            @else 
+                -
+            @endif
+          </td>
         </tr>
        @endforeach
     </tbody>

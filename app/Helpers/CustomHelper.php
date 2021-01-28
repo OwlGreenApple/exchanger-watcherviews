@@ -3,10 +3,14 @@
 //GET PACKAGE PRICING
 function getPackage()
 {
+    $pro_coins = 1000000;
+    $master_coins = 2000000;
+    $super_coins = 3000000;
+
     $package = array(
-      1 => ['package'=>'pro','price'=>295000],
-      2 => ['package'=>'master','price'=>395000],
-      3 => ['package'=>'super','price'=>495000]
+      1 => ['package'=>'pro','price'=>295000,'bc'=>$pro_coins,'bonus'=>'Bonus '.str_replace(",",".",number_format($pro_coins)).' coins','disc'=>'Disc 10% untuk setiap pembelian Coin'],
+      2 => ['package'=>'master','price'=>395000,'bc'=>$master_coins,'bonus'=>'Bonus '.str_replace(",",".",number_format($master_coins)).' coins','disc'=>'Disc 18% untuk setiap pembelian Coin'],
+      3 => ['package'=>'super','price'=>495000,'bc'=>$super_coins,'bonus'=>'Bonus '.str_replace(",",".",number_format($super_coins)).' coins','disc'=>'Disc 28% untuk setiap pembelian Coin']
     );
 
     return $package;

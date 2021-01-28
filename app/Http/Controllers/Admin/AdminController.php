@@ -10,6 +10,7 @@ use Illuminate\Database\QueryException;
 use App\Models\User;
 use App\Models\Orders;
 use App\Models\Transaction;
+use App\Models\Contacts;
 use Storage;
 use Carbon\Carbon;
 
@@ -65,7 +66,7 @@ class AdminController extends Controller
        $order->status = 2;
        $user = User::find($order->user_id);
 
-       //if user order membership package
+       //MEMBERSHIP PACKAGE
        if($order->package_id <> 0)
        {
           if($user->valid_until == "" || $user->valid_until == null && ($user->membership == null || $user->membership == ""))
@@ -78,7 +79,15 @@ class AdminController extends Controller
           }
           
           $user->membership = $order->package;
+          $user->credits += getPackage()[$order->package_id]['bc'];
           $user->valid_until = $valid_until;
+
+            //COINS TRANSACTIONS
+          $trans = new Transaction;
+          $trans->user_id = $user->id;
+          $trans->debit = getPackage()[$order->package_id]['bc'];
+          $trans->source = "bonus-coins-membership";
+          $trans->save();
        } 
 
        // BUYING COINS
@@ -144,7 +153,18 @@ class AdminController extends Controller
       {
         //$e->getMessage();
       }
-      
+    }
+
+    public function user_contacts()
+    {
+      return view('admin.contact');
+    }
+
+    //DISPLAY CONTACT FROM USER
+    public function user_contacts_table()
+    {
+      $contacts = Contacts::where('reply','=',null)->orderBy('id','desc')->get();
+      return view('admin.contact-table',['data'=>$contacts]);
     }
 
 /* END ADMIN CONTROLLER */

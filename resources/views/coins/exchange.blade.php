@@ -51,9 +51,13 @@
                         <label>&nbsp;X 1000 Views</label> -->
                       </div>
                       
-                      @if(Auth::user()->membership == 'super')
+                      <!-- if(Auth::user()->membership == 'super') -->
                       <div class="form-group form-inline">
-                        <label class="mr-2">Drip-Feed <i class="ml-2 fa fa-question-circle question" aria-hidden="true" title="If you check this box, your video will display every 4 - 5 hours depend how many runs you entered."></i></label>
+                        <label class="mr-2">Drip-Views <i class="ml-2 fa fa-question-circle question" aria-hidden="true" title="Fitur Drip Views adalah
+                        Fitur untuk membagi views beberapa kali pada video yang sama dalam waktu random,
+                        sehingga penambahan views video terlihat lebih organik
+                          Contoh :
+                          Video A : 200 Views untuk 11x = Total 2200 views."></i></label>
                         <input type="checkbox" name="drip" />
                       </div>
                       
@@ -62,7 +66,7 @@
                         <input type="text" class="form-control" name="runs" value="1" />
                         <div class="error errruns"></div>
                       </div>
-                      @endif
+                      <!-- endif -->
 
                       <div class="form-group form-inline">
                         <label class="mr-2">Total Views</label>

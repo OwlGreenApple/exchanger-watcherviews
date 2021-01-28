@@ -97,14 +97,7 @@ class CoinsController extends Controller
 
       $success = false;
       $rate = getExchangeRate($id_exchange);
-      if(Auth::user()->membership == 'super')
-      {
-        $total_views = $views * $drip;
-      }
-      else
-      {
-        $total_views = $views;
-      }
+      $total_views = $views * $drip;
       
       $credit = $total_views * ($rate['coins']/1000);
 
@@ -117,7 +110,7 @@ class CoinsController extends Controller
         $exc->id_exchange = $id_exchange;
         $exc->yt_link = $ytlink;
         $exc->views = $views;
-        if($request->drip == "1"  && Auth::user()->membership == 'super'):
+        if($request->drip == "1"):
           $exc->drip = $drip;
         endif;
         $exc->total_coins = $credit;
@@ -169,8 +162,8 @@ class CoinsController extends Controller
         self::add_youtube_link($api);
       }
 
-      //if user request drip and membership = super
-      if($request->drip == "1" && $user->membership == 'super'):
+      //if user request drip and membership
+      if($request->drip == "1"):
           $ret = [
             'credit'=>$data['credit'],
             'exchange_id'=>$exchange_id
@@ -185,7 +178,36 @@ class CoinsController extends Controller
     public function exchange_table()
     {
       $exc = Exchange::where('user_id',Auth::id())->orderBy('id','desc')->get();
-      return view('coins.exchange-table',['data'=>$exc]);
+      $data = [];
+
+      if($exc->count() > 0)
+      {
+        foreach($exc as $row)
+        {
+          if($row->drip > 0)
+          {
+            $process = Drips::where([['exchange_id',$row->id],['status','=',1]])->get()->count();
+          }
+          else
+          {
+            $process = null;
+          }
+
+          $data[] = (object)[
+            'duration'=>$row->duration,
+            'coins_value'=>$row->coins_value,
+            'yt_link'=>$row->yt_link,
+            'views'=>$row->views,
+            'drip'=>$row->drip,
+            'total_coins'=>$row->total_coins,
+            'total_views'=>$row->total_views,
+            'created_at'=>$row->created_at,
+            'process'=>$process
+          ];
+        }
+      }
+
+      return view('coins.exchange-table',['data'=>$data]);
     }
 
     //FETCH USER DRIP INTO DATABASE FOR CRON JOB SCHEDULES

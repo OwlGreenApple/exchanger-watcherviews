@@ -79,43 +79,46 @@
                         <!-- Authentication Links -->
                         @guest
                             @if (Route::has('login'))
-                                <li class="nav-item">
+                                <li class="nav-item @if(Request::is('login')) active @endif">
                                     <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                                 </li>
                             @endif
                             
                             @if (Route::has('register'))
-                                <li class="nav-item">
+                                <li class="nav-item @if(Request::is('register')) active @endif">
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
                             @endif
 
-                            <li class="nav-item">
+                            <li class="nav-item @if(Request::is('pricing')) active @endif">
                                 <a class="nav-link" href="{{ url('pricing') }}">{{ __('Memberships') }}</a>
                             </li>
 
                         @else
-                            <li class="nav-item">
+                            <li class="nav-item @if(Request::is('pricing')) active @endif">
                                 <a class="nav-link" href="{{ url('pricing') }}">{{ __('Memberships') }}</a>
                             </li> 
 
                             <!-- MILESTONE -->
                             @if(Auth::user()->is_admin == 1)
-                              <li class="nav-item">
+                              <li class="nav-item @if(Request::is('list-order')) active @endif">
                                   <a class="nav-link" href="{{ url('list-order') }}">Orders</a>
                               </li>
+                              <li class="nav-item @if(Request::is('user-contacts')) active @endif">
+                                  <a class="nav-link" href="{{ url('user-contacts') }}">Kontak User</a>
+                              </li>
                             @else
-                              <li class="nav-item">
-                                  <a class="nav-link" href="{{ url('buy-coins') }}">Buy Coins</a>
+                              <li class="nav-item @if(Request::is('buy-coins')) active @endif">
+                                  <a class="nav-link" href="{{ url('buy-coins') }}">Beli Koin</a>
                               </li> 
-                              <li class="nav-item dropdown">
+                              <li class="nav-item dropdown @if(Request::is('exchange-coins') || Request::is('transaction')) active @endif">
                                   <a id="coinsDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     Views
                                   </a>
 
                                   <div class="dropdown-menu" aria-labelledby="coinsDropdown">
-                                    <a class="dropdown-item" href="{{ url('exchange-coins') }}">Order Views</a>
-                                    <a class="dropdown-item" href="{{ url('transaction') }}">Coins Transaction</a> 
+                                    <a class="dropdown-item  @if(Request::is('exchange-coins')) active @endif" href="{{ url('exchange-coins') }}">Order Views</a>
+                                    <a class="dropdown-item  @if(Request::is('transaction')) active @endif" href="{{ url('transaction') }}">Transaksi Koin</a> 
                                   </div>
                               </li>
                             @endif
@@ -124,16 +127,17 @@
                                 <b class="nav-link" id="current_coins">{{ number_format(Auth::user()->credits) }}</b>
                               </li>
 
-                            <li class="nav-item dropdown">
+                            <li class="nav-item dropdown @if(Request::is('profile') || Request::is('referral') || Request::is('history-order') || Request::is('contact')) active @endif">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ url('profile') }}">Profile</a>
+                                    <a class="dropdown-item @if(Request::is('profile')) active @endif" href="{{ url('profile') }}">Profil</a>
                                     @if(Auth::user()->is_admin == 0)
-                                      <a class="dropdown-item" href="{{ url('referral') }}">Referral</a>
-                                      <a class="dropdown-item" href="{{ url('history-order') }}">Orders History</a>
+                                      <a class="dropdown-item @if(Request::is('referral')) active @endif" href="{{ url('referral') }}">Referral</a>
+                                      <a class="dropdown-item @if(Request::is('history-order')) active @endif" href="{{ url('history-order') }}">Orders History</a>
+                                      <a class="dropdown-item @if(Request::is('contact')) active @endif" href="{{ url('contact') }}">Kontak</a>
                                     @endif
 
                                     <a class="dropdown-item" href="{{ route('logout') }}"

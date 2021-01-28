@@ -48,26 +48,21 @@
       <div class="modal-body">
 
           <p class="card-text">
-            Please do Bank Transfer to :
+            Silhakan Transfer ke :
           </p> 
           <h2>8290-336-261</h2>
           <p class="card-text">
             BCA <b>Sugiarto Lasjim</b>
           </p>
           <p class="card-text">
-            After make payment, please click on confirm button <br> or transfer your payment proof to : <b>celebfans@gmail.com</b> <br>
-            Our Admin will help you max 1x24 working hours.
-          </p>
-          <!-- <p class="card-text">
-            Setelah Transfer, silahkan Klik tombol confirm payment di bawah ini <br> atau Email bukti Transfer anda ke <b>activrespon@gmail.com</b> <br>
+            Setelah Transfer, silahkan Klik tombol confirm payment di bawah ini <br> atau Email bukti Transfer anda ke <b>@php echo env('APP_EMAIL_ADMIN') @endphp</b> <br>
             Admin kami akan membantu anda max 1x24 jam
           </p>
-           -->
 
       </div>
       <div class="modal-footer" id="foot">
         <button class="btn" data-dismiss="modal">
-          Ok
+          Tutup
         </button>
       </div>
     </div>

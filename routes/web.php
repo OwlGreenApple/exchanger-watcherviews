@@ -48,6 +48,11 @@ Route::group(['middleware' => ['web','auth']], function () {
   Route::get('history-order',[Home::class, 'order_history']);
   Route::get('thank-confirm',[Home::class, 'confirm_thank_you']);
 
+  //CONTACT
+  Route::get('contact',[Home::class, 'contact']);
+  Route::post('send-contact',[Home::class, 'save_contact']);
+  Route::get('contact-table',[Home::class, 'contact_table']);
+
   //REFERRAL
   Route::get('referral',[Home::class, 'referral']);
   Route::get('referral-link',[Home::class, 'generate_referral_link']);
@@ -73,6 +78,10 @@ Route::group(['middleware' => ['web','auth','is_admin']], function ()
 {
   Route::get('list-order', [Admin::class, 'index']);
   Route::post('confirm-order',[Admin::class, 'confirm_order']);
+
+  //CONTACTS
+  Route::get('user-contacts',[Admin::class, 'user_contacts']);
+  Route::get('user-contacts-table',[Admin::class, 'user_contacts_table']);
 });
 
 

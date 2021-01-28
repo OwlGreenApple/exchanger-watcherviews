@@ -8,19 +8,23 @@
         <div class="card cardpad">
 
           <form id="proof_order">
-              <h2 class="Daftar-Disini">Upgrade Your Membership</h2>
+              <h2 class="Daftar-Disini">Upgrade Membership Anda</h2>
+              <div class="alert">
+                <div class="bc"><!-- display bonus text here --></div>
+                <div class="disc"><!-- display discount text here --></div>
+              </div>
               <div class="form-group">
                 <div class="col-12 col-md-12">
-                  <label class="text">Select Membership:</label>
+                  <label class="text">Pilih Membership:</label>
                   <select class="form-control" name="idproof" >
                     @php $pg = 1 @endphp
-                    <option data-price="{!! getPackage()[$pg]['price'] !!}" id-paket="{{ $pg }}" data-paket="{!! getPackage()[$pg]['package'] !!}" selected>{!! strtoupper(getPackage()[$pg]['package']) !!} - IDR {!! str_replace(",",".",number_format(getPackage()[$pg]['price'])) !!}</option>   
+                    <option data-price="{!! getPackage()[$pg]['price'] !!}" id-paket="{{ $pg }}" data-paket="{!! getPackage()[$pg]['package'] !!}" data-bc="{!! getPackage()[$pg]['bonus'] !!}" data-disc="{!! getPackage()[$pg]['disc'] !!}" selected>{!! strtoupper(getPackage()[$pg]['package']) !!} - IDR {!! str_replace(",",".",number_format(getPackage()[$pg]['price'])) !!}</option>   
 
                     @php $pg = 2 @endphp
-                    <option data-price="{!! getPackage()[$pg]['price'] !!}" id-paket="{{ $pg }}" data-paket="{!! getPackage()[$pg]['package'] !!}">{!! strtoupper(getPackage()[$pg]['package']) !!} - IDR {!! str_replace(",",".",number_format(getPackage()[$pg]['price'])) !!}</option>  
+                    <option data-price="{!! getPackage()[$pg]['price'] !!}" id-paket="{{ $pg }}" data-paket="{!! getPackage()[$pg]['package'] !!}" data-bc="{!! getPackage()[$pg]['bonus'] !!}" data-disc="{!! getPackage()[$pg]['disc'] !!}">{!! strtoupper(getPackage()[$pg]['package']) !!} - IDR {!! str_replace(",",".",number_format(getPackage()[$pg]['price'])) !!}</option>  
 
                     @php $pg = 3 @endphp
-                    <option data-price="{!! getPackage()[$pg]['price'] !!}" id-paket="{{ $pg }}" data-paket="{!! getPackage()[$pg]['package'] !!}">{!! strtoupper(getPackage()[$pg]['package']) !!} - IDR {!! str_replace(",",".",number_format(getPackage()[$pg]['price'])) !!}</option>  
+                    <option data-price="{!! getPackage()[$pg]['price'] !!}" id-paket="{{ $pg }}" data-paket="{!! getPackage()[$pg]['package'] !!}" data-bc="{!! getPackage()[$pg]['bonus'] !!}" data-disc="{!! getPackage()[$pg]['disc'] !!}">{!! strtoupper(getPackage()[$pg]['package']) !!} - IDR {!! str_replace(",",".",number_format(getPackage()[$pg]['price'])) !!}</option>  
 
                     <!-- <option data-price="getPackage()[$pg]['price']" data-paket="getPackage()[$pg]['package'] !!}" value=" $id "  if($id==$pg) selected endif> getActivProofPackage()[$pg]['package']  - IDR  str_replace(",",".",number_format(getActivProofPackage()[$pg]['price']))  -  str_replace(",",".",number_format(getActivProofPackage()[$pg]['credit']))  Credit</option>   -->
 
@@ -44,7 +48,7 @@
                 <div class="col-12 col-md-12">
                   <span class="check_mark"><!-- error --></span>
                   <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" required/>
-                  <label for="agree-term" class="label-agree-term text">I agree all statements in <a href="{{url('/helps')}}" class="term-service" target="_blank">Terms of service</a></label>
+                  <label for="agree-term" class="label-agree-term text">Saya menyetujui semua pernyataan di : <a href="{{url('/helps')}}" class="term-service" target="_blank">Terms of service</a></label>
                 </div>
               </div>
               <div class="form-group">
@@ -79,6 +83,8 @@
   {
     var price = parseInt($("select[name='idproof'] option:selected").attr('data-price'));
     $(".total").html('IDR '+formatNumber(price));
+    $(".bc").html('<h4>'+$("select[name='idproof'] option:selected").attr('data-bc')+'</h4>');
+    $(".disc").html('<h4>'+$("select[name='idproof'] option:selected").attr('data-disc')+'</h4>');
   }
 
   function formatNumber(num) 
@@ -101,7 +107,7 @@
       var is_checked = $("#agree-term").prop('checked');
       if(is_checked == false)
       {
-        $(".check_mark").html("<div class='error'>Please check box on : <u>I agree all statements in Terms of service</u></div>");
+        $(".check_mark").html("<div class='error'>Harap centang kotak : <u>Saya menyetujui semua pernyataan</u></div>");
         return false;
       }
       else
