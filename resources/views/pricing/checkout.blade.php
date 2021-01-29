@@ -12,6 +12,7 @@
               <div class="alert">
                 <div class="bc"><!-- display bonus text here --></div>
                 <div class="disc"><!-- display discount text here --></div>
+                <h4>Fitur Drip Views <i class="ml-2 fa fa-question-circle question" aria-hidden="true"></i>&nbsp;Setiap pembelian minimal 500.000 Coin</h4>
               </div>
               <div class="form-group">
                 <div class="col-12 col-md-12">
@@ -70,7 +71,16 @@
     change_selection();
     display_price();
     submit_order();
+    tooltips();
   });
+
+  function tooltips()
+  {
+    $('.question').tooltip({
+      'html':true,
+      'title': "Fitur Drip Views adalah Fitur untuk membagi views beberapa kali pada video yang sama dalam waktu random,sehingga penambahan views video terlihat lebih organik <br/><br/> Contoh : Video A : 200 Views untuk 11x = Total 2200 views."
+    });
+  }
 
   function change_selection()
   {
