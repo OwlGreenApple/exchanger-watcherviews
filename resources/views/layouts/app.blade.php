@@ -46,11 +46,11 @@
       <script type="text/javascript" src="{{ asset('/assets/intl-tel-input/js/intlTelInput.js') }}"></script>
     @endif
 
-     <!-- Pricing -->
+     <!-- Thankyou -->
     @if(Request::is('thankyou') || Request::is('thank-confirm')) 
       <link href="{{ asset('assets/css/thankyou.css') }}" rel="stylesheet">
     @endif
-
+   
 </head>
 <body>
      <!--Loading Bar-->

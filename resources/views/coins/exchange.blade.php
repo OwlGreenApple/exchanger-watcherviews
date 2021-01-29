@@ -53,11 +53,7 @@
                       
                       <!-- if(Auth::user()->membership == 'super') -->
                       <div class="form-group form-inline">
-                        <label class="mr-2">Drip-Views <i class="ml-2 fa fa-question-circle question" aria-hidden="true" title="Fitur Drip Views adalah
-                        Fitur untuk membagi views beberapa kali pada video yang sama dalam waktu random,
-                        sehingga penambahan views video terlihat lebih organik
-                          Contoh :
-                          Video A : 200 Views untuk 11x = Total 2200 views."></i></label>
+                        <label class="mr-2">Drip-Views <i class="ml-2 fa fa-question-circle question" aria-hidden="true"></i></label>
                         <input type="checkbox" name="drip" />
                       </div>
                       
@@ -115,7 +111,10 @@
 
   function tooltips()
   {
-    $('.question').tooltip();
+    $('.question').tooltip({
+      'html':true,
+      'title': "Fitur Drip Views adalah Fitur untuk membagi views beberapa kali pada video yang sama dalam waktu random,sehingga penambahan views video terlihat lebih organik <br/><br/> Contoh : Video A : 200 Views untuk 11x = Total 2200 views."
+    });
   }
 
   function check_drip()

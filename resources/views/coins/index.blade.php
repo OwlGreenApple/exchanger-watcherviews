@@ -15,13 +15,20 @@
   <div class="row justify-content-center">
       <div class="col-md-8">
           <div class="card">
-              <div class="card-body">
+              <div class="card-body alert">
                  <span id="status_msg"><!-- message --></span>
                  <div><input id="total_coins" class="form-control w-50" /></div>
-                 <small>Coins must be multiplied of 100,000</small>
+                 <small><b>Koin harus kelipatan 100,000</b></small>
+                 <div>Membership : <span class="badge badge-success">{{ Auth::user()->membership }}</span></div>
                  <div id="rate" data-price="{!! getPackageRate($user->membership) !!}">Price : Rp {!! str_replace(",",".",number_format(getPackageRate($user->membership))) !!} /100.000 coins</div>
-                 <div>Total : Rp <span id="total">0</span></div>
-                 <div id="purchase" class="btn btn-primary">Purchase</div>
+
+                 <div class="mt-2 mb-2 input-group col-lg-6 row">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Total : Rp</span>
+                    </div> 
+                    <b class="form-control" id="total">0</b>
+                  </div>
+                 <div id="purchase" class="btn btn-primary">Beli</div>
               </div>
           </div>
       </div>
