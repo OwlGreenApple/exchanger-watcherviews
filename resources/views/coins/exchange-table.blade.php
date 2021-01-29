@@ -9,7 +9,7 @@
       <th>Drip</th>
       <th>Total Coins</th>
       <th>Total Views</th>
-      <th>Status</th>
+      <th>Status Drip</th>
     </thead>
     <tbody>
       @foreach($data as $row)
