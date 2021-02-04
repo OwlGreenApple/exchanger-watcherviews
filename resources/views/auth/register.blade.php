@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Register') }}</div>
+                <div class="card-header">Form Pendaftaran</div>
 
                 <div class="card-body">
                   <form class="add-contact" id="form-register">
@@ -19,7 +19,7 @@
                     @endif
                    
                     <div class="form-group">
-                      <label>Name*</label>
+                      <label>Nama*</label>
                       <input type="text" name="username" class="form-control" placeholder="Input Your Name" required />
                       <span class="error username" role="alert"></span>                             
                     </div>
@@ -31,7 +31,7 @@
                     </div>
 
                     <div class="form-group">
-                      <label>Phone* <span class="tooltipstered" title="<div class='panel-heading'>Message</div><div class='panel-content'>
+                      <label>No HP* <span class="tooltipstered" title="<div class='panel-heading'>Message</div><div class='panel-content'>
                             Fill with your phone number without 0 or country code<br/>
                             For example : 8123456789, (201)5555555
                           </div>">
@@ -48,14 +48,14 @@
                     </div>
 
                     <div class="form-group">
-                      <label>Gender*</label>
+                      <label>Jenis Kelamin*</label>
                       <div>
                         <div class="form-check form-check-inline">
                           <label class="custom-radio">
                             <input class="form-check-input" type="radio" name="gender" value="male" id="radio-male" checked>
                             <span class="checkmark"></span>
                           </label>
-                          <label class="form-check-label" for="radio-male">Male</label>
+                          <label class="form-check-label" for="radio-male">Pria</label>
                         </div>
 
                         <div class="form-check form-check-inline">
@@ -63,7 +63,7 @@
                             <input class="form-check-input" type="radio" name="gender" id="radio-female" value="female">
                             <span class="checkmark"></span>
                           </label>
-                          <label class="form-check-label" for="radio-female">Female</label>
+                          <label class="form-check-label" for="radio-female">Wanita</label>
                         </div>
 
                       </div>
@@ -75,11 +75,11 @@
                             <input type="checkbox" name="agreement" required id="check-terms"/>
                             <span class="checkmark-check"></span>
                         </label>
-                        <label class="checkbox-left" for="check-terms"><sb>I Agree with <a href="/terms-of-services/" target="_blank" style="text-decoration: underline;">Terms and Condition</a></sb></label>
+                        <label class="checkbox-left" for="check-terms"><sb><!-- I Agree with -->Saya setuju dengan: <a href="{!! env('APP_URL') !!}/terms-of-services/" target="_blank" style="text-decoration: underline;"><!-- Terms and Condition -->Syarat dan Ketentuan</a></sb></label>
                     </div>
 
                     <div class="text-left">
-                      <button id="btn-register" type="button" class="btn btn-custom btn-lg">REGISTER</button>
+                      <button id="btn-register" type="button" class="btn btn-custom btn-lg">Daftar</button>
                     </div>
                 </form>
                 <!-- end cardbody -->
@@ -118,7 +118,7 @@
       var val= $("input[name=agreement]").val();
 
       if(val == 'on'){
-        alert('Please Check Agreement Box');
+        alert('Harap menclick kotak persetujuan');
         return false;
       }
 
@@ -141,7 +141,7 @@
           if (data.success == 1) 
           {
             $(".error").hide();
-            location.href="{{url('home')}}"
+            location.href="{{url('profile')}}"
           } 
           else {
              $('#loader').hide();

@@ -29,7 +29,7 @@
     <a class="d-inline-block d-md-none pb-30" data-toggle="modal" data-target="#summaryModal">
       <span class="d-flex align-items-center">
         <img class="mr-10" src="https://appsumo2.b-cdn.net/static/images/svg/baseline-shopping_cart-24px.svg" width="auto" height="24">
-        <span class="sumo-psuedo-link">View cart summary</span>
+        <span class="sumo-psuedo-link">Lihat cart summary</span>
       </span>
     </a>
     <div id="checkoutSteps">
@@ -38,7 +38,7 @@
         <div class="card checkout-card card-step-1 filled" id="cardStep1">
         <div class="card-header">
           <div class="d-flex align-items-center">
-            <h2 class="h3" id="header-step1">1. <?php if ($is_login == false) { ?>Account verification<?php } else { ?>Create an account <?php } ?></h2>
+            <h2 class="h3" id="header-step1">1. <?php if ($is_login == false) { ?>Akun Verifikasi<?php } else { ?>Buat akun <?php } ?></h2>
           </div>
         </div>
         <!-- End Card Header -->
@@ -46,14 +46,14 @@
           <!-- Card Data Summary -->
           <div class="card-data-summary show" id="step-1">
 						<?php if ($is_login == true) { ?>
-            <p>Your order confirmation will be emailed to:</p>
+            <p>Order anda akan di email ke :</p>
             <span class="sumo-psuedo-link">{{Auth::user()->email}}</span>
 						<?php } else { ?>
 
 							<div id="div-register">
                 <form class="add-contact" id="form-register">
                     <div class="form-group">
-                      <label>Name*</label>
+                      <label>Nama*</label>
                       <input type="text" name="username" class="form-control" placeholder="Input Your Name" required />
                       <span class="error username" role="alert"></span>                             
                     </div>
@@ -65,7 +65,7 @@
                     </div>
 
                     <div class="form-group">
-                      <label>Handphone* <span class="tooltipstered" title="<div class='panel-heading'>Message</div><div class='panel-content'>
+                      <label>No Hp* <span class="tooltipstered" title="<div class='panel-heading'>Message</div><div class='panel-content'>
                             Fill with your phone number without 0 or country code<br/>
                             For example : 8123456789, (201)5555555
                           </div>">
@@ -81,14 +81,14 @@
                     </div>
 
                     <div class="form-group">
-                      <label>Gender*</label>
+                      <label>Jenis Kelamin*</label>
                       <div>
                         <div class="form-check form-check-inline">
                           <label class="custom-radio">
                             <input class="form-check-input" type="radio" name="gender" value="male" id="radio-male" checked>
                             <span class="checkmark"></span>
                           </label>
-                          <label class="form-check-label" for="radio-male">Male</label>
+                          <label class="form-check-label" for="radio-male">Pria</label>
                         </div>
 
                         <div class="form-check form-check-inline">
@@ -96,7 +96,7 @@
                             <input class="form-check-input" type="radio" name="gender" id="radio-female" value="female">
                             <span class="checkmark"></span>
                           </label>
-                          <label class="form-check-label" for="radio-female">Female</label>
+                          <label class="form-check-label" for="radio-female">Wanita</label>
                         </div>
 
                       </div>
@@ -108,18 +108,18 @@
                             <input type="checkbox" name="agreement" required id="check-terms"/>
                             <span class="checkmark-check"></span>
                         </label>
-                        <label class="checkbox-left" for="check-terms"><sb>I Agree with <a href="http://activrespon.com/terms-of-services/" target="_blank" style="text-decoration: underline;">Terms and Condition</a></sb></label>
+                        <label class="checkbox-left" for="check-terms"><sb>Saya menyetujui <a href="{!! env('APP_URL') !!}/terms-of-services/" target="_blank" style="text-decoration: underline;">Term of services</a></sb></label>
                     </div>
 
                     <div class="text-left">
-                      <button id="btn-register" type="button" class="btn btn-custom btn-lg">REGISTER</button>
+                      <button id="btn-register" type="button" class="btn btn-custom btn-lg">Daftar</button>
                     </div>
                     <input type="hidden" name="recaptcha_response" id="recaptchaResponse" readonly="readonly"/>
                 </form>
 
                 <hr class="mt-5" />
 
-                <div class="mt-4 mb-3"><sb>Already Have An Account? <a href="" id="link-to-login">Log in Here</a></sb></div>
+                <div class="mt-4 mb-3"><sb>Sudah punya akun? <a href="" id="link-to-login">Login di sini</a></sb></div>
 							</div>
 							<div id="div-login" style="display:none;">
                 <span id="login-error"><!-- error login --></span>
@@ -163,7 +163,7 @@
 
 								<hr class="mt-5" />
 
-								<div class="mt-4 mb-3"><sb>Need an Activrespon account? <a href="" id="link-to-register">Register Here</a></sb></div>
+								<div class="mt-4 mb-3"><sb>Perlu akun? <a href="" id="link-to-register">Daftar disini</a></sb></div>
 							</div>
 						<?php } ?>
           </div>
@@ -184,9 +184,13 @@
           <!-- Card Data Entry -->
           <div class="card-data-entry step-2" <?php if (!$is_login) { ?> style="display:none;"<?php } ?>> <!-- style="display: none;" -->
             <p>
-              <b>
+             <!--  <b>
                 While we're sure you got everything right, please review your order summary,
                 email address, and payment method before placing your order.
+              </b> 
+               -->
+               <b>
+                Untuk memastikan anda mendapatkan yang tepat, silahkan cek order,email dan metode pembayaran and sebelum menempatkan order.
               </b>
             </p>
             <!-- Mobile Checkout Summary  -->
@@ -229,17 +233,20 @@
             <div class="checkout-button-container mt-30 step-2" id="checkout-buttons-2" <?php if (!$is_login) { ?> style="display:none;"<?php } ?>>
 							
               <div class="sumo-product-note light mt-20">
-                By clicking the "Place Order" button, you confirm that you have read, understand,
-                and accept our <a href="http://activrespon.com/terms-of-services/" target="_blank">Terms and Conditions</a>, and <a href="http://activrespon.com/privacy-policy/" target="_blank" style="text-decoration: underline;">Privacy Policy</a>.
+                <!-- By clicking the "Place Order" button, you confirm that you have read, understand,
+                and accept our  -->Dengan menclick tombol "Order Now", bahwa anda telah : mengconfirmasi,membaca,mengerti dan setuju <a href="{!! env('APP_URL') !!}/terms-of-services/" target="_blank"> Terms and Conditions</a>, dan <a href="{!! env('APP_URL') !!}/privacy-policy/" target="_blank" style="text-decoration: underline;"><!-- Privacy Policy -->Kebijakan privasi</a>.
               </div>
             </div>
             <!-- End Mobile Checkout Summary -->
             <hr class="my-30">
-            <h4 class="mb-10"><b>Need Help?</b></h4>
-            <p>
+            <h4 class="mb-10"><b><!-- Need Help? -->Perlu Bantuan?</b></h4>
+            <!-- <p>
               Our support team is only one click away! Send us any questions you may have.
+            </p> -->
+            <p>
+              Kirimkan pertanyaan anda kepada tim kami disini.
             </p>
-            <a href="whatsapp://send/?phone=+62817318368" target="_blank" class="btn btn-more full-width-mobile waves-effect waves-light">Find Help</a>
+            <a href="whatsapp://send/?phone=+62817318368" target="_blank" class="btn btn-more full-width-mobile waves-effect waves-light">Temukan Bantuan</a>
           </div>
           <!-- End Card Data Entry -->
         </div>
@@ -342,10 +349,10 @@
                     <div class="checkout-button-container mt-30 step-2" id="checkout-buttons-1" <?php if (!$is_login) { ?> style="display:none;"<?php } ?>>
 
 												<input type="submit" name="submit" id="submit" class="col-md-12 col-12 btn btn-primary bsub btn-block" value="Order Now"/>
-                      <div class="sumo-product-note light mt-20">
-                        By clicking the "Place Order" button, you confirm that you have read, understand,
-                        and accept our <a href="https://celebfans.com/terms-of-services/" target="_blank">Terms and Conditions</a>, and <a href="https://celebfans.com/privacy-policy/" target="_blank">Privacy Policy</a>.
-                      </div>
+                     <div class="sumo-product-note light mt-20">
+                      <!-- By clicking the "Place Order" button, you confirm that you have read, understand,
+                      and accept our  -->Dengan menclick tombol "Place Order", bahwa anda telah : mengconfirmasi,membaca,mengerti dan setuju <a href="{!! env('APP_URL') !!}/terms-of-services/" target="_blank"> Terms and Conditions</a>, dan <a href="{!! env('APP_URL') !!}/privacy-policy/" target="_blank" style="text-decoration: underline;"><!-- Privacy Policy -->Kebijakan Privasi</a>.
+                    </div>
                     </div>
 									</form>
               <!-- Close Desktop Table -->

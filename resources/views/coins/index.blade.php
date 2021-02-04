@@ -15,14 +15,14 @@
   <div class="row justify-content-center">
       <div class="col-md-8">
           <div class="card">
-              <div class="card-body">
+              <div class="card-body col-lg-6">
                  <span id="status_msg"><!-- message --></span>
-                 <div><input id="total_coins" class="form-control w-50" /></div>
+                 <div><input id="total_coins" class="form-control" /></div>
                  <small><b>Koin harus kelipatan 100,000</b></small>
-                 <div class="py-1">Membership : <span class="badge badge-success">{{ Auth::user()->membership }}</span></div>
+                 <div class="py-1">Membership : @if(Auth::user()->membership == null || Auth::user()->membership =='')Free @else  <span class="badge badge-success px-2 py-1">{{ Auth::user()->membership }}</span>@endif</div>
                  <div class="py-1" id="rate" data-price="{!! getPackageRate($user->membership) !!}">Harga rate : <b>Rp {!! str_replace(",",".",number_format(getPackageRate($user->membership))) !!} /100.000 coins</b></div>
 
-                 <div class="mt-2 mb-2 input-group col-lg-6 row">
+                 <div class="mt-2 mb-2 input-group">
                     <div class="input-group-prepend">
                       <span class="input-group-text bg-success text-white">Total Rp :</span>
                     </div> 
@@ -94,14 +94,14 @@
         {
           $('#loader').hide();
           $('.div-loading').removeClass('background-load');
-          $("#status_msg").html('<div class="alert alert-danger">Sorry, our server is too busy, please try again later.</div>')
+          $("#status_msg").html(alert_wrapper('Maaf server kami sedang sibuk, coba lagi nanti.'));
         }
         else if(result.msg == 2)
         {
           //serverside validation
           $('#loader').hide();
           $('.div-loading').removeClass('background-load');
-          $("#status_msg").html('<div class="alert alert-danger">'+result.message+'</div>')
+          $("#status_msg").html(alert_wrapper(result.message));
         }
         else
         {
@@ -193,7 +193,7 @@
 
      if(check_min_coin(coins) == false)
      {
-        alert('Minimum coins for purchasing is 500,000');
+        $("#status_msg").html(alert_wrapper('Minimal pembelian koin adalah sebesar 500.000'));
         return false;
      }
 
@@ -203,7 +203,7 @@
       
      if(total_coin > 0)
      {
-       alert('The amount of coins must multiplied of 100,000');
+       $("#status_msg").html(alert_wrapper('Jumlah koin harus kelipatan 100,000'));
        return false;
      }
      else

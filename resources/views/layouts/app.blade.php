@@ -162,5 +162,13 @@
         </main>
     </div>
 
+    <script type="text/javascript">
+      //wrapper alert style
+      function alert_wrapper(text)
+      {
+        return  "<div class='alert alert-danger'>"+text+"</div>";
+      }
+    </script>
+
 </body>
 </html>

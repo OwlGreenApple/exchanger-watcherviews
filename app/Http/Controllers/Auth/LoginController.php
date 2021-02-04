@@ -151,7 +151,7 @@ class LoginController extends Controller
           //if user login 2 days after last login then total login become 1
          /* $user->total_login = $total_login;
           $user->save();  */
-          return redirect('home');
+          return redirect('profile');
       }
 
       try 
@@ -159,7 +159,7 @@ class LoginController extends Controller
         $user->total_login= $total_login;
         $user->date_bonus = Carbon::now(); //noted if user get bonuses already
         $user->save();  
-        return redirect('home');
+        return redirect('profile');
       }
       catch (QueryException $e) {
         /*$res['error'] = true;

@@ -36,7 +36,7 @@
                     </div>
                     @endfor
 
-                    <div id="common-error" class="error exchange mb-2"><!-- error message --></div>
+                    <div id="common-error" class="error exchangev mt-2 mb-2"><!-- error message --></div>
 
                       <div class="form-group">
                         <label>Link Video</label>
@@ -324,27 +324,27 @@
 
     if(link_video.toString().length == 0)
     {
-      $("#common-error").html(alert_wrapper('Field youtube link cannot be empty'));
+      $("#common-error").html(alert_wrapper('Kolom youtube link wajib diisi'));
       return false;
     }
     else if(views.toString().length == 0)
     {
-      $("#common-error").html(alert_wrapper('Field views cannot be empty'));
+      $("#common-error").html(alert_wrapper('Kolom views wajib diisi'));
       return false;
     }
     else if(formatted_runs(views) < 100)
     {
-      $("#common-error").html(alert_wrapper('Field views at least 100'));
+      $("#common-error").html(alert_wrapper('Kolom views paling sedikit berjumlah 100'));
       return false;
     }
     else if(drip == true && runs < 1)
     {
-      $("#common-error").html(alert_wrapper('Field runs at least 1'));
+      $("#common-error").html(alert_wrapper('Kolom runs paling sedikit berjumlah 1'));
       return false;
     }
     else if(drip == true && runs.toString().length == 0)
     {
-      $("#common-error").html(alert_wrapper('Field runs cannot be empty'));
+      $("#common-error").html(alert_wrapper('Kolom runs wajib diisi'));
       return false;
     }
     else
