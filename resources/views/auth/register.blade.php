@@ -31,11 +31,7 @@
                     </div>
 
                     <div class="form-group">
-                      <label>No HP* <span class="tooltipstered" title="<div class='panel-heading'>Message</div><div class='panel-content'>
-                            Fill with your phone number without 0 or country code<br/>
-                            For example : 8123456789, (201)5555555
-                          </div>">
-                          <i class="fa fa-question-circle "></i>
+                      <label>No HP* <span class="question"><i class="fa fa-question-circle "></i>
                         </span>
                       </label>
                       <input type="text" id="phone" name="phone" class="form-control" required/>
@@ -97,7 +93,17 @@
   {
     agreement();
     registerAjax();
+    tooltips();
   });
+
+  function tooltips()
+  {
+    /*Fill with your phone number without 0 or country code<br/>For example : 8123456789, (201)5555555*/
+    $('.question').tooltip({
+      'html':true,
+      'title': "Isi kolom no hp tanpa menggunakkan 0 atau kode negara<br/>Contoh : 8123456789,(201)5555555"
+    });
+  }
 
   function agreement(){
     $("input[name=agreement]").click(function(){

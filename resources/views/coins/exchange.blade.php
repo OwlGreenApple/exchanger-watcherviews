@@ -112,12 +112,6 @@
   // GLOBAL VARIABLE
   const max_value = 10000;
 
-  //wrapper alert style
-  function alert_wrapper(text)
-  {
-    return  "<div class='alert alert-danger'>"+text+"</div>";
-  }
-
   function tooltips()
   {
     $('.question').tooltip({
