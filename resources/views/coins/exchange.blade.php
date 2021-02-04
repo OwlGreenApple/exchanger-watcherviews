@@ -6,36 +6,37 @@
   <div class="row">
     <div class="col-md-12">
 
-      <h2><b>Exchange Coins</b></h2>  
+      <h2><b>Order Views</b></h2>  
     
       <hr>
     </div>
   </div>
 
   <div class="row justify-content-center">
-      <div class="col-md-8">
+      <div class="col-md-9">
           <div class="card">
               <div class="card-body">
+             <!-- form views -->
+              <div class="col-lg-6 col-md-4 col-sm-12 col-12 px-0 mt-2">
                  <span id="status_msg"><!-- message --></span>
-                  <form id="submit_exchange">
+                  <form id="submit_exchange" class="mb-2">
 
                     <!-- display exchange rate -->
                     @for($x=1; $x<=7; $x++)
                     <div class="form-check">
                       @if($x == 1) 
                       <label class="form-check-label">
-                        <input type="radio" data-coins="{!! getExchangeRate($x)['coins'] !!}" class="form-check-input" name="exchange" value="{{ $x }}" checked/>{!! getExchangeRate($x)['duration'] !!} sec = {!! number_format(getExchangeRate($x)['coins']) !!} coins / 1000 views
+                        <input type="radio" data-coins="{!! getExchangeRate($x)['coins'] !!}" class="form-check-input" name="exchange" value="{{ $x }}" checked/>{!! getExchangeRate($x)['duration'] !!} detik = {!! number_format(getExchangeRate($x)['coins']) !!} coins / 1000 views
                       </label>
                       @else
                       <label class="form-check-label">
-                        <input type="radio" data-coins="{!! getExchangeRate($x)['coins'] !!}" class="form-check-input" name="exchange" value="{{ $x }}"/>{!! getExchangeRate($x)['duration'] !!} sec = {!! number_format(getExchangeRate($x)['coins']) !!} coins / 1000 views
+                        <input type="radio" data-coins="{!! getExchangeRate($x)['coins'] !!}" class="form-check-input" name="exchange" value="{{ $x }}"/>{!! getExchangeRate($x)['duration'] !!} detik = {!! number_format(getExchangeRate($x)['coins']) !!} coins / 1000 views
                       </label>
                       @endif
                     </div>
                     @endfor
-                    <div class="error exchange"></div>
-                   
-                    <div class="col-lg-5 col-md-4 col-sm-12 col-12 px-0 mt-2">
+
+                    <div id="common-error" class="error exchange mb-2"><!-- error message --></div>
 
                       <div class="form-group">
                         <label>Link Video</label>
@@ -68,16 +69,18 @@
                         <label class="mr-2">Total Views</label>
                         <div id="total_views" class="form-control"></div>
                       </div>
-                    </div>
 
-                    <div class="mt-2 mb-2 input-group col-lg-7">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text">Total Coins Charge :</span>
-                      </div> 
-                      <b class="form-control" id="total">0</b>
-                    </div>
+                      <div class="mt-2 mb-3 input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text bg-success text-white">Jumlah Coins :</span>
+                        </div> 
+                        <b class="form-control" id="total">0</b>
+                      </div>
 
-                    <button type="button" id="purchase" type="submit" class="btn btn-primary">Purchase</button>
+                      <button type="button" id="purchase" type="submit" class="btn btn-primary">Tukar Koin</button>
+
+                    <!-- form views -->
+                    </div>
                   </form>
 
               </div>
@@ -86,7 +89,7 @@
   </div>
 
   <div class="row justify-content-center mt-3 bg-white py-2">
-    <h5><b>Exchange Transaction</b></h5>
+    <h5><b>Transaksi Order Views</b></h5>
     <div class="col-lg-12 table-responsive" id="content"><!-- datatable --></div>
   </div>
 
@@ -108,6 +111,12 @@
 
   // GLOBAL VARIABLE
   const max_value = 10000;
+
+  //wrapper alert style
+  function alert_wrapper(text)
+  {
+    return  "<div class='alert alert-danger'>"+text+"</div>";
+  }
 
   function tooltips()
   {
@@ -315,27 +324,27 @@
 
     if(link_video.toString().length == 0)
     {
-      alert('Field youtube link cannot be empty');
+      $("#common-error").html(alert_wrapper('Field youtube link cannot be empty'));
       return false;
     }
     else if(views.toString().length == 0)
     {
-      alert('Field views cannot be empty');
+      $("#common-error").html(alert_wrapper('Field views cannot be empty'));
       return false;
     }
     else if(formatted_runs(views) < 100)
     {
-      alert('Field views at least 100');
+      $("#common-error").html(alert_wrapper('Field views at least 100'));
       return false;
     }
     else if(drip == true && runs < 1)
     {
-      alert('Field runs at least 1');
+      $("#common-error").html(alert_wrapper('Field runs at least 1'));
       return false;
     }
     else if(drip == true && runs.toString().length == 0)
     {
-      alert('Field runs cannot be empty');
+      $("#common-error").html(alert_wrapper('Field runs cannot be empty'));
       return false;
     }
     else

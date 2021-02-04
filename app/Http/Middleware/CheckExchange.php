@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use App\Rules\CheckUsersCredit;
 use App\Rules\ValidYoutubeLink;
+use App\Rules\CheckIdExchange;
 use Validator;
 
 class CheckExchange
@@ -29,15 +30,14 @@ class CheckExchange
 
         $maxvalue = 10000;
         $rules = [
-          'exchange'=>['required','numeric','min:1','max:7'],
-          'link_video'=>['required',new ValidYoutubeLink],
-          'views'=>['bail','required','numeric','min:100','max:'.$maxvalue.'',new CheckUsersCredit($request->exchange,0)]
+          'link_video'=>['bail','required',new ValidYoutubeLink],
+          'views'=>['bail','required',new CheckIdExchange($reqs['exchange']),'numeric','min:100','max:'.$maxvalue.'',new CheckUsersCredit($reqs['exchange'],0)]
         ];
 
         if($request->drip == "1")
         {
            $rules['views'] = ['bail','required','numeric','min:100','max:'.$maxvalue.''];
-           $rules['runs'] = ['bail','required','numeric','min:1','max:'.$maxvalue.'',new CheckUsersCredit($request->exchange,$request->views)];
+           $rules['runs'] = ['bail','required',new CheckIdExchange($reqs['exchange']),'numeric','min:1','max:'.$maxvalue.'',new CheckUsersCredit($reqs['exchange'],$reqs['views'])];
         }
 
         $validator = Validator::make($reqs,$rules);
@@ -47,7 +47,6 @@ class CheckExchange
            $err = $validator->errors();
            $errors = [
               'msg'=>2,
-              'exchange'=>$err->first('exchange'),
               'link_video'=>$err->first('link_video'),
               'views'=>$err->first('views'),
               'runs'=>$err->first('runs')

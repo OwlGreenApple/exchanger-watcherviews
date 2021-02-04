@@ -3,12 +3,12 @@
     <thead align="center">
       <th>No Order</th>
       <th>Package</th>
-      <th>Purchased coins</th>
-      <th>Price</th>
+      <th>Koin yang dibeli</th>
+      <th>Harga</th>
       <th>Total</th>
-      <th>Date</th>
-      <th>Upload Image</th>
-      <th>Notes</th>
+      <th>Tanggal</th>
+      <th>Upload Bukti</th>
+      <th>Catatan</th>
       <th style="width:145px">Status</th>
     </thead>
 
@@ -23,7 +23,7 @@
           <td>{{$order['created_at']}}</td>
           <td class="text-center">
             @if($order['buktibayar'] !== 0)
-              <a class="open_proof" data-href="{!! Storage::disk('s3')->url($order['buktibayar']) !!}">View</a>
+              <a class="open_proof" data-href="{!! Storage::disk('s3')->url($order['buktibayar']) !!}">Lihat</a>
             @else
               -
             @endif

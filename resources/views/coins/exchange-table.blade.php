@@ -1,9 +1,9 @@
 @if(count($data) > 0)
   <table id="exchanged_coins" class="table table-striped table-bordered">
     <thead align="center">
-      <th>Created</th>
-      <th>Duration</th>
-      <th>Coins Rate</th>
+      <th>Tanggal</th>
+      <th>Durasi</th>
+      <th>Rate Koin</th>
       <th>Youtube Link</th>
       <th>Views</th>
       <th>Drip</th>

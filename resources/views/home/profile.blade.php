@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header"><h5>Profile</h5></div>
+                <div class="card-header"><h5>Profil</h5></div>
 
                 <div class="card-body">
                   <span id="server-error"><!-- error server --></span>
@@ -22,18 +22,18 @@
                     </div>
 
                     <div class="form-group">
-                      <label>Name</label>
+                      <label>Nama</label>
                       <input type="text" name="username" class="form-control" placeholder="Input Your Name" required value="{{ $user->name }}" />
                       <span class="error username" role="alert"></span>                             
                     </div>
 
                     <div class="form-group">
-                      <label>Current Phone</label>
+                      <label>No Hp</label>
                        <div id="current_phone" class="form-control">{{ $user->phone }}</div>
                     </div>
 
                     <div class="form-group">
-                      <label>Update Phone <span class="tooltipstered" title="<div class='panel-heading'>Message</div><div class='panel-content'>
+                      <label>Edit No Hp <span class="tooltipstered" title="<div class='panel-heading'>Message</div><div class='panel-content'>
                             Fill with your phone number without 0 or country code<br/>
                             For example : 8123456789, (201)5555555
                           </div>">
@@ -50,25 +50,25 @@
                     </div>
 
                     <div class="form-group">
-                      <label>Old Password</label>
+                      <label>Password Lama</label>
                        <input type="password" class="form-control" name="oldpass" placeholder="Old Password">
                        <span class="error oldpass"></span>
                     </div>
 
                     <div class="form-group">
-                      <label>New Password</label>
+                      <label>Password Baru</label>
                        <input type="password" class="form-control" name="password" placeholder="New Password">
                        <span class="error password"></span>
                     </div>
 
                     <div class="form-group">
-                      <label>Confirm New Password</label>
+                      <label>Konfirmasi Password Baru</label>
                        <input type="password" class="form-control" name="confpass" placeholder="Confirm New Password">
                        <span class="error confpass"></span>
                     </div>
 
                     <div class="text-left">
-                      <button id="btn-register" type="button" class="btn btn-custom">Update</button>
+                      <button id="btn-register" type="button" class="btn btn-custom">Perbaharui</button>
                     </div>
                 </form>
                 <!-- end cardbody -->

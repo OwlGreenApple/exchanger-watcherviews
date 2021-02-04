@@ -6,14 +6,14 @@
   <div class="row">
     <div class="col-md-12">
 
-      <h2><b>Coins Transaction</b></h2>  
+      <h2><b>Transaksi Koin</b></h2>  
     
       <hr>
     </div>
   </div>
 
   <div class="col-lg-10 justify-content-center mt-3 mx-auto bg-white py-2">
-    <h5 class="text-center"><b>Transaction List</b></h5>
+    <h5 class="text-center"><b>Daftar Transaksi</b></h5>
     
     <div class="table-responsive">
       <table id="transaction_list" class="table table-striped table-bordered">
@@ -21,8 +21,8 @@
           <th width="10%">No</th>
           <th width="25%">Debit</th>
           <th width="25%">Credit</th>
-          <th width="20%">Source</th>
-          <th width="20%">Date</th>
+          <th width="20%">Sumber</th>
+          <th width="20%">Tanggal</th>
          <!--  <th>Status</th> -->
         </thead>
         <tbody>

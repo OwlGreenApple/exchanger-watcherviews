@@ -108,7 +108,7 @@ class LoginController extends Controller
     public function get_daily_bonus()
     {
       $user = Auth::user();
-      $already_get_bonus = false; 
+      // $already_get_bonus = false; 
       $total_login = $user->total_login;
       $get_bonus = Carbon::parse($user->date_bonus)->setTime(0, 0, 0); //set time to 00:00:00
 
@@ -120,23 +120,22 @@ class LoginController extends Controller
       }
 
       //determine user get bonus or not
-      if ( $last_activity->diffInDays(Carbon::now()) >= 1 && $last_activity->diffInDays(Carbon::now()) < 2  ) {
+     /* if ( $last_activity->diffInDays(Carbon::now()) >= 1 && $last_activity->diffInDays(Carbon::now()) < 2  ) {
         $already_get_bonus = false; // blm dapat bonus
         $user->date_bonus = Carbon::now();
-      }
-      else if ( $last_activity->diffInDays(Carbon::now()) >= 2  ) {
-        $already_get_bonus = false;
+      }*/
+      if ($last_activity->diffInDays(Carbon::now()) >= 2) {
         $total_login = 0;
         $user->date_bonus = Carbon::now();
       }
-      else if ( $last_activity->diffInDays(Carbon::now()) < 1  ) 
+    /*  else if ( $last_activity->diffInDays(Carbon::now()) < 1  ) 
       {
         $already_get_bonus = true;
-      }
+      }*/
 
       //check if user last login eligible to get bonus
-      //TO PREVENT IF USER LOGIN AND THEN LOGOUT SEVERAL TIMES TO GET BONUSES
-      if($already_get_bonus == true && $get_bonus->diffInDays(Carbon::now()) > 0)
+      //TO PREVENT IF USER LOGIN AND THEN LOGOUT SEVERAL TIMES AND GET BONUSES
+      if($get_bonus->diffInDays(Carbon::now()) > 0)
       {
           //SET COINS GIFT
          $total_login++;
@@ -149,9 +148,9 @@ class LoginController extends Controller
       }
       else
       {   
-          //if user login 2 days after last login then total login become 0
-          $user->total_login= $total_login;
-          $user->save();  
+          //if user login 2 days after last login then total login become 1
+         /* $user->total_login = $total_login;
+          $user->save();  */
           return redirect('home');
       }
 

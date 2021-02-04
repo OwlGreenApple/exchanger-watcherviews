@@ -6,7 +6,7 @@
   <div class="row">
     <div class="col-md-12">
 
-      <h2><b>Buy Coins</b></h2>  
+      <h2><b>Beli Koin</b></h2>  
     
       <hr>
     </div>
@@ -15,16 +15,16 @@
   <div class="row justify-content-center">
       <div class="col-md-8">
           <div class="card">
-              <div class="card-body alert">
+              <div class="card-body">
                  <span id="status_msg"><!-- message --></span>
                  <div><input id="total_coins" class="form-control w-50" /></div>
                  <small><b>Koin harus kelipatan 100,000</b></small>
-                 <div>Membership : <span class="badge badge-success">{{ Auth::user()->membership }}</span></div>
-                 <div id="rate" data-price="{!! getPackageRate($user->membership) !!}">Price : Rp {!! str_replace(",",".",number_format(getPackageRate($user->membership))) !!} /100.000 coins</div>
+                 <div class="py-1">Membership : <span class="badge badge-success">{{ Auth::user()->membership }}</span></div>
+                 <div class="py-1" id="rate" data-price="{!! getPackageRate($user->membership) !!}">Harga rate : <b>Rp {!! str_replace(",",".",number_format(getPackageRate($user->membership))) !!} /100.000 coins</b></div>
 
                  <div class="mt-2 mb-2 input-group col-lg-6 row">
                     <div class="input-group-prepend">
-                      <span class="input-group-text">Total : Rp</span>
+                      <span class="input-group-text bg-success text-white">Total Rp :</span>
                     </div> 
                     <b class="form-control" id="total">0</b>
                   </div>

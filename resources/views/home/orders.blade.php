@@ -55,7 +55,7 @@
             BCA <b>Sugiarto Lasjim</b>
           </p>
           <p class="card-text">
-            Setelah Transfer, silahkan Klik tombol confirm payment di bawah ini <br> atau Email bukti Transfer anda ke <b>@php echo env('APP_EMAIL_ADMIN') @endphp</b> <br>
+            Setelah Transfer, silahkan Klik tombol <span class="badge badge-primary">confirm payment</span> di bawah ini <br> atau Email bukti Transfer anda ke <b>@php echo env('APP_EMAIL_ADMIN') @endphp</b> <br>
             Admin kami akan membantu anda max 1x24 jam
           </p>
 
