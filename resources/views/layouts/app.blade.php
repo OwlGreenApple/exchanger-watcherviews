@@ -95,10 +95,6 @@
                             </li>
 
                         @else
-                            <li class="nav-item @if(Request::is('pricing')) active @endif">
-                                <a class="nav-link" href="{{ url('pricing') }}">{{ __('Memberships') }}</a>
-                            </li> 
-
                             <!-- MILESTONE -->
                             @if(Auth::user()->is_admin == 1)
                               <li class="nav-item @if(Request::is('list-order')) active @endif">
@@ -108,9 +104,14 @@
                                   <a class="nav-link" href="{{ url('user-contacts') }}">Kontak User</a>
                               </li>
                             @else
+                               <li class="nav-item @if(Request::is('pricing')) active @endif">
+                                  <a class="nav-link" href="{{ url('pricing') }}">{{ __('Memberships') }}</a>
+                              </li> 
+
                               <li class="nav-item @if(Request::is('buy-coins')) active @endif">
                                   <a class="nav-link" href="{{ url('buy-coins') }}">Beli Koin</a>
-                              </li> 
+                              </li>
+                               
                               <li class="nav-item dropdown @if(Request::is('exchange-coins') || Request::is('transaction')) active @endif">
                                   <a id="coinsDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     Views
