@@ -1,12 +1,15 @@
-
 <table class="order-column compact stripe" id="order-table">
     <thead align="center">
       <th>No Order</th>
-      <th>Package</th>
-      <th>Koin yang dibeli</th>
+      <th>Tanggal</th>
+      @if($stlabel == 'membership-history')
+        <th>Package</th>
+      @endif
+      @if($stlabel == 'coin-history')
+        <th>Koin yang dibeli</th>
+      @endif
       <th>Harga</th>
       <th>Total</th>
-      <th>Tanggal</th>
       <th>Upload Bukti</th>
       <th>Catatan</th>
       <th style="width:145px">Status</th>
@@ -16,11 +19,15 @@
        @foreach($orders as $order)
         <tr>
           <td>{{$order['no_order']}}</td>
-          <td>{{$order['package']}}</td>
-          <td>{{ number_format($order['purchased_coins']) }}</td>
+          <td>{{$order['created_at']}}</td>
+          @if($stlabel == 'membership-history')
+            <td>{{$order['package']}}</td>
+          @endif
+          @if($stlabel == 'coin-history')
+            <td>{{ number_format($order['purchased_coins']) }}</td>
+          @endif
           <td>{{ number_format($order['price']) }}</td>
           <td>{{ number_format($order['total']) }}</td>
-          <td>{{$order['created_at']}}</td>
           <td class="text-center">
             @if($order['buktibayar'] !== 0)
               <a class="open_proof" data-href="{!! Storage::disk('s3')->url($order['buktibayar']) !!}">Lihat</a>

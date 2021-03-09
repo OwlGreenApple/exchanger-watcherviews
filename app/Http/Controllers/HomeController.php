@@ -79,9 +79,23 @@ class HomeController extends Controller
     }
 
     //DISPLAY ORDER HISTORY
-    public function order_history()
+    public function order_history($status)
     {
-        $orders = Orders::where('user_id',Auth::id())->orderBy('id','desc')->get();
+        /*
+          - membership package
+          - coin package
+        */
+        if($status == 'membership-history')
+        {
+          $orders = Orders::where([['user_id',Auth::id()],['package','<>','buy-coins']])->orderBy('id','desc')->get();
+          $label = 'Upgrade Membership History';
+        }
+        elseif($status == 'coin-history')
+        {
+          $orders = Orders::where([['user_id',Auth::id()],['package','=','buy-coins']])->orderBy('id','desc')->get();
+          $label = 'Coin Order History';
+        }
+       
         $data = array();
 
         if($orders->count() > 0)
@@ -111,7 +125,7 @@ class HomeController extends Controller
           }
         }
 
-        return view('home.orders',['orders'=>$data]);
+        return view('home.orders',['orders'=>$data,'label'=>$label,'stlabel'=>$status]);
     }
 
     //THANK YOU PAGE FOR USER CONFIRM ORDER
@@ -123,19 +137,19 @@ class HomeController extends Controller
     //REFERRAL
     public function referral()
     {
-       $user = Auth::user();       
-       if($user->referral_link <> null || $user->referral_link <> "")
+       $user = Auth::user();      
+       if($user->referral_link == null || $user->referral_link == "")
        {
-          $referral_link = url('/referral-reg')."/".$user->referral_link;
+          $ref_link = $this->generate_referral_link();//generate referal link when user visit referal page       
        }
        else
        {
-          $referral_link = null;
+          $ref_link = $user->referral_link;
        }
-     
+
        $data = [
         'user'=>User::where('referral_id',$user->id)->get(),
-        'referral_link'=>$referral_link
+        'referral_link'=>url('/referral-reg')."/".$ref_link
        ];
 
        return view('referral.index',$data);
@@ -150,15 +164,15 @@ class HomeController extends Controller
 
         try{
            $user->save();
-           $data['msg'] = 0;
-           $data['link'] = url('/referral-reg')."/".$user->referral_link;
+          /* $data['msg'] = 0;
+           $data['link'] = url('/referral-reg')."/".$user->referral_link;*/
         }
         catch(QueryException $e)
         {
           // $e->getMessage();
-          $data['msg'] = 1;
+          // $data['msg'] = 1;
         }
-        return response()->json($data);
+        return $user->referral_link;
     }
 
     public function referral_register($referral_link)

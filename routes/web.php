@@ -27,6 +27,7 @@ Auth::routes();
 
 //ORDER
 Route::get('pricing',[Orders::class, 'index']);
+Route::get('checkout/{id}',[Orders::class, 'checkout']);
 Route::get('thankyou',[Orders::class, 'thankyou']); 
 Route::post('payment',[Orders::class, 'payment']);
 Route::get('summary',[Orders::class, 'summary']);
@@ -45,7 +46,7 @@ Route::group(['middleware' => ['web','auth']], function () {
   Route::get('home', [Home::class, 'index'])->name('home');
   Route::get('profile',[Home::class , 'profile']);
   Route::post('update-profile',[Home::class , 'update_profile'])->middleware('profile');
-  Route::get('history-order',[Home::class, 'order_history']);
+  Route::get('history-order/{status}',[Home::class, 'order_history']);
   Route::get('thank-confirm',[Home::class, 'confirm_thank_you']);
 
   //CONTACT
@@ -55,7 +56,6 @@ Route::group(['middleware' => ['web','auth']], function () {
 
   //REFERRAL
   Route::get('referral',[Home::class, 'referral']);
-  Route::get('referral-link',[Home::class, 'generate_referral_link']);
 
   //TRANSACTION
   Route::get('transaction',[Home::class, 'transaction']);

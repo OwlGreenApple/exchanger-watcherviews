@@ -6,7 +6,7 @@
   <div class="row">
     <div class="col-md-12">
 
-      <h2><b>Orders</b></h2>  
+      <h2><b>{{ $label }}</b></h2>  
       
       <h5>
         Show you previous history orders

@@ -14,6 +14,11 @@ class OrderController extends Controller
     // DISPLAY PRICING PAGE
     public function index()
     {
+      return view('pricing.index');
+    } 
+
+    public function checkout($id)
+    {
       //delete session if user want to change order
       if(session('order') <> null)
       {

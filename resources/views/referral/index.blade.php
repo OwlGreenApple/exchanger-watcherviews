@@ -20,14 +20,12 @@
                 <div class="input-group mb-3">
                   <input id="ref_link" class="form-control" readonly="readonly" value="{{ $referral_link }}" />
                   <div id="append-button" class="input-group-append">
-                    @if(Auth::user()->referral_link !== null)
-                      <button class="btn btn-primary btn-sm btn-copy">Copy Link</button>
-                    @endif
+                    <button class="btn btn-primary btn-sm btn-copy">Copy Link</button>
                   </div>
                 </div>
-                @if(Auth::user()->referral_link == null)
+              <!--   @if(Auth::user()->referral_link == null)
                   <button id="generate_link" class="btn btn-primary btn-sm">Generate Link</button>
-                @endif
+                @endif -->
               </div>
           </div>
       </div>
@@ -94,50 +92,11 @@
   $(document).ready(function()
   {
     copyLink();
-    generate_ref_link();
     let table = $("#referral_list").DataTable({
       "lengthMenu": [ 10, 25, 50, 75, 100, 250, 500 ],
       "aaSorting" : [],
     });
   });
-
-  function generate_ref_link()
-  { 
-    $("#generate_link").click(function(){
-      $.ajax({
-        type : 'GET',
-        url : "{{ url('referral-link') }}",
-        dataType: 'json',
-        beforeSend: function() {
-          $('#loader').show();
-          $('.div-loading').addClass('background-load');
-        },
-        success: function(result) {
-        
-          $('#loader').hide();
-          $('.div-loading').removeClass('background-load');
-          
-          if(result.msg == 0)
-          {
-            $("#ref_link").val(result.link);
-            $("#message").html("<div class='alert alert-primary'>Your referral link has been generated, please copy link on below.</div>")
-            $("#append-button").html('<button class="btn btn-primary btn-sm btn-copy">Copy Link</button>');
-            $("#generate_link").remove();
-          }
-          else
-          {
-            $("#message").html("<div class='alert alert-danger'>Currently our server is too busy, please try again later.</div>")
-          }
-        },
-        error : function(xhr)
-        {
-          $('#loader').hide();
-          $('.div-loading').removeClass('background-load');
-          console.log(xhr.responseText);
-        }
-      });
-    });
-  }
 
   function copyLink(){
     $( "body" ).on("click",".btn-copy",function(e) 

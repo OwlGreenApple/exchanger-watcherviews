@@ -19,10 +19,11 @@
       <table id="transaction_list" class="table table-striped table-bordered">
         <thead align="center">
           <th width="10%">No</th>
-          <th width="25%">Debit</th>
-          <th width="25%">Credit</th>
-          <th width="20%">Sumber</th>
           <th width="20%">Tanggal</th>
+          <th width="25%">Dapat Koin (+)</th>
+          <th width="25%">Pakai Koin (-)</th>
+          <th width="20%">Sumber</th>
+          
          <!--  <th>Status</th> -->
         </thead>
         <tbody>
@@ -31,10 +32,10 @@
             @foreach($transaction as $row)
               <tr>
                 <td>{{ $no }}</td>
+                <td>{{ $row->created_at }}</td>
                 <td>{{ str_replace(",",".",number_format($row->debit)) }}</td>
                 <td>{{ str_replace(",",".",number_format($row->kredit)) }}</td>
                 <td>{{ str_replace("-"," ",$row->source) }}</td>
-                <td>{{ $row->created_at }}</td>
               </tr>
               @php $no++; @endphp
             @endforeach

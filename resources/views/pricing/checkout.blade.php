@@ -9,23 +9,23 @@
 
           <form id="proof_order">
               <h2 class="Daftar-Disini">Upgrade Membership Anda</h2>
-              <div class="alert">
-                <div class="bc"><!-- display bonus text here --></div>
-                <div class="disc"><!-- display discount text here --></div>
-                <h4>Fitur Drip Views <i class="ml-2 fa fa-question-circle question" aria-hidden="true"></i>&nbsp;Setiap pembelian minimal 500.000 Coin</h4>
-              </div>
+            <!--   <div class="alert">
+                <div class="bc">display bonus text here </div>
+                <div class="disc">display discount text here</div>
+                <h4>Fitur Drip Views <i class="ml-2 fa fa-question-circle question" aria-hidden="true"></i></h4>
+              </div> -->
               <div class="form-group">
                 <div class="col-12 col-md-12">
                   <label class="text">Pilih Membership:</label>
                   <select class="form-control" name="idproof" >
                     @php $pg = 1 @endphp
-                    <option data-price="{!! getPackage()[$pg]['price'] !!}" id-paket="{{ $pg }}" data-paket="{!! getPackage()[$pg]['package'] !!}" data-bc="{!! getPackage()[$pg]['bonus'] !!}" data-disc="{!! getPackage()[$pg]['disc'] !!}" selected>{!! strtoupper(getPackage()[$pg]['package']) !!} - IDR {!! str_replace(",",".",number_format(getPackage()[$pg]['price'])) !!}</option>   
+                    <option @if(Request::segment(2) == 1) selected @endif data-price="{!! getPackage()[$pg]['price'] !!}" id-paket="{{ $pg }}" data-paket="{!! getPackage()[$pg]['package'] !!}" data-bc="{!! getPackage()[$pg]['bonus'] !!}" data-disc="{!! getPackage()[$pg]['disc'] !!}" selected>{!! strtoupper(getPackage()[$pg]['package']) !!} - IDR {!! str_replace(",",".",number_format(getPackage()[$pg]['price'])) !!}</option>   
 
                     @php $pg = 2 @endphp
-                    <option data-price="{!! getPackage()[$pg]['price'] !!}" id-paket="{{ $pg }}" data-paket="{!! getPackage()[$pg]['package'] !!}" data-bc="{!! getPackage()[$pg]['bonus'] !!}" data-disc="{!! getPackage()[$pg]['disc'] !!}">{!! strtoupper(getPackage()[$pg]['package']) !!} - IDR {!! str_replace(",",".",number_format(getPackage()[$pg]['price'])) !!}</option>  
+                    <option @if(Request::segment(2) == 2) selected @endif data-price="{!! getPackage()[$pg]['price'] !!}" id-paket="{{ $pg }}" data-paket="{!! getPackage()[$pg]['package'] !!}" data-bc="{!! getPackage()[$pg]['bonus'] !!}" data-disc="{!! getPackage()[$pg]['disc'] !!}">{!! strtoupper(getPackage()[$pg]['package']) !!} - IDR {!! str_replace(",",".",number_format(getPackage()[$pg]['price'])) !!}</option>  
 
                     @php $pg = 3 @endphp
-                    <option data-price="{!! getPackage()[$pg]['price'] !!}" id-paket="{{ $pg }}" data-paket="{!! getPackage()[$pg]['package'] !!}" data-bc="{!! getPackage()[$pg]['bonus'] !!}" data-disc="{!! getPackage()[$pg]['disc'] !!}">{!! strtoupper(getPackage()[$pg]['package']) !!} - IDR {!! str_replace(",",".",number_format(getPackage()[$pg]['price'])) !!}</option>  
+                    <option @if(Request::segment(2) == 3) selected @endif data-price="{!! getPackage()[$pg]['price'] !!}" id-paket="{{ $pg }}" data-paket="{!! getPackage()[$pg]['package'] !!}" data-bc="{!! getPackage()[$pg]['bonus'] !!}" data-disc="{!! getPackage()[$pg]['disc'] !!}">{!! strtoupper(getPackage()[$pg]['package']) !!} - IDR {!! str_replace(",",".",number_format(getPackage()[$pg]['price'])) !!}</option>  
 
                     <!-- <option data-price="getPackage()[$pg]['price']" data-paket="getPackage()[$pg]['package'] !!}" value=" $id "  if($id==$pg) selected endif> getActivProofPackage()[$pg]['package']  - IDR  str_replace(",",".",number_format(getActivProofPackage()[$pg]['price']))  -  str_replace(",",".",number_format(getActivProofPackage()[$pg]['credit']))  Credit</option>   -->
 

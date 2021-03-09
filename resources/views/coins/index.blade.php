@@ -18,9 +18,8 @@
               <div class="card-body col-lg-6">
                  <span id="status_msg"><!-- message --></span>
                  <div><input id="total_coins" class="form-control" /></div>
-                 <small><b>Koin harus kelipatan 100,000</b></small>
-                 <div class="py-1">Membership : @if(Auth::user()->membership == null || Auth::user()->membership =='')Free @else  <span class="badge badge-success px-2 py-1">{{ Auth::user()->membership }}</span>@endif</div>
-                 <div class="py-1" id="rate" data-price="{!! getPackageRate($user->membership) !!}">Harga rate : <b>Rp {!! str_replace(",",".",number_format(getPackageRate($user->membership))) !!} /100.000 coins</b></div>
+                 <small>Koin harus kelipatan 100,000</small>
+                 <div class="py-1" id="rate" data-price="{!! getPackageRate($user->membership) !!}">Rate : <b>Rp {!! str_replace(",",".",number_format(getPackageRate($user->membership))) !!} /100.000 coins</b></div>
 
                  <div class="mt-2 mb-2 input-group">
                     <div class="input-group-prepend">

@@ -31,7 +31,7 @@
     <link href="{{ asset('/assets/font-awesome-5/all.css') }}" rel="stylesheet" />
 
     <!-- Pricing -->
-    @if(Request::is('pricing')) 
+    @if(Request::is('pricing') || Request::segment(1) == 'checkout') 
       <link href="{{ asset('assets/css/pricing.css') }}" rel="stylesheet">
     @endif
 
@@ -90,10 +90,6 @@
                                 </li>
                             @endif
 
-                            <li class="nav-item @if(Request::is('pricing')) active @endif">
-                                <a class="nav-link" href="{{ url('pricing') }}">{{ __('Memberships') }}</a>
-                            </li>
-
                         @else
                             <!-- MILESTONE -->
                             @if(Auth::user()->is_admin == 1)
@@ -104,41 +100,61 @@
                                   <a class="nav-link" href="{{ url('user-contacts') }}">Kontak User</a>
                               </li>
                             @else
-                               <li class="nav-item @if(Request::is('pricing')) active @endif">
-                                  <a class="nav-link" href="{{ url('pricing') }}">{{ __('Memberships') }}</a>
+                              <li class="nav-item dropdown @if(Request::is('pricing') || Request::segment(2) == 'membership-history') active @endif">
+                                  <a id="coinsDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{ __('Upgrade') }}
+                                  </a>
+
+                                  <div class="dropdown-menu" aria-labelledby="coinsDropdown">
+                                    <a class="dropdown-item  @if(Request::is('pricing')) active @endif" href="{{ url('pricing') }}">Upgrade Membership</a>
+                                    <a class="dropdown-item  @if(Request::segment(2) == 'membership-history') active @endif" href="{{ url('history-order/membership-history') }}">Upgrade History</a> 
+                                  </div>
                               </li> 
 
-                              <li class="nav-item @if(Request::is('buy-coins')) active @endif">
-                                  <a class="nav-link" href="{{ url('buy-coins') }}">Beli Koin</a>
+                              <li class="nav-item dropdown @if(Request::is('referral')) active @endif">
+                                  <a id="coinsDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{ __('Referral') }}
+                                  </a>
+
+                                  <div class="dropdown-menu" aria-labelledby="coinsDropdown">
+                                     <a class="dropdown-item @if(Request::is('referral')) active @endif" href="{{ url('referral') }}">Referral Coins</a> 
+                                  </div>
+                              </li>
+
+                              <li class="nav-item dropdown @if(Request::is('buy-coins') || Request::segment(2) == 'coin-history') active @endif">
+                                  <a id="coinsDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    My coins :  <span><b id="current_coins">{{ number_format(Auth::user()->credits) }}</b></span>
+                                  </a>
+
+                                  <div class="dropdown-menu" aria-labelledby="coinsDropdown">
+                                     <a class="dropdown-item @if(Request::is('buy-coins')) active @endif" href="{{ url('buy-coins') }}">Buy Coins</a> 
+                                     <a class="dropdown-item  @if(Request::is('coin-history') && Request::segment(2) == 'coin-history' ) active @endif" href="{{ url('history-order/coin-history') }}">Coin Order History</a> 
+                                  </div>
                               </li>
                                
-                              <li class="nav-item dropdown @if(Request::is('exchange-coins') || Request::is('transaction')) active @endif">
+                              <li class="nav-item dropdown @if(Request::is('exchange-coins')) active @endif">
                                   <a id="coinsDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     Views
                                   </a>
 
                                   <div class="dropdown-menu" aria-labelledby="coinsDropdown">
-                                    <a class="dropdown-item  @if(Request::is('exchange-coins')) active @endif" href="{{ url('exchange-coins') }}">Order Views</a>
-                                    <a class="dropdown-item  @if(Request::is('transaction')) active @endif" href="{{ url('transaction') }}">Transaksi Koin</a> 
+                                    <a class="dropdown-item  @if(Request::is('exchange-coins')) active @endif" href="{{ url('exchange-coins') }}">Buy Views</a>
+                                    <a class="dropdown-item  @if(Request::is('exchange-coins')) active @endif" href="{{ url('exchange-coins') }}">View History</a>
                                   </div>
                               </li>
                             @endif
 
-                              <li class="nav-item">
-                                <b class="nav-link" id="current_coins">{{ number_format(Auth::user()->credits) }}</b>
-                              </li>
-
-                            <li class="nav-item dropdown @if(Request::is('profile') || Request::is('referral') || Request::is('history-order') || Request::is('contact')) active @endif">
+                            <li class="nav-item dropdown @if(Request::is('profile') || Request::is('contact')) active @endif">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item">Membership
+                                     : @if(Auth::user()->membership == null || Auth::user()->membership =="") Free @else <span class="badge badge-success px-2 py-1">{{ Auth::user()->membership }}</span> @endif</a>
                                     <a class="dropdown-item @if(Request::is('profile')) active @endif" href="{{ url('profile') }}">Profil</a>
                                     @if(Auth::user()->is_admin == 0)
-                                      <a class="dropdown-item @if(Request::is('referral')) active @endif" href="{{ url('referral') }}">Referral</a>
-                                      <a class="dropdown-item @if(Request::is('history-order')) active @endif" href="{{ url('history-order') }}">Orders History</a>
-                                      <a class="dropdown-item @if(Request::is('contact')) active @endif" href="{{ url('contact') }}">Kontak</a>
+                                      <a class="dropdown-item @if(Request::is('contact')) active @endif" href="{{ url('contact') }}">Kontak Kami</a>
                                     @endif
 
                                     <a class="dropdown-item" href="{{ route('logout') }}"
