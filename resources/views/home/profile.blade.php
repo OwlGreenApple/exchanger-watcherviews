@@ -1,11 +1,21 @@
 @extends('layouts.app')
 
 @section('content')
+
+<div class="bg-custom">
+  <div class="container">
+    <div class="col-md-12 py-4">
+      <h2 class="mb-0"><b class="mr-2">Profil</b><i class="fas fa-user"></i></h2>  
+    </div>
+  </div>
+</div>
+
+<hr>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header"><h5>Profil</h5></div>
 
                 <div class="card-body">
                   <span id="server-error"><!-- error server --></span>
@@ -13,7 +23,7 @@
 
                     <div class="form-group form-inline">
                       <label>Email : </label>
-                       <div class="form-control bg-secondary text-white ml-2">{{ $user->email }}</div>
+                       <div class="form-control bg-custom text-white ml-2">{{ $user->email }}</div>
                     </div>
 
                     <div class="form-group form-inline">
@@ -70,7 +80,7 @@
                     </div>
 
                     <div class="text-left">
-                      <button id="btn-register" type="button" class="btn btn-custom">Perbaharui</button>
+                      <button id="btn-register" type="button" class="btn btn-dark">Perbaharui</button>
                     </div>
                 </form>
                 <!-- end cardbody -->
@@ -79,15 +89,52 @@
             </div>
         </div>
     </div>
+
+<!-- Modal Popup Login -->
+<div class="modal fade" id="popup_login" role="dialog">
+  <div class="modal-dialog">
+    
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+           Welcome ...
+        </h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        popup login
+      </div>
+      <div class="modal-footer" id="foot">
+        <button class="btn btn-primary" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+      
+  </div>
+</div>
+<!-- end container -->
 </div>
 
 <script type="text/javascript" src="{{ asset('/assets/intl-tel-input/callback.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/intl-tel-input/js/custom-intl.js') }}"></script> 
 <script type="text/javascript">
+
+  var popup = "{{ Session::get('popup') }}";
   $(function()
   {
     updateProfile();
+    display_popup();
   });
+
+  function display_popup()
+  {
+    if(popup == 1)
+    {
+      $("#popup_login").modal();
+    }
+  }
 
   function updateProfile(){
     $("#btn-register").click(function()

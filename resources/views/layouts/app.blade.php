@@ -59,7 +59,7 @@
     </div> 
 
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
@@ -132,14 +132,14 @@
                                   </div>
                               </li>
                                
-                              <li class="nav-item dropdown @if(Request::is('exchange-coins')) active @endif">
+                              <li class="nav-item dropdown @if(Request::is('exchange-coins') || Request::is('transaction')) active @endif">
                                   <a id="coinsDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     Views
                                   </a>
 
                                   <div class="dropdown-menu" aria-labelledby="coinsDropdown">
                                     <a class="dropdown-item  @if(Request::is('exchange-coins')) active @endif" href="{{ url('exchange-coins') }}">Buy Views</a>
-                                    <a class="dropdown-item  @if(Request::is('exchange-coins')) active @endif" href="{{ url('exchange-coins') }}">View History</a>
+                                    <a class="dropdown-item  @if(Request::is('transaction')) active @endif" href="{{ url('transaction') }}">View History</a>
                                   </div>
                               </li>
                             @endif
@@ -174,7 +174,7 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <main>
             @yield('content')
         </main>
     </div>

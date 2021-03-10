@@ -1,12 +1,21 @@
 @extends('layouts.app')
 
 @section('content')
+
+<div class="bg-custom">
+  <div class="container">
+    <div class="col-md-12 py-4">
+      <h2 class="mb-0"><b class="mr-2">Kontak Kami</b><i class="fas fa-envelope"></i></h2>  
+    </div>
+  </div>
+</div>
+
+<hr>
+
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-9">
             <div class="card">
-                <div class="card-header"><h5>Kontak Kami</h5></div>
-
                 <div class="card-body">
                   <span id="server-message"><!-- error server --></span>
                   <form class="add-contact" id="form-register">
@@ -35,7 +44,7 @@
     </div>
 
     <!-- DATATABLE -->
-    <div class="table-responsive mt-6"><div id="content"><!-- data message here --></div></div>
+    <div class="table-responsive mt-5"><div id="content"><!-- data message here --></div></div>
 </div>
 
 <!-- Modal User Message -->

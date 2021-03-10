@@ -11,7 +11,7 @@ use App\Models\Orders;
 use App\Models\Transaction;
 use App\Models\Contacts;
 use App\Http\Controllers\Auth\RegisterController as Reg;
-use Storage, Cookie, Validator;
+use Storage, Cookie, Validator, Session;
 
 class HomeController extends Controller
 {

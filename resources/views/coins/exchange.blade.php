@@ -2,22 +2,22 @@
 
 @section('content')
 
-<div class="container mb-5 main-cont">
-  <div class="row">
-    <div class="col-md-12">
-
-      <h2><b>Order Views</b></h2>  
-    
-      <hr>
+<div class="bg-custom">
+  <div class="container">
+    <div class="col-md-12 py-4">
+      <h2 class="mb-0"><b class="mr-2">Order Views</b><i class="fab fa-youtube"></i></h2>  
     </div>
   </div>
+</div>
 
+<hr>
+
+<div class="container mb-5 main-cont">
   <div class="row justify-content-center">
-      <div class="col-md-9">
-          <div class="card">
-              <div class="card-body">
+      <div class="col-md-7">
+          <div class="card py-4">
              <!-- form views -->
-              <div class="col-lg-6 col-md-4 col-sm-12 col-12 px-0 mt-2">
+              <div class="col-lg-6 col-md-4 col-sm-12 col-12 px-0 mt-2 mx-auto">
                  <span id="status_msg"><!-- message --></span>
                   <form id="submit_exchange" class="mb-2">
 
@@ -70,20 +70,18 @@
                         <div id="total_views" class="form-control"></div>
                       </div>
 
-                      <div class="mt-2 mb-3 input-group">
+                      <div class="mt-2 mb-2 input-group">
                         <div class="input-group-prepend">
                           <span class="input-group-text bg-success text-white">Jumlah Coins :</span>
                         </div> 
                         <b class="form-control" id="total">0</b>
                       </div>
 
-                      <button type="button" id="purchase" type="submit" class="btn btn-primary">Tukar Koin</button>
+                      <button type="button" id="purchase" type="submit" class="btn btn-dark w-100">Tukar Koin</button>
 
                     <!-- form views -->
                     </div>
                   </form>
-
-              </div>
           </div>
       </div>
   </div>

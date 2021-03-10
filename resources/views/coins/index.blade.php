@@ -2,32 +2,40 @@
 
 @section('content')
 
-<div class="container mb-5 main-cont">
-  <div class="row">
-    <div class="col-md-12">
-
-      <h2><b>Beli Koin</b></h2>  
-    
-      <hr>
+<div class="bg-custom">
+  <div class="container">
+    <div class="col-md-12 py-4">
+      <h2 class="mb-0"><b class="mr-2">Beli Koin</b><i class="fas fa-coins"></i></h2>  
     </div>
   </div>
+</div>
 
+<hr>
+
+<!-- banner image -->
+<div class="container text-center mb-2">
+  <img src="{{ asset('assets/img/banner.jpg') }}" class="image_banner" />
+</div>
+
+<div class="container mb-5 main-cont">
   <div class="row justify-content-center">
-      <div class="col-md-8">
-          <div class="card">
-              <div class="card-body col-lg-6">
+      <div class="col-md-9">
+          <div class="card py-4">
+              <div class="card-body col-lg-7 mx-auto px-0 py-0">
                  <span id="status_msg"><!-- message --></span>
+                 <label><b>Jumlah Koin</b> <i class="fas fa-coins"></i></label>
                  <div><input id="total_coins" class="form-control" /></div>
                  <small>Koin harus kelipatan 100,000</small>
-                 <div class="py-1" id="rate" data-price="{!! getPackageRate($user->membership) !!}">Rate : <b>Rp {!! str_replace(",",".",number_format(getPackageRate($user->membership))) !!} /100.000 coins</b></div>
+                 <div class="py-1" id="rate" data-price="{!! getPackageRate($user->membership) !!}">Rate <i class="fas fa-exchange-alt"></i> : <b>Rp {!! str_replace(",",".",number_format(getPackageRate($user->membership))) !!} /100.000 coins</b></div>
 
-                 <div class="mt-2 mb-2 input-group">
+                 <!-- div class="mt-2 mb-2 input-group">
                     <div class="input-group-prepend">
                       <span class="input-group-text bg-success text-white">Total Rp :</span>
                     </div> 
                     <b class="form-control" id="total">0</b>
-                  </div>
-                 <div id="purchase" class="btn btn-primary">Beli</div>
+                  </div> -->
+                 <div id="total" class="form-control bg-success text-white text-center mb-2">0</div>
+                 <div id="purchase" class="btn btn-dark w-100">Beli</div>
               </div>
           </div>
       </div>
@@ -123,7 +131,7 @@
     price = parseInt(price);
     var total_price = price * min_price; 
     $("#total_coins").val(formatNumber(min));
-    $("#total").html(formatNumber(total_price));
+    $("#total").html('Rp '+formatNumber(total_price));
 
     //PROCESS
     $("#total_coins").on('keyup keypress', function()
@@ -166,7 +174,7 @@
     
     // total = total.toLocaleString('fullwide', {useGrouping:false});
     $("#price").attr('data-price',total);
-    $("#total").html(formatNumber(total));
+    $("#total").html('Rp '+formatNumber(total));
   }
 
   function check_min_coin(min_coins)

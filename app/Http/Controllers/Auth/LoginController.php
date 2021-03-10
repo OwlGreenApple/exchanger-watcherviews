@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use App\Models\Transaction;
 use App\Models\User;
 use Cookie;
+use Session;
 
 class LoginController extends Controller
 {
@@ -60,8 +61,7 @@ class LoginController extends Controller
 
         if(Auth::guard('web')->attempt(['email' => $email, 'password' => $password])) 
         {
-            $user = Auth::user();
-            
+            $user = Auth::user();            
             return response()->json([
                 'success' => 1,
                 'email' => $request->email,
@@ -101,6 +101,8 @@ class LoginController extends Controller
     //IF USER SUCCESSFULLY LOGIN
     public function authenticated()
     {
+      // session flash for popup appear after login
+       Session::flash('popup', 1); 
        return $this->get_daily_bonus();
     }
 

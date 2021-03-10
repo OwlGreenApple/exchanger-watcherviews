@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\RegisterController as Register;
 use App\Http\Controllers\Auth\LoginController as Login;
 use App\Http\Controllers\HomeController as Home;
@@ -20,7 +21,11 @@ use App\Http\Controllers\Admin\AdminController as Admin;
 */
 
 Route::get('/', function () {
+  if(Auth::id() > 0):
+    return redirect('profile');
+  else:
     return view('welcome');
+  endif;
 });
 
 Auth::routes();

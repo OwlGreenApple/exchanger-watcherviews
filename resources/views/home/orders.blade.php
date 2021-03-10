@@ -2,22 +2,23 @@
 
 @section('content')
 
-<div class="container mb-5 main-cont">
-  <div class="row">
-    <div class="col-md-12">
-
-      <h2><b>{{ $label }}</b></h2>  
-      
-      <h5>
+<div class="bg-custom">
+  <div class="container">
+    <div class="col-md-12 py-4">
+      <h2><b class="mr-2">{{ $label }}</b><i class="fas fa-history"></i></h2>  
+      <h5 class="mb-0">
         Show you previous history orders
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#transfer-information" style="font-size: 13px; padding: 5px 8px;">
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#transfer-information" style="font-size: 13px; padding: 5px 8px;">
           Payment / Transfer information
         </button>        
       </h5>
-      
-      <hr>
     </div>
+  </div>
+</div>
 
+<hr>
+
+<div class="container mb-5 main-cont card py-3">
     <div class="col-md-12">
       <form class="table-responsive" id="content">
         @if(count($orders) > 0)
@@ -29,8 +30,6 @@
         @endif
       </form>
     </div>
-
-  </div>
 </div>
 
 <!-- Modal Transfer Information -->
@@ -55,7 +54,7 @@
             BCA <b>Sugiarto Lasjim</b>
           </p>
           <p class="card-text">
-            Setelah Transfer, silahkan Klik tombol <span class="badge badge-primary">confirm payment</span> di bawah ini <br> atau Email bukti Transfer anda ke <b>@php echo env('APP_EMAIL_ADMIN') @endphp</b> <br>
+            Setelah Transfer, silahkan Klik tombol <span class="badge bg-custom">confirm payment</span> di bawah ini <br> atau Email bukti Transfer anda ke <b>@php echo env('APP_EMAIL_ADMIN') @endphp</b> <br>
             Admin kami akan membantu anda max 1x24 jam
           </p>
 

@@ -3,8 +3,17 @@
 	JAN 06 2021
 */
 
+body {
+    background : #fffcf6 !important;
+}
+
 .error {
 	color : #cc1212 !important;
+}
+
+.card {
+    background-color : #f5f5f5 !important;
+    border : 0 !important;
 }
 
 /* Loading BaR */
@@ -50,17 +59,32 @@
 }
 
 .btn-custom {
-    background-color: #158ac1;
-    color: #fff;
+    background-color: #f39c12;
+    color: #000;
+    font-weight : bold;
+}
+
+.bg-custom {
+    background-color : #f39c12 !important;
 }
 
 /* APP BAR */
 
-.navbar-light .navbar-nav .active > .nav-link {
+.navbar {
+    padding : 1rem;
+}
+
+.navbar-dark .navbar-nav .active > .nav-link {
     color : white !important;
-    background : #106ac7;
+    background : #f39c12;
     padding : 6px 8px;
+    border-radius : 8px;
     display : block;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    background : #f39c12 !important;
+    color : #000;
 }
 
 /* ADMIN */
@@ -68,4 +92,10 @@
 #message_user, #message_reply {
     padding : 5px;
     border : 1px solid #ced4da;
+}
+
+/* BANNER IMAGE */
+.image_banner {
+    width : 100%;
+    max-width : 1200px;   
 }

@@ -2,16 +2,17 @@
 
 @section('content')
 
-<div class="container mb-5 main-cont">
-  <div class="row">
-    <div class="col-md-12">
-
-      <h2><b>Program Referral</b></h2>  
-    
-      <hr>
+<div class="bg-custom">
+  <div class="container">
+    <div class="col-md-12 py-4">
+      <h2 class="mb-0"><b class="mr-2">Program Referral</b><i class="fas fa-user-plus"></i></h2>  
     </div>
   </div>
+</div>
 
+<hr>
+
+<div class="container mb-5 main-cont">
   <div class="row justify-content-center">
       <div class="col-md-8">
           <div class="card">
@@ -31,7 +32,7 @@
       </div>
   </div>
 
-  <div class="col-lg-8 justify-content-center mt-3 mx-auto bg-white py-2">
+  <div class="col-lg-12 justify-content-center mt-3 mx-auto py-2">
     <h5 class="text-center"><b>Daftar Referral</b></h5>
 
     <div class="table-responsive">

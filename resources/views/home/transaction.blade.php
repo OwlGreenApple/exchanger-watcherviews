@@ -2,17 +2,18 @@
 
 @section('content')
 
-<div class="container mb-5 main-cont">
-  <div class="row">
-    <div class="col-md-12">
-
-      <h2><b>Transaksi Koin</b></h2>  
-    
-      <hr>
+<div class="bg-custom">
+  <div class="container">
+    <div class="col-md-12 py-4">
+      <h2 class="mb-0"><b class="mr-2">Transaksi Koin</b><i class="fas fa-exchange-alt"></i></h2>  
     </div>
   </div>
+</div>
 
-  <div class="col-lg-10 justify-content-center mt-3 mx-auto bg-white py-2">
+<hr>
+
+<div class="container mb-5 main-cont">
+  <div class="col-lg-12 justify-content-center mt-3 mx-auto bg-white py-2">
     <h5 class="text-center"><b>Daftar Transaksi</b></h5>
     
     <div class="table-responsive">

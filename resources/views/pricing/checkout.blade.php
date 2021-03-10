@@ -15,6 +15,10 @@
                 <h4>Fitur Drip Views <i class="ml-2 fa fa-question-circle question" aria-hidden="true"></i></h4>
               </div> -->
               <div class="form-group">
+                <div class="col-12 col-md-12 mb-3">
+                  <label class="text">Current Membership:</label>
+                  <div class="form-control text-uppercase">@if(Auth::user()->membership == null || Auth::user()->membership == '') FREE @else {{ Auth::user()->membership }} @endif</div>
+                </div>
                 <div class="col-12 col-md-12">
                   <label class="text">Pilih Membership:</label>
                   <select class="form-control" name="idproof" >
