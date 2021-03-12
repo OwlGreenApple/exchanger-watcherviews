@@ -26,18 +26,21 @@ class CheckExchange
           'link_video'=>$request->link_video,
           'views'=>(int)str_replace(".","",$request->views),
           'runs'=>(int)str_replace(".","",$request->runs),
+          'refill'=>(int)$request->refill
         ];
 
         $maxvalue = 10000;
+        $refill_fee = 100000;
         $rules = [
           'link_video'=>['bail','required',new ValidYoutubeLink],
-          'views'=>['bail','required',new CheckIdExchange($reqs['exchange']),'numeric','min:100','max:'.$maxvalue.'',new CheckUsersCredit($reqs['exchange'],0)]
+          'views'=>['bail','required',new CheckIdExchange($reqs['exchange']),'numeric','min:100','max:'.$maxvalue.'',new CheckUsersCredit($reqs['exchange'],0,$reqs['refill'])],
+          'refill'=>['required','numeric','min:0','max:2']
         ];
 
         if($request->drip == "1")
         {
            $rules['views'] = ['bail','required','numeric','min:100','max:'.$maxvalue.''];
-           $rules['runs'] = ['bail','required',new CheckIdExchange($reqs['exchange']),'numeric','min:1','max:'.$maxvalue.'',new CheckUsersCredit($reqs['exchange'],$reqs['views'])];
+           $rules['runs'] = ['bail','required',new CheckIdExchange($reqs['exchange']),'numeric','min:1','max:'.$maxvalue.'',new CheckUsersCredit($reqs['exchange'],$reqs['views'],$reqs['refill'])];
         }
 
         $validator = Validator::make($reqs,$rules);
@@ -49,7 +52,8 @@ class CheckExchange
               'msg'=>2,
               'link_video'=>$err->first('link_video'),
               'views'=>$err->first('views'),
-              'runs'=>$err->first('runs')
+              'runs'=>$err->first('runs'),
+              'refill'=>$err->first('refill')
            ];
 
            return response()->json($errors);

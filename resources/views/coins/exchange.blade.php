@@ -17,7 +17,7 @@
       <div class="col-md-7">
           <div class="card py-4">
              <!-- form views -->
-              <div class="col-lg-6 col-md-4 col-sm-12 col-12 px-0 mt-2 mx-auto">
+              <div class="col-lg-9 col-md-4 col-sm-12 col-12 px-0 mt-2 mx-auto">
                  <span id="status_msg"><!-- message --></span>
                   <form id="submit_exchange" class="mb-2">
 
@@ -36,7 +36,7 @@
                     </div>
                     @endfor
 
-                    <div id="common-error" class="error exchangev mt-2 mb-2"><!-- error message --></div>
+                    <div id="common-error" class="error exchangev mt-2 mb-3"><!-- error message --></div>
 
                       <div class="form-group">
                         <label>Link Video</label>
@@ -50,6 +50,15 @@
                         <div class="error views"></div>
                        <!--  <input type="number" min="1" max="999" value="1" name="total_views" />
                         <label>&nbsp;X 1000 Views</label> -->
+                      </div>
+
+                      <div class="form-group">
+                        <label>Refill <i class="ml-2 fa fa-question-circle question_refill" aria-hidden="true"></i></label>
+                        <select name="refill" class="form-control">
+                          <option value="0" selected>No Refill</option>
+                          <option value="1">Refill</option>
+                          <option value="2">Auto Refill</option>
+                        </select>
                       </div>
                       
                       <!-- if(Auth::user()->membership == 'super') -->
@@ -105,10 +114,12 @@
     calculate_drip();
     drip_formula(1,100);
     tooltips();
+    calculate_refill();
   });
 
   // GLOBAL VARIABLE
   const max_value = 10000;
+  const refill_price = 100000;
 
   function tooltips()
   {
@@ -116,6 +127,37 @@
       'html':true,
       'title': "Fitur Drip Views adalah Fitur untuk membagi views beberapa kali pada video yang sama dalam waktu random,sehingga penambahan views video terlihat lebih organik <br/><br/> Contoh : Video A : 200 Views untuk 11x = Total 2200 views."
     });
+
+    $(".question_refill").tooltip({
+      'html':true,
+      'title': "<b>No refill</b> : apabila jumlah view pada youtube tidak sesuai, maka anda tidak mendapat tambahan koin.<br>"+
+        "<b>Refill</b> : apabila jumlah view pada youtube tidak sesuai, maka anda akan mendapat tambahan koin secara manual.<br/>"+
+        "<b>Auto Refill</b> : apabila jumlah view pada youtube tidak sesuai, maka anda akan mendapat tambahan koin secara otomatis."
+    });
+  }
+
+  /*To count coin prize when user choose refill / autorefill*/
+  function calculate_refill()
+  {
+    $("select[name='refill']").change(function(){
+      var opt = $(this).val();
+      refill_pricing(opt);
+    });
+  }
+
+  function refill_pricing(opt)
+  {
+    var drip = $("input[name='drip']").is(':checked');
+    if(drip == true)
+    {
+      var run = $("input[name='runs']").val();
+      run = formatted_runs(run);
+      calculate_coins(run);
+    }
+    else
+    {
+      calculate_coins(undefined);
+    }
   }
 
   function check_drip()
@@ -199,11 +241,17 @@
     if(drip == true)
     {
       total_coins = total_views * coins_price * runs;
-
     }
     else
     {
       total_coins = total_views * coins_price;
+    }
+
+    var refill = $("select[name='refill'] option:selected").val();
+
+    if(refill > 0)
+    {
+      total_coins += refill_price;
     }
 
     $("#total").html(formatNumber(total_coins));

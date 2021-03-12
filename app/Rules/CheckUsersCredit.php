@@ -14,12 +14,13 @@ class CheckUsersCredit implements Rule
      * @return void
      */
 
-    public $idpackage, $views;
+    public $idpackage, $views, $refill_option;
 
-    public function __construct($idpackage,$views)
+    public function __construct($idpackage,$views,$refill_option)
     {
         $this->idpackage = $idpackage;
         $this->views = $views;
+        $this->refill_option = $refill_option;
     }
 
     /**
@@ -31,6 +32,7 @@ class CheckUsersCredit implements Rule
      */
     public function passes($attribute, $value)
     {
+        $refill_price = 100000;
         $user = User::find(Auth::id());
         $current_credits = $user->credits;
         $coins_rate = (int)getExchangeRate($this->idpackage)['coins'];
@@ -52,6 +54,12 @@ class CheckUsersCredit implements Rule
         {
           $value = $value * $coins_rate;
           $credits = $current_credits - $value;
+        }
+
+        //if user choose refill feature
+        if($this->refill_option > 0)
+        {
+          $credits -= $refill_price;
         }
        
         if($credits < 0)

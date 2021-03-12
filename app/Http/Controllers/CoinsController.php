@@ -90,16 +90,24 @@ class CoinsController extends Controller
     public function submit_exchange(Request $request)
     {
       // dd($request->all());
+      $refill_fee = 100000;
       $views = strip_tags((int)str_replace(".","",$request->views));
       $drip = strip_tags((int)str_replace(".","",$request->runs));
       $id_exchange = strip_tags($request->exchange);
       $ytlink = strip_tags($request->link_video);
+      $refill = strip_tags($request->refill);
 
       $success = false;
       $rate = getExchangeRate($id_exchange);
       $total_views = $views * $drip;
       
       $credit = $total_views * ($rate['coins']/1000);
+
+      /*IF USER USING REFILL THEN ADD COIN PRICE RATE TOO*/
+      if($refill > 0)
+      {
+        $credit+= $refill_fee;
+      }
 
       try
       {
@@ -115,6 +123,7 @@ class CoinsController extends Controller
         endif;
         $exc->total_coins = $credit;
         $exc->total_views = $total_views;
+        $exc->refill = $refill;
         $exc->save();
         $exchange_id = $exc->id;
       }
@@ -159,7 +168,18 @@ class CoinsController extends Controller
                 'duration'=>$rate['duration'],
                 'views'=>$total_views,
               ];
-        self::add_youtube_link($api);
+        $api = self::add_youtube_link($api);
+        // dd($api);
+        $exchange = Exchange::find($exchange_id);
+        $exchange->yt_before = $api['count'];
+
+        try{
+          $exchange->save();
+        }
+        catch(QueryException $e)
+        {
+          // $e->getMessage();
+        }
       }
 
       //if user request drip and membership
@@ -246,7 +266,8 @@ class CoinsController extends Controller
     public static function add_youtube_link(array $cels)
     {
       $curl = curl_init();
-      $url = 'https://watcherviews.com/dashboard/add-video-fromcelebfans';
+      // $url = 'https://watcherviews.com/dashboard/add-video-fromcelebfans';
+      $url = 'https://watcherviews.com/staging-server/add-video-fromcelebfans';
       $data = array(
           'key_celebfans'=>'f6a055c556be9d36a68ce3f632f25d70b7168399dec581ae98c7f3ea3c950bc5787c6e3310bf32d3',
           'coin_get' => self::coin_get($cels['duration']),
