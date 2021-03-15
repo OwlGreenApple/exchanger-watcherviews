@@ -1,0 +1,4 @@
+/* NOTES */
+
+celebfans_id berasal dari tabel watcherviews dan dipergunakan untuk mengupdate kolom 
+yt_after pada table exchanges.

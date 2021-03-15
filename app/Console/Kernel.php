@@ -28,6 +28,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $schedule->command('check:membership')->everySixHours();
         $schedule->command('check:drip')->everyMinute();
+        $schedule->command('check:refill')->daily();
     }
 
     /**

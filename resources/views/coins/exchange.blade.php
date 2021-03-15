@@ -115,6 +115,7 @@
     drip_formula(1,100);
     tooltips();
     calculate_refill();
+    refill();
   });
 
   // GLOBAL VARIABLE
@@ -133,6 +134,49 @@
       'title': "<b>No refill</b> : apabila jumlah view pada youtube tidak sesuai, maka anda tidak mendapat tambahan koin.<br>"+
         "<b>Refill</b> : apabila jumlah view pada youtube tidak sesuai, maka anda akan mendapat tambahan koin secara manual.<br/>"+
         "<b>Auto Refill</b> : apabila jumlah view pada youtube tidak sesuai, maka anda akan mendapat tambahan koin secara otomatis."
+    });
+  }
+
+  /*Refill Views if yt_after view is less than total view*/
+  function refill()
+  {
+    $("body").on('click','.refil_act',function(){
+      var id = $(this).attr('id');
+      $.ajax({
+         headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+
+        type : 'POST',
+        url : "{{ url('refill') }}/"+id+"/"+false,
+        dataType: 'json',
+        beforeSend: function() {
+          $('#loader').show();
+          $('.div-loading').addClass('background-load');
+        },
+        success: function(result) {
+        
+          $('#loader').hide();
+          $('.div-loading').removeClass('background-load');
+
+          if(result.status == 1)
+          {
+            display_table();
+            $("#status_msg").html('<div class="alert alert-success">View anda sudah terisi ulang.</div>')
+          }
+          else
+          {
+            $("#status_msg").html('<div class="alert alert-danger">Maaf, saat ini server kami terlalu sibuk, silahkan coba lagi nanti.</div>')
+          }
+        },
+        error : function(xhr)
+        {
+          $('#loader').hide();
+          $('.div-loading').removeClass('background-load');
+          console.log(xhr.responseText);
+        }
+      });
+      /*end ajax*/
     });
   }
 

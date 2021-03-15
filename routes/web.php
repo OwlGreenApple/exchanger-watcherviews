@@ -45,6 +45,9 @@ Route::post('loginajax',[Login::class, 'loginAjax']);// user login via ajax
 //REFERRAL FORM
 Route::get('referral-reg/{link}',[Home::class, 'referral_register']);
 
+//API FOR WATCHERVIEWS
+Route::get('cfans-api',[Coins::class, 'updateYoutubeView']);
+
 /*LOGIN USER*/
 Route::group(['middleware' => ['web','auth']], function () {
   //HOME OR DAHSBOARD
@@ -76,6 +79,7 @@ Route::group(['middleware' => ['web','auth']], function () {
   Route::get('exchange-coins',[Coins::class, 'exchange']);
   Route::post('exchange-submit-coins',[Coins::class, 'submit_exchange'])->middleware('exchange');
   Route::get('exchange-table',[Coins::class, 'exchange_table']);
+  Route::post('refill',[Coins::class, 'refill']);
 });
 
 /*ADMIN USER*/

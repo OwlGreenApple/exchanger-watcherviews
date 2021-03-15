@@ -9,6 +9,9 @@
       <th>Drip</th>
       <th>Total Coins</th>
       <th>Total Views</th>
+      <th>YT Sebelum</th>
+      <th>YT Sesudah</th>
+      <th>Refill</th>
       <th>Status Drip</th>
     </thead>
     <tbody>
@@ -28,6 +31,13 @@
           </td>
           <td class="text-center" style="width:20%">{{ number_format($row->total_coins) }}</td>
           <td class="text-center" style="width:20%">{{ number_format($row->total_views) }}</td>
+          <td class="text-center" style="width:20%">{{ number_format($row->yt_before) }}</td>
+          <td class="text-center" style="width:20%">{{ number_format($row->yt_after) }}</td>
+          <td class="text-center">
+            @if($row->refill == 1)
+              <a id="{{ $row->id }}" class="btn btn-custom btn-sm refil_act">Refill</a>
+            @endif
+          </td>
           <td class="text-center">
             @if($row->process == $row->drip && $row->process !== null)
                 Complete

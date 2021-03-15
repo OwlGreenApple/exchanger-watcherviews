@@ -167,9 +167,10 @@ class CoinsController extends Controller
                 'ytlink'=>$ytlink,
                 'duration'=>$rate['duration'],
                 'views'=>$total_views,
+                'celebfans_id'=>$exchange_id
               ];
         $api = self::add_youtube_link($api);
-        // dd($api);
+        // fill total view youtube before
         $exchange = Exchange::find($exchange_id);
         $exchange->yt_before = $api['count'];
 
@@ -214,6 +215,7 @@ class CoinsController extends Controller
           }
 
           $data[] = (object)[
+            'id'=>$row->id,
             'duration'=>$row->duration,
             'coins_value'=>$row->coins_value,
             'yt_link'=>$row->yt_link,
@@ -222,7 +224,10 @@ class CoinsController extends Controller
             'total_coins'=>$row->total_coins,
             'total_views'=>$row->total_views,
             'created_at'=>$row->created_at,
-            'process'=>$process
+            'process'=>$process,
+            'yt_before'=>$row->yt_before,
+            'yt_after'=>$row->yt_after,
+            'refill'=>$row->refill_btn
           ];
         }
       }
@@ -266,15 +271,21 @@ class CoinsController extends Controller
     public static function add_youtube_link(array $cels)
     {
       $curl = curl_init();
-      // $url = 'https://watcherviews.com/dashboard/add-video-fromcelebfans';
-      $url = 'https://watcherviews.com/staging-server/add-video-fromcelebfans';
+      
+      if(env('APP_ENV') == 'local'):
+        $url = 'https://watcherviews.com/staging-server/add-video-fromcelebfans';
+      else:
+        $url = 'https://watcherviews.com/dashboard/add-video-fromcelebfans';
+      endif;
+
       $data = array(
           'key_celebfans'=>'f6a055c556be9d36a68ce3f632f25d70b7168399dec581ae98c7f3ea3c950bc5787c6e3310bf32d3',
           'coin_get' => self::coin_get($cels['duration']),
           'link' => $cels['ytlink'],
           'time' => $cels['duration'],
           'maximum_watch' => $cels['views'], //view
-          'description' => 'add video from celebfans'
+          'description' => 'add video from celebfans',
+          'celebfans_id'=> $cels['celebfans_id']
       );
 
       $data_string = json_encode($data);
@@ -318,6 +329,107 @@ class CoinsController extends Controller
         ];
 
         return $data[$sec];
+    }
+
+    /*API for watcherviews to update yt after*/
+    public function updateYoutubeView()
+    {
+       $req = file_get_contents('php://input');
+       $req = json_encode($req);
+
+       $res = json_decode($req,true);
+       $api_key = '8b720f4f0bf3925a2cb6b63c8d7e2c57';
+       $check = null;
+
+       if($res['api'] == $api_key)
+       {
+          $exc = Exchange::find($res['celebfans_id']);
+       }
+       else
+       {
+          exit();
+       }
+
+       if(!is_null($exc))
+       {
+          $exc->yt_after = $res['yt_after_view'];
+          $exc->refill_api = 1;
+
+          try
+          {
+            $exc->save();
+          }
+          catch(QueryException $e)
+          {
+            // $e->getMessage()
+          }
+       }
+       else
+       {
+          exit();
+       }
+    }
+
+    /* TO REFILL VIEWS */
+    public function refill($id,$cron)
+    {
+      // USING CRON JOB
+      if($cron == true)
+      {
+        $exc = Exchange::find($id);
+      }
+      else
+      {
+        // BY USER
+        $exc = Exchange::where([['user_id',Auth::id()],['id',$id]])->first();
+      }
+      
+      if(!is_null($exc))
+      {
+        /*
+            DRIP LOGIC HER....
+        */
+        $calculate_view = $exc->yt_after - $exc->yt_before - $exc->total_views;
+
+        if($calculate_view < $exc->total_views):
+          $calculate_view = abs($calculate_view);
+          $adding_view = round(($calculate_view/5) * 6);
+
+          $api = [
+            'ytlink'=>$exc->yt_link,
+            'duration'=>$exc->duration,
+            'views'=>$adding_view,
+            'celebfans_id'=>$exc->id
+          ];
+          
+          self::add_youtube_link($api);
+
+          //IF MANUAL / VIA AJAX
+          if($cron == false)
+          {
+             $exc->refill_btn = 0;
+          }
+
+          try{
+            $exc->refill_api = 0;
+            $exc->save();
+          }
+          catch(QueryException $e)
+          {
+            if($cron == false)
+            {
+               return response()->json(['status'=>0]);
+            }
+            // $e->getMessages();
+          }
+        endif;
+      }
+
+      // MANUAL REFILL / AJAX
+      if($cron == false)
+      {
+        return response()->json(['status'=>1]);
+      }
     }
 
 /*end class*/
