@@ -334,11 +334,16 @@ class CoinsController extends Controller
     /*API for watcherviews to update yt after*/
     public function updateYoutubeView()
     {
-       $req = file_get_contents('php://input');
-       $req = json_encode($req);
+      /*$data = array(
+          'api'=>'e906f5b7500a4a76b832b201533d825a',
+          'celebfans_id' => 2,
+          'yt_after_view' => 1291
+       );
+       $req = json_encode($data);*/
 
+       $req = file_get_contents('php://input');
        $res = json_decode($req,true);
-       $api_key = '8b720f4f0bf3925a2cb6b63c8d7e2c57';
+       $api_key = 'e906f5b7500a4a76b832b201533d825a';
        $check = null;
 
        if($res['api'] == $api_key)
@@ -350,19 +355,20 @@ class CoinsController extends Controller
           exit();
        }
 
-       if(!is_null($exc))
+       if(is_null($exc))
        {
-          $exc->yt_after = $res['yt_after_view'];
-          $exc->refill_api = 1;
+          exit();
+       }
 
-          try
-          {
-            $exc->save();
-          }
-          catch(QueryException $e)
-          {
-            // $e->getMessage()
-          }
+       if($exc->refill == 1)
+       {
+          self::manual_refill($exc,$res['yt_after_view']);
+       }
+       elseif($exc->refill == 2)
+       {
+          $this->refill($exc->id,true);
+          $exc->yt_after = $res['yt_after_view'];
+          $exc->save();
        }
        else
        {
@@ -370,24 +376,55 @@ class CoinsController extends Controller
        }
     }
 
-    /* TO REFILL VIEWS */
-    public function refill($id,$cron)
+    /*TO DISPLAY BUTTON REFILL*/
+    private static function manual_refill($row,$yt_after_view)
     {
-      // USING CRON JOB
-      if($cron == true)
+      $calculate_view = $yt_after_view - $row->yt_before - $row->total_views;
+
+      if($calculate_view < $row->total_views):
+        $row->refill_btn = 1;
+      else:
+        $row->refill_btn = 0;
+      endif;
+
+      $row->yt_after = $yt_after_view;
+      // $row->refill_api = 1;
+
+      try{
+        $row->save();
+      }
+      catch(QueryException $e)
+      {
+        //$e->f=getMessage(); 
+      }
+    }
+
+    /*REFILL MANULA BUTTON AJAX*/
+    public function refill_ajax(Request $req)
+    {
+      $id = $req->id;
+      return $this->refill($id,false);
+    }
+
+
+    /* TO REFILL VIEWS */
+    public function refill($id,$api)
+    {
+      // USING AUTOMATIC REFILL
+      if($api == true)
       {
         $exc = Exchange::find($id);
       }
       else
       {
-        // BY USER
+        // USING MANUAL
         $exc = Exchange::where([['user_id',Auth::id()],['id',$id]])->first();
       }
       
       if(!is_null($exc))
       {
         /*
-            DRIP LOGIC HER....
+            DRIP LOGIC HERE....
         */
         $calculate_view = $exc->yt_after - $exc->yt_before - $exc->total_views;
 
@@ -395,28 +432,23 @@ class CoinsController extends Controller
           $calculate_view = abs($calculate_view);
           $adding_view = round(($calculate_view/5) * 6);
 
-          $api = [
+          $api_data = [
             'ytlink'=>$exc->yt_link,
             'duration'=>$exc->duration,
             'views'=>$adding_view,
             'celebfans_id'=>$exc->id
           ];
           
-          self::add_youtube_link($api);
-
-          //IF MANUAL / VIA AJAX
-          if($cron == false)
-          {
-             $exc->refill_btn = 0;
-          }
+          self::add_youtube_link($api_data);
 
           try{
-            $exc->refill_api = 0;
+            // $exc->refill_api = 0;
+            $exc->refill_btn = 2;
             $exc->save();
           }
           catch(QueryException $e)
           {
-            if($cron == false)
+            if($api == false)
             {
                return response()->json(['status'=>0]);
             }
@@ -424,9 +456,13 @@ class CoinsController extends Controller
           }
         endif;
       }
+      else
+      {
+        return redirect('home');
+      }
 
-      // MANUAL REFILL / AJAX
-      if($cron == false)
+      // MANUAL REFILL / AJAX RETURNING RESPONSE
+      if($api == false)
       {
         return response()->json(['status'=>1]);
       }

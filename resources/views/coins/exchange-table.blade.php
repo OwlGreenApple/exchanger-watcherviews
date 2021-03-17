@@ -36,6 +36,12 @@
           <td class="text-center">
             @if($row->refill == 1)
               <a id="{{ $row->id }}" class="btn btn-custom btn-sm refil_act">Refill</a>
+            @elseif($row->refill == 1 && $row->process == $row->drip && $row->process !== null)
+              <a id="{{ $row->id }}" class="btn btn-custom btn-sm refil_act">Refill</a>
+            @elseif($row->refill == 2)
+              Waiting
+            @else
+              -
             @endif
           </td>
           <td class="text-center">

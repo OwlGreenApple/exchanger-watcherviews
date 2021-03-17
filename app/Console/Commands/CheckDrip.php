@@ -59,6 +59,7 @@ class CheckDrip extends Command
                     'ytlink'=>$row->yt_link,
                     'duration'=>$row->duration,
                     'views'=>$row->views,
+                    'celebfans_id'=>$row->exchange_id
                   ];
 
                   /* API WATCHERVIEW */

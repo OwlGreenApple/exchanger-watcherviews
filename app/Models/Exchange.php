@@ -22,8 +22,9 @@ class Exchange extends Model
       1 = button refill appear
 
       refill_api :
-      0 = still not get sign from watcherview, so check refill wouldn't be run.
-      1 = has get sign from watcherview, so check refill would be run.
+      0 = button hide.
+      1 = button appear.
+      2 = wait.
     */
 
     protected $table = "exchanges";

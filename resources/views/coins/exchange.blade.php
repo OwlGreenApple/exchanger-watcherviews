@@ -141,14 +141,18 @@
   function refill()
   {
     $("body").on('click','.refil_act',function(){
+      var conf = confirm('Apakah anda ingin me-refill?');
       var id = $(this).attr('id');
-      $.ajax({
-         headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
 
-        type : 'POST',
-        url : "{{ url('refill') }}/"+id+"/"+false,
+      if(conf == false)
+      {
+        return false;
+      }
+
+      $.ajax({
+        type : 'GET',
+        url : "{{ url('refill') }}",
+        data : {"id" : id},
         dataType: 'json',
         beforeSend: function() {
           $('#loader').show();
@@ -162,7 +166,7 @@
           if(result.status == 1)
           {
             display_table();
-            $("#status_msg").html('<div class="alert alert-success">View anda sudah terisi ulang.</div>')
+            $("#status_msg").html('<div class="alert alert-success">Refill anda telah diproses.</div>')
           }
           else
           {
