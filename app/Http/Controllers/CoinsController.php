@@ -42,7 +42,7 @@ class CoinsController extends Controller
       //VALIDATION MINIMUM COINS
       if($coin < 5*pow(10,5)){
         $result['msg'] = 2;
-        $result['message'] = "Minimum coins for purchasing is 500,000";
+        $result['message'] = "Minimum pembelian koin adalah sebesar 500,000";
         return response()->json($result);
       }
 
@@ -51,7 +51,7 @@ class CoinsController extends Controller
       if($check_coin <> 0)
       {
         $result['msg'] = 2;
-        $result['message'] = "The amount of coins must multiplied of 100,000";
+        $result['message'] = "Jumlah koin harus kelipatan 100,000";
         return response()->json($result);
       }
 
@@ -59,7 +59,7 @@ class CoinsController extends Controller
       if($coin > 999900000)
       {
         $result['msg'] = 2;
-        $result['message'] = "The maximum amount of coins is 999,900,000";
+        $result['message'] = "Maksimal jumlah koin adalah 999,900,000";
         return response()->json($result);
       }
 

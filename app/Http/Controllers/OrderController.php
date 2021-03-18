@@ -149,9 +149,17 @@ class OrderController extends Controller
       return redirect('thankyou');    
     }
 
-    public function thankyou()
+    public function thankyou(Request $request)
     {
-      return view('pricing.thankyou');   
+      if($request->segment(1) == 'thank_you')
+      {
+        $history_link = 'coin-history';
+      }
+      else
+      {
+        $history_link = 'membership-history';
+      }
+      return view('pricing.thankyou',['link'=>$history_link]);   
     }
 
     //USER UPLOAD PAYMENT PROOF (BUKTI BAYAR)

@@ -112,7 +112,7 @@
         }
         else
         {
-          location.href="{{ url('thankyou') }}";
+          location.href="{{ url('thank_you') }}";
         }
       },
       error : function(xhr)

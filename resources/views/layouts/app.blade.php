@@ -47,7 +47,7 @@
     @endif
 
      <!-- Thankyou -->
-    @if(Request::is('thankyou') || Request::is('thank-confirm')) 
+    @if(Request::is('thankyou') || Request::is('thank_you') || Request::is('thank-confirm')) 
       <link href="{{ asset('assets/css/thankyou.css') }}" rel="stylesheet">
     @endif
    

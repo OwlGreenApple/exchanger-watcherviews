@@ -35,7 +35,9 @@ Auth::routes();
 //ORDER
 Route::get('pricing',[Orders::class, 'index']);
 Route::get('checkout/{id}',[Orders::class, 'checkout']);
-Route::get('thankyou',[Orders::class, 'thankyou']); 
+Route::get('thankyou',[Orders::class, 'thankyou']); //for buying membership
+Route::get('thank_you',[Orders::class, 'thankyou']); //for buying coin
+
 Route::post('payment',[Orders::class, 'payment']);
 Route::get('summary',[Orders::class, 'summary']);
 Route::post('submit-summary',[Orders::class, 'submit_summary']);
