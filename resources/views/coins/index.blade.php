@@ -34,8 +34,8 @@
                     </div> 
                     <b class="form-control" id="total">0</b>
                   </div> -->
-                 <div id="total" class="form-control bg-success text-white text-center mb-2">0</div>
-                 <div id="purchase" class="btn btn-dark w-100">Beli</div>
+                 <div id="total" class="form-control bg-white text-center mb-2">0</div>
+                 <div id="purchase" class="btn btn-success w-100"><b>Beli Sekarang</b></div>
               </div>
           </div>
       </div>
@@ -131,7 +131,7 @@
     price = parseInt(price);
     var total_price = price * min_price; 
     $("#total_coins").val(formatNumber(min));
-    $("#total").html('Rp '+formatNumber(total_price));
+    $("#total").html('Total : Rp '+formatNumber(total_price));
 
     //PROCESS
     $("#total_coins").on('keyup keypress', function()
@@ -174,7 +174,7 @@
     
     // total = total.toLocaleString('fullwide', {useGrouping:false});
     $("#price").attr('data-price',total);
-    $("#total").html('Rp '+formatNumber(total));
+    $("#total").html('Total : Rp '+formatNumber(total));
   }
 
   function check_min_coin(min_coins)

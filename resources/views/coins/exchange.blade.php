@@ -45,7 +45,7 @@
                       </div>
                       
                       <div class="form-group">
-                        <label>Views</label>
+                        <label>Views (Pembelian Minimal 100 View)</label>
                         <input type="text" class="form-control" name="views" value="100" />
                         <div class="error views"></div>
                        <!--  <input type="number" min="1" max="999" value="1" name="total_views" />
@@ -55,9 +55,9 @@
                       <div class="form-group">
                         <label>Refill <i class="ml-2 fa fa-question-circle question_refill" aria-hidden="true"></i></label>
                         <select name="refill" class="form-control">
-                          <option value="0" selected>No Refill</option>
-                          <option value="1">Refill</option>
-                          <option value="2">Auto Refill</option>
+                          <option value="0" selected>No Refill (Tanpa Garansi)</option>
+                          <option value="1">Refill (Garansi 30 Hari)</option>
+                          <option value="2">Auto Refill (Garansi 30 Hari)</option>
                         </select>
                       </div>
                       
