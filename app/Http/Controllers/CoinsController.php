@@ -268,12 +268,24 @@ class CoinsController extends Controller
 
     /*** API ***/
 
+    public function testadd()
+    {
+      $api_data = [
+        'ytlink'=>'aaaaa',
+        'duration'=>30,
+        'views'=>0,
+        'celebfans_id'=>5
+      ];
+      self::add_youtube_link($api_data);
+    }
+
     public static function add_youtube_link(array $cels)
     {
       $curl = curl_init();
       
       if(env('APP_ENV') == 'local'):
-        $url = 'https://watcherviews.com/staging-server/add-video-fromcelebfans';
+        // $url = 'https://watcherviews.com/staging-server/add-video-fromcelebfans';
+        $url = 'http://localhost/watcherviews/add-video-fromcelebfans';
       else:
         $url = 'https://watcherviews.com/dashboard/add-video-fromcelebfans';
       endif;
@@ -366,9 +378,10 @@ class CoinsController extends Controller
        }
        elseif($exc->refill == 2)
        {
-          $this->refill($exc->id,true);
           $exc->yt_after = $res['yt_after_view'];
           $exc->save();
+          sleep(0.5);
+          $this->refill($exc->id,true);
        }
        else
        {
@@ -381,14 +394,13 @@ class CoinsController extends Controller
     {
       $calculate_view = $yt_after_view - $row->yt_before - $row->total_views;
 
-      if($calculate_view < $row->total_views):
+      if($calculate_view < 0):
         $row->refill_btn = 1;
       else:
         $row->refill_btn = 0;
       endif;
 
       $row->yt_after = $yt_after_view;
-      // $row->refill_api = 1;
 
       try{
         $row->save();
@@ -423,14 +435,11 @@ class CoinsController extends Controller
       
       if(!is_null($exc))
       {
-        /*
-            DRIP LOGIC HERE....
-        */
         $calculate_view = $exc->yt_after - $exc->yt_before - $exc->total_views;
 
-        if($calculate_view < $exc->total_views):
+        if($calculate_view < 0):
           $calculate_view = abs($calculate_view);
-          $adding_view = round(($calculate_view/5) * 6);
+          $adding_view = round(($calculate_view/20) * 21);
 
           $api_data = [
             'ytlink'=>$exc->yt_link,
@@ -441,8 +450,8 @@ class CoinsController extends Controller
           
           self::add_youtube_link($api_data);
 
-          try{
-            // $exc->refill_api = 0;
+          try
+          {
             $exc->refill_btn = 2;
             $exc->save();
           }
@@ -454,6 +463,10 @@ class CoinsController extends Controller
             }
             // $e->getMessages();
           }
+        else:
+          /*IF YT AFTER VIEW HAS EQUAL OR GREATER THAN TOTAL VIEW */
+          $exc->refill_btn = 0;
+          $exc->save();
         endif;
       }
       else

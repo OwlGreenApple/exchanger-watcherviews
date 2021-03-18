@@ -28,6 +28,8 @@ Route::get('/', function () {
   endif;
 });
 
+// Route::get('test',[Coins::class, 'testadd']);
+
 Auth::routes();
 
 //ORDER
