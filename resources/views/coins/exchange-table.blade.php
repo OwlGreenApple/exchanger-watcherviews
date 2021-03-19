@@ -11,8 +11,10 @@
       <th>Total Views</th>
       <th>YT Sebelum</th>
       <th>YT Sesudah</th>
-      <th>Refill</th>
+      <th>Status Refill</th>
+      <th>Jenis Refill</th>
       <th>Status Drip</th>
+      <th>Status</th>
     </thead>
     <tbody>
       @foreach($data as $row)
@@ -34,12 +36,21 @@
           <td class="text-center" style="width:20%">{{ number_format($row->yt_before) }}</td>
           <td class="text-center" style="width:20%">{{ number_format($row->yt_after) }}</td>
           <td class="text-center">
-            @if($row->refill == 1)
+            @if($row->refill_btn == 1)
               <a id="{{ $row->id }}" class="btn btn-custom btn-sm refil_act">Refill</a>
-            @elseif($row->refill == 1 && $row->process == $row->drip && $row->process !== null)
+            @elseif($row->refill_btn == 1 && $row->process == $row->drip && $row->process !== null)
               <a id="{{ $row->id }}" class="btn btn-custom btn-sm refil_act">Refill</a>
-            @elseif($row->refill == 2)
+            @elseif($row->refill_btn == 2)
               Waiting
+            @else
+              -
+            @endif
+          </td>
+          <td>
+            @if($row->refill== 1)
+              Manual Refill
+            @elseif($row->refill_btn == 2)
+              Auto Refill
             @else
               -
             @endif
@@ -51,6 +62,15 @@
                 <span class="text-primary">Process</span>
             @else 
                 -
+            @endif
+          </td>
+          <td>
+            @if($row->progress == 0)
+              <span class="text-custom">Process</span>
+            @elseif($row->progress == 1)
+              <b class="text-success">Complete</b>
+            @else
+              -
             @endif
           </td>
         </tr>

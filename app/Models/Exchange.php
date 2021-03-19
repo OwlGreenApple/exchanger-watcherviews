@@ -25,6 +25,9 @@ class Exchange extends Model
       0 = button hide.
       1 = button appear.
       2 = wait.
+
+      status_view : to count how many drip process running
+      progress : to show if the entire of activity process is complete or not.
     */
 
     protected $table = "exchanges";

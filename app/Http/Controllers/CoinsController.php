@@ -227,7 +227,9 @@ class CoinsController extends Controller
             'process'=>$process,
             'yt_before'=>$row->yt_before,
             'yt_after'=>$row->yt_after,
-            'refill'=>$row->refill_btn
+            'refill_btn'=>$row->refill_btn,
+            'refill'=>$row->refill,
+            'progress'=>$row->progress
           ];
         }
       }

@@ -252,7 +252,7 @@ class HomeController extends Controller
     /*TRANSACTION*/
     public function transaction()
     {
-      $trans = Transaction::where('user_id',Auth::id())->orderBy('id','desc')->get();
+      $trans = Transaction::where([['user_id',Auth::id()],['source','NOT LIKE','%referral-gift-user%']])->orderBy('id','desc')->get();
       return view('home.transaction',['transaction'=>$trans]);
     }
 
