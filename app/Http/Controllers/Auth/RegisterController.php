@@ -114,7 +114,9 @@ class RegisterController extends Controller
           'date_bonus'=> Carbon::createFromFormat('Y-m-d H:i:s', '1970-01-01 00:00:00')
         ]);
 
-        Mail::to($data['email'])->send(new RegisteredEmail($generated_password,$data['username']));
+        if(env('APP_ENV') == 'production'):
+          Mail::to($data['email'])->send(new RegisteredEmail($generated_password,$data['username']));
+        endif;
          
         return $user;
     }
