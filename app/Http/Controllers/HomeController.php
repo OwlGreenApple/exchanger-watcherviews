@@ -147,8 +147,10 @@ class HomeController extends Controller
           $ref_link = $user->referral_link;
        }
 
+      $transaction = Transaction::where([['user_id','=',$user->id],['source','LIKE','%referral-gift-user%']])->get();
+
        $data = [
-        'user'=>User::where('referral_id',$user->id)->get(),
+        'user'=>$transaction,
         'referral_link'=>url('/referral-reg')."/".$ref_link
        ];
 

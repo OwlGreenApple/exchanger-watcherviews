@@ -39,9 +39,9 @@
       <table id="referral_list" class="table table-striped table-bordered">
         <thead align="center">
           <th>No</th>
-          <th>User Name</th>
           <th>Tgl Bergabung</th>
-         <!--  <th>Status</th> -->
+          <th>User Name</th>
+          <th>Koin Yang Didapat</th>
         </thead>
         <tbody>
           @if($user->count() > 0)
@@ -49,8 +49,9 @@
             @foreach($user as $row)
               <tr>
                 <td>{{ $no }}</td>
-                <td>{{ $row->name }}</td>
                 <td>{{ $row->created_at }}</td>
+                <td>{{ explode("-",$row->source)[3] }}</td>
+                <td>{{ str_replace(",",".",number_format($row->debit)) }}</td>
               </tr>
               @php $no++; @endphp
             @endforeach

@@ -240,7 +240,7 @@ class RegisterController extends Controller
           $trans = new Transaction;
           $trans->user_id = $userid;
           $trans->debit = $coins;
-          $trans->source = "referral-gift-user-".$newuser->name;
+          $trans->source = "referral-gift-user-".$newuser->name."-".$newuser->id;
           $trans->save();
         }
         catch(QueryException $e)
