@@ -36,9 +36,9 @@
           <td class="text-center" style="width:20%">{{ number_format($row->yt_before) }}</td>
           <td class="text-center" style="width:20%">{{ number_format($row->yt_after) }}</td>
           <td class="text-center">
-            @if($row->refill_btn == 1)
+            @if($row->refill_btn == 1 && $row->process == $row->drip && $row->process !== null)
               <a id="{{ $row->id }}" class="btn btn-custom btn-sm refil_act">Refill</a>
-            @elseif($row->refill_btn == 1 && $row->process == $row->drip && $row->process !== null)
+            @elseif($row->refill_btn == 1 && $row->drip == 0)
               <a id="{{ $row->id }}" class="btn btn-custom btn-sm refil_act">Refill</a>
             @elseif($row->refill_btn == 2)
               Waiting
@@ -49,7 +49,7 @@
           <td>
             @if($row->refill== 1)
               Manual Refill
-            @elseif($row->refill_btn == 2)
+            @elseif($row->refill == 2)
               Auto Refill
             @else
               -

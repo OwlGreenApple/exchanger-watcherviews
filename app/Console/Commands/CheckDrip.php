@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\Drips;
+use App\Models\Exchange;
 use App\Http\Controllers\CoinsController as Coins;
 use Carbon\Carbon;
 
@@ -42,7 +43,7 @@ class CheckDrip extends Command
     {
         $drips = Drips::where('drips.status',0)
                 ->leftJoin('exchanges','exchanges.id','=','drips.exchange_id')
-                ->select('drips.id','drips.schedule','drips.status','exchanges.yt_link','exchanges.duration','exchanges.views')
+                ->select('drips.id','drips.schedule','drips.status','exchanges.yt_link','exchanges.duration','exchanges.views','exchanges.id AS eid')
                 ->get();
 
         if($drips->count() > 0):
@@ -55,15 +56,31 @@ class CheckDrip extends Command
                   $drp->status = 1;
                   $drp->save();
 
+                  $exc = Exchange::find($row->eid);
+                 
                   $data = [
                     'ytlink'=>$row->yt_link,
                     'duration'=>$row->duration,
                     'views'=>$row->views,
-                    'celebfans_id'=>$row->exchange_id
+                    'celebfans_id'=>$row->eid
                   ];
 
+                  // dd($data);
+
                   /* API WATCHERVIEW */
-                  Coins::add_youtube_link($data);
+                  $api = Coins::add_youtube_link($data);
+
+                  // to prevent if sometimes google API not working
+                  if(!isset($api['count'])):
+                    continue;
+                  endif;
+
+                  //UPDATE YT_VIEW_BEFORE IF THE VALUE IS 0
+                  if($exc->yt_before < 1)
+                  {
+                    $exc->yt_before = $api['count'];
+                    $exc->save();
+                  }
               }
           }
         endif;

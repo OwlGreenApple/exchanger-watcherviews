@@ -348,10 +348,10 @@ class CoinsController extends Controller
     /*API for watcherviews to update yt after*/
     public function updateYoutubeView()
     {
-      /*$data = array(
+     /* $data = array(
           'api'=>'e906f5b7500a4a76b832b201533d825a',
-          'celebfans_id' => 2,
-          'yt_after_view' => 1291
+          'celebfans_id' => 38,
+          'yt_after_view' => 8271012
        );
        $req = json_encode($data);*/
 
@@ -387,6 +387,11 @@ class CoinsController extends Controller
        }
        else
        {
+          //CHANGE EXCHANGE STATUS PROGRESS
+          $exc->yt_after = $res['yt_after_view'];
+          $exc->save();
+          self::check_drips($exc);
+          sleep(0.5);
           exit();
        }
     }
@@ -400,6 +405,7 @@ class CoinsController extends Controller
         $row->refill_btn = 1;
       else:
         $row->refill_btn = 0;
+        $row->progress = 1; //progress complete if total view and yt view equal or more
       endif;
 
       $row->yt_after = $yt_after_view;
@@ -434,52 +440,73 @@ class CoinsController extends Controller
         // USING MANUAL
         $exc = Exchange::where([['user_id',Auth::id()],['id',$id]])->first();
       }
+
+      if(is_null($exc))
+      {
+        exit();
+      }
+
+      // to check if drip is complete or not yet, if complete then refill can be run.
+      $total_drip = $exc->drip;
+      $complete_drip = Drips::where([['exchange_id','=',$exc->id],['status',1]])->get()->count();
       
-      if(!is_null($exc))
+      if($complete_drip <> $total_drip)
       {
-        $calculate_view = $exc->yt_after - $exc->yt_before - $exc->total_views;
+        exit();
+      }
+      
+      // REFILL PROCESS START HERE
+      $calculate_view = $exc->yt_after - $exc->yt_before - $exc->total_views;
 
-        if($calculate_view < 0):
-          $calculate_view = abs($calculate_view);
-          $adding_view = round(($calculate_view/20) * 21);
+      if($calculate_view < 0):
+        $calculate_view = abs($calculate_view);
+        $adding_view = round(($calculate_view/20) * 21);
 
-          $api_data = [
-            'ytlink'=>$exc->yt_link,
-            'duration'=>$exc->duration,
-            'views'=>$adding_view,
-            'celebfans_id'=>$exc->id
-          ];
-          
-          self::add_youtube_link($api_data);
+        $api_data = [
+          'ytlink'=>$exc->yt_link,
+          'duration'=>$exc->duration,
+          'views'=>$adding_view,
+          'celebfans_id'=>$exc->id
+        ];
+        
+        self::add_youtube_link($api_data);
 
-          try
-          {
-            $exc->refill_btn = 2;
-            $exc->save();
-          }
-          catch(QueryException $e)
-          {
-            if($api == false)
-            {
-               return response()->json(['status'=>0]);
-            }
-            // $e->getMessages();
-          }
-        else:
-          /*IF YT AFTER VIEW HAS EQUAL OR GREATER THAN TOTAL VIEW */
-          $exc->refill_btn = 0;
+        try
+        {
+          $exc->refill_btn = 2;
           $exc->save();
-        endif;
-      }
-      else
-      {
-        return redirect('home');
-      }
+        }
+        catch(QueryException $e)
+        {
+          if($api == false)
+          {
+             return response()->json(['status'=>0]);
+          }
+          // $e->getMessages();
+        }
+      else:
+        /*IF YT AFTER VIEW HAS EQUAL OR GREATER THAN TOTAL VIEW */
+        $exc->progress = 1;
+        $exc->refill_btn = 0;
+        $exc->save();
+      endif;
 
       // MANUAL REFILL / AJAX RETURNING RESPONSE
       if($api == false)
       {
         return response()->json(['status'=>1]);
+      }
+    }
+
+    private static function check_drips($exc)
+    {
+      $total_drip = $exc->drip;
+      $complete_drip = Drips::where([['exchange_id','=',$exc->id],['status',1]])->get()->count();
+
+      if($complete_drip == $total_drip)
+      {
+        $exc->progress = 1;
+        $exc->save();
       }
     }
 
