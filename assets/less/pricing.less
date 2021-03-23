@@ -46,25 +46,51 @@ section.pricing {
 
 .pricing .card {
   border: none;
-  border-radius: 1rem;
+  border-radius: 0;
+  border-bottom-left-radius : 1rem;
+  border-bottom-right-radius : 1rem;
   transition: all 0.2s;
   box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
 }
 
+.pricing-header {
+  border-top-left-radius : 15px;
+  border-top-right-radius : 15px;
+  padding : 15px 80px;
+}
+
+.pricing-header.pro,.btn-pro {
+   background : linear-gradient(to right,#62d4ff,#1435d8,#000b8c);
+}
+
+.pricing-header.master,.btn-master {
+   background : linear-gradient(to right,#b5f124,#56c51d,#0e6f08);
+}
+
+.pricing-header.super,.btn-super {
+   background : linear-gradient(to right,#ffe568,#f38600,#f30000);
+}
+
 .pricing hr {
   margin: 1.5rem 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.2)
 }
 
 .pricing .card-title {
   margin: 0.5rem 0;
-  font-size: 0.9rem;
   letter-spacing: .1rem;
   font-weight: bold;
+  padding : 12px;
+  border : 2px solid #fff;
 }
 
 .pricing .card-price {
-  font-size: 1.8rem;
+  font-size: 1.35rem;
   margin: 0;
+  color : #fff;
+  padding : 15px;
+  background : #081533;
+  font-weight : bold;
 }
 
 .pricing .card-price .period {
@@ -84,18 +110,20 @@ section.pricing {
   border-radius: 5rem;
   letter-spacing: .1rem;
   font-weight: bold;
-  padding: 1rem;
+  padding: 0.75rem;
   opacity: 0.7;
   transition: all 0.2s;
+  color : #fff;
+  border : none;
 }
 
 /* Hover Effects on Card */
 
 @media (min-width: 992px) {
-  .pricing .card:hover {
+  .pricing .btn:hover {
     margin-top: -.25rem;
     margin-bottom: .25rem;
-    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.3);
+    /*box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.3);*/
   }
   .pricing .card:hover .btn {
     opacity: 1;
