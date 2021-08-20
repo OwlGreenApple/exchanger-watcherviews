@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +17,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('checkout/{id?}', [App\Http\Controllers\OrderController::class, 'index']);
+Route::post('submit_payment',[App\Http\Controllers\OrderController::class, 'submit_payment'])/*->middleware('check_valid_order')*/;
+Route::get('summary',[App\Http\Controllers\OrderController::class, 'summary']);
 
 Auth::routes();
 

@@ -11,8 +11,29 @@
 
     <!-- Scripts -->
     <script src="{{ asset('assets/js/app.js') }}" defer></script>
+    <script src="{{ asset('assets/js/jquery-3.2.1.min.js') }}"></script>
 
-    <!-- Fonts -->
+    <!-- Styles -->
+    <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet">
+    <!-- Custom select -->
+    <link href="{{ asset('assets/css/custom-select.css') }}" rel="stylesheet" />
+
+     <!-- Font Awesome 5 -->
+    <link href="{{ asset('assets/font-awesome-5/all.css') }}" rel="stylesheet">
+
+    <!-- Intl Dialing Code -->
+    <link href="{{ asset('assets/intl-tel-input/css/intlTelInput.min.css') }}" rel="stylesheet" />
+    <script type="text/javascript" src="{{ asset('assets/intl-tel-input/js/intlTelInput.js') }}"></script> 
+
+    <!-- Data Table -->
+    <link href="{{ asset('assets/DataTables/datatables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/DataTables/Responsive/css/responsive.dataTables.min.css') }}" rel="stylesheet">
+
+    <script defer type="text/javascript" src="{{ asset('assets/DataTables/datatables.min.js') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('assets/DataTables/Responsive/js/dataTables.responsive.min.js') }}"></script>
+
+     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
@@ -20,6 +41,12 @@
     <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet">
 </head>
 <body>
+
+    <!--Loading Bar-->
+    <div class="div-loading">
+      <div id="loader" style="display: none;"></div>  
+    </div> 
+
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">

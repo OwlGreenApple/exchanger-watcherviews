@@ -11,6 +11,17 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    /*
+        is_admin : 
+        0 = user
+        1 = admin
+
+        status :
+        0 = banned
+        1 = activated - membership running
+        2 = activated - membership end
+    */
+
     /**
      * The attributes that are mass assignable.
      *
@@ -20,6 +31,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone',
+        'is_admin',
+        'membership',
+        'trial',
+        'end_membership',
+        'status',
     ];
 
     /**
