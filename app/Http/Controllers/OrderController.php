@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Lang;
 use App\Helpers\Price;
 use App\Helpers\Api;
 use Illuminate\Database\QueryException;
-use App\Orders;
+use App\Models\Orders;
 use Carbon\Carbon;
 use Session, Auth, Storage, DB;
 

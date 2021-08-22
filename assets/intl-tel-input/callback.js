@@ -4,11 +4,11 @@ var path;
 
 if(url[2] == 'localhost')
 {
-    path = 'https://localhost/'+url[3]+'/public/assets';
+    path = 'https://localhost/'+url[3]+'/assets';
 }
 else
 {
-    path = 'https://'+url[2]+'/'+url[3]+'/public/assets';
+    path = 'https://'+url[2]+'/'+url[3]+'/assets';
 }
 
 var input = document.querySelector("#phone");

@@ -2,6 +2,7 @@
 @section('content')
 <link rel="stylesheet" href="{{asset('assets/css/summary.css')}}">
 
+@if(env('APP_ENV') == 'production')
 <script src="https://www.google.com/recaptcha/api.js?render=<?php echo env('GOOGLE_RECAPTCHA_SITE_KEY');?>"></script>
 <script>
   grecaptcha.ready(function() {
@@ -10,6 +11,7 @@
     });
   });
 </script>
+@endif
 
 <?php 
 	$is_login = false;
@@ -592,6 +594,6 @@
 </script>
 
 @if(!$is_login)
-  <script src="{{ asset('/public/assets/intl-tel-input/callback.js') }}" type="text/javascript"></script>
+  <script src="{{ asset('/assets/intl-tel-input/callback.js') }}" type="text/javascript"></script>
 @endif
 @endsection
