@@ -5,12 +5,14 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
+        "aws/aws-sdk-php": "~3.0",
         "php": "^7.3|^8.0",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.54",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.3",
+        "league/flysystem-aws-s3-v3": "~1.0",
         "nesbot/carbon": "^2.50",
         "rap2hpoutre/laravel-log-viewer": "^1.3"
     },

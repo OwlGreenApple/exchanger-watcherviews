@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<link href="{{ asset('/public/assets/css/order.css') }}" rel="stylesheet" />
+<link href="{{ asset('assets/css/order.css') }}" rel="stylesheet" />
 
 <div class="container mb-5 main-cont" style="">
   <div class="row">
@@ -18,6 +18,7 @@
       
       <hr>
     </div>
+
       @if (session('error') )
     <div class="col-md-12 ">
       <div id="pesan" class="alert alert-danger">
@@ -37,31 +38,19 @@
               {{$lang::get('order.package')}}
             </th>
             <th class="menu-nomobile">
-              {{$lang::get('order.yt_thumb')}}
-            </th>
-            <th class="menu-nomobile">
-              {{$lang::get('order.url')}}
-            </th>
-            <th class="menu-nomobile">
               {{$lang::get('order.price')}}
             </th>
             <th class="menu-nomobile">
               {{$lang::get('order.total')}}
             </th>
             <th class="menu-nomobile">
-              {{$lang::get('order.purchased_view')}}
-            </th> 
-            <th class="menu-nomobile">
-              {{$lang::get('order.start')}}
-            </th>
-            <th class="menu-nomobile">
-              {{$lang::get('order.views')}}
-            </th>
-            <th class="menu-nomobile">
               {{$lang::get('order.date')}}
             </th>
             <th class="menu-nomobile">
               {{$lang::get('order.date_complete')}}
+            </th>
+            <th class="menu-nomobile">
+              {{$lang::get('order.desc')}}
             </th>
             <th class="menu-nomobile">
               {{$lang::get('order.proof')}}
@@ -87,22 +76,22 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="modaltitle">
-          Transfer Information
+          {{$lang::get('order.transfer')}}
         </h5>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
       <div class="modal-body">
 
           <p class="card-text">
-            Silahkan melakukan Transfer Bank ke
+            {{$lang::get('order.step')}}
           </p> 
-          <h2>8290-336-261</h2>
+          <h2>{{ env('NO_REK') }}</h2>
           <p class="card-text">
-            BCA <b>Sugiarto Lasjim</b>
+            {{ env('BANK_NAME') }} <b>Sugiarto Lasjim</b>
           </p>
           <p class="card-text">
-            Setelah Transfer, silahkan Klik tombol confirm payment di bawah ini <br> atau Email bukti Transfer anda ke <b>{{ env('EMAIL_ADMIN') }}</b> <br>
-            Admin kami akan membantu anda max 1x24 jam
+            {!! $lang::get('order.step_next') !!}<br> {{$lang::get('order.step_next_1')}} <b>{{ env('EMAIL_ADMIN') }}</b> <br>
+            {{$lang::get('order.admin_24')}}
           </p>
 
       </div>
@@ -130,7 +119,6 @@
         <div id="re-title"><!--  --></div>
         <div>{{$lang::get('order.package')}} : <span id="order-package"></span></div>
         <div>{{$lang::get('order.price')}} : <span id="order-price"></span></div>
-        <div>{{$lang::get('order.total_views')}} : <span id="order-total_views"></span></div>
         <div>{{$lang::get('order.total')}} : <span id="order-total"></span></div>
       </div>
       <div class="modal-footer" id="foot">
@@ -154,7 +142,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="modaltitle">
-          Confirm payment
+          {{$lang::get('order.upload')}}
         </h5>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
@@ -187,15 +175,6 @@
             </label>
 
             <span class="col-md-6 col-12" id="mod-total"></span>
-          </div>
-
-          <div class="form-group" id="div-purchased_view">
-            <label class="col-md-3 col-12">
-              <b>{{$lang::get('order.purchased_view')}}</b>
-            </label>
-
-            <span class="col-md-6 col-12" id="mod-purchased_view">
-            </span>
           </div>
 
           <div class="form-group">
@@ -241,9 +220,9 @@
 
   $(document).ready(function() {
     load_page();
-    open_repromote();
-    repromote();
-    refill();
+    // open_repromote();
+    // repromote();
+    // refill();
   });
 
   function load_page()

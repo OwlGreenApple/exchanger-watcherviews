@@ -19,7 +19,7 @@ Route::get('/', function () {
 });
 
 Route::get('checkout/{id?}', [App\Http\Controllers\OrderController::class, 'index']);
-Route::post('submit_payment',[App\Http\Controllers\OrderController::class, 'submit_payment'])/*->middleware('check_valid_order')*/;
+Route::post('submit_payment',[App\Http\Controllers\OrderController::class, 'submit_payment'])->middleware('check_valid_order');
 Route::get('summary',[App\Http\Controllers\OrderController::class, 'summary']);
 
 /*AUTH*/
@@ -27,11 +27,13 @@ Route::post('loginajax',[App\Http\Controllers\Auth\LoginController::class, 'logi
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
 /*USER*/
 Route::group(['middleware'=>['auth','web']],function()
 {
 	Route::get('thankyou',[App\Http\Controllers\OrderController::class,'thankyou']);
-	// Route::get('order','CheckoutController@order');
+	Route::get('home', [App\Http\Controllers\HomeController::class, 'index']);
+	Route::get('order',[App\Http\Controllers\HomeController::class, 'order']);
+	Route::get('order-list',[App\Http\Controllers\HomeController::class, 'order_list']);
+	Route::post('order-confirm-payment',[App\Http\Controllers\HomeController::class, 'confirm_payment_order']);
+	Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'update_profile'])->middleware('check_profile');
 });

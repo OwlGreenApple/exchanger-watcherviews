@@ -15,6 +15,12 @@ class OrderController extends Controller
 {
     public function index()
     {
+    	// REMOVE SESSION IF AVAILABLE
+    	if(session('order') !== null)
+    	{
+    		Session::forget('order');
+    	}
+
     	$page = request()->segment(2);
     	$page == null? $page = 1 : $page;
     	$part = [

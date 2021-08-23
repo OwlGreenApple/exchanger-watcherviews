@@ -42,8 +42,4 @@ return [
     'unique_phone'=>'No yang anda masukkan sudah terdaftar', //rule.CheckUniquePhone
     'valid'=>'tidak valid', //CheckPricing
     'verify_account'=>'Verifikasi Akun', //summary.blade
-    'yt_progress'=>'Link yang anda masukkan masih dalam proses, tunggu hingga selesai.', //CheckYtLinkProgress
-    'yt_progress_time'=>'Mohon tunggu 1 x 24 jam dari tanggal selesai.', //CheckYtLinkProgress
-    'yt_link'=>'Mohon gunakan youtube link yang valid.', //CheckYtLink
-    'yt_link_default'=>'Maaf url ini sudah di pakai', //CheckYtLink
 ];

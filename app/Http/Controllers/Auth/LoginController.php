@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Http\Request;
 use Cookie,Session;
 
 
@@ -58,6 +60,7 @@ class LoginController extends Controller
 
     public function loginAjax(Request $request)
     {
+        // dd($request->all());
         $email = $request->email;
         $password = $request->password;
 
@@ -71,7 +74,7 @@ class LoginController extends Controller
         } else {
             return response()->json([
                 'success' => false,
-                'message' => 'Not Credential Account'
+                'message' => Lang::get('auth.credential')
             ]);
         }
     }

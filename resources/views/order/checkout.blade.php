@@ -31,10 +31,7 @@
                         @endif
                       @endforeach
                   </select>
-                  <div class="error price"><!-- error --></div>
                   <div class="error package"><!-- error --></div>
-                  <div class="error desc"><!-- error --></div>
-                  <div class="error type"><!-- error --></div>
                 </div>
                 <!--  -->
               </div>
@@ -68,13 +65,9 @@
                   <div class="col-md-12 pl-0">
                     <span class="total" style="font-size:18px"></span>
                   </div>
-                  <!-- <label class="mt-2">
-                    *Your upgrade will be activated as soon as payment confirmed
-                  </label>  -->
-                </div>
               </div>
 
-              <div class="form-group">
+              <div class="form-group mt-4">
                 <div class="col-12 col-md-12">
                   <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" required/>
                   <label for="agree-term" class="label-agree-term text">{{ $lang::get('custom.agreement') }}<a href="{{ env('APP_URL') }}terms-of-services/" class="term-service" target="_blank">{{ $lang::get('custom.terms') }}</a></label>
@@ -121,7 +114,7 @@
       type: 'POST',
       url: "{{url('submit_payment')}}",
       data: {
-        package :  $("#select-auto-manage").find("option:selected").val()
+        package :  $("#select-auto-manage").val()
       },
       dataType: 'json',
       beforeSend: function() {
@@ -146,12 +139,7 @@
           if(result.status == 0 && result.msg == undefined)
           {
             $(".alert-danger").hide();
-            $(".price").html(result.price);
             $(".package").html(result.package);
-            $(".desc").html(result.desc);
-            $(".link").html(result.link);
-            $(".qty").html(result.qty);
-            $(".type").html(result.type);
           }
           else
           {

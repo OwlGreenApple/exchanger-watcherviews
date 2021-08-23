@@ -51,6 +51,7 @@
                       </div>
                       <!-- End Card Header -->
                       <div class="card-body">
+                        <span class="credential"><!--  --></span>
                         <!-- Card Data Summary -->
                         <div class="card-data-summary show" id="step-1">
               						<?php if ($is_login) { ?>
@@ -388,42 +389,6 @@
     }
 	}
 
-	/*
-	REGISTER
-	*/
-  function getDataFromCountry()
-  {
-     var data_country = $(".iti__selected-flag").attr('data-country');
-     $("input[name='data_country']").val(data_country);
-  }
-
-  function countryChange()
-  {
-     jQuery("#phone").on('countrychange', function(e, countryData){
-        var data_country = $(".iti__selected-flag").attr('data-country');
-        $("input[name='data_country']").val(data_country);
-    })
-  } 
-
-  function fixLayoutInputPhoneCountry()
-  {
-      $(".iti").addClass('w-100');
-  }
-
-  function agreement(){
-    $("input[name=agreement]").click(function(){
-      var val = $(this).val();
-
-      if(val == 1){
-        $(this).val('on');
-      }
-      else {
-        $(this).val(1);
-      }
-
-    });
-  }
-
   function rememberMe(){
     $("input[name=remember]").click(function(){
       var val = $(this).val();
@@ -462,26 +427,11 @@
 						$(".step-2").show();
             $(".bsub").show();
 						$("#step-1").html('<p>{{ $lang::get("custom.conf_order") }}</p><span class="sumo-psuedo-link">'+data.email+'</span>');
-
-            if(data.reseller_price > 0)
-            {
-               $(".total_price").html('Rp '+'<strike>'+formatNumber(data.price)+'</strike> '+formatNumber(data.reseller_price));
-            }
-
-            if(data.status_upgrade == 1) //false which mean upgrade
-            {
-              $("input[name='status_upgrade']").prop('disabled',false);
-              // $(".upgrade").show();
-              $(".total_price").html('Rp '+'<strike>'+formatNumber(data.price)+'</strike> '+data.total);
-              // $("input[name='status_upgrade']").prop('disabled',false);
-            }
-           /* else
-            {
-               $(".upgrade").hide(); 
-            }*/
+            $(".credential").html('');
 					} 
-					else {
-						alert(data.message);
+					else 
+          {
+						$(".credential").html('<div class="alert alert-danger">'+data.message+'</div>');
 					}
 				},
         error : function(xhr)
@@ -577,10 +527,6 @@
 	}
 
   $(document).ready(function() {
-		agreement();
-		fixLayoutInputPhoneCountry();
-		getDataFromCountry();
-		countryChange();
 		rememberMe();
 		
 		loginAjax();

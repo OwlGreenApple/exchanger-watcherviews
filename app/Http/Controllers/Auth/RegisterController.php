@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Http\Request;
 use App\Rules\CheckPlusCode;
 use App\Rules\CheckCallCode;
@@ -67,7 +68,7 @@ class RegisterController extends Controller
     
     public function showRegistrationForm()
     {
-        return redirect('login');
+        return view('auth.register',['lang'=> new Lang]);
     }
 
     /**
