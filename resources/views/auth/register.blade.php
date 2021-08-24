@@ -86,13 +86,18 @@
 <script src="{{ asset('/assets/js/custom.js') }}" type="text/javascript"></script>
 <script type="text/javascript">
 
+var bool = false;
+$(function(){
+    registerAjax();
+});
+
   function registerAjax()
   {
     $("#btn-register").click(function(){
       var val= $("input[name=agreement]").val();
 
       if(val == 'on'){
-        alert('Please Check Agreement Box');
+        alert('{{ $lang::get("custom.check") }}');
         return false;
       }
 
@@ -117,8 +122,7 @@
             if (data.success == 1) 
             {
                 $(".error").hide();
-                $(".step-2").show();
-                $("#step-1").html('<p>{{ $lang::get("custom.conf_order") }}</p><span class="sumo-psuedo-link">'+data.email+'</span>');
+                bool = true;
             } 
             else 
             {
@@ -128,6 +132,13 @@
                  $(".code_country").html(data.code_country);
                  $(".phone").html(data.phone);
             }
+        },
+        complete : function(xhr)
+        {
+           if(bool == true)
+           {
+             location.href="{{ url('home') }}";
+           }
         },
         error: function(xhr,attr,throwable)
         {

@@ -344,8 +344,8 @@
     </div>
   </section>
 
+<script src="{{ asset('/assets/js/custom.js') }}" type="text/javascript"></script>
 <script type="text/javascript">
-
   function getUpgrade()
   {
     $("input[name='status_upgrade']").change(function(){
@@ -449,7 +449,7 @@
       var val= $("input[name=agreement]").val();
 
       if(val == 'on'){
-        alert('Please Check Agreement Box');
+        alert('{{ $lang::get("custom.check") }}');
 				return false;
       }
 

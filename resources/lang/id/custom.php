@@ -4,6 +4,7 @@ return [
     'and'=>'dan :', //summary.blade
     'agreement'=>'Saya menyetujui semua pernyataan di : ', //checkout.blade
     'cart_summary'=>'Keranjang summary', //summary.blade
+    'check'=>'Harap centang, syarat dan ketentuan yang berlaku', //register.blade//summary.blade
     'conf_order'=>'Order konfirmasi anda akan di email ke : ', //summary.blade
     'create_account'=>'Buat Akun', //summary.blade
     'currency'=>'Rp', //summary.blade
@@ -22,6 +23,7 @@ return [
     'need_help'=>'Perlu bantuan ?',//summary.blade
     'old_password'=> 'Password anda yang lama tidak sesuai',
     'order'=> 'Pembelian paket : ',
+    'package_terms'=>'per bulan', //checkout.blade
     'paket'=>'Paket yang tersedia', //checkout.blade
     'phone'=>'Hp', //summary.blade
     'pilih_paket'=>'Silahkan pilih paket anda', //checkout.blade
@@ -35,7 +37,6 @@ return [
     'review'=>'Harap periksa lagi email dan nomer hp anda sebelum melanjutkan order', //summary.blade
     'success'=>'Data and telah di simpan',
     'sell'=>'Kesempatan jual per hari',
-    'package_terms'=>'per tahun', //checkout.blade
     'terms'=>'Syarat dan ketentuan yang berlaku', //checkout.blade
     'tiktok_url'=>'Tiktok URL',
     'tk_link'=>'Mohon gunakan tiktok link yang valid',

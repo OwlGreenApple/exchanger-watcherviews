@@ -3,7 +3,7 @@
     on page : 
     res -> order.content
     res -> order.thankyouconfirmpayment
-    controller -> CheckoutController
+    controller -> CheckoutController, AdminController
 */
 return [
     'admin'=>'Admin akan mengkonfirmasi pembayaran anda.',
@@ -17,6 +17,7 @@ return [
     'desc'=>'Deskripsi',
     'detail'=>'Detail',
     'duration'=>'Durasi',
+    'err_membership'=>'Error pada system order later',
     'for'=>'atas Konfirmasi pembayaranya',
     'id'=>'Invalid ID',
     'max_notes'=>'Maksimal panjang karakter untuk notes adalah 300 karakter',

@@ -15,6 +15,7 @@ class CreateMembershipsTable extends Migration
     {
         Schema::create('memberships', function (Blueprint $table) {
             $table->id();
+            $table->BigInteger('user_id');
             $table->BigInteger('order_id');
             $table->DateTime('start');
             $table->DateTime('end');

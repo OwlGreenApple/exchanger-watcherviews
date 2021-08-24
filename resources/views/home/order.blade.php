@@ -231,7 +231,7 @@
         "processing": true,
         "serverSide": true,
         "lengthMenu": [ 10, 25, 50, 75, 100, 500 ],
-        "ajax": "{{ url('order-list') }}",
+        "ajax": "{{ url('orders') }}",
         "destroy": true
     });
 
