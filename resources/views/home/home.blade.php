@@ -37,6 +37,24 @@
                             </div>
                         </div>
 
+                         <div class="form-group row">
+                            <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.bank_name') }}</label>
+
+                            <div class="col-md-6">
+                                <input type="text" value="{{ $user->bank_name }}" class="form-control" name="bank_name" />
+                                <span class="error bank_name"><!--  --></span>
+                            </div>
+                        </div> 
+
+                        <div class="form-group row">
+                            <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.bank_no') }}</label>
+
+                            <div class="col-md-6">
+                                <input type="text" value="{{ $user->bank_no }}" class="form-control" name="bank_no" />
+                                <span class="error bank_no"><!--  --></span>
+                            </div>
+                        </div>
+
                         <div class="form-group row">
                             <label class="col-md-4 col-form-label text-md-right"> Password Lama</label>
 
@@ -111,6 +129,8 @@
                     {
                         $(".error").show();
                         $(".name").html(result.name);
+                        $(".bank_name").html(result.bank_name);
+                        $(".bank_no").html(result.bank_no);
                         $(".phone").html(result.phone);
                         $(".phone").html(result.code_country); //exceptional
                         $(".oldpass").html(result.oldpass);

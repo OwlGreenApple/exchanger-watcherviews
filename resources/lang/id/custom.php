@@ -3,6 +3,8 @@ return [
     'accept'=>'Dengan meng-click tombol \'Order Now\' berarti anda sudah membaca, mengerti dan setuju :', //summary.blade
     'and'=>'dan :', //summary.blade
     'agreement'=>'Saya menyetujui semua pernyataan di : ', //checkout.blade
+    'bank_name'=>'Nama Bank', //home.blade
+    'bank_no'=>'No Rekening', //home.blade
     'cart_summary'=>'Keranjang summary', //summary.blade
     'check'=>'Harap centang, syarat dan ketentuan yang berlaku', //register.blade//summary.blade
     'conf_order'=>'Order konfirmasi anda akan di email ke : ', //summary.blade

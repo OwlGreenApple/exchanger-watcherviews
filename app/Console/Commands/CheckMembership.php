@@ -42,7 +42,7 @@ class CheckMembership extends Command
     public function handle()
     {
         $users = User::where('status',2)->get();
-        $today = Carbon::now()->setTimezone('Asia/Jakarta');
+        $today = Carbon::now();
 
         if($users->count() > 0)
         {
@@ -74,7 +74,7 @@ class CheckMembership extends Command
     public static function check_membership($user)
     {
         $user_id = $user->id;
-        $today = Carbon::now()->setTimezone('Asia/Jakarta');
+        $today = Carbon::now();
         $mb = Membership::where([['user_id',$user_id],['status',0]])->orderBy('id','asc')->get();
 
         if($mb->count() > 0)

@@ -21,6 +21,8 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->boolean('is_admin')->default(0);
+            $table->string('bank_name')->nullable();
+            $table->string('bank_no')->nullable();
             $table->string('membership')->default('free');
             $table->boolean('trial')->default(3);
             $table->string('end_membership')->nullable();

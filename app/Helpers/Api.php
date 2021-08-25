@@ -3,7 +3,6 @@ namespace App\Helpers;
 
 class Api
 {
-
     public static function send_wa_message($admin_id,$msg,$to)
     {
         // $admin_id --- user id activrespon
@@ -16,8 +15,9 @@ class Api
 
         $data_api = json_encode($data);
 
-        $url = 'https://activrespon.com/dashboard/api/celebfans';
-        // $url = 'https://192.168.100.49/activrespon/api/celebfans';
+        // note : this using celebfans page link, due same logic
+        // $url = 'https://activrespon.com/dashboard/api/celebfans';
+        $url = 'https://192.168.100.49/activrespon/api/celebfans';
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data_api);

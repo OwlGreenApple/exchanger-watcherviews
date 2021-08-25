@@ -89,6 +89,9 @@
                                  <li class="nav-item">
                                     <a class="nav-link" href="{{ url('order-list') }}">Order List</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ url('wa-message') }}">WA Message</a>
+                                </li>
                             @endif
 
                             <li class="nav-item dropdown">

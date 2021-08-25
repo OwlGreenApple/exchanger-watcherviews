@@ -8,6 +8,7 @@ use App\Helpers\Price;
 use App\Helpers\Api;
 use Illuminate\Database\QueryException;
 use App\Models\Orders;
+use App\Models\Notification;
 use Carbon\Carbon;
 use Session, Auth, Storage, DB;
 
@@ -117,7 +118,7 @@ class OrderController extends Controller
                 $rt['status'] = 2; //redirect to thankyou page
 
                 // SEND WA MESSAGE IF ORDER SUCCESSFUL  
-                /*$this->send_message($data['package'],$link,$data['price'],$data['total'],$data['purchased_views'],$order_number,Auth::user()->phone_number);*/
+                $this->send_message($data['package'],$data['price'],$data['total'],$order_number,Auth::user()->phone_number);
             }
 
             if(session('order') !== null)
@@ -166,8 +167,9 @@ class OrderController extends Controller
     }
 
     // SEND MESSAGE TO USER'S WA
-    public function send_message($package,$link,$price,$total,$purchase,$order_number,$phone_number,$after = null)
+    public function send_message($package,$price,$total,$order_number,$phone_number,$after = null)
     {
+        $pc = new Price;
         $api = new Api;
         $notif = Notification::all()->first();
         $admin_id = $notif->admin_id;
@@ -182,20 +184,20 @@ class OrderController extends Controller
             $txt = $notif->notif_after;
         }
        
-        $message = $this->replace_string_order($package,$link,$api->pricing_format($price),$api->pricing_format($total),$api->pricing_format($purchase),$order_number,$txt);
+        $message = $this->replace_string_order($package,$pc->pricing_format($price),$pc->pricing_format($total),$order_number,$txt);
 
         $api->send_wa_message($admin_id,$message,$phone_number);
     }
 
     // REPLACE SPECIAL CHARACTER ACCORDING ON ORDER
-    public function replace_string_order($package,$link,$price,$total,$purchase,$order_number,$message)
+    public function replace_string_order($package,$price,$total,$order_number,$message)
     {
         $replace_target = array(
-          '[PACKAGE]','[PRICE]','[TOTAL]','[PURCHASE]','[NO-ORDER]'
+          '[PACKAGE]','[PRICE]','[TOTAL]','[NO-ORDER]'
         );
 
         $replace = array(
-          $package,$price,$total,$purchase,$order_number
+          $package,$price,$total,$order_number
         );
 
         return str_replace($replace_target,$replace,$message);

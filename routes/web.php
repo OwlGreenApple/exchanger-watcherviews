@@ -44,4 +44,8 @@ Route::group(['middleware'=>['auth','web','is_admin']],function()
 	Route::get('order-list',[App\Http\Controllers\Admin\AdminController::class,'index']);
 	Route::get('order-load',[App\Http\Controllers\Admin\AdminController::class,'order']);
 	Route::get('order-confirm',[App\Http\Controllers\Admin\AdminController::class,'confirm_order']);
+
+	// WA MESSAGE
+	Route::get('wa-message',[App\Http\Controllers\Admin\AdminController::class,'set_order_message']);
+	Route::post('save-message',[App\Http\Controllers\Admin\AdminController::class,'save_message']);
 });

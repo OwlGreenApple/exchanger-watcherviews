@@ -32,13 +32,16 @@ class HomeController extends Controller
     public function index()
     {
         $user = Auth::user();
-        return view('home.home',['user'=>$user]);
+        $lang = new Lang;
+        return view('home.home',['user'=>$user,'lang'=>$lang]);
     }
 
     public function update_profile(Request $request)
     {
         $user = User::find(Auth::id());
         $user->name = strip_tags($request->name);
+        $user->bank_name = strip_tags($request->bank_name);
+        $user->bank_no = strip_tags($request->bank_no);
 
         if($request->newpass !== null)
         {
@@ -136,6 +139,10 @@ class HomeController extends Controller
           {
             $status = '<span class="text-primary"><b>'.Lang::get('order.complete').'</b></span>';
           }
+          elseif($order->status==3)
+          {
+            $status = '<span class="text-danger"><b>'.Lang::get('order.cancel').'</b></span>';
+          }
           else
           {
             $status = '<span><b>'.Lang::get('order.waiting').'</b></span>';
@@ -147,7 +154,7 @@ class HomeController extends Controller
           }
           else
           {
-            $date_confirm = Carbon::parse($order->date_confirm)->setTimeZone('Asia/Jakarta')->toDateTimeString();
+            $date_confirm = Carbon::parse($order->date_confirm)->toDateTimeString();
           }
           
           $data['data'][] = [
@@ -155,7 +162,7 @@ class HomeController extends Controller
             1=>$order->package,
             2=>Lang::get('custom.currency')." ".$prc->pricing_format($order->price),
             3=>Lang::get('custom.currency')." ".$prc->pricing_format($order->total_price),
-            4=>Carbon::parse($order->created_at)->setTimeZone('Asia/Jakarta')->toDateTimeString(),
+            4=>Carbon::parse($order->created_at)->toDateTimeString(),
             5=>$date_confirm,
             6=>$order->desc,
             7=>$proof,

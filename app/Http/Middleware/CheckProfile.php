@@ -26,6 +26,8 @@ class CheckProfile
         $userid = Auth::id();
         $rules = [
             'name' => ['required','string','max:255'],
+            'bank_name' => ['string','max:50'],
+            'bank_no' => ['numeric','max:30'],
         ];
 
         if(!empty($request->phone))
@@ -53,6 +55,8 @@ class CheckProfile
             $error = array(
               'status'=>'error',
               'name'=>$err->first('name'),
+              'bank_name'=>$err->first('bank_name'),
+              'bank_no'=>$err->first('bank_no'),
               'code_country'=>$err->first('code_country'),
               'phone'=>$err->first('phone'),
               'oldpass'=>$err->first('oldpass'),

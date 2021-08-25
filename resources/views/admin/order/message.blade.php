@@ -46,10 +46,10 @@
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-md-4 col-form-label text-md-right">Admin id activrespon</label>
+                           <!--  <label class="col-md-4 col-form-label text-md-right">Admin id activrespon</label> -->
 
                             <div class="col-md-6">
-                                <input readonly="readonly" class="form-control" name="admin_id" value="{{ $notif->admin_id }}" />
+                                <input type="hidden" readonly="readonly" class="form-control" name="admin_id" value="{{ $notif->admin_id }}" />
                                 <span class="error admin_id"><!--  --></span>
                             </div>
                         </div>

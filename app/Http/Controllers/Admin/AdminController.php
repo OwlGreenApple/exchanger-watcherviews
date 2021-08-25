@@ -3,14 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Http\Request;
 use App\Models\Orders;
 use App\Models\User;
 use App\Models\Membership;
+use App\Models\Notification;
 use App\Helpers\Api;
 use App\Helpers\Price;
 use Carbon\Carbon;
-use Storage;
+use Storage, Validator, DB;
 
 class AdminController extends Controller
 {
@@ -80,9 +82,13 @@ class AdminController extends Controller
           {
           	$confirm = '<button type="button" class="btn btn-info btn-sm confirm" data-toggle="modal" data-target="#confirm_popup" data-id="'.$row->id.'">Konfirmasi</button> <button type="button" class="btn btn-danger btn-sm cancel" data-toggle="modal" data-target="#cancel_popup" data-id="'.$row->id.'">Batal</button>';
           }
+          elseif($row->status == 2)
+          {
+            $confirm = '<b class="text-success">Terkonfirmasi</b>';
+          }
           else
           {
-          	$confirm = '<b class="text-success">Terkonfirmasi</b>';
+          	$confirm = '<b class="text-danger">Batal</b>';
           }
 
           // PROOF
@@ -102,7 +108,7 @@ class AdminController extends Controller
           }
           else
           {
-            $date_confirm =Carbon::parse($row->date_confirm)->setTimezone('Asia/Jakarta')->toDateTimeString();
+            $date_confirm = $row->date_confirm;
           }
 
           $data['data'][] = [
@@ -112,7 +118,7 @@ class AdminController extends Controller
             3=>$api->pricing_format($row->total_price),
             4=>$proof,
             5=>$notes,
-            6=>Carbon::parse($row->created_at)->setTimezone('Asia/Jakarta')->toDateTimeString(),
+            6=>Carbon::parse($row->created_at)->toDateTimeString(),
             7=>$date_confirm,
             8=>$confirm
           ];
@@ -122,13 +128,16 @@ class AdminController extends Controller
       echo json_encode($data);
     }
 
+    /*
+      ADMIN CONFIRM ORDER
+    */
     public function confirm_order(Request $request)
     {
     	$order = Orders::find($request->id);
 
     	if(!is_null($order))
     	{
-        $today = Carbon::now()->setTimezone('Asia/Jakarta');
+        $today = Carbon::now();
         $user = User::find($order->user_id);
     
         $order->date_confirm = $today;
@@ -169,7 +178,10 @@ class AdminController extends Controller
     	return response()->json($data);
     }
 
-    //TO CHECK WHETHER MEMBERSHIP STILL ACTIVE
+    /*
+      TO CHECK WHETTHER MEMBERSHIP STILL ACTIVE OR HAS END,
+      IF ACTIVE, ORDER / PURCHASED ORDER WILL DELIVER TO TABLE MEMBERSHIP
+    */
     private function check_term_membership($user)
     {
       if(!is_null($user))
@@ -186,6 +198,9 @@ class AdminController extends Controller
       }
     }
 
+    /*
+       DELIVER ORDER TO TABLE MEMBERSHIP
+    */
     private function orderLater(array $data)
     {
       $check_membership = Membership::where('user_id',$data['user_id'])->orderBy('id','desc')->first();
@@ -225,11 +240,14 @@ class AdminController extends Controller
       return response()->json($arr);
     }
 
+    /*
+      ORDER LATER
+    */
     public function updateLater($user_id)
     {
         $user = User::find($user_id);
         $end_membership = $user->end_membership;
-        $data['start'] = Carbon::parse($end_membership)->setTimezone('Asia/Jakarta');
+        $data['start'] = Carbon::parse($end_membership)->toDatetimeString();
         $data['end'] = Carbon::parse($data['start'])->setTime(0,0,0)->addMonths(1);
         return $data;
     }
@@ -252,6 +270,57 @@ class AdminController extends Controller
 
     	return response()->json($data);
     }
+
+    // SET WA MESSAGE FOR ORDER
+    public function set_order_message()
+    {
+        $notif = Notification::all()->first();
+        return view('admin.order.message',['notif'=>$notif]);
+    }
+
+    public function save_message(Request $request)
+    {
+        $data = [
+            'notif_order'=>$request->notif,
+            'notif_after'=>$request->notif_order,
+            'admin_id'=>$request->admin_id,
+        ];
+
+        $rules = [
+            'notif'=>['required','max:65000'],
+            'notif_order'=>['required','max:65000'],
+            'admin_id'=>['required','numeric'],
+        ];
+
+        $valid = Validator::make($request->all(),$rules);
+
+        if($valid->fails() == true)
+        {
+            $err = $valid->errors();
+            $errors = [
+                'status'=>'error',
+                'notif'=>$err->first('notif'),
+                'notif_order'=>$err->first('notif_order'),
+                'admin_id'=>$err->first('admin_id')
+            ];
+
+            return response()->json($errors);
+        }
+        
+        try
+        {
+           DB::table('notification')->update($data);
+           $data['status'] = 1;
+           $data['msg'] = Lang::get('custom.success');
+        }
+        catch(Queryexception $e)
+        {
+           $data['status'] = "error";
+        }
+
+        return response()->json($data);
+    }
+
 
 /*end controller*/
 }
