@@ -36,6 +36,9 @@ Route::group(['middleware'=>['auth','web']],function()
 	Route::get('orders',[App\Http\Controllers\HomeController::class, 'order_list']);
 	Route::post('order-confirm-payment',[App\Http\Controllers\HomeController::class, 'confirm_payment_order']);
 	Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'update_profile'])->middleware('check_profile');
+
+	//WITHDRAW COIN TO WALLET
+	Route::get('test',[App\Http\Controllers\HomeController::class,'get_watcherviews_coin']);
 });
 
 /*ADMIN*/

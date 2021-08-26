@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Orders;
 use App\Models\User;
 use App\Helpers\Price;
+use App\Helpers\Api;
 use Carbon\Carbon;
 use Storage;
 
@@ -29,6 +30,15 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+
+    public function get_watcherviews_coin()
+    {
+        $api = new Api;
+        $email = 'alotivi@gmail.com';
+        $password = 1234567;
+        $api::get_watcerviews_coin($email,$password);
+    }
+
     public function index()
     {
         $user = Auth::user();
