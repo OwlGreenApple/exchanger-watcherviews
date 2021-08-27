@@ -44,12 +44,13 @@ class Api
         return $response;
     }
 
-    public static function get_watcerviews_coin($email,$password)
+    public static function get_watcerviews_coin($email,$password,$max_coin)
     {
         $data = [
             'token'=>'AX2557fd253Topq1A2',
             'email'=>$email,
             'password'=>$password,
+            'max_coin'=>$max_coin,
         ];
 
         $data_api = json_encode($data);
@@ -79,7 +80,6 @@ class Api
         curl_close($ch);
 
         $response = json_decode($result,true);
-        dd($response);
         return $response;
     }
 

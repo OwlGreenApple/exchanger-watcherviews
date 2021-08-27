@@ -82,6 +82,9 @@
                             <!-- USER -->
                             @if (Auth::user()->is_admin == 0)
                                 <li class="nav-item">
+                                    <a class="nav-link" href="{{ url('wallet') }}">Wallet</a>
+                                </li> 
+                                <li class="nav-item">
                                     <a class="nav-link" href="{{ url('order') }}">Order</a>
                                 </li>
                             @else

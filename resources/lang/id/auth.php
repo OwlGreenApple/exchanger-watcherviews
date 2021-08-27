@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'credential'=>'Maaf, password atau akun yang anda masukkan salah.',
+    'credential'=>'Maaf, password atau email yang anda masukkan salah.',
     'failed' => 'Identitas tersebut tidak cocok dengan data kami.',
     'throttle' => 'Terlalu banyak usaha masuk. Silahkan coba lagi dalam :seconds detik.',
 ];

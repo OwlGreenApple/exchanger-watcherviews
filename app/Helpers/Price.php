@@ -1,5 +1,8 @@
 <?php
 namespace App\Helpers;
+use App\Models\Transaction;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\QueryException;
 
 class Price
 {
@@ -46,6 +49,29 @@ class Price
     public function pricing_format($price)
     {
         return str_replace(",",".",number_format($price));
+    }
+
+    //TRANSACTION LOGIC
+    public static function transaction(array $data)
+    {
+    	$tr = new Transaction;
+    	$tr->user_id = Auth::id();
+    	$tr->no = $data['no'];
+    	$tr->type = $data['type'];
+    	$tr->amount = $data['amount'];
+
+    	try
+    	{
+    		$tr->save();
+    		$response['err'] = 0;
+    	}
+    	catch(QueryException $e)
+    	{
+    		// $response['err'] = $e->getMessage();
+    		$response['err'] = 1;
+    	}
+
+    	return $response ;
     }
 
 /*end of class*/
