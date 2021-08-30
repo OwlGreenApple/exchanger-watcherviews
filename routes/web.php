@@ -34,8 +34,13 @@ Route::group(['middleware'=>['auth','web']],function()
 	Route::get('home', [App\Http\Controllers\HomeController::class, 'index']);
 	Route::get('order',[App\Http\Controllers\HomeController::class, 'order']);
 	Route::get('orders',[App\Http\Controllers\HomeController::class, 'order_list']);
+	Route::get('transaction',[App\Http\Controllers\HomeController::class, 'history_transaction']);
 	Route::post('order-confirm-payment',[App\Http\Controllers\HomeController::class, 'confirm_payment_order']);
 	Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'update_profile'])->middleware('check_profile');
+
+	// SHOP
+	Route::get('buy',[App\Http\Controllers\HomeController::class, 'buying_page']);
+	Route::get('sell',[App\Http\Controllers\HomeController::class, 'selling_page']);
 
 	//WITHDRAW COIN TO WALLET
 	Route::get('wallet',[App\Http\Controllers\HomeController::class,'wallet']);

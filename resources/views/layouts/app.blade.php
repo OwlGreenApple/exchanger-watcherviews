@@ -81,9 +81,23 @@
                         @else
                             <!-- USER -->
                             @if (Auth::user()->is_admin == 0)
+                                <li class="nav-item dropdown">
+                                    <a id="shop" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                        Shop
+                                    </a>
+
+                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="shop">
+                                        <a class="dropdown-item" href="{{ url('buy') }}">{{ Lang::get('transaction.buy') }}</a> 
+
+                                        <a class="dropdown-item" href="{{ url('sell') }}">{{ Lang::get('transaction.sell') }}</a> 
+
+                                        <a class="dropdown-item" href="{{ url('transaction') }}">{{ Lang::get('transaction.name') }}</a> 
+                                    </div>
+
+                                </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ url('wallet') }}">Wallet</a>
-                                </li> 
+                                </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ url('order') }}">Order</a>
                                 </li>
@@ -103,6 +117,11 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item text-primary">
+                                        {{ Auth::user()->membership }}
+                                    </a>
+
+                                    <!-- LOGOUT -->
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

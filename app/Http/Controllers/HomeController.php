@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Orders;
 use App\Models\User;
+use App\Models\Transaction;
 use App\Helpers\Price;
 use App\Helpers\Api;
 use Carbon\Carbon;
@@ -31,6 +32,22 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+
+    public function buying_page()
+    {
+        return view('home.buy',['lang'=>new Lang,'pc'=>new Price]);
+    }
+
+    public function selling_page()
+    {
+        return view('home.sell',['lang'=>new Lang,'pc'=>new Price]);
+    }
+
+    public function history_transaction()
+    {
+        $tr = Transaction::where('user_id',Auth::id())->get();
+        return view('home.transaction',['lang'=>new Lang,'data'=>$tr]);
+    }
 
     public function wallet()
     {
