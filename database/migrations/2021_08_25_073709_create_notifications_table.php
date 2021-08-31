@@ -26,7 +26,6 @@ class CreateNotificationsTable extends Migration
         $notif_order .= "No Order : *[NO-ORDER]*\n";
         $notif_order .= "Paket : [PACKAGE]\n";
         $notif_order .= "Harga : Rp.[PRICE]\n";
-        $notif_order .= "Jumlah View : [PURCHASE]\n";
         $notif_order .= "Total : Rp.*[TOTAL]*\n\n";
         $notif_order .= "Transfer ke BCA :\n";
         $notif_order .= "Langkah sesudah transfer :\n";
@@ -37,7 +36,6 @@ class CreateNotificationsTable extends Migration
         $notif_after .= "No Order : *[NO-ORDER]*\n";
         $notif_after .= "Paket : [PACKAGE]\n";
         $notif_after .= "Harga : Rp.[PRICE]\n";
-        $notif_after .= "Jumlah View : [PURCHASE]\n";
         $notif_after .= "Total : Rp.*[TOTAL]*\n\n";
         $notif_after .= "Transfer ke BCA :\n";
         $notif_after .= "Langkah sesudah transfer :\n";

@@ -16,6 +16,12 @@ use Storage, Validator, DB;
 
 class AdminController extends Controller
 {
+
+    public function trade()
+    {
+      return view('admin.order.trade');
+    }
+
     public function index()
     {
     	return view('admin.order.index');

@@ -81,29 +81,32 @@
                         @else
                             <!-- USER -->
                             @if (Auth::user()->is_admin == 0)
+                                <li class="nav-item">
+                                    <li class="nav-link"><a>{{ Lang::get('transaction.trade') }}</a>&nbsp;<span class="border border-success px-1">{{ Lang::get('custom.currency') }} 0.1/coin</span></li>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ url('buy') }}">{{ Lang::get('transaction.buy') }}</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ url('sell') }}">{{ Lang::get('transaction.sell') }}</a>
+                                </li>
                                 <li class="nav-item dropdown">
-                                    <a id="shop" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                        Shop
+                                    <a id="walletDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                        Wallet
                                     </a>
 
-                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="shop">
-                                        <a class="dropdown-item" href="{{ url('buy') }}">{{ Lang::get('transaction.buy') }}</a> 
-
-                                        <a class="dropdown-item" href="{{ url('sell') }}">{{ Lang::get('transaction.sell') }}</a> 
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="walletDropdown">
+                                        <a class="dropdown-item" href="{{ url('wallet') }}">Koin</a>
 
                                         <a class="dropdown-item" href="{{ url('transaction') }}">{{ Lang::get('transaction.name') }}</a> 
                                     </div>
-
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ url('wallet') }}">Wallet</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ url('order') }}">Order</a>
                                 </li>
                             @else
                             <!-- ADMIN -->
-                                 <li class="nav-item">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ url('kurs-admin') }}">Kurs Coin</a>
+                                </li> 
+                                <li class="nav-item">
                                     <a class="nav-link" href="{{ url('order-list') }}">Order List</a>
                                 </li>
                                 <li class="nav-item">
@@ -120,6 +123,8 @@
                                     <a class="dropdown-item text-primary">
                                         {{ Auth::user()->membership }}
                                     </a>
+
+                                     <a class="dropdown-item" href="{{ url('order') }}">Membership</a> 
 
                                     <!-- LOGOUT -->
                                     <a class="dropdown-item" href="{{ route('logout') }}"

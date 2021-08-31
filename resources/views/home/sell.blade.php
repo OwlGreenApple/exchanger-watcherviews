@@ -12,17 +12,20 @@
                 <div class="card-body">
                     <form id="profile">
                     
+                        <div class="float-right">{{ $lang::get('transaction.total.coin') }}&nbsp;:&nbsp;<b>{{ $pc->pricing_format(Auth::user()->coin) }}</b></div>
+                        <div class="clearfix mb-2"><!--  --></div>
+
                         <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.coin') }}</label>
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.sell') }}</label>
 
                             <div class="col-md-6">
-                               <div id="coin" data-coin='{{ Auth::user()->coin }}' class="form-control">{{ $pc->pricing_format(Auth::user()->coin) }}</div>
-                               <span class="error wallet"><!--  --></span>
+                                 <input type="number" class="form-control" min="100000" name="tr_coin" />
+                                <span class="error tr_coin"><!--  --></span>
                             </div>
                         </div>
 
                          <div class="form-group row">
-                            <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.product') }}</label>
+                            <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.fee') }}&nbsp;(x%)</label>
 
                             <div class="col-md-6">
                                 <input placeholder="{{ $lang::get('transaction.placeholder') }}" type="text" class="form-control" name="tr_product" />
@@ -31,11 +34,11 @@
                         </div> 
 
                         <div class="form-group row">
-                            <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.qty') }}</label>
+                            <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.total') }}&nbsp;{{ $lang::get('custom.currency') }}</label>
 
                             <div class="col-md-6">
-                                <input type="number" class="form-control" min="100000" name="tr_coin" />
-                                <span class="error tr_coin"><!--  --></span>
+                                <div id="coin" class="form-control"></div>
+                               <span class="error wallet"><!--  --></span>
                             </div>
                         </div> 
 

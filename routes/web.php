@@ -50,6 +50,7 @@ Route::group(['middleware'=>['auth','web']],function()
 /*ADMIN*/
 Route::group(['middleware'=>['auth','web','is_admin']],function()
 {
+	Route::get('kurs-admin',[App\Http\Controllers\Admin\AdminController::class,'trade']);
 	Route::get('order-list',[App\Http\Controllers\Admin\AdminController::class,'index']);
 	Route::get('order-load',[App\Http\Controllers\Admin\AdminController::class,'order']);
 	Route::get('order-confirm',[App\Http\Controllers\Admin\AdminController::class,'confirm_order']);

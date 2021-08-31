@@ -5,51 +5,27 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header bg-info text-white">Pesan untuk notifikasi order WA</div>
+                <div class="card-header bg-info text-white">Kurs harga coin hari ini</div>
 
                 <div id="msg"><!-- message --></div>
 
                 <div class="card-body">
                     <form id="message">
-                    
+
                         <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Notifikasi setelah order') }}</label>
+                            <label class="col-md-4 col-form-label text-md-right">Kurs Sekarang</label>
 
                             <div class="col-md-6">
-                                <textarea class="form-control" name="notif">{{ $notif->notif_order }}</textarea>
-                                <span class="error notif"><!--  --></span>
+                                <div class="form-control" id="kurs">{{ Lang::get('custom.currency') }}&nbsp;0.1 / coin</div>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-md-4 col-form-label text-md-right"> Notifikasi 6 jam setelah order</label>
+                            <label class="col-md-4 col-form-label text-md-right">Kurs baru</label>
 
                             <div class="col-md-6">
-                                <textarea class="form-control" name="notif_order">{{ $notif->notif_after }}</textarea>
-                                <span class="error notif_order"><!--  --></span>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label class="col-md-4 col-form-label text-md-right"> Daftar variabel yg bisa dipakai</label>
-
-                            <div class="col-md-6">
-                                <ul>
-                                    <li>[NO-ORDER]</li>
-                                    <li>[PACKAGE]</li>
-                                    <li>[PRICE]</li>
-                                    <li>[TOTAL]</li>
-                                    <!-- <li>[LINK]</li> -->
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                           <!--  <label class="col-md-4 col-form-label text-md-right">Admin id activrespon</label> -->
-
-                            <div class="col-md-6">
-                                <input type="hidden" readonly="readonly" class="form-control" name="admin_id" value="{{ $notif->admin_id }}" />
-                                <span class="error admin_id"><!--  --></span>
+                                <input type="number" class="form-control" name="kurs"  />
+                                <span class="error kurs"><!--  --></span>
                             </div>
                         </div>
 

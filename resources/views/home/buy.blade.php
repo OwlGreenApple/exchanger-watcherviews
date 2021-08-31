@@ -11,9 +11,9 @@
                     <table class="table table-hover shopping-cart-wrap">
                         <thead class="text-muted">
                         <tr>
-                          <th scope="col" width="360">Product</th>
-                          <th scope="col">Quantity</th>
-                          <th scope="col">Price</th>
+                          <th scope="col" width="360">{{ $lang::get('transaction.buy.seller') }}</th>
+                          <th scope="col">{{ $lang::get('transaction.qty') }}</th>
+                          <th scope="col">{{ $lang::get('transaction.price') }}</th>
                           <th scope="col" width="120" class="text-right">Action</th>
                         </tr>
                         </thead>
@@ -22,7 +22,7 @@
                             <td>
                                 <figure class="media">
                                     <figcaption class="media-body">
-                                        <h6 class="title text-truncate">Judul Koin</h6>
+                                        <h6 class="title text-truncate">Penjual A</h6>
                                     </figcaption>
                                 </figure> 
                             </td>

@@ -7,9 +7,10 @@ return [
     'bank_no'=>'No Rekening', //home.blade
     'cart_summary'=>'Keranjang summary', //summary.blade
     'check'=>'Harap centang, syarat dan ketentuan yang berlaku', //register.blade//summary.blade
+    'currency'=>'Rp', //navigation
     'coin'=>'Jumlah Koin anda di wallet', //wallet.blade
     'conf_order'=>'Order konfirmasi anda akan di email ke : ', //summary.blade
-    'connect'=>'Konek ke watcherviews', //wallet.blade
+    'connect'=>'Tarik dari watcherviews', //wallet.blade
     'create_account'=>'Buat Akun', //summary.blade
     'currency'=>'Rp', //summary.blade
     'end'=>'Trial sudah habis', //trial.blade
