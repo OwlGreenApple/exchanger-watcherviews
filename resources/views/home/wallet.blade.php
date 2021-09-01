@@ -5,22 +5,17 @@
     <div class="row justify-content-center">
         <div class="col-md-9">
             <div class="card">
-                <div class="card-header bg-danger text-white">{{ $lang::get('custom.wallet') }}</div>
+                <div class="card-header bg-danger text-white">{{ $lang::get('custom.wallet') }}
+                    <div class="float-right">{{ $lang::get('custom.coin') }} : {{ $pc->pricing_format(Auth::user()->coin) }}</div>
+                    <span class="clearfix"></span>
+                </div>
 
                 <div id="msg"><!-- message --></div>
 
                 <div class="card-body">
                     <form id="profile">
                     
-                        <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.coin') }}</label>
-
-                            <div class="col-md-6">
-                               <div id="coin" data-coin='{{ Auth::user()->coin }}' class="form-control">{{ $pc->pricing_format(Auth::user()->coin) }}</div>
-                               <span class="error wallet"><!--  --></span>
-                            </div>
-                        </div>
-
+                        <span class="error wallet"><!--  --></span>
                         <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.wt') }}</label>
 
@@ -38,28 +33,10 @@
                             </div>
                         </div>
 
-                         <div class="form-group row">
-                            <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.email_watcherviews') }}</label>
-
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" name="wt_email" />
-                                <span class="error wt_email"><!--  --></span>
-                            </div>
-                        </div> 
-
-                        <div class="form-group row">
-                            <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.pass_watcherviews') }}</label>
-
-                            <div class="col-md-6">
-                                <input type="password" class="form-control" name="wt_pass" />
-                                <span class="error wt_pass"><!--  --></span>
-                            </div>
-                        </div>
-
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-danger">
-                                    {{ $lang::get('custom.connect') }}
+                                    {{ $lang::get('custom.withdraw') }}
                                 </button>
                             </div>
                         </div>

@@ -33,6 +33,31 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
 
+    public function connect_api()
+    {
+        $membership = Auth::user()->membership;
+        $trial = Auth::user()->trial;
+
+        if($membership == 'free' && $trial == 0)
+        {
+            return view('auth.trial',['lang'=>new Lang]);
+        }
+        return view('home.connect_api',['lang'=>new Lang,'pc'=>new Price]);
+    }
+
+    public function index()
+    {
+        return view('home.buy',['lang'=>new Lang,'pc'=>new Price]);
+    }
+
+    /*
+        trade currently no use due rate / kurs is available
+    */
+    public function trade()
+    {
+        return view('home.kurs');
+    }
+
     public function buying_page()
     {
         return view('home.buy',['lang'=>new Lang,'pc'=>new Price]);
@@ -103,11 +128,11 @@ class HomeController extends Controller
         return response()->json($wt_coin);
     }
 
-    public function index()
+    public function profile()
     {
         $user = Auth::user();
         $lang = new Lang;
-        return view('home.home',['user'=>$user,'lang'=>$lang]);
+        return view('home.profile',['user'=>$user,'lang'=>$lang]);
     }
 
     public function update_profile(Request $request)

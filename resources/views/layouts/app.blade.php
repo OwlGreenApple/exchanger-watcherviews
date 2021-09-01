@@ -39,6 +39,9 @@
 
     <!-- Styles -->
     <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet">
+
+    <!-- Canvas JS -->
+    <script type="text/javascript" src="{{ asset('assets/canvasjs/canvasjs.min.js') }}"></script>
 </head>
 <body>
 
@@ -82,7 +85,10 @@
                             <!-- USER -->
                             @if (Auth::user()->is_admin == 0)
                                 <li class="nav-item">
-                                    <li class="nav-link"><a>{{ Lang::get('transaction.trade') }}</a>&nbsp;<span class="border border-success px-1">{{ Lang::get('custom.currency') }} 0.1/coin</span></li>
+                                    <a class="nav-link" href="{{ url('home') }}">{{ Lang::get('transaction.home') }}</a>
+                                </li>
+                                <li class="nav-item">
+                                    <li class="nav-link"><a href="{{ url('trade') }}">{{ Lang::get('transaction.trade') }}</a>&nbsp;<span class="border border-success px-1">{{ Lang::get('custom.currency') }} 0.1/coin</span></li>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ url('buy') }}">{{ Lang::get('transaction.buy') }}</a>
@@ -125,6 +131,10 @@
                                     </a>
 
                                      <a class="dropdown-item" href="{{ url('order') }}">Membership</a> 
+
+                                     <a class="dropdown-item" href="{{ url('connect_api') }}">Connect API</a> 
+
+                                     <a class="dropdown-item" href="{{ url('profile') }}">Profile</a> 
 
                                     <!-- LOGOUT -->
                                     <a class="dropdown-item" href="{{ route('logout') }}"

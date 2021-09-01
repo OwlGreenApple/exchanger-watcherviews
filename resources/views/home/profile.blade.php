@@ -56,6 +56,37 @@
                         </div>
 
                         <div class="form-group row">
+                            <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.ovo') }}</label>
+
+                            <div class="col-md-6">
+                                <input type="file" class="form-control" name="ovo" />
+                                <span class="error ovo"><!--  --></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.dana') }}</label>
+
+                            <div class="col-md-6">
+                                <input type="file" class="form-control" name="dana" />
+                                <span class="error dana"><!--  --></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.gopay') }}</label>
+
+                            <div class="col-md-6">
+                                <input type="file" class="form-control" name="gopay" />
+                                <span class="error gopay"><!--  --></span>
+                            </div>
+                        </div>
+
+                        <hr/>
+
+                        <div align="center" class="mb-3"><b>{{ $lang::get('auth.notes') }}</b></div>
+
+                        <div class="form-group row">
                             <label class="col-md-4 col-form-label text-md-right"> Password Lama</label>
 
                             <div class="col-md-6">

@@ -32,8 +32,10 @@ Route::group(['middleware'=>['auth','web']],function()
 {
 	Route::get('thankyou',[App\Http\Controllers\OrderController::class,'thankyou']);
 	Route::get('home', [App\Http\Controllers\HomeController::class, 'index']);
+	Route::get('profile', [App\Http\Controllers\HomeController::class, 'profile']);
 	Route::get('order',[App\Http\Controllers\HomeController::class, 'order']);
 	Route::get('orders',[App\Http\Controllers\HomeController::class, 'order_list']);
+	Route::get('connect_api',[App\Http\Controllers\HomeController::class, 'connect_api']);
 	Route::get('transaction',[App\Http\Controllers\HomeController::class, 'history_transaction']);
 	Route::post('order-confirm-payment',[App\Http\Controllers\HomeController::class, 'confirm_payment_order']);
 	Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'update_profile'])->middleware('check_profile');
@@ -41,6 +43,7 @@ Route::group(['middleware'=>['auth','web']],function()
 	// SHOP
 	Route::get('buy',[App\Http\Controllers\HomeController::class, 'buying_page']);
 	Route::get('sell',[App\Http\Controllers\HomeController::class, 'selling_page']);
+	Route::get('trade',[App\Http\Controllers\HomeController::class, 'trade']);
 
 	//WITHDRAW COIN TO WALLET
 	Route::get('wallet',[App\Http\Controllers\HomeController::class,'wallet']);

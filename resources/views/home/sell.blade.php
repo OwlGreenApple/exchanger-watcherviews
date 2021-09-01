@@ -28,7 +28,7 @@
                             <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.fee') }}&nbsp;(x%)</label>
 
                             <div class="col-md-6">
-                                <input placeholder="{{ $lang::get('transaction.placeholder') }}" type="text" class="form-control" name="tr_product" />
+                                <input type="text" class="form-control" name="tr_product" />
                                 <span class="error tr_product"><!--  --></span>
                             </div>
                         </div> 
@@ -60,8 +60,14 @@
                     </form>
                 </div>
             </div>
-        </div>
+            <!--  -->
+
+            <h4>History</h4>
+
+            <!-- end col -->
+        </div> 
     </div>
+    <!-- end justify -->
 </div>
 
 <script type="text/javascript">

@@ -15,5 +15,9 @@ return [
 
     'credential'=>'Maaf, password atau email yang anda masukkan salah.',
     'failed' => 'Identitas tersebut tidak cocok dengan data kami.',
+    'forgot' => 'Lupa Password',
+    'login'=>'Masuk',
+    'notes'=>'Hanya diisi jika ingin mengganti password',
+    'remember' => 'Ingat saya',
     'throttle' => 'Terlalu banyak usaha masuk. Silahkan coba lagi dalam :seconds detik.',
 ];

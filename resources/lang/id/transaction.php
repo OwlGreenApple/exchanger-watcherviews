@@ -14,6 +14,7 @@ return [
     'buy.title'=>'Beli koin Watcherviews',
     'created'=>'Tanggal Transaksi',
     'fee'=>'Coin fee',
+    'home'=>'Beranda',
     'min'=>'Minimal transaksi jual koin adalah 100.000 coin',
     'name'=>'Transaksi',
     'no'=>'No Transaksi',

@@ -3,6 +3,7 @@ return [
     'accept'=>'Dengan meng-click tombol \'Order Now\' berarti anda sudah membaca, mengerti dan setuju :', //summary.blade
     'and'=>'dan :', //summary.blade
     'agreement'=>'Saya menyetujui semua pernyataan di : ', //checkout.blade
+    'api'=>'Connect ke akun watcherviews anda', //checkout.blade
     'bank_name'=>'Nama Bank', //home.blade
     'bank_no'=>'No Rekening', //home.blade
     'cart_summary'=>'Keranjang summary', //summary.blade
@@ -10,18 +11,21 @@ return [
     'currency'=>'Rp', //navigation
     'coin'=>'Jumlah Koin anda di wallet', //wallet.blade
     'conf_order'=>'Order konfirmasi anda akan di email ke : ', //summary.blade
-    'connect'=>'Tarik dari watcherviews', //wallet.blade
+    'connect'=>'Sambungkan ke watcherviews', //connect_api.blade
     'create_account'=>'Buat Akun', //summary.blade
     'currency'=>'Rp', //summary.blade
+    'dana'=>'QR-Code DANA', //profile.blade
     'end'=>'Trial sudah habis', //trial.blade
     'email_watcherviews'=>'Email Watcherviews anda', //wallet.blade
     'failed'=>'Maaf server kami terlalu sibuk, silahkan coba lagi nanti.', //checkout.blade
     'find_help'=>'Temukan Bantuan', //summary.blade
     'female'=>'Wanita', //summary.blade
+    'gopay'=>'QR-Code GOPAY', //profile.blade
     'have_account'=>'Sudah punya akun ?', //summary.blade
     'here'=>'disini', //trial.blade
     'intl'=>'Masukkan no hp anda tanpa di awali 0 atau kode negara<br/>Contoh : 8123456789, (201)5555555', //order.index.blade
     'inv_id'=>'ID tidak valid', //summary.blade
+    'trade'=>'Kurs', //kurs.blade
     'login'=>'Login di sini', //summary.blade
     'log_in'=>'Masuk', //summary.blade
     'male'=>'Pria',//summary.blade
@@ -32,6 +36,7 @@ return [
     'need_help'=>'Perlu bantuan ?',//summary.blade
     'old_password'=> 'Password anda yang lama tidak sesuai',
     'order'=> 'Pembelian paket : ',
+    'ovo'=> 'QR-Code OVO',
     'package_terms'=>'per bulan', //checkout.blade
     'paket'=>'Paket yang tersedia', //checkout.blade
     'pass_watcherviews'=>'Password watcherviews anda', //wallet.blade
@@ -57,4 +62,5 @@ return [
     'valid'=>'tidak valid', //CheckPricing
     'verify_account'=>'Verifikasi Akun', //summary.blade
     'wallet'=>'Tarik koin dari akun watcherviews anda', //wallet.blade
+    'withdraw'=>'Tarik koin', //wallet.blade
 ];
