@@ -11,15 +11,16 @@ class Price
 	/*
 		sell = n per day
 		profit = fee = n%
+		max_sell = Rp
 	*/
     public function get_price()
     {
         $price = [
-            ['package'=>'free','price'=>0,'max_coin'=>200000,'fee'=>15,'sell'=>1,'profit'=>0],
-            ['package'=>'starter','price'=>100000,'max_coin'=>500000,'fee'=>10,'sell'=>2,'profit'=>0.5],
-            ['package'=>'doubler','price'=>200000,'max_coin'=>1000000,'fee'=>10,'sell'=>3,'profit'=>0.5],
-            ['package'=>'tripler','price'=>300000,'max_coin'=>2000000,'fee'=>10,'sell'=>4,'profit'=>1],
-            ['package'=>'quadrupler','price'=>400000,'max_coin'=>3000000,'fee'=>10,'sell'=>5,'profit'=>1.5]
+            ['package'=>'free','price'=>0,'max_sell'=>30000,'max_trans'=>10000,'fee'=>15,'sell'=>1,'profit'=>0],
+            ['package'=>'starter','price'=>100000,'max_sell'=>500000,'max_trans'=>50000,'fee'=>10,'sell'=>2,'profit'=>0.5],
+            ['package'=>'doubler','price'=>200000,'max_sell'=>2000000,'max_trans'=>100000,'fee'=>10,'sell'=>3,'profit'=>0.5],
+            ['package'=>'tripler','price'=>350000,'max_sell'=>3500000,'max_trans'=>150000,'fee'=>10,'sell'=>4,'profit'=>1],
+            ['package'=>'quadrupler','price'=>500000,'max_sell'=>5000000,'max_trans'=>200000,'fee'=>10,'sell'=>5,'profit'=>1.5]
         ];
 
         return $price;

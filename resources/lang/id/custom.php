@@ -9,7 +9,7 @@ return [
     'cart_summary'=>'Keranjang summary', //summary.blade
     'check'=>'Harap centang, syarat dan ketentuan yang berlaku', //register.blade//summary.blade
     'currency'=>'Rp', //navigation
-    'coin'=>'Jumlah Koin anda di wallet', //wallet.blade
+    'coin'=>'Jumlah coin anda di wallet', //wallet.blade
     'conf_order'=>'Order konfirmasi anda akan di email ke : ', //summary.blade
     'connect'=>'Sambungkan ke watcherviews', //connect_api.blade
     'create_account'=>'Buat Akun', //summary.blade
@@ -37,7 +37,7 @@ return [
     'old_password'=> 'Password anda yang lama tidak sesuai',
     'order'=> 'Pembelian paket : ',
     'ovo'=> 'QR-Code OVO',
-    'package_terms'=>'per bulan', //checkout.blade
+    'package_terms'=>'per tahun', //checkout.blade
     'paket'=>'Paket yang tersedia', //checkout.blade
     'pass_watcherviews'=>'Password watcherviews anda', //wallet.blade
     'phone'=>'Hp', //summary.blade
@@ -61,6 +61,5 @@ return [
     'unique_phone'=>'No yang anda masukkan sudah terdaftar', //rule.CheckUniquePhone
     'valid'=>'tidak valid', //CheckPricing
     'verify_account'=>'Verifikasi Akun', //summary.blade
-    'wallet'=>'Tarik koin dari akun watcherviews anda', //wallet.blade
-    'withdraw'=>'Tarik koin', //wallet.blade
+    'wallet'=>'Tarik / Kirim Coin', //wallet.blade
 ];

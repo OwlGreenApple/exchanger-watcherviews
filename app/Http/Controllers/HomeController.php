@@ -13,6 +13,7 @@ use App\Helpers\Price;
 use App\Helpers\Api;
 use Carbon\Carbon;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\Auth\RegisterController;
 use Storage;
 
 class HomeController extends Controller
@@ -47,7 +48,29 @@ class HomeController extends Controller
 
     public function index()
     {
-        return view('home.buy',['lang'=>new Lang,'pc'=>new Price]);
+        return view('home.dashboard',['lang'=>new Lang,'pc'=>new Price]);
+    }
+
+    public function upgrade()
+    {
+        $page = new RegisterController;
+        return $page->price_page();
+    }
+
+    public function detail_buy()
+    {
+        return view('home.buy-detail',['lang'=>new Lang,'pc'=>new Price]);
+    }
+
+    public function transfer()
+    {
+        return view('home.transfer',['lang'=>new Lang,'pc'=>new Price]);
+    }
+
+    // ORDER FROM BUYER NOT MEMBERSHIP
+    public function purchase()
+    {
+        return view('home.purchasing');
     }
 
     /*

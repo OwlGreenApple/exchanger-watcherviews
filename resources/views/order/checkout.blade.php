@@ -21,11 +21,11 @@
                         @if($row['price'] > 0) 
                            @if($index == $page)
                             <option data-price="{{ $row['price'] }}" value="{{ $row['package'] }}" selected="selected">
-                              {{$row['package']}} - IDR {{ $api->pricing_format($row['price']) }} {{ $lang::get('custom.package_terms') }} - {{ $api->pricing_format($row['max_coin']) }} {{$lang::get('custom.max_coin')}} - {{ $api->pricing_format($row['fee']) }} {{$lang::get('custom.post_fee')}} - {{$row['sell']}} {{$lang::get('custom.sell')}}
+                              {{$row['package']}} - IDR {{ $api->pricing_format($row['price']) }} {{ $lang::get('custom.package_terms') }} - {{$lang::get('order.month_sell')}} : {{ $api->pricing_format($row['max_sell']) }} 
                             </option>
                             @else
                             <option data-price="{{ $row['price'] }}" value="{{ $row['package'] }}">
-                              {{$row['package']}} - IDR {{ $api->pricing_format($row['price']) }} {{ $lang::get('custom.package_terms') }} - {{ $api->pricing_format($row['max_coin']) }} {{$lang::get('custom.max_coin')}} - {{ $api->pricing_format($row['fee']) }} {{$lang::get('custom.post_fee')}} - {{$row['sell']}} {{$lang::get('custom.sell')}}
+                              {{$row['package']}} - IDR {{ $api->pricing_format($row['price']) }} {{ $lang::get('custom.package_terms') }} - {{$lang::get('order.month_sell')}} : {{ $api->pricing_format($row['max_sell']) }} 
                             </option>
                             @endif
                         @endif

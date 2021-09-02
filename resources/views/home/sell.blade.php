@@ -62,7 +62,33 @@
             </div>
             <!--  -->
 
-            <h4>History</h4>
+            <div class="card mt-4">
+                <div class="card-body">
+                <h4>History Penjualan</h4>
+                <table class="table" id="selling">
+                    <thead>
+                        <th>Tanggal</th>
+                        <th>Invoice</th>
+                        <th>Total Coin</th>
+                        <th>Kurs</th>
+                        <th>Harga</th>
+                        <th>Action</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2021-09-02</td>
+                            <td>SL-20210902-001</td>
+                            <td>100.000</td>
+                            <td>0.1</td>
+                            <td>Rp 10.000</td>
+                            <td>
+                                <a target="_blank" href="{{ url('transfer') }}" class="btn btn-info btn-sm">Transfer</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
 
             <!-- end col -->
         </div> 
@@ -72,8 +98,14 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
+        data_table();
         withdraw_coin();
     });
+
+    function data_table()
+    {
+        $("#selling").DataTable();
+    }
 
     function withdraw_coin()
     {

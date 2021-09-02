@@ -6,7 +6,7 @@
         <div class="col-md-9">
             <div class="card">
                 <div class="card-header bg-danger text-white">{{ $lang::get('custom.wallet') }}
-                    <div class="float-right">{{ $lang::get('custom.coin') }} : {{ $pc->pricing_format(Auth::user()->coin) }}</div>
+                    <div class="float-right">{{ $lang::get('custom.coin') }} : <b>{{ $pc->pricing_format(Auth::user()->coin) }}</b></div>
                     <span class="clearfix"></span>
                 </div>
 
@@ -20,12 +20,31 @@
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.wt') }}</label>
 
                             <div class="col-md-6">
-                               <div class="form-control"></div>
+                               <label for="name" class="col-form-label text-md-right"><b>50.000</b></label>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.wd') }}</label>
+                            <label for="name" class="col-md-4 col-form-label text-md-right"><!--  --></label>
+
+                            <div class="col-md-6">
+                               <div class="form-check">
+                                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
+                                  <label class="form-check-label" for="flexRadioDefault1">
+                                    {{ $lang::get('transaction.wd') }}
+                                  </label>
+                                </div>
+                                <div class="form-check">
+                                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+                                  <label class="form-check-label" for="flexRadioDefault2">
+                                    {{ $lang::get('transaction.send') }}
+                                  </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.total.coin') }}</label>
 
                             <div class="col-md-6">
                                <input class="form-control" type="number" name="wd_coin" />
@@ -36,7 +55,7 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-danger">
-                                    {{ $lang::get('custom.withdraw') }}
+                                    {{ $lang::get('transaction.wallet') }}
                                 </button>
                             </div>
                         </div>

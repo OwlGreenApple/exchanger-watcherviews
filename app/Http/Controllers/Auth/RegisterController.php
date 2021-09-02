@@ -18,6 +18,8 @@ use App\Rules\InternationalTel;
 use App\Rules\CheckUserPhone;
 use App\Rules\CheckUniquePhone;
 use App\Mail\RegisteredEmail;
+use App\Helpers\Price;
+use Session;
 
 class RegisterController extends Controller
 {
@@ -124,10 +126,38 @@ class RegisterController extends Controller
             ];
             return response()->json($errors);
         }
-        else
+
+        if(!isset($data['free']))
         {
             return $this->register_ajax($data);
         }
+        else
+        {
+            session::flash('reg',$data);
+            return response()->json(['success'=>1]);
+        }
+    }
+
+    public function offer_upgrade(Request $request)
+    {
+      $req = $request->all();
+      $req['free'] = 1;
+      return $this->ajax_validator($req);
+    }
+
+    public function price_page()
+    {
+      if(session::get('reg') !== null)
+      {
+        session::reflash();
+      }
+      return view('package',['pc'=> new Price]);
+    }
+
+    public function register_redirect()
+    {
+      $request = new Request(session::get('reg'));
+      return $this->register($request);
     }
 
     public function register(Request $request)

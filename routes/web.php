@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
+use App\Helpers\Price;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,15 +15,14 @@ use App\Http\Controllers\OrderController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+Route::get('/', [App\Http\Controllers\Auth\RegisterController::class, 'price_page']);
 Route::get('checkout/{id?}', [App\Http\Controllers\OrderController::class, 'index']);
 Route::post('submit_payment',[App\Http\Controllers\OrderController::class, 'submit_payment'])->middleware('check_valid_order');
 Route::get('summary',[App\Http\Controllers\OrderController::class, 'summary']);
 
 /*AUTH*/
+Route::post('offer',[App\Http\Controllers\Auth\RegisterController::class, 'offer_upgrade']);
+Route::get('register-redirect',[App\Http\Controllers\Auth\RegisterController::class, 'register_redirect']);
 Route::post('loginajax',[App\Http\Controllers\Auth\LoginController::class, 'loginAjax']);// user login via ajax
 
 Auth::routes();
@@ -32,6 +32,7 @@ Route::group(['middleware'=>['auth','web']],function()
 {
 	Route::get('thankyou',[App\Http\Controllers\OrderController::class,'thankyou']);
 	Route::get('home', [App\Http\Controllers\HomeController::class, 'index']);
+	Route::get('purchase', [App\Http\Controllers\HomeController::class, 'purchase']);
 	Route::get('profile', [App\Http\Controllers\HomeController::class, 'profile']);
 	Route::get('order',[App\Http\Controllers\HomeController::class, 'order']);
 	Route::get('orders',[App\Http\Controllers\HomeController::class, 'order_list']);
@@ -41,8 +42,11 @@ Route::group(['middleware'=>['auth','web']],function()
 	Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'update_profile'])->middleware('check_profile');
 
 	// SHOP
+	Route::get('upgrade',[App\Http\Controllers\HomeController::class, 'upgrade']);
 	Route::get('buy',[App\Http\Controllers\HomeController::class, 'buying_page']);
+	Route::get('buy-detail',[App\Http\Controllers\HomeController::class, 'detail_buy']);
 	Route::get('sell',[App\Http\Controllers\HomeController::class, 'selling_page']);
+	Route::get('transfer',[App\Http\Controllers\HomeController::class, 'transfer']);
 	Route::get('trade',[App\Http\Controllers\HomeController::class, 'trade']);
 
 	//WITHDRAW COIN TO WALLET

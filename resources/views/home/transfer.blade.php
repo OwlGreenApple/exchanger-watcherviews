@@ -3,58 +3,29 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-12">
+        <div class="col-md-9">
             <div class="card">
-                <div class="card-header bg-info text-black">{{ $lang::get('transaction.buy.title') }}</div>
-
-                <div class="card-body table-responsive">
-                    <table id="seller" class="table table-hover shopping-cart-wrap">
-                        <thead class="text-muted">
-                        <tr>
-                          <th scope="col" width="240">{{ $lang::get('transaction.buy.seller') }}</th>
-                          <th scope="col">{{ $lang::get('transaction.qty') }}</th>
-                          <th scope="col">{{ $lang::get('transaction.price') }}</th>
-                          <th scope="col">{{ $lang::get('transaction.rate') }}</th>
-                          <th scope="col">{{ $lang::get('transaction.comments') }}</th>
-                          <th scope="col" width="120" class="text-right">Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td><h6 class="title text-truncate">Penjual A</h6></td>
-                            <td> 100.000</td>
-                            <td> 
-                                <div class="price-wrap"> 
-                                    <var class="price">IDR 10.000</var> 
-                                   <!--  <small class="text-muted">(USD5 each)</small>  -->
-                                </div> <!-- price-wrap .// -->
-                            </td>
-                            <td><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"><i class="fas fa-star"></td>
-                            <td><i class="far fa-envelope"></i></td>
-                            <td class="text-right"> 
-                            <a href="{{ url('buy-detail') }}" class="btn btn-outline-success btn-sm conf" data-toggle="tooltip" data-original-title="Save to Wishlist">Beli</a> 
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <!--  -->
+                <div class="card-header bg-warning">
+                    Transfer Coin
                 </div>
+
+                <div class="card-body">
+                    <div>Pembeli : Test2</div>
+                    <div>Email : Test2@mail.com</div>
+                    <div>Jumlah Coin : 100.000</div>
+                    <a type="button" class="btn btn-warning">Transfer</a>
+                </div>
+
+
             </div>
         </div>
     </div>
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function()
-    {
-        data_table();
+    $(document).ready(function(){
         withdraw_coin();
     });
-
-    function data_table()
-    {
-        $("#seller").DataTable();
-    }
 
     function withdraw_coin()
     {

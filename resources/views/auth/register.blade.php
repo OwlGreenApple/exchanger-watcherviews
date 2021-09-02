@@ -103,21 +103,19 @@ $(function(){
 
       $.ajax({
         type: 'POST',
-        url: "{{url('register')}}",
+        url: "{{url('offer')}}",
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         data: $("#form-register").serializeArray(),
-        dataType: 'text',
+        dataType: 'json',
         beforeSend: function() {
             $('#loader').show();
             $('.div-loading').addClass('background-load');
         },
-        success: function(result) {
+        success: function(data) {
             $('#loader').hide();
             $('.div-loading').removeClass('background-load');
-
-            var data = jQuery.parseJSON(result);
 
             if (data.success == 1) 
             {
@@ -137,7 +135,7 @@ $(function(){
         {
            if(bool == true)
            {
-             location.href="{{ url('home') }}";
+             location.href="{{ url('/') }}";
            }
         },
         error: function(xhr,attr,throwable)
