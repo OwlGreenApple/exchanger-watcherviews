@@ -27,6 +27,83 @@ class AdminController extends Controller
     	return view('admin.order.index');
     }
 
+    public function user_list()
+    {
+      return view('admin.order.user');
+    }
+
+    public function fetch_user(Request $request)
+    {
+      $start = $request->start;
+      $length = $request->length;
+      $search = $request->search;
+      $src = $search['value'];
+      $data['data'] = array();
+
+      if($src == null)
+      {
+         $db = User::orderBy('id','desc')->skip($start)->limit($length)->get();
+      }
+      else
+      {
+        if(preg_match("/^ACT[a-zA-Z0-9]/i",$src))
+        {
+          $db = Orders::where('no_order','LIKE',"%".$src."%");
+        }
+        elseif(preg_match("/[a-zA-Z]/i",$src))
+        {
+          $db = Orders::where('package','LIKE',"%".$src."%");
+        }
+        elseif(preg_match("/[\-]/i",$src))
+        {
+          $db = Orders::where('created_at','LIKE','%'.$src.'%');
+        }
+        else
+        {
+          $db = Orders::where('notes','LIKE',"%".$src."%");
+        }
+
+        $db = $db->orderBy('created_at','desc')->get();
+      }
+
+      $total = User::count(); //use this instead of ->count(), this cause error when in case large amount data.
+      $data['draw'] = $request->draw;
+      $data['recordsTotal']=$total;
+      $data['recordsFiltered']=$total;
+      $api = new Price;
+
+      if($db->count())
+      {
+        $no = 1;
+        foreach($db as $row)
+        {
+          
+          if($row->status < 1)
+          {
+            $btn = '<span class="text-danger">Banned</span>';
+          }
+          else
+          {
+            $btn = '<button type="button" id="'.$row->id.'" class="btn btn-danger btn-sm">Ban User</button>';
+          }
+
+          $data['data'][] = [
+            0=>$no++,
+            1=>$row->name,
+            2=>$row->email,
+            3=>$row->phone_number,
+            4=>$row->membership,
+            5=>$row->trial,
+            6=>$row->end_membership,
+            7=>Carbon::parse($row->created_at)->toDateTimeString(),
+            8=>$btn,
+          ];
+        }
+      }
+     
+      echo json_encode($data);
+    }
+
     public function order(Request $request)
     {
       $start = $request->start;

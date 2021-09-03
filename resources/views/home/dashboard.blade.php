@@ -4,25 +4,41 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header bg-info text-black">{{ $lang::get('transaction.buy.title') }}</div>
-
+            <div class="card px-3 py-3">
                 <div class="mt-3 col-md-12 mb-3">
                     <div class="row">
-                        <div class="col-lg-6">
-                            <div class="card text-white bg-primary" style="max-width: 18rem;">
-                              <div class="card-header">Total Penjualan</div>
+                        <div class="col-lg-3">
+                            <div class="card text-white text-center bg-primary ml-auto" style="max-width: 18rem;">
+                              <div class="card-header"><a class="text-white" href="{{ url('buy') }}">Total Penjualan</a></div>
                               <div class="card-body">
                                 <h2 class="card-title">Rp100.000</h2>
                               </div>
                             </div>
                         </div>
 
-                        <div class="col-lg-6">
-                            <div class="card text-white bg-primary col-lg-6" style="max-width: 18rem;">
-                              <div class="card-header">Total Coins</div>
+                        <div class="col-lg-3">
+                            <div class="card text-white text-center bg-success ml-auto" style="max-width: 18rem;">
+                              <div class="card-header"><a class="text-white" href="{{ url('buy') }}">Total Pembelian</a></div>
+                              <div class="card-body">
+                                <h2 class="card-title">Rp100.000</h2>
+                              </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3">
+                            <div class="card text-dark text-center bg-warning" style="max-width: 18rem;">
+                              <div class="card-header"><a class="text-dark" href="{{ url('wallet') }}">Total Coins</a></div>
                               <div class="card-body">
                                 <h2 class="card-title">100.000</h2>
+                              </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3">
+                            <div class="card text-dark text-center bg-danger" style="max-width: 18rem;">
+                              <div class="card-header"><a class="text-dark" href="{{ url('wallet') }}">Coin Watcherviews</a></div>
+                              <div class="card-body">
+                                <h2 class="card-title">1000.000</h2>
                               </div>
                             </div>
                         </div>
@@ -30,16 +46,39 @@
                     
                 </div>
 
-                <div class="card-body table-responsive">
-                    <div>Transfer Uang <span class="badge badge-primary">0</span></div>     
-                    <div>Pembayaran <span class="badge badge-success">0</span></div>     
-                    <div>Konfirmasi uang diterima <span class="badge badge-warning">0</span></div>     
-                    <div>Transfer Coin <span class="badge badge-info">0</span></div>     
+                <div class="card-body">
+                    <h5 class="text-center">Notifikasi</h5>
+                    <div class="row">
+                        <div class="col-lg-3 text-center"><a href="{{ url('buy') }}" class="btn btn-outline-secondary d-block p-2">Transfer Uang <span class="badge badge-primary">0</span></a></div>  
+                        <div class="col-lg-3 text-center"><a href="{{ url('buy') }}" class="btn btn-outline-secondary d-block p-2">Pembayaran <span class="badge badge-success">0</span></a></div>  
+                        <div class="col-lg-3 text-center"><a href="{{ url('sell') }}" class="btn btn-outline-secondary d-block p-2">Konfirmasi uang diterima <span class="badge badge-warning">0</span></a></div>  
+                        <div class="col-lg-3 text-center"><a href="{{ url('sell') }}" class="btn btn-outline-secondary d-block p-2">Transfer Coin <span class="badge badge-danger">0</span></a></div>   
+                    </div>   
                 </div>
 
-                <div class="card-body table-responsive">
-                    <input type="text" class="form-control" />
-                    <button type="button" class="btn-primary">Cari Penjual</button>
+                <!-- search -->
+                <div class="card-body">
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-10 col-lg-8">
+                            <form class="card card-sm">
+                                <div class="card-body row no-gutters align-items-center">
+                                    <div class="col-auto">
+                                        <i class="fas fa-search h4 text-body"></i>
+                                    </div>
+                                    <!--end of col-->
+                                    <div class="col">
+                                        <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Cari Coin">
+                                    </div>
+                                    <!--end of col-->
+                                    <div class="col-auto">
+                                        <button class="btn btn-lg btn-success" type="submit">Cari</button>
+                                    </div>
+                                    <!--end of col-->
+                                </div>
+                            </form>
+                        </div>
+                        <!--end of col-->
+                    </div>
                 </div>
 
                 <div class="card-body table-responsive">
@@ -56,7 +95,7 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td><h6 class="title text-truncate">Penjual A</h6></td>
+                            <td><h6 class="title text-truncate">test@mail.com</h6></td>
                             <td> 100.000</td>
                             <td> 
                                 <div class="price-wrap"> 
@@ -65,7 +104,7 @@
                                 </div> <!-- price-wrap .// -->
                             </td>
                             <td><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"><i class="fas fa-star"></td>
-                            <td><i class="far fa-envelope"></i></td>
+                            <td><a href="{{ url('comments') }}"><i class="far fa-envelope"></i></a></td>
                             <td class="text-right"> 
                             <a class="btn btn-outline-success btn-sm conf" data-toggle="tooltip" data-original-title="Save to Wishlist">Beli</a> 
                             </td>

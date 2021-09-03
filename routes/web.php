@@ -33,14 +33,21 @@ Route::group(['middleware'=>['auth','web']],function()
 	Route::get('thankyou',[App\Http\Controllers\OrderController::class,'thankyou']);
 	Route::get('home', [App\Http\Controllers\HomeController::class, 'index']);
 	Route::get('purchase', [App\Http\Controllers\HomeController::class, 'purchase']);
-	Route::get('profile', [App\Http\Controllers\HomeController::class, 'profile']);
-	Route::get('order',[App\Http\Controllers\HomeController::class, 'order']);
+	Route::get('comments/{sellerid?}',[App\Http\Controllers\HomeController::class, 'comments']);
 	Route::get('orders',[App\Http\Controllers\HomeController::class, 'order_list']);
 	Route::get('connect_api',[App\Http\Controllers\HomeController::class, 'connect_api']);
-	Route::get('transaction',[App\Http\Controllers\HomeController::class, 'history_transaction']);
 	Route::post('order-confirm-payment',[App\Http\Controllers\HomeController::class, 'confirm_payment_order']);
 	Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'update_profile'])->middleware('check_profile');
 
+	// DISPUTE
+	Route::get('seller-dispute',[App\Http\Controllers\HomeController::class, 'seller_dispute']);
+	Route::get('buyer-dispute',[App\Http\Controllers\HomeController::class, 'buyer_dispute']);
+
+	// SETTINGS
+	Route::get('account', [App\Http\Controllers\HomeController::class, 'account']);
+	Route::get('profile', [App\Http\Controllers\HomeController::class, 'profile']);
+	Route::get('order',[App\Http\Controllers\HomeController::class, 'order']);
+	
 	// SHOP
 	Route::get('upgrade',[App\Http\Controllers\HomeController::class, 'upgrade']);
 	Route::get('buy',[App\Http\Controllers\HomeController::class, 'buying_page']);
@@ -58,6 +65,8 @@ Route::group(['middleware'=>['auth','web']],function()
 Route::group(['middleware'=>['auth','web','is_admin']],function()
 {
 	Route::get('kurs-admin',[App\Http\Controllers\Admin\AdminController::class,'trade']);
+	Route::get('user-list',[App\Http\Controllers\Admin\AdminController::class,'user_list']);
+	Route::get('user-fetch',[App\Http\Controllers\Admin\AdminController::class,'fetch_user']);
 	Route::get('order-list',[App\Http\Controllers\Admin\AdminController::class,'index']);
 	Route::get('order-load',[App\Http\Controllers\Admin\AdminController::class,'order']);
 	Route::get('order-confirm',[App\Http\Controllers\Admin\AdminController::class,'confirm_order']);

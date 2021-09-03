@@ -5,7 +5,32 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header bg-info text-black">{{ $lang::get('transaction.buy.title') }}</div>
+                <div class="card-header bg-info text-white">{{ $lang::get('transaction.buy.title') }}</div>
+
+                 <!-- search -->
+                <div class="card-body">
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-10 col-lg-8">
+                            <form class="card card-sm">
+                                <div class="card-body row no-gutters align-items-center">
+                                    <div class="col-auto">
+                                        <i class="fas fa-search h4 text-body"></i>
+                                    </div>
+                                    <!--end of col-->
+                                    <div class="col">
+                                        <input class="form-control form-control form-control-borderless" type="search" placeholder="Cari Coin">
+                                    </div>
+                                    <!--end of col-->
+                                    <div class="col-auto">
+                                        <button class="btn btn-success" type="submit">Cari</button>
+                                    </div>
+                                    <!--end of col-->
+                                </div>
+                            </form>
+                        </div>
+                        <!--end of col-->
+                    </div>
+                </div>
 
                 <div class="card-body table-responsive">
                     <table id="seller" class="table table-hover shopping-cart-wrap">
@@ -40,6 +65,38 @@
                     <!--  -->
                 </div>
             </div>
+
+            <div class="card mt-4">
+                <div class="card-body">
+                <h4>History Pembelian</h4>
+                <table class="table" id="selling">
+                    <thead>
+                        <th>Tanggal</th>
+                        <th>Invoice</th>
+                        <th>Total Coin</th>
+                        <th>Kurs</th>
+                        <th>Harga</th>
+                        <th>Komentar</th>
+                        <th>Action</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2021-09-02</td>
+                            <td>SL-20210902-001</td>
+                            <td>100.000</td>
+                            <td>0.1</td>
+                            <td>Rp 10.000</td>
+                            <td><a href="{{ url('comments') }}"><i class="far fa-envelope"></i></a></td>
+                            <td>
+                                <a target="_blank" href="{{ url('buyer-dispute') }}" class="btn btn-warning btn-sm">Dispute</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+
+        <!-- end col -->
         </div>
     </div>
 </div>
@@ -47,7 +104,7 @@
 <script type="text/javascript">
     $(document).ready(function()
     {
-        data_table();
+        // data_table();
         withdraw_coin();
     });
 

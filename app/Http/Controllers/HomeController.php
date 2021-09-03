@@ -34,6 +34,11 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
 
+    public function account()
+    {
+        return view('home.account');
+    }
+
     public function connect_api()
     {
         $membership = Auth::user()->membership;
@@ -60,6 +65,21 @@ class HomeController extends Controller
     public function detail_buy()
     {
         return view('home.buy-detail',['lang'=>new Lang,'pc'=>new Price]);
+    }
+
+    public function comments()
+    {
+        return view('home.comments');
+    }
+
+    public function seller_dispute()
+    {
+        return view('home.seller-dispute');
+    }
+
+    public function buyer_dispute()
+    {
+        return view('home.buyer-dispute');
     }
 
     public function transfer()
@@ -91,14 +111,9 @@ class HomeController extends Controller
         return view('home.sell',['lang'=>new Lang,'pc'=>new Price]);
     }
 
-    public function history_transaction()
-    {
-        $tr = Transaction::where('user_id',Auth::id())->get();
-        return view('home.transaction',['lang'=>new Lang,'data'=>$tr]);
-    }
-
     public function wallet()
     {
+        $tr = Transaction::where('user_id',Auth::id())->get();
         $membership = Auth::user()->membership;
         $trial = Auth::user()->trial;
 
@@ -106,7 +121,7 @@ class HomeController extends Controller
         {
             return view('auth.trial',['lang'=>new Lang]);
         }
-        return view('home.wallet',['lang'=>new Lang,'pc'=>new Price]);
+        return view('home.wallet',['lang'=>new Lang,'pc'=>new Price,'data'=>$tr]);
     }
 
     public function get_watcherviews_coin(Request $request)

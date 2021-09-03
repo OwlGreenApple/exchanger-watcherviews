@@ -91,38 +91,26 @@
                                 <li class="nav-item">
                                     <li class="nav-link"><a href="{{ url('trade') }}">{{ Lang::get('transaction.trade') }}</a>&nbsp;<span class="border border-success px-1">{{ Lang::get('custom.currency') }} 0.1/coin</span></li>
                                 </li>
-                                <li class="nav-item dropdown">
-                                    <a id="walletDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                        {{ Lang::get('transaction.buy') }}
-                                    </a>
 
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="walletDropdown">
-                                        <a class="dropdown-item" href="{{ url('buy') }}">Beli Koin</a>
-
-                                         <a class="dropdown-item" href="{{ url('order') }}">{{ Lang::get('transaction.order') }}</a>
-                                    </div>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ url('buy') }}">Beli Koin</a>
                                 </li>
                                
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ url('sell') }}">{{ Lang::get('transaction.sell') }}</a>
                                 </li>
-                              
-                                <li class="nav-item dropdown">
-                                    <a id="walletDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                        Wallet
-                                    </a>
 
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="walletDropdown">
-                                        <a class="dropdown-item" href="{{ url('wallet') }}">Koin</a>
-
-                                        <a class="dropdown-item" href="{{ url('transaction') }}">{{ Lang::get('transaction.name') }}</a> 
-                                    </div>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ url('wallet') }}">Wallet</a>
                                 </li>
                             @else
                             <!-- ADMIN -->
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ url('kurs-admin') }}">Kurs Coin</a>
                                 </li> 
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ url('user-list') }}">User List</a>
+                                </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ url('order-list') }}">Order List</a>
                                 </li>
@@ -142,11 +130,13 @@
                                     </a> -->
                                      <a class="dropdown-item" href="{{ url('profile') }}">Profile</a> 
 
-                                     <a class="dropdown-item" href="{{ url('upgrade') }}">Upgrade</a> 
+                                     @if (Auth::user()->is_admin == 0)
+                                         <a class="dropdown-item" href="{{ url('connect_api') }}">Connect API</a> 
 
-                                     <a class="dropdown-item" href="{{ url('connect_api') }}">Connect API</a> 
+                                         <a class="dropdown-item" href="{{ url('upgrade') }}">Upgrade</a> 
 
-                                     <a class="dropdown-item" href="{{ url('order') }}">Billing</a> 
+                                         <a class="dropdown-item" href="{{ url('order') }}">Billing</a> 
+                                     @endif
 
                                     <!-- LOGOUT -->
                                     <a class="dropdown-item" href="{{ route('logout') }}"
@@ -159,6 +149,10 @@
                                         @csrf
                                     </form>
                                 </div>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('account') }}">Akun</a>
                             </li>
                         @endguest
                     </ul>

@@ -47,7 +47,7 @@
     </div>
 
     @if(session::get('reg') !== null)
-        <div align="center"><a class="btn btn-primary btn-lg" href="{{ url('register-redirect') }}">{{ Lang::get('order.later') }}</a></div>
+        <div align="center"><a class="text-black-50" href="{{ url('register-redirect') }}">{{ Lang::get('order.later') }}</a></div>
     @endif
 </div>
 @endsection

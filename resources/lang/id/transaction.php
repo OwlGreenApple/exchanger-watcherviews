@@ -20,7 +20,6 @@ return [
     'min'=>'Minimal transaksi jual koin adalah 100.000 coin',
     'name'=>'Transaksi',
     'no'=>'No Transaksi',
-    'order'=>'Order pembeli',
     'placeholder'=>'Contoh : Jual murah koin watcherviews',
     'price'=>'Harga',
     'qty'=>'Coin',

@@ -6,24 +6,24 @@
   <div class="row">
 
     <div class="col-md-12">
-      <h2><b>Orders</b></h2>  
-      <h5>Order-order dari user</h5>
+      <h2><b>Users</b></h2>  
+      <h5>Daftar User</h5>
       <hr>
       <div id="err"><!--  --></div>
     </div>
 
-    <div class="col-4 col-md-12 col-lg-12">
+    <div class="col-4 col-md-12 col-lg-12 table-responsive">
       <table class="table" id="order_table">
         <thead>
-          <th>No Order</th>
-          <th>Paket</th>
-          <th>Harga</th>
-          <th>Total Harga</th>
-          <th>Bukti Bayar</th>
-          <th>Catatan</th>
-          <th>Tanggal Order</th>
-          <th>Tanggal Konfirmasi</th>
-          <th>Konfirmasi</th>
+          <th>No</th>
+          <th>Nama</th>
+          <th>Email</th>
+          <th>Hp</th>
+          <th>Membership</th>
+          <th>Trial</th>
+          <th>Masa berlaku membership</th>
+          <th>Tanggal Gabung</th>
+          <th>Action</th>
         </thead>
         <tbody></tbody>
       </table>
@@ -86,12 +86,13 @@
 
   $(document).ready(function() {
     display_table();
+    /*
     enable_id_confirm();
     confirm_order();
     cancel_order();
     popup_new_window();
     display_no_order();
-    confirm_tiktok();
+    confirm_tiktok();*/
   });
 
   function display_table()
@@ -100,7 +101,7 @@
         "processing": true,
         "serverSide": true,
         "lengthMenu": [ 10, 25, 50, 75, 100, 500 ],
-        "ajax": "{{ url('order-load') }}",
+        "ajax": "{{ url('user-fetch') }}",
         "destroy": true
     });
 

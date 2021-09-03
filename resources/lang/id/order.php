@@ -25,7 +25,7 @@ return [
     'max_notes'=>'Maksimal panjang karakter untuk notes adalah 300 karakter',
     'max_trans'=>'kali / Hari',
     'month_sell'=>'Maximum Penjualan per bulan',
-    'no'=>'No',
+    'no'=>'No Billing',
     'notes'=>'Keterangan',
     'order'=>'Pesan Sekarang',
     'package'=>'Paket',

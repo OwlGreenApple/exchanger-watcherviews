@@ -5,21 +5,27 @@
     <div class="row justify-content-center">
         <div class="col-md-9">
             <div class="card">
-                <div class="card-header bg-danger text-white">
-                    Detail Pembelian
+                <div class="card-header bg-success">
+                    Seller Dispute
                 </div>
 
                 <div class="card-body">
-                     <h5>Anda akan membeli koin dengan detail :</h5>
-                    <div>Penjual : Test</div>
-                    <div><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                    <div>Jumlah Coin : 100.000</div>
-                    <div>Total : <b>Rp 10.000</b></div>
-
-                    <a type="button" class="btn btn-danger">Beli</a>
-                    <a type="button" class="btn btn-danger">Kembali</a>
+                    <form action="/action_page.php">
+                          <div class="form-group">
+                            <label for="email">Email Pembeli:</label>
+                            <input type="email" class="form-control" placeholder="Enter email" id="email">
+                          </div>
+                          <div class="form-group">
+                            <label for="fl">Upload Bukti</label>
+                            <input type="file" class="form-control" name="bukti" id="fl">
+                          </div>
+                          <div class="form-group">
+                            <label for="ct">Komentar</label>
+                            <textarea class="form-control"></textarea>
+                          </div>
+                          <button type="submit" class="btn btn-success">Kirim</button>
+                        </form>
                 </div>
-
 
             </div>
         </div>
@@ -59,18 +65,18 @@
                         cur_coin = parseInt(cur_coin);
                         cur_coin += result.coin;
                         $("#coin").html(formatNumber(cur_coin));
-                        $("#msg").html('<div class="alert alert-success">{{ $lang::get("custom.success_coin") }}</div>');
+                        $("#msg").html('<div class="alert alert-success">{{ Lang::get("custom.success_coin") }}</div>');
                         $("input").val('');
                     }
                     else if(result.err == 1)
                     {
                         $(".error").show();
-                        $(".wallet").html('{{ $lang::get("auth.credential") }}');
+                        $(".wallet").html('{{ Lang::get("auth.credential") }}');
                     }
                     else if(result.err == 2)
                     {
                         $(".error").show();
-                        $(".wallet").html('{{ $lang::get("custom.failed") }}');
+                        $(".wallet").html('{{ Lang::get("custom.failed") }}');
                     }
                     else if(result.err == 'validation')
                     {

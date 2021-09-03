@@ -7,12 +7,11 @@
   <div class="row">
     <div class="col-md-12">
 
-      <h2><b>Orders</b></h2>  
+      <h2><b>Billing History</b></h2>  
       
       <h5>
-        Show you previous history orders
         <button type="button" class="btn btn-primary btn-confirm" data-toggle="modal" data-target="#transfer-information" style="font-size: 13px; padding: 5px 8px;">
-          Payment / Transfer information
+          Informasi Pembayaran / Transfer
         </button>        
       </h5>
       

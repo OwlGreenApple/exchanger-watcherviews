@@ -10,10 +10,12 @@
                 </div>
 
                 <div class="card-body">
+                    <h5>Anda akan transfer koin dengan detail :</h5>
                     <div>Pembeli : Test2</div>
                     <div>Email : Test2@mail.com</div>
-                    <div>Jumlah Coin : 100.000</div>
+                    <div>Jumlah Coin : <b>100.000</b></div>
                     <a type="button" class="btn btn-warning">Transfer</a>
+                    <a type="button" class="btn btn-warning">Kembali</a>
                 </div>
 
 
