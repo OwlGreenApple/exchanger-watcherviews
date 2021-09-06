@@ -10,14 +10,14 @@
                 </div>
 
                 <div class="card-body">
-                     <h5>Anda akan membeli koin dengan detail :</h5>
-                    <div>Penjual : Test</div>
-                    <div><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <h5>Anda akan membeli koin dengan detail :</h5>
+                    <div>No Invoice : <b>B-210903-002</b></div>
+                    <div>Penjual : Test&nbsp;<span><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span></div>
                     <div>Jumlah Coin : 100.000</div>
-                    <div>Total : <b>Rp 10.000</b></div>
+                    <div class="mb-2">Total : <b>Rp 10.000</b></div>
 
-                    <a type="button" class="btn btn-danger">Beli</a>
-                    <a type="button" class="btn btn-danger">Kembali</a>
+                    <a href="{{ url('deal') }}" class="btn btn-danger">Beli</a>
+                    <a href="{{ url('home') }}" type="button" class="btn btn-danger">Kembali</a>
                 </div>
 
 

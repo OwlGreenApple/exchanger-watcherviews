@@ -14,7 +14,7 @@ use App\Helpers\Api;
 use Carbon\Carbon;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Auth\RegisterController;
-use Storage;
+use Storage, Session;
 
 class HomeController extends Controller
 {
@@ -36,19 +36,12 @@ class HomeController extends Controller
 
     public function account()
     {
-        return view('home.account');
-    }
-
-    public function connect_api()
-    {
+        $user = Auth::user();
+        $lang = new Lang;
         $membership = Auth::user()->membership;
         $trial = Auth::user()->trial;
 
-        if($membership == 'free' && $trial == 0)
-        {
-            return view('auth.trial',['lang'=>new Lang]);
-        }
-        return view('home.connect_api',['lang'=>new Lang,'pc'=>new Price]);
+        return view('home.account',['user'=>$user,'lang'=>$lang,'pc'=> new Price,'membership'=>$membership,'trial'=>$trial]);
     }
 
     public function index()
@@ -56,15 +49,19 @@ class HomeController extends Controller
         return view('home.dashboard',['lang'=>new Lang,'pc'=>new Price]);
     }
 
-    public function upgrade()
-    {
-        $page = new RegisterController;
-        return $page->price_page();
-    }
-
     public function detail_buy()
     {
         return view('home.buy-detail',['lang'=>new Lang,'pc'=>new Price]);
+    }
+
+    public function deal()
+    {
+        return view('home.buy-deal',['pc'=>new Price]);
+    }
+
+    public function buyer_confirm()
+    {
+        return view('home.buyer-confirm',['pc'=>new Price]);
     }
 
     public function comments()
@@ -166,12 +163,12 @@ class HomeController extends Controller
         return response()->json($wt_coin);
     }
 
-    public function profile()
+    /*public function profile()
     {
         $user = Auth::user();
         $lang = new Lang;
         return view('home.profile',['user'=>$user,'lang'=>$lang]);
-    }
+    }*/
 
     public function update_profile(Request $request)
     {
@@ -204,11 +201,11 @@ class HomeController extends Controller
         return response()->json($data);
     }
 
-    public function order()
+    /*public function order()
     {
         $lang = ['lang'=> new Lang];
         return view('home.order',$lang);
-    }
+    }*/
 
     public function order_list(Request $request)
     {

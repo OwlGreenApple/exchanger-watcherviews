@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mb-5 mt-5">
+    <div class="container mb-5 mt-5">
     <div class="pricing card-deck flex-column flex-md-row mb-3">
     
         @if(count( $pc->get_price() ) > 0)

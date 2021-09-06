@@ -39,21 +39,22 @@ Route::group(['middleware'=>['auth','web']],function()
 	Route::post('order-confirm-payment',[App\Http\Controllers\HomeController::class, 'confirm_payment_order']);
 	Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'update_profile'])->middleware('check_profile');
 
+	//BUY
+	Route::get('buy',[App\Http\Controllers\HomeController::class, 'buying_page']);
+	Route::get('buy-detail',[App\Http\Controllers\HomeController::class, 'detail_buy']);
+	Route::get('deal',[App\Http\Controllers\HomeController::class, 'deal']);
+	Route::get('buyer-confirm',[App\Http\Controllers\HomeController::class, 'buyer_confirm']);
+
+	//SELL
+	Route::get('sell',[App\Http\Controllers\HomeController::class, 'selling_page']);
+	Route::get('transfer',[App\Http\Controllers\HomeController::class, 'transfer']);
+
 	// DISPUTE
 	Route::get('seller-dispute',[App\Http\Controllers\HomeController::class, 'seller_dispute']);
 	Route::get('buyer-dispute',[App\Http\Controllers\HomeController::class, 'buyer_dispute']);
 
 	// SETTINGS
 	Route::get('account', [App\Http\Controllers\HomeController::class, 'account']);
-	Route::get('profile', [App\Http\Controllers\HomeController::class, 'profile']);
-	Route::get('order',[App\Http\Controllers\HomeController::class, 'order']);
-	
-	// SHOP
-	Route::get('upgrade',[App\Http\Controllers\HomeController::class, 'upgrade']);
-	Route::get('buy',[App\Http\Controllers\HomeController::class, 'buying_page']);
-	Route::get('buy-detail',[App\Http\Controllers\HomeController::class, 'detail_buy']);
-	Route::get('sell',[App\Http\Controllers\HomeController::class, 'selling_page']);
-	Route::get('transfer',[App\Http\Controllers\HomeController::class, 'transfer']);
 	Route::get('trade',[App\Http\Controllers\HomeController::class, 'trade']);
 
 	//WITHDRAW COIN TO WALLET
@@ -70,6 +71,7 @@ Route::group(['middleware'=>['auth','web','is_admin']],function()
 	Route::get('order-list',[App\Http\Controllers\Admin\AdminController::class,'index']);
 	Route::get('order-load',[App\Http\Controllers\Admin\AdminController::class,'order']);
 	Route::get('order-confirm',[App\Http\Controllers\Admin\AdminController::class,'confirm_order']);
+	Route::post('save-rate',[App\Http\Controllers\Admin\AdminController::class,'save_rate']);
 
 	// WA MESSAGE
 	Route::get('wa-message',[App\Http\Controllers\Admin\AdminController::class,'set_order_message']);

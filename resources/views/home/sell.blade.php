@@ -79,19 +79,19 @@
                     <tbody>
                         <tr>
                             <td>2021-09-02</td>
-                            <td>SL-20210902-001</td>
+                            <td>B-20210902-001</td>
                             <td>pak test</td>
                             <td>100.000</td>
                             <td>0.1</td>
                             <td>Rp 10.000</td>
                             <td>2021-09-03</td>
                             <td>
-                                <a target="_blank" href="{{ url('transfer') }}" class="btn btn-info btn-sm">Transfer</a>
+                                <a target="_blank" href="{{ url('seller-dispute') }}" class="btn btn-warning btn-sm">Dispute</a>
                             </td>
                         </tr>
                         <tr>
                             <td>2021-09-02</td>
-                            <td>SL-20210902-002</td>
+                            <td>B-20210902-002</td>
                             <td></td>
                             <td>100.000</td>
                             <td>0.15</td>
@@ -99,6 +99,18 @@
                             <td>2021-09-04</td>
                             <td>
                                 <a target="_blank" href="{{ url('transfer') }}" class="btn btn-danger btn-sm">Hapus</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2021-09-06</td>
+                            <td>B-20210902-003</td>
+                            <td></td>
+                            <td>100.000</td>
+                            <td>0.2</td>
+                            <td>Rp 20.000</td>
+                            <td>2021-09-06</td>
+                            <td>
+                                <a target="_blank" href="{{ url('transfer') }}" class="btn btn-info btn-sm">Transfer</a>
                             </td>
                         </tr>
                     </tbody>

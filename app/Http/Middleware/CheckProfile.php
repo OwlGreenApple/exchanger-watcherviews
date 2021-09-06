@@ -27,7 +27,7 @@ class CheckProfile
         $rules = [
             'name' => ['required','string','max:255'],
             'bank_name' => ['string','max:50'],
-            'bank_no' => ['numeric','max:30'],
+            'bank_no' => ['numeric','digits_between:4,30'],
         ];
 
         if(!empty($request->phone))

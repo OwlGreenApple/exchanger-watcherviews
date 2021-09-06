@@ -36,7 +36,7 @@
                     <table id="seller" class="table table-hover shopping-cart-wrap">
                         <thead class="text-muted">
                         <tr>
-                          <th scope="col" width="240">{{ $lang::get('transaction.buy.seller') }}</th>
+                          <th scope="col" width="240">{{ $lang::get('transaction.buy.no') }}</th>
                           <th scope="col">{{ $lang::get('transaction.qty') }}</th>
                           <th scope="col">{{ $lang::get('transaction.price') }}</th>
                           <th scope="col">{{ $lang::get('transaction.rate') }}</th>
@@ -46,7 +46,7 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td><h6 class="title text-truncate">Penjual A</h6></td>
+                            <td><h6 class="title text-truncate">B-210903-002</h6></td>
                             <td> 100.000</td>
                             <td> 
                                 <div class="price-wrap"> 
@@ -82,7 +82,18 @@
                     <tbody>
                         <tr>
                             <td>2021-09-02</td>
-                            <td>SL-20210902-001</td>
+                            <td>B-210902-001</td>
+                            <td>500.000</td>
+                            <td>0.1</td>
+                            <td>Rp 50.000</td>
+                            <td><a href="{{ url('comments') }}"><i class="far fa-envelope"></i></a></td>
+                            <td>
+                                <a target="_blank" href="{{ url('buyer-confirm') }}" class="btn btn-primary btn-sm">Konfirmasi</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2021-09-02</td>
+                            <td>B-210903-001</td>
                             <td>100.000</td>
                             <td>0.1</td>
                             <td>Rp 10.000</td>

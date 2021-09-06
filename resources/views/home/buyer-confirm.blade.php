@@ -6,21 +6,21 @@
         <div class="col-md-9">
             <div class="card">
                 <div class="card-header bg-success text-white">
-                    Seller Dispute
+                    Konfimasi Pembelian
                 </div>
 
                 <div class="card-body">
                     <form action="/action_page.php">
                           <div class="form-group">
                             <label for="email">No Invoice:</label>
-                            <div class="form-control">B-20210902-001</div>
+                            <div class="form-control">B-210902-001</div>
                           </div>
                           <div class="form-group">
-                            <label for="fl">Upload Bukti</label>
+                            <label for="fl">Upload Bukti Bayar</label>
                             <input type="file" class="form-control" name="bukti" id="fl">
                           </div>
                           <div class="form-group">
-                            <label for="ct">Komentar</label>
+                            <label for="ct">Keterangan</label>
                             <textarea class="form-control"></textarea>
                           </div>
                           <button type="submit" class="btn btn-success">Kirim</button>

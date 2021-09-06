@@ -9,7 +9,7 @@ return [
     'amount'=>'Jumlah Transaksi Coin',
     'buy'=>'Beli',
     'buy.done'=>'Transaksi pembelian selesai',
-    'buy.seller'=>'Penjual',
+    'buy.no'=>'No Invoice',
     'buy.status'=>'Transaksi pembelian sedang di proses',
     'buy.title'=>'Beli koin Watcherviews',
     'conf'=>'Konfirmasi pembelian Coin',

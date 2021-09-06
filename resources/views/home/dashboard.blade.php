@@ -85,7 +85,7 @@
                     <table id="seller" class="table table-hover shopping-cart-wrap">
                         <thead class="text-muted">
                         <tr>
-                          <th scope="col" width="240">{{ $lang::get('transaction.buy.seller') }}</th>
+                          <th scope="col" width="240">{{ $lang::get('transaction.buy.no') }}</th>
                           <th scope="col">{{ $lang::get('transaction.qty') }}</th>
                           <th scope="col">{{ $lang::get('transaction.price') }}</th>
                           <th scope="col">{{ $lang::get('transaction.rate') }}</th>
@@ -95,7 +95,7 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td><h6 class="title text-truncate">test@mail.com</h6></td>
+                            <td><h6 class="title text-truncate">B-210903-002</h6></td>
                             <td> 100.000</td>
                             <td> 
                                 <div class="price-wrap"> 
@@ -106,7 +106,7 @@
                             <td><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"><i class="fas fa-star"></td>
                             <td><a href="{{ url('comments') }}"><i class="far fa-envelope"></i></a></td>
                             <td class="text-right"> 
-                            <a class="btn btn-outline-success btn-sm conf" data-toggle="tooltip" data-original-title="Save to Wishlist">Beli</a> 
+                            <a href="{{ url('buy-detail') }}" class="btn btn-outline-success btn-sm">Beli</a> 
                             </td>
                         </tr>
                         </tbody>
@@ -152,20 +152,12 @@
     $(document).ready(function()
     {
         // data_table();
-        open_popup();
         withdraw_coin();
     });
 
     function data_table()
     {
         $("#seller").DataTable();
-    }
-
-    function open_popup()
-    {
-        $("body").on('click','.conf',function(){
-            $("#confirm_buy").modal();
-        });
     }
 
     function withdraw_coin()

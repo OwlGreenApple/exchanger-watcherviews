@@ -10,7 +10,7 @@
                 <div id="msg"><!-- message --></div>
 
                 <div class="card-body">
-                    <form id="message">
+                    <form id="save-rate">
 
                         <div class="form-group row">
                             <label class="col-md-4 col-form-label text-md-right">Kurs Sekarang</label>
@@ -24,7 +24,7 @@
                             <label class="col-md-4 col-form-label text-md-right">Kurs baru</label>
 
                             <div class="col-md-6">
-                                <input type="number" class="form-control" name="kurs"  />
+                                <input type="text" class="form-control" name="kurs"  />
                                 <span class="error kurs"><!--  --></span>
                             </div>
                         </div>
@@ -50,6 +50,53 @@
 </div>
 
 <script type="text/javascript">
+
+  $(document).ready(function(){
+        save_rate();
+    });
+
+    function save_rate()
+    {
+        $("#save-rate").submit(function(e){
+            e.preventDefault();
+
+            $.ajax({
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                type : 'POST',
+                url : "{{ url('save-rate') }}",
+                dataType : 'json',
+                data : $(this).serialize(),
+                beforeSend: function()
+                {
+                   $('#loader').show();
+                   $('.div-loading').addClass('background-load');
+                   $(".error").hide();
+                },
+                success : function(result)
+                {
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+
+                    if(result.status == 'error')
+                    {
+                        $(".error").show();
+                        $("#msg").html('<div class="alert alert-danger">'+result.msg+'</div>');
+                    }
+                    else
+                    {
+                        $(".error").hide();
+                        $("#msg").html('<div class="alert alert-success">'+result.msg+'</div>');
+                    }
+                },
+                error : function()
+                {
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+                }
+            });
+        });
+    }
+
   window.onload = function () 
   {
     /** TOTAL CONTACTS ADDING PER DAY **/
@@ -85,53 +132,5 @@
     chart.render();
     //{x : new Date('2019-12-04'), y: 520, indexLabel: "highest",markerColor: "red", markerType: "triangle" },
   }
-
-   $(document).ready(function(){
-        save_message();
-    });
-
-    function save_message()
-    {
-        $("#message").submit(function(e){
-            e.preventDefault();
-
-            $.ajax({
-                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-                type : 'POST',
-                url : "{{ url('save-message') }}",
-                dataType : 'json',
-                data : $(this).serialize(),
-                beforeSend: function()
-                {
-                   $('#loader').show();
-                   $('.div-loading').addClass('background-load');
-                   $(".error").hide();
-                },
-                success : function(result)
-                {
-                    $('#loader').hide();
-                    $('.div-loading').removeClass('background-load');
-
-                    if(result.status == 'error')
-                    {
-                        $(".error").show();
-                        $(".notif").html(result.notif);
-                        $(".notif_order").html(result.notif_order);
-                        $(".admin_id").html(result.admin_id);
-                    }
-                    else
-                    {
-                        $(".error").hide();
-                        $("#msg").html('<div class="alert alert-success">'+result.msg+'</div>');
-                    }
-                },
-                error : function()
-                {
-                    $('#loader').hide();
-                    $('.div-loading').removeClass('background-load');
-                }
-            });
-        });
-    }
 </script>
 @endsection

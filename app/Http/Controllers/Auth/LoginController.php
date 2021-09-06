@@ -42,7 +42,7 @@ class LoginController extends Controller
           return '/home';
           break;
         case 1:
-          return '/profile';
+          return '/account';
           break; 
 
         default:

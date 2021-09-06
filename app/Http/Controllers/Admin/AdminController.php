@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Models\Orders;
 use App\Models\User;
 use App\Models\Membership;
 use App\Models\Notification;
+use App\Models\Kurs;
 use App\Helpers\Api;
 use App\Helpers\Price;
 use Carbon\Carbon;
@@ -20,6 +22,25 @@ class AdminController extends Controller
     public function trade()
     {
       return view('admin.order.trade');
+    }
+
+    public function save_rate(Request $request)
+    {
+      $kurs = new Kurs;
+      $kurs->kurs = $request->kurs;
+
+      try
+      {
+        $kurs->save();
+        $ret['msg'] = 'Data berhasil disimpan';
+      }
+      catch(QueryException $e)
+      {
+        $ret['success'] = 'error';
+        $ret['msg'] = $e->getMessage();;
+      }
+
+      return response()->json($ret);
     }
 
     public function index()

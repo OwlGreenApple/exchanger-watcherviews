@@ -43,6 +43,11 @@
 
     <!-- Canvas JS -->
     <script type="text/javascript" src="{{ asset('assets/canvasjs/canvasjs.min.js') }}"></script>
+
+    <!-- ReactJS -->
+    <script type="text/javascript" src="{{ asset('assets/reactjs/babel.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/reactjs/react.production.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/reactjs/react-dom.production.min.js') }}"></script>
 </head>
 <body>
 
@@ -119,36 +124,8 @@
                                 </li>
                             @endif
 
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}&nbsp;<span><small>({{ Auth::user()->membership }})</small></span>
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                   <!--  <a class="dropdown-item text-primary">
-                                        
-                                    </a> -->
-                                     <a class="dropdown-item" href="{{ url('profile') }}">Profile</a> 
-
-                                     @if (Auth::user()->is_admin == 0)
-                                         <a class="dropdown-item" href="{{ url('connect_api') }}">Connect API</a> 
-
-                                         <a class="dropdown-item" href="{{ url('upgrade') }}">Upgrade</a> 
-
-                                         <a class="dropdown-item" href="{{ url('order') }}">Billing</a> 
-                                     @endif
-
-                                    <!-- LOGOUT -->
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
+                            <li class="nav-item">
+                                    <a class="nav-link">{{ Auth::user()->name }}&nbsp;<span><small class="text-success">({{ Auth::user()->membership }})</small></span></a>
                             </li>
 
                             <li class="nav-item">
