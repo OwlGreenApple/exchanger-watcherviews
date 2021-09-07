@@ -19,7 +19,7 @@
           </p>
           </div>
           <div class="form-group offset-md-2 col-md-8 col-12">
-            <a href="{{url('order')}}" class="free-underline">
+            <a href="{{url('account')}}/1" class="free-underline">
               <input type="button" class=" btn btn-primary bsub btn-block" value="{{ $lang::get('order.back') }}" style="margin-top:-10px;" />
             </a>
           </div>

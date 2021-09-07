@@ -51,19 +51,22 @@ class CheckPurchasing extends Command
                 $curtime = Carbon::now();
                 $day = Carbon::parse($row->created_at)->addDays(1);
                 $hours = Carbon::parse($row->created_at)->addHour(6);
+                $order = Orders::find($row->id);
 
-                // SET USER STATUS TO 3 IF AFTER 24 HOURS USER DOESN'T PAY ORDER
+                // SET USER STATUS TO 4 IF AFTER 24 HOURS USER DOESN'T PAY ORDER
                 if($curtime->gte($day))
                 {
-                   $order = Orders::find($row->id);
-                   $order->status = 3;
+                   $order->status = 4;
                    $order->save();
                 }
                 
                 // SEND WA MESSAGE AFTER 6 HOURS ORDER
                 if($curtime->gte($hours))
                 {
-                    $otc->send_message($row->package,$row->price,$row->total,$row->no_order,$row->phone_number,1);
+                    $otc->send_message($row->package,$row->price,$row->total_price,$row->no_order,$row->phone_number,1);
+
+                    $order->status = 6;
+                    $order->save();
                 }
             endforeach;
         }

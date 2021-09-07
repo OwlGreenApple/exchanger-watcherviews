@@ -21,7 +21,13 @@ class AdminController extends Controller
 
     public function trade()
     {
-      return view('admin.order.trade');
+      $kurs = Kurs::all();
+      $data = array();
+      foreach($kurs as $row)
+      {
+        $data[Carbon::parse($row->created_at)->toDateTimeString()] = $row->kurs;
+      }
+      return view('admin.order.trade',['data'=>$data]);
     }
 
     public function save_rate(Request $request)
@@ -48,6 +54,7 @@ class AdminController extends Controller
     	return view('admin.order.index');
     }
 
+    /*** -- USER -- ***/
     public function user_list()
     {
       return view('admin.order.user');
@@ -105,7 +112,7 @@ class AdminController extends Controller
           }
           else
           {
-            $btn = '<button type="button" id="'.$row->id.'" class="btn btn-danger btn-sm">Ban User</button>';
+            $btn = '<button type="button" id="'.$row->id.'" class="btn btn-danger btn-sm ban">Ban User</button>';
           }
 
           $data['data'][] = [
@@ -125,6 +132,31 @@ class AdminController extends Controller
       echo json_encode($data);
     }
 
+    public function ban_user(Request $request)
+    {
+      $user = User::find($request->id);
+      if(is_null($user))
+      {
+        $data['error'] = 2;
+        $data['msg'] = 'User tidak ada';
+        return response()->json($data);
+      }
+      
+      try
+      {
+        $user->status = 0;
+        $user->save();
+        $data['error'] = 0;
+      }
+      catch(queryException $e)
+      {
+        $data['error'] = 1;
+        $data['msg'] = $e->getMessage();
+      }
+      return response()->json($data);
+    }
+
+    /*** ORDER ***/
     public function order(Request $request)
     {
       $start = $request->start;
@@ -190,9 +222,13 @@ class AdminController extends Controller
           {
             $confirm = '<b class="text-success">Terkonfirmasi</b>';
           }
-          else
+          elseif($row->status == 3)
           {
           	$confirm = '<b class="text-danger">Batal</b>';
+          }
+          else
+          {
+            $confirm = '<b class="text-danger">Batal oleh system</b>';
           }
 
           // PROOF
@@ -362,7 +398,7 @@ class AdminController extends Controller
     	$order = Orders::find($request->id);
     	if(!is_null($order))
     	{
-    		$order->status = 6;
+    		$order->status = 3;
     		$order->save();
     		$data['success'] = 1; 
     	}

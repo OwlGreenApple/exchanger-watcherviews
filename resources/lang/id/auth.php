@@ -13,6 +13,8 @@ return [
     |
     */
 
+    'api'=>'Anda telah terhubung dengan akun watcherviews anda, klik disini untuk',
+    'banned'=>'Maaf, akun anda sudah di banned, silahkan kontak admin.',
     'credential'=>'Maaf, password atau email yang anda masukkan salah.',
     'failed' => 'Identitas tersebut tidak cocok dengan data kami.',
     'forgot' => 'Lupa Password',

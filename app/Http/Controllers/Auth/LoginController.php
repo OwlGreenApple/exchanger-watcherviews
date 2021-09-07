@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Http\Request;
+use App\Models\User;
 use Cookie,Session;
 
 
@@ -35,21 +36,6 @@ class LoginController extends Controller
      * @var string
      */
     // protected $redirectTo = RouteServiceProvider::HOME;
-    public function redirectTo() {
-      $role = Auth::user()->is_admin; 
-      switch ($role) {
-        case 0:
-          return '/home';
-          break;
-        case 1:
-          return '/account';
-          break; 
-
-        default:
-          return '/home'; 
-        break;
-      }
-    }
 
     /**
      * Create a new controller instance.
@@ -63,6 +49,7 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request,$user)
     {
+        self::check_banned($request);
         if($request->remember == 1)
         {
             $this->setCookie($request->email,$request->password);
@@ -73,25 +60,78 @@ class LoginController extends Controller
         }
     }
 
+    // CHECK BANNED USER
+    private static function check_banned(Request $request)
+    {
+        if(Auth::check() == true && Auth::user()->status == 0)
+        {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            if($request->ajax() == false)
+            {
+                return redirect()->route('login')->with('error', Lang::get('auth.banned'));
+            }
+        }
+    }
+
     public function loginAjax(Request $request)
     {
         // dd($request->all());
         $email = $request->email;
         $password = $request->password;
 
+        // check email / password valid / tidak
         if(Auth::guard('web')->attempt(['email' => $email, 'password' => $password])) 
         {
-            $user = Auth::user();
-            return response()->json([
-                'success' => 1,
-                'email' => $email,
-            ]);
+            $user = User::where('email',$email)->first();
+            if($user->status == 0)
+            {
+                self::check_banned($request);
+                $ret = [
+                    'success' => false,
+                    'message' => Lang::get('auth.banned'),
+                ];
+            }
+            else
+            {
+                $ret = [
+                    'success' => 1,
+                    'email' => $email,
+                ];
+            }
+            return response()->json($ret);
         } else {
             return response()->json([
                 'success' => false,
                 'message' => Lang::get('auth.credential')
             ]);
         }
+    }
+
+    public function redirectTo() {
+      if(Auth::check() == true)
+      {
+         $role = Auth::user()->is_admin; 
+          switch ($role) {
+            case 0:
+              return '/home';
+              break;
+            case 1:
+              return '/account';
+              break; 
+
+            default:
+              return '/home'; 
+            break;
+          }
+      }
+      else
+      {
+         return '/login'; 
+      }
+     
     }
 
     private function setCookie($email,$password)

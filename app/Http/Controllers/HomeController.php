@@ -34,14 +34,77 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
 
-    public function account()
+    public function account(Request $request)
     {
         $user = Auth::user();
         $lang = new Lang;
         $membership = Auth::user()->membership;
         $trial = Auth::user()->trial;
+        $confirm = $request->segment(2);
 
-        return view('home.account',['user'=>$user,'lang'=>$lang,'pc'=> new Price,'membership'=>$membership,'trial'=>$trial]);
+        return view('home.account',['user'=>$user,'lang'=>$lang,'pc'=> new Price,'membership'=>$membership,'trial'=>$trial,'conf'=>$confirm]);
+    }
+
+    // CONNECT TO WATCHERVIEWS TO OBTAIN WATCHERVIEWS ID
+    public function connect_api(Request $request)
+    {
+        dd($request->all());
+        $email = $request->wt_email;
+        $password = $request->wt_pass;
+
+        $api = new Api;
+        $wt = $api::connect_watcherviews($email,$password);
+
+        if($wt['err'] == 0)
+        {
+            $user = User::find($auth->id);
+            $user->watcherviews_id = $wt['id'];
+            $user->save();
+        }
+
+        return response()->json($wt);
+    }
+
+    public function get_watcherviews_coin(Request $request)
+    {
+        $email = $request->wt_email;
+        $password = $request->wt_pass;
+
+        $api = new Api;
+        $pc = new Price;
+        $auth = Auth::user();
+        $membership = $auth->membership;
+        $package = $pc->check_type($membership);
+
+        // COUN HOW MUCH COIN IN WALLET
+        $user_coin = $auth->coin;
+        $max_coin = $package['max_coin'] - $user_coin;
+
+        $wt_coin = $api::get_watcerviews_coin($email,$password,$max_coin);
+
+        if($wt_coin['err'] == 0)
+        {
+            // SAVE COIN TO TABLE USER
+            $user = User::find($auth->id);
+            $user->coin += $wt_coin['coin'];
+            $user->save();
+
+            // LOGIC TO INSERT INTO TRANSACTION
+            $dt = Carbon::now();
+            $str = 'WD-'.$dt->format('ymd').'-'.$dt->format('Hi');
+            $logic = new OrderController;
+            $no_transaction = $logic::autoGenerateID(new \App\Models\Transaction, 'no', $str, 3, '0');
+
+            $data = [
+                'no'=>$no_transaction,
+                'amount'=>$wt_coin['coin'],
+                'type'=>3,
+            ];
+
+            $pc::transaction($data);
+        }
+
+        return response()->json($wt_coin);
     }
 
     public function index()
@@ -120,55 +183,6 @@ class HomeController extends Controller
         }
         return view('home.wallet',['lang'=>new Lang,'pc'=>new Price,'data'=>$tr]);
     }
-
-    public function get_watcherviews_coin(Request $request)
-    {
-        $email = $request->wt_email;
-        $password = $request->wt_pass;
-
-        $api = new Api;
-        $pc = new Price;
-        $auth = Auth::user();
-        $membership = $auth->membership;
-        $package = $pc->check_type($membership);
-
-        // COUN HOW MUCH COIN IN WALLET
-        $user_coin = $auth->coin;
-        $max_coin = $package['max_coin'] - $user_coin;
-
-        $wt_coin = $api::get_watcerviews_coin($email,$password,$max_coin);
-
-        if($wt_coin['err'] == 0)
-        {
-            // SAVE COIN TO TABLE USER
-            $user = User::find($auth->id);
-            $user->coin += $wt_coin['coin'];
-            $user->save();
-
-            // LOGIC TO INSERT INTO TRANSACTION
-            $dt = Carbon::now();
-            $str = 'WD-'.$dt->format('ymd').'-'.$dt->format('Hi');
-            $logic = new OrderController;
-            $no_transaction = $logic::autoGenerateID(new \App\Models\Transaction, 'no', $str, 3, '0');
-
-            $data = [
-                'no'=>$no_transaction,
-                'amount'=>$wt_coin['coin'],
-                'type'=>3,
-            ];
-
-            $pc::transaction($data);
-        }
-
-        return response()->json($wt_coin);
-    }
-
-    /*public function profile()
-    {
-        $user = Auth::user();
-        $lang = new Lang;
-        return view('home.profile',['user'=>$user,'lang'=>$lang]);
-    }*/
 
     public function update_profile(Request $request)
     {

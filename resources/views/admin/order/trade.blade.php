@@ -74,11 +74,10 @@
                 },
                 success : function(result)
                 {
-                    $('#loader').hide();
-                    $('.div-loading').removeClass('background-load');
-
                     if(result.status == 'error')
                     {
+                        $('#loader').hide();
+                        $('.div-loading').removeClass('background-load');
                         $(".error").show();
                         $("#msg").html('<div class="alert alert-danger">'+result.msg+'</div>');
                     }
@@ -87,6 +86,10 @@
                         $(".error").hide();
                         $("#msg").html('<div class="alert alert-success">'+result.msg+'</div>');
                     }
+                },
+                complete : function()
+                {
+                    location.href="{{ url('kurs-admin') }}";
                 },
                 error : function()
                 {
@@ -101,9 +104,9 @@
   {
     /** TOTAL CONTACTS ADDING PER DAY **/
     var contacts = [];
-    /*$.each(php echo json_encode($graph_contacts);, function( i, item ) {
+    $.each(<?php echo json_encode($data);?>, function( i, item ) {
         contacts.push({'x': new Date(i), 'y': item});
-    });*/
+    });
 
     var chart = new CanvasJS.Chart("user-charts", {
       animationEnabled: true,
@@ -116,16 +119,13 @@
       axisY: {
           titleFontFamily: "Nunito,sans-serif",
           titleFontSize : 14,
-          title : "Total registered users",
+          title : "Total Kurs",
           titleFontColor: "#b7b7b7",
           includeZero: false
       },
       data: [{        
         type: "line",       
-        dataPoints: [
-        {x : new Date('2021-08-04'), y: 1, indexLabel: "highest",markerColor: "green", markerType: "triangle" },
-        {x : new Date('2021-09-01'), y: 0.1, indexLabel: "lowes",markerColor: "red", markerType: "triangle" },
-        ],
+        dataPoints : contacts,
         color : "#2cb06a"
       }]
     });

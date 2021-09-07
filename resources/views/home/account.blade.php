@@ -39,6 +39,7 @@
 
         <!-- RIGHT TAB -->
         <div class="col-md-9">
+            <!-- PROFILE -->
             <div id="settings_target_1" class="card target_hide">
                 <div class="card-body bg-white text-black-50 border-bottom"><h5 class="mb-0"><b><i class="far fa-user text-success"></i>&nbsp;Profile</b></h5></div>
 
@@ -48,6 +49,7 @@
                 </div>
             </div>
 
+            <!-- UPGRADE PACKAGE -->
             <div id="settings_target_2" class="card target_hide d-none">
                 <div class="card-body bg-white text-black-50 border-bottom"><h5 class="mb-0"><b>Upgrade</b></h5></div>
 
@@ -57,6 +59,7 @@
                 </div>
             </div>
 
+            <!-- INVOICE -->
             <div id="settings_target_3" class="card target_hide d-none">
                 <div class="card-body bg-white text-black-50 border-bottom"><h5 class="mb-0"><b>Invoice</b></h5></div>
 
@@ -66,13 +69,16 @@
                 </div>
             </div>
 
+            <!-- CONNECT API -->
             <div id="settings_target_4" class="card target_hide d-none">
                 <div class="card-body bg-white text-black-50 border-bottom"><h5 class="mb-0"><b>{{ $lang::get('custom.api') }}</b></h5></div>
 
                 <div class="card-body">
                     <div class="msg"><!--  --></div>
                     @if($membership == 'free' && $trial == 0)
-                        @include('auth.trial');
+                        @include('auth.trial')
+                    @elseif($user->watcherviews_id > 0)
+                        <div class="alert alert-info">{{ Lang::get('auth.api') }} : <b><a id="logout">logout</a></b></div>
                     @else
                         @include('home.connect_api')
                     @endif
@@ -90,14 +96,28 @@
 <script src="{{ asset('/assets/js/custom.js') }}" type="text/javascript"></script>
 
 <script type="text/javascript">
+    var segment = "{{ $conf }}";
+
     $(document).ready(function(){
         data_tabs();
         load_page();
         save_profile();
+        connect_api();
     });
 
     function data_tabs()
     {
+        if(segment == 1)
+        {
+            $(".target_hide").addClass('d-none');
+            $(".settings").removeClass('active');
+            $("#settings_target_3").removeClass('d-none');
+            $(".mn").addClass('active');
+            $(".mn").removeClass('collapsed');
+            $("#collapseExample").removeClass('collapse');
+            $("#collapseExample").addClass('collapse show');
+        }
+
         $(".settings").click(function(){
             var target = $(this).attr('data_target');
             $(".settings").removeClass('active');
@@ -152,6 +172,59 @@
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                 type : 'POST',
                 url : "{{ url('update-profile') }}",
+                dataType : 'json',
+                data : $(this).serialize(),
+                beforeSend: function()
+                {
+                   $('#loader').show();
+                   $('.div-loading').addClass('background-load');
+                   $(".error").hide();
+                },
+                success : function(result)
+                {
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+
+                    if(result.status == 'error')
+                    {
+                        $(".error").show();
+                        $(".name").html(result.name);
+                        $(".bank_name").html(result.bank_name);
+                        $(".bank_no").html(result.bank_no);
+                        $(".phone").html(result.phone);
+                        $(".phone").html(result.code_country); //exceptional
+                        $(".oldpass").html(result.oldpass);
+                        $(".confpass").html(result.confpass);
+                        $(".newpass").html(result.newpass);
+                    }
+                    else
+                    {
+                        $("#phone_number").html(result.phone);
+                        $(".msg").html('<div class="alert alert-success">'+result.msg+'</div>');
+                    }
+                },
+                complete : function()
+                {
+                    $(".msg").delay(3000).fadeOut(1000);
+                },
+                error : function()
+                {
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+                }
+            });
+        });
+    }
+
+    function connect_api()
+    {
+        $("#connect_api").submit(function(e){
+            e.preventDefault();
+
+            $.ajax({
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                type : 'POST',
+                url : "{{ url('connect-api') }}",
                 dataType : 'json',
                 data : $(this).serialize(),
                 beforeSend: function()

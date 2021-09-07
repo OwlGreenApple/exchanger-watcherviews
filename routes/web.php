@@ -35,7 +35,6 @@ Route::group(['middleware'=>['auth','web']],function()
 	Route::get('purchase', [App\Http\Controllers\HomeController::class, 'purchase']);
 	Route::get('comments/{sellerid?}',[App\Http\Controllers\HomeController::class, 'comments']);
 	Route::get('orders',[App\Http\Controllers\HomeController::class, 'order_list']);
-	Route::get('connect_api',[App\Http\Controllers\HomeController::class, 'connect_api']);
 	Route::post('order-confirm-payment',[App\Http\Controllers\HomeController::class, 'confirm_payment_order']);
 	Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'update_profile'])->middleware('check_profile');
 
@@ -54,8 +53,9 @@ Route::group(['middleware'=>['auth','web']],function()
 	Route::get('buyer-dispute',[App\Http\Controllers\HomeController::class, 'buyer_dispute']);
 
 	// SETTINGS
-	Route::get('account', [App\Http\Controllers\HomeController::class, 'account']);
+	Route::get('account/{conf?}', [App\Http\Controllers\HomeController::class, 'account']);
 	Route::get('trade',[App\Http\Controllers\HomeController::class, 'trade']);
+	Route::post('connect-api',[App\Http\Controllers\HomeController::class, 'connect_api']);
 
 	//WITHDRAW COIN TO WALLET
 	Route::get('wallet',[App\Http\Controllers\HomeController::class,'wallet']);
@@ -68,6 +68,7 @@ Route::group(['middleware'=>['auth','web','is_admin']],function()
 	Route::get('kurs-admin',[App\Http\Controllers\Admin\AdminController::class,'trade']);
 	Route::get('user-list',[App\Http\Controllers\Admin\AdminController::class,'user_list']);
 	Route::get('user-fetch',[App\Http\Controllers\Admin\AdminController::class,'fetch_user']);
+	Route::get('user-ban',[App\Http\Controllers\Admin\AdminController::class,'ban_user']);
 	Route::get('order-list',[App\Http\Controllers\Admin\AdminController::class,'index']);
 	Route::get('order-load',[App\Http\Controllers\Admin\AdminController::class,'order']);
 	Route::get('order-confirm',[App\Http\Controllers\Admin\AdminController::class,'confirm_order']);

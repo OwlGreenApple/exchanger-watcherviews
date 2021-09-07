@@ -1,4 +1,4 @@
-<form id="profile">
+<form id="connect_api">
      <div class="form-group row">
         <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.email_watcherviews') }}</label>
 

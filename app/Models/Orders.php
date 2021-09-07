@@ -14,6 +14,9 @@ class Orders extends Model
 		- 0 == order still not confirmed by user
 		- 1 == order has confirmed by user already
 		- 2 == order has confirmed by admin
+		- 3 == order has cancelled by admin
+		- 4 == order has cancelled by system
+		- 6 == order get flagged after 6 hours -- to avoid system send WA after next 6 hours
     */
 
     protected $table = 'orders';
