@@ -73,18 +73,21 @@
             <div id="settings_target_4" class="card target_hide d-none">
                 <div class="card-body bg-white text-black-50 border-bottom"><h5 class="mb-0"><b>{{ $lang::get('custom.api') }}</b></h5></div>
 
-                <div class="card-body">
-                    <div class="msg"><!--  --></div>
+                <div id="connect_api_gui" class="card-body">
+                    <span class="wallet mb-2"><!--  --></span>
                     @if($membership == 'free' && $trial == 0)
-                        @include('auth.trial')
-                    @elseif($user->watcherviews_id > 0)
-                        <div class="alert alert-info">{{ Lang::get('auth.api') }} : <b><a id="logout">logout</a></b></div>
+                        <a class="settings text-bold alert-warning" data_target="2">{!! $lang::get('custom.trial') !!} {{ $lang::get('custom.here') }}</a></div>
                     @else
-                        @include('home.connect_api')
+                        <div class="msg"><!--  --></div>
+                        @if($user->watcherviews_id > 0)
+                            <div class="alert alert-info">{{ Lang::get('auth.api') }} : <b><a id="logout">logout</a></b></div>
+                        @else
+                            @include('home.connect_api')
+                        @endif
                     @endif
                 </div>
             </div>
-
+           
             <!-- end col -->
         </div> 
     </div>
@@ -238,22 +241,32 @@
                     $('#loader').hide();
                     $('.div-loading').removeClass('background-load');
 
-                    if(result.status == 'error')
+                    if(result.err == 0)
+                    {
+                        $("#connect_api_gui").html('<div class="alert alert-info">{{ Lang::get("auth.api") }} : <b><a id="logout">logout</a>')
+                        $("input").val('');
+                    }
+                    else if(result.err == 1)
                     {
                         $(".error").show();
-                        $(".name").html(result.name);
-                        $(".bank_name").html(result.bank_name);
-                        $(".bank_no").html(result.bank_no);
-                        $(".phone").html(result.phone);
-                        $(".phone").html(result.code_country); //exceptional
-                        $(".oldpass").html(result.oldpass);
-                        $(".confpass").html(result.confpass);
-                        $(".newpass").html(result.newpass);
+                        $(".wallet").html('<div class="alert alert-danger">{{ $lang::get("auth.credential") }}</div>');
+                    }
+                    else if(result.err == 2)
+                    {
+                        $(".error").show();
+                        $(".wallet").html('<div class="alert alert-danger">{{ $lang::get("custom.failed") }}</div>');
+                    }
+                    else if(result.err == 'validation')
+                    {
+                        $(".error").show();
+                        $(".wt_email").html(result.wt_email);
+                        $(".wt_pass").html(result.wt_pass);
                     }
                     else
                     {
-                        $("#phone_number").html(result.phone);
-                        $(".msg").html('<div class="alert alert-success">'+result.msg+'</div>');
+                        $(".error").show();
+                        $(".wt_email").html(result.wt_email);
+                        $(".wt_pass").html(result.wt_pass);
                     }
                 },
                 complete : function()

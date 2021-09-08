@@ -18,8 +18,8 @@ class User extends Authenticatable
 
         status :
         0 = banned
-        1 = activated - free membership / end membership
-        2 = activated - paid membership 
+        1 = activated - free membership
+        2 = activated - paid membership
     */
 
     /**

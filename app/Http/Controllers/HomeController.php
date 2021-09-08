@@ -34,6 +34,11 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
 
+    public function end_membership()
+    {
+        return view('auth.trial',['lang'=>new Lang]);
+    }
+
     public function account(Request $request)
     {
         $user = Auth::user();
@@ -48,7 +53,7 @@ class HomeController extends Controller
     // CONNECT TO WATCHERVIEWS TO OBTAIN WATCHERVIEWS ID
     public function connect_api(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         $email = $request->wt_email;
         $password = $request->wt_pass;
 
@@ -57,7 +62,9 @@ class HomeController extends Controller
 
         if($wt['err'] == 0)
         {
-            $user = User::find($auth->id);
+            // CHECK IF WATCHERVIEWS ID AVAILABLE ON OTHER ID
+            self::check_watcherviews_id($wt['id']);
+            $user = User::find(Auth::id());
             $user->watcherviews_id = $wt['id'];
             $user->save();
         }
@@ -65,10 +72,28 @@ class HomeController extends Controller
         return response()->json($wt);
     }
 
-    public function get_watcherviews_coin(Request $request)
+    // CHECK IF WATCHERVIEWS ID AVAILABLE ON OTHER ID AND LOGOUT OR SET 0 IF EXIST
+    private static function check_watcherviews_id($wt_id)
     {
-        $email = $request->wt_email;
-        $password = $request->wt_pass;
+        $user = User::where('watcherviews_id',$wt_id)->first();
+
+        if(!is_null($user))
+        {
+            $user_id = $user->id;
+            $mb = User::find($user_id);
+            $mb->watcherviews_id = 0;
+            $mb->save();
+        }
+    }
+
+    public function transaction_watcherviews_coin(Request $request)
+    {
+        // dd($request->all());
+        $wallet_option = $request->wallet_option;
+        $coin_ammount = $request->coin_ammount;
+
+        // WITHDRAW COIN FROM WATCHERVIEWS $wallet_option = 1
+        // SEND COIN TO WATCHERVIEWS $wallet_option = 2
 
         $api = new Api;
         $pc = new Price;
@@ -76,35 +101,50 @@ class HomeController extends Controller
         $membership = $auth->membership;
         $package = $pc->check_type($membership);
 
-        // COUN HOW MUCH COIN IN WALLET
-        $user_coin = $auth->coin;
-        $max_coin = $package['max_coin'] - $user_coin;
+        // COUNT HOW MUCH COIN IN WALLET -- validator
+        /*$user_coin = $auth->coin;
+        $max_coin = $package['max_coin'] - $user_coin;*/
 
-        $wt_coin = $api::get_watcerviews_coin($email,$password,$max_coin);
-
+        $wt_coin = $api::transaction_wt_coin($coin_ammount,$auth->watcherviews_id,$wallet_option);
+        
         if($wt_coin['err'] == 0)
         {
-            // SAVE COIN TO TABLE USER
-            $user = User::find($auth->id);
-            $user->coin += $wt_coin['coin'];
-            $user->save();
-
-            // LOGIC TO INSERT INTO TRANSACTION
-            $dt = Carbon::now();
-            $str = 'WD-'.$dt->format('ymd').'-'.$dt->format('Hi');
-            $logic = new OrderController;
-            $no_transaction = $logic::autoGenerateID(new \App\Models\Transaction, 'no', $str, 3, '0');
-
-            $data = [
-                'no'=>$no_transaction,
-                'amount'=>$wt_coin['coin'],
-                'type'=>3,
-            ];
-
-            $pc::transaction($data);
+            $wallet_coin = self::save_withdrawal($auth->id,$wt_coin['coin'],$wallet_option);
+            $wt_coin['wallet_coin'] = $wallet_coin;
         }
-
+        
         return response()->json($wt_coin);
+    }
+
+    private static function save_withdrawal($id,$coin,$method)
+    {
+        // SAVE COIN TO TABLE USER 
+        $user = User::find($id);
+        if($method == 1)
+        {
+            $user->coin += $coin;
+        }
+        else
+        {
+            $user->coin -= $coin;
+        }
+        
+        $user->save();
+        return $user->coin;
+        
+        // LOGIC TO INSERT INTO TRANSACTION
+       /* $dt = Carbon::now();
+        $str = 'WD-'.$dt->format('ymd').'-'.$dt->format('Hi');
+        $logic = new OrderController;
+        $no_transaction = $logic::autoGenerateID(new \App\Models\Transaction, 'no', $str, 3, '0');
+
+        $data = [
+            'no'=>$no_transaction,
+            'amount'=>$wt_coin['coin'],
+            'type'=>3,
+        ];
+
+        $pc::transaction($data);*/
     }
 
     public function index()
@@ -174,14 +214,28 @@ class HomeController extends Controller
     public function wallet()
     {
         $tr = Transaction::where('user_id',Auth::id())->get();
-        $membership = Auth::user()->membership;
-        $trial = Auth::user()->trial;
+        $wt_id = Auth::user()->watcherviews_id;
+        $pc = new Price;
+        $coin = 0;
 
-        if($membership == 'free' && $trial == 0)
+        if($wt_id > 0)
         {
-            return view('auth.trial',['lang'=>new Lang]);
+            $api = new Api;
+            $wt_coin = $api->get_total_coin($wt_id);
+
+            // if err = 1 invalid user id
+            // if err = 2 invalid token
+            if($wt_coin['err'] == 0)
+            {
+                $coin = $pc->pricing_format($wt_coin['total_coin']);
+            }
+            else
+            {
+                $coin = 0;
+            }
         }
-        return view('home.wallet',['lang'=>new Lang,'pc'=>new Price,'data'=>$tr]);
+
+        return view('home.wallet',['lang'=>new Lang,'pc'=>new Price,'data'=>$tr,'coin'=>$coin]);
     }
 
     public function update_profile(Request $request)

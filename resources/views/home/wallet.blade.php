@@ -6,23 +6,25 @@
         <div class="col-md-9">
             <div class="card">
                 <div class="card-header bg-danger text-white">{{ $lang::get('custom.wallet') }}
-                    <div class="float-right">{{ $lang::get('custom.coin') }} : <b>{{ $pc->pricing_format(Auth::user()->coin) }}</b></div>
+                    <div class="float-right">{{ $lang::get('custom.coin') }} : <b id="coin">{{ $pc->pricing_format(Auth::user()->coin) }}</b></div>
                     <span class="clearfix"></span>
                 </div>
 
                 <div id="msg"><!-- message --></div>
 
                 <div class="card-body">
-                    <form id="profile">
+                    <form id="wallet_coin">
                     
-                        <div class="alert alert-info">Silahkan hubungkan akun watcherviews anda di link ini <a href="{{ url('connect_api') }}">connect api</a></div>
+                        @if(auth()->user()->watcherviews_id == 0)
+                          <div class="alert alert-info">Silahkan hubungkan akun watcherviews anda di link ini <a href="{{ url('account') }}">connect api</a></div>
+                        @endif
 
                         <span class="error wallet"><!--  --></span>
                         <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.wt') }}</label>
 
                             <div class="col-md-6">
-                               <label for="name" class="col-form-label text-md-right"><b>50.000</b></label>
+                               <label for="name" class="col-form-label text-md-right"><b id="total_coin">{!! $coin !!}</b></label>
                             </div>
                         </div>
 
@@ -31,13 +33,13 @@
 
                             <div class="col-md-6">
                                <div class="form-check">
-                                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
+                                  <input class="form-check-input" type="radio" name="wallet_option" id="flexRadioDefault1" value="1" checked>
                                   <label class="form-check-label" for="flexRadioDefault1">
                                     {{ $lang::get('transaction.wd') }}
                                   </label>
                                 </div>
                                 <div class="form-check">
-                                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+                                  <input class="form-check-input" type="radio" name="wallet_option" value="2" id="flexRadioDefault2">
                                   <label class="form-check-label" for="flexRadioDefault2">
                                     {{ $lang::get('transaction.send') }}
                                   </label>
@@ -49,7 +51,7 @@
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.total.coin') }}</label>
 
                             <div class="col-md-6">
-                               <input class="form-control" type="number" name="wd_coin" />
+                               <input class="form-control" type="number" name="coin_ammount" />
                                <span class="error wd_coin"><!--  --></span>
                             </div>
                         </div>
@@ -135,18 +137,18 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        withdraw_coin();
+        transaction_coin();
     });
 
-    function withdraw_coin()
+    function transaction_coin()
     {
-        $("#profile").submit(function(e){
+        $("#wallet_coin").submit(function(e){
             e.preventDefault();
 
             $.ajax({
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                 type : 'POST',
-                url : "{{ url('wallet-top-up') }}",
+                url : "{{ url('wallet-transaction') }}",
                 dataType : 'json',
                 data : $(this).serialize(),
                 beforeSend: function()
@@ -162,28 +164,21 @@
 
                     if(result.err == 0)
                     {
-                        var cur_coin = $("#coin").attr('data-coin');
-                        cur_coin = parseInt(cur_coin);
-                        cur_coin += result.coin;
+                        cur_coin = parseInt(result.wallet_coin);
                         $("#coin").html(formatNumber(cur_coin));
+                        $("#total_coin").html(formatNumber(parseInt(result.total_coin)));
                         $("#msg").html('<div class="alert alert-success">{{ $lang::get("custom.success_coin") }}</div>');
                         $("input").val('');
                     }
                     else if(result.err == 1)
                     {
                         $(".error").show();
-                        $(".wallet").html('{{ $lang::get("auth.credential") }}');
+                        $(".wallet").html('<div class="alert alert-danger">{{ $lang::get("custom.failed") }}--</div>');
                     }
                     else if(result.err == 2)
                     {
                         $(".error").show();
-                        $(".wallet").html('{{ $lang::get("custom.failed") }}');
-                    }
-                    else if(result.err == 'validation')
-                    {
-                        $(".error").show();
-                        $(".wt_email").html(result.wt_email);
-                        $(".wt_pass").html(result.wt_pass);
+                        $(".wallet").html('<div class="alert alert-danger">{{ $lang::get("custom.failed") }}</div>');
                     }
                     else if(result.pkg !== undefined)
                     {
