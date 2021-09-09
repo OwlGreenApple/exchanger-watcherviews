@@ -6,7 +6,7 @@
         <div class="col-md-9">
             <div class="card">
                 <div class="card-header bg-danger text-white">{{ $lang::get('custom.wallet') }}
-                    <div class="float-right">{{ $lang::get('custom.coin') }} : <b id="coin">{{ $pc->pricing_format(Auth::user()->coin) }}</b></div>
+                    <div class="float-right">{{ $lang::get('custom.coin') }} : <b id="coin">{{ $pc->pricing_format(Auth::user()->coin) }}</b>&nbsp;coin</div>
                     <span class="clearfix"></span>
                 </div>
 
@@ -16,15 +16,15 @@
                     <form id="wallet_coin">
                     
                         @if(auth()->user()->watcherviews_id == 0)
-                          <div class="alert alert-info">Silahkan hubungkan akun watcherviews anda di link ini <a href="{{ url('account') }}">connect api</a></div>
-                        @endif
+                          <div class="alert alert-info">Silahkan hubungkan akun watcherviews anda di link ini <a href="{{ url('account') }}/wallet">connect wallet</a></div>
+                        @else
 
                         <span class="error wallet"><!--  --></span>
                         <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.wt') }}</label>
 
                             <div class="col-md-6">
-                               <label for="name" class="col-form-label text-md-right"><b id="total_coin">{!! $coin !!}</b></label>
+                               <label for="name" class="col-form-label text-md-right"><b id="total_coin">{!! $coin !!}</b>&nbsp;coin</label>
                             </div>
                         </div>
 
@@ -35,7 +35,7 @@
                                <div class="form-check">
                                   <input class="form-check-input" type="radio" name="wallet_option" id="flexRadioDefault1" value="1" checked>
                                   <label class="form-check-label" for="flexRadioDefault1">
-                                    {{ $lang::get('transaction.wd') }}
+                                    {{ $lang::get('transaction.wd') }}&nbsp;(min : <b>100.000</b>)
                                   </label>
                                 </div>
                                 <div class="form-check">
@@ -52,7 +52,7 @@
 
                             <div class="col-md-6">
                                <input class="form-control" type="number" name="coin_ammount" />
-                               <span class="error wd_coin"><!--  --></span>
+                               <span class="error coin_ammount"><!--  --></span>
                             </div>
                         </div>
 
@@ -65,8 +65,10 @@
                         </div>
                     </form>
                 </div>
+                @endif
             </div>
             <!--  -->
+            @if(auth()->user()->watcherviews_id > 0)
             <div class="card">
                 <div class="card-body">
                     <table class="table table-bordered w-100" style="font-size : 0.65rem" id="data_transaction">
@@ -130,6 +132,7 @@
                     </table>
                 </div>
             </div>
+            @endif
             <!--  -->
         </div>
     </div>
@@ -164,11 +167,12 @@
 
                     if(result.err == 0)
                     {
+                        $(".alert-success").show();
                         cur_coin = parseInt(result.wallet_coin);
                         $("#coin").html(formatNumber(cur_coin));
                         $("#total_coin").html(formatNumber(parseInt(result.total_coin)));
-                        $("#msg").html('<div class="alert alert-success">{{ $lang::get("custom.success_coin") }}</div>');
-                        $("input").val('');
+                        $("#msg").html('<div class="alert alert-success text-center">{{ $lang::get("custom.success_coin") }}</div>');
+                        $("input[name='coin_ammount']").val('');
                     }
                     else if(result.err == 1)
                     {
@@ -180,7 +184,22 @@
                         $(".error").show();
                         $(".wallet").html('<div class="alert alert-danger">{{ $lang::get("custom.failed") }}</div>');
                     }
-                    else if(result.pkg !== undefined)
+                    else if(result.err == 'trial')
+                    {
+                        $(".error").show();
+                        $(".wallet").html('<div class="alert alert-danger">{{ Lang::get("custom.trial.wallet") }} <a href="{{ url("checkout") }}">{{ Lang::get("custom.here") }}</a></div>');
+                    }
+                    else if(result.err == 'validation')
+                    {
+                        $(".error").show();
+                        $(".coin_ammount").html(result.coin_ammount);
+                    }
+                    else if(result.err == 'coin')
+                    {
+                        $(".error").show();
+                        $(".coin_ammount").html(result.coin);
+                    }
+                    /*else if(result.pkg !== undefined)
                     {
                         $(".error").show();
                         $(".wallet").html(result.pkg);
@@ -189,13 +208,17 @@
                     {
                         $(".error").show();
                         $(".wallet").html(result.max);
-                    }
+                    }*/
                     else
                     {
                         $(".error").show();
                         $(".wt_email").html(result.wt_email);
                         $(".wt_pass").html(result.wt_pass);
                     }
+                },
+                complete :function()
+                {
+                  $(".alert-success").delay(3000).fadeOut(2000);
                 },
                 error : function()
                 {

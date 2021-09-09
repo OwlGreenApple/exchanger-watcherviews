@@ -9,7 +9,7 @@ return [
     'cart_summary'=>'Keranjang summary', //summary.blade
     'check'=>'Harap centang, syarat dan ketentuan yang berlaku', //register.blade//summary.blade
     'currency'=>'Rp', //navigation
-    'coin'=>'Jumlah coin anda di wallet', //wallet.blade
+    'coin'=>'My Wallet', //wallet.blade
     'conf_order'=>'Order konfirmasi anda akan di email ke : ', //summary.blade
     'connect'=>'Sambungkan ke watcherviews', //connect_api.blade
     'create_account'=>'Buat Akun', //summary.blade
@@ -24,8 +24,8 @@ return [
     'have_account'=>'Sudah punya akun ?', //summary.blade
     'here'=>'disini', //trial.blade
     'intl'=>'Masukkan no hp anda tanpa di awali 0 atau kode negara<br/>Contoh : 8123456789, (201)5555555', //order.index.blade
+    'inscoin'=>'Jumlah coin di wallet anda tidak cukup', //CheckMaxCoin
     'inv_id'=>'ID tidak valid', //summary.blade
-    'trade'=>'Kurs', //kurs.blade
     'login'=>'Login di sini', //summary.blade
     'log_in'=>'Masuk', //summary.blade
     'male'=>'Pria',//summary.blade
@@ -52,14 +52,16 @@ return [
     'review'=>'Harap periksa lagi email dan nomer hp anda sebelum melanjutkan order', //summary.blade
     'save'=>'Simpan', //wallet.blade
     'success'=>'Data and telah di simpan',
-    'success_coin'=>'Koin anda berhasil di tarik dari akun watcherviews anda',
+    'success_coin'=>'Transaksi berhasil',
     'sell'=>'Kesempatan jual per hari',
     'terms'=>'Syarat dan ketentuan yang berlaku', //checkout.blade
     'tiktok_url'=>'Tiktok URL',
     'tk_link'=>'Mohon gunakan tiktok link yang valid',
+    'trade'=>'Kurs', //kurs.blade
     'trial'=>'Maaf trial anda sudah habis, jika anda masih ingin menjual koin, silahkan beli membership',
+    'trial.wallet'=>'Maaf trial anda sudah habis, jika anda ingin melakukkan transaksi, silahkan beli membership',
     'unique_phone'=>'No yang anda masukkan sudah terdaftar', //rule.CheckUniquePhone
     'valid'=>'tidak valid', //CheckPricing
     'verify_account'=>'Verifikasi Akun', //summary.blade
-    'wallet'=>'Tarik / Kirim Coin', //wallet.blade
+    'wallet'=>'Wallet', //wallet.blade
 ];

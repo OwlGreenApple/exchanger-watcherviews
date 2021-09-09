@@ -20,10 +20,25 @@ class CheckMaxCoin
     public function handle(Request $request, Closure $next)
     {
         $error = false;
-        $rules = [
-            'wt_email'=>['required','email'],
-            'wt_pass'=>['required','max:255'],
-        ];
+        $method = $request->wallet_option;
+        $auth = Auth::user();
+        $wallet = $auth->coin;
+
+        if($method == 1)
+        {
+            $rules = [
+            'coin_ammount'=>['required','numeric','min:100000'],
+            ];
+        }
+        else
+        {
+            $rules = [
+                'coin_ammount'=>['required','numeric'],
+            ];
+
+            $wallet = $wallet - $request->coin_ammount;
+        }
+        
         $validator = Validator::make($request->all(),$rules);
         if($validator->fails())
         {
@@ -31,12 +46,18 @@ class CheckMaxCoin
             $err = $validator->errors();
             $errors = [
                 'err'=>'validation',
-                'wt_email'=>$err->first('wt_email'),
-                'wt_pass'=>$err->first('wt_pass'),
+                'coin_ammount'=>str_replace(["100000","coin ammount"],['100.000','jumlah coin'],$err->first('coin_ammount')),
             ];
-        }
+        } 
 
-        $price = new Price;
+        if($wallet < 0)
+        {
+            $error = true;
+            $errors['err'] = 'coin';
+            $errors['coin'] = Lang::get('custom.inscoin');
+        }       
+
+        /*$price = new Price;
         $auth = Auth::user();
         $wallet = $auth->coin;
         $package = $price->check_type($auth->membership);
@@ -53,7 +74,7 @@ class CheckMaxCoin
         {
             $error = true;
             $errors['max'] = Lang::get('custom.max');
-        }
+        }*/
 
         if($error == true)
         {

@@ -9,11 +9,21 @@
 
                 <div id="msg"><!-- message --></div>
 
+                @if(auth()->user()->bank_name == null && auth()->user()->bank_no == null  && auth()->user()->ovo == null  && auth()->user()->gopay == null  && auth()->user()->dana == null)
+
+                <div class="alert alert-info">Mohon isi metode pembayaran anda <a href="{{ url('account') }}">disini</a></div>
+
+                @else
                 <div class="card-body">
                     <form id="profile">
-                    
-                        <div class="float-right">{{ $lang::get('transaction.total.coin') }}&nbsp;:&nbsp;<b>{{ $pc->pricing_format(Auth::user()->coin) }}</b></div>
-                        <div class="clearfix mb-2"><!--  --></div>
+
+                        <div class="form-group row">
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.total.coin') }}</label>
+
+                            <div class="col-md-6 py-2">
+                                 <b>{{ $pc->pricing_format(Auth::user()->coin) }}</b>
+                            </div>
+                        </div>
 
                         <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.sell') }}</label>
@@ -25,11 +35,10 @@
                         </div>
 
                          <div class="form-group row">
-                            <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.fee') }}&nbsp;(x%)</label>
+                            <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.fee') }}&nbsp;({{$fee}} %)</label>
 
                             <div class="col-md-6">
-                                <input type="text" class="form-control" name="tr_product" />
-                                <span class="error tr_product"><!--  --></span>
+                                <div id="fee" class="form-control"><!--  --></div>
                             </div>
                         </div> 
 
@@ -59,9 +68,13 @@
                         </div>
                     </form>
                 </div>
+                @endif
             </div>
             <!--  -->
 
+             @if(auth()->user()->bank_name == null && auth()->user()->bank_no == null && auth()->user()->ovo == null && auth()->user()->gopay == null && auth()->user()->dana == null)
+
+             @else
             <div class="card mt-4">
                 <div class="card-body">
                 <h4>History Penjualan</h4>
@@ -74,21 +87,9 @@
                         <th>Kurs</th>
                         <th>Harga</th>
                         <th>Tanggal Beli</th>
-                        <th>Action</th>
+                        <th>&nbsp;</th>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>2021-09-02</td>
-                            <td>B-20210902-001</td>
-                            <td>pak test</td>
-                            <td>100.000</td>
-                            <td>0.1</td>
-                            <td>Rp 10.000</td>
-                            <td>2021-09-03</td>
-                            <td>
-                                <a target="_blank" href="{{ url('seller-dispute') }}" class="btn btn-warning btn-sm">Dispute</a>
-                            </td>
-                        </tr>
                         <tr>
                             <td>2021-09-02</td>
                             <td>B-20210902-002</td>
@@ -98,7 +99,7 @@
                             <td>Rp 15.000</td>
                             <td>2021-09-04</td>
                             <td>
-                                <a target="_blank" href="{{ url('transfer') }}" class="btn btn-danger btn-sm">Hapus</a>
+                                <a target="_blank" href="{{ url('transfer') }}" class="text-danger"><i class="fas fa-trash-alt"></i></a>
                             </td>
                         </tr>
                         <tr>
@@ -110,14 +111,26 @@
                             <td>Rp 20.000</td>
                             <td>2021-09-06</td>
                             <td>
-                                <a target="_blank" href="{{ url('transfer') }}" class="btn btn-info btn-sm">Transfer</a>
+                                <a target="_blank" href="{{ url('transfer') }}" class="btn btn-info btn-sm">Konfirmasi</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2021-09-06</td>
+                            <td>B-20210902-003</td>
+                            <td></td>
+                            <td>100.000</td>
+                            <td>0.2</td>
+                            <td>Rp 20.000</td>
+                            <td>2021-09-06</td>
+                            <td>
+                                <span class="text-black-50">Lunas</span>
                             </td>
                         </tr>
                     </tbody>
                 </table>
                 </div>
             </div>
-
+            @endif
             <!-- end col -->
         </div> 
     </div>
@@ -127,7 +140,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
         data_table();
-        withdraw_coin();
+        sell_coin();
     });
 
     function data_table()
@@ -135,7 +148,7 @@
         $("#selling").DataTable();
     }
 
-    function withdraw_coin()
+    function sell_coin()
     {
         $("#profile").submit(function(e){
             e.preventDefault();
@@ -143,7 +156,7 @@
             $.ajax({
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                 type : 'POST',
-                url : "{{ url('wallet-top-up') }}",
+                url : "{{ url('selling') }}",
                 dataType : 'json',
                 data : $(this).serialize(),
                 beforeSend: function()

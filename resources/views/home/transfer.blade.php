@@ -6,16 +6,20 @@
         <div class="col-md-9">
             <div class="card">
                 <div class="card-header bg-warning">
-                    Transfer Coin
-                </div>
+                    Konfirmasi Penjualan
+                </div> 
 
                 <div class="card-body">
-                    <h5>Anda akan transfer koin dengan detail :</h5>
-                    <div>Pembeli : Test2</div>
-                    <div>Email : Test2@mail.com</div>
+                    <h5>Anda akan konfirmasi penjualan koin anda dengan detail :</h5>
+                    <div>Nama : Test2</div>
+                    <div>No Invoice  : GS210909-01</div>
                     <div>Jumlah Coin : <b>100.000</b></div>
-                    <a type="button" class="btn btn-warning">Transfer</a>
+                    <div>Total : Rp <b>10.000</b></div>
+                    <div>Bukti Bayar  : <img width="300" height="300" src="https://www.pintarcaricuan.com/wp-content/uploads/2021/02/Bukti-Transfer-ATM-BCA.jpg"/></div>
+                    <a type="button" class="btn btn-warning">Konfirmasi</a>
                     <a type="button" class="btn btn-warning">Kembali</a>
+                    <a target="_blank" href="{{ url('seller-dispute') }}" class="btn btn-danger">Dispute</a>
+                    
                 </div>
 
 

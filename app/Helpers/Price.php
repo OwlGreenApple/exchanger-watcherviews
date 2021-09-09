@@ -1,6 +1,7 @@
 <?php
 namespace App\Helpers;
 use App\Models\Transaction;
+use App\Models\Kurs;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
 
@@ -73,6 +74,12 @@ class Price
     	}
 
     	return $response ;
+    }
+
+    public static function get_rate()
+    {
+        $rate = Kurs::select('kurs')->orderBy('id','desc')->first();
+        return $rate->kurs;
     }
 
 /*end of class*/

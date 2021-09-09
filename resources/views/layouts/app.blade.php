@@ -94,7 +94,7 @@
                                     <a class="nav-link" href="{{ url('home') }}">{{ Lang::get('transaction.home') }}</a>
                                 </li> -->
                                 <li class="nav-item">
-                                    <li class="nav-link"><a href="{{ url('trade') }}">{{ Lang::get('transaction.trade') }}</a>&nbsp;<span class="border border-success px-1">{{ Lang::get('custom.currency') }} 0.1/coin</span></li>
+                                    <li class="nav-link"><a href="{{ url('trade') }}">{{ Lang::get('transaction.trade') }}</a>&nbsp;<span class="border border-success px-1">{{ Lang::get('custom.currency') }} {{ Price::get_rate() }}/coin</span></li>
                                 </li>
 
                                 <li class="nav-item">

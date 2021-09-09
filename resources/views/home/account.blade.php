@@ -80,7 +80,8 @@
                     @else
                         <div class="msg"><!--  --></div>
                         @if($user->watcherviews_id > 0)
-                            <div class="alert alert-info">{{ Lang::get('auth.api') }} : <b><a id="logout">logout</a></b></div>
+                             <div class="alert alert-info"> Silahkan tarik coin anda dari watcherviews <b><a href="{{ url('wallet') }}">disini</a></b></div>
+                            <div class="alert alert-info">{{ Lang::get('auth.api') }} : <u><a id="logout_watcherviews">Disconnect API</a></u></div>
                         @else
                             @include('home.connect_api')
                         @endif
@@ -106,6 +107,7 @@
         load_page();
         save_profile();
         connect_api();
+        logout_watcherviews();
     });
 
     function data_tabs()
@@ -119,6 +121,14 @@
             $(".mn").removeClass('collapsed');
             $("#collapseExample").removeClass('collapse');
             $("#collapseExample").addClass('collapse show');
+        }
+
+        if(segment == 'wallet')
+        {
+            $(".target_hide").addClass('d-none');
+            $(".settings").removeClass('active');
+            $("#settings_target_4").removeClass('d-none');
+            $(".mn_4").addClass('active');
         }
 
         $(".settings").click(function(){
@@ -243,7 +253,7 @@
 
                     if(result.err == 0)
                     {
-                        $("#connect_api_gui").html('<div class="alert alert-info">{{ Lang::get("auth.api") }} : <b><a id="logout">logout</a>')
+                        $("#connect_api_gui").html('<div class="alert alert-info">{{ Lang::get("auth.api") }} : <b><a id="logout_watcherviews">logout</a>')
                         $("input").val('');
                     }
                     else if(result.err == 1)
@@ -279,6 +289,49 @@
                     $('.div-loading').removeClass('background-load');
                 }
             });
+        });
+    }
+
+    function logout_watcherviews()
+    {
+        $("body").on("click","#logout_watcherviews",function(){
+            logout('logout-watcherviews');
+        });
+    }
+
+    function logout(url)
+    {
+         $.ajax({
+            type : 'GET',
+            url : "{{ url('') }}/"+url,
+            dataType : 'json',
+            data : $(this).serialize(),
+            beforeSend: function()
+            {
+               $('#loader').show();
+               $('.div-loading').addClass('background-load');
+               $(".error").hide();
+            },
+            success : function(result)
+            {
+                if(result.err == 0)
+                {
+                    location.href="{{ url('account') }}/wallet";
+                }
+                else
+                {
+                    $(".wallet").html('<div class="alert alert-danger">'+result.err+'</div>');
+                }
+            },
+            complete : function()
+            {
+               $('#loader').hide();
+               $('.div-loading').removeClass('background-load');
+            },
+            error: function(){
+               $('#loader').hide();
+               $('.div-loading').removeClass('background-load');
+            }
         });
     }
 

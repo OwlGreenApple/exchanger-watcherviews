@@ -99,7 +99,29 @@
                             <td>Rp 10.000</td>
                             <td><a href="{{ url('comments') }}"><i class="far fa-envelope"></i></a></td>
                             <td>
-                                <a target="_blank" href="{{ url('buyer-dispute') }}" class="btn btn-warning btn-sm">Dispute</a>
+                                <a target="_blank" href="{{ url('buyer-dispute') }}" class="btn btn-danger btn-sm">Dispute</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2021-09-02</td>
+                            <td>B-210903-001</td>
+                            <td>100.000</td>
+                            <td>0.1</td>
+                            <td>Rp 10.000</td>
+                            <td><a href="{{ url('comments') }}"><i class="far fa-envelope"></i></a></td>
+                            <td>
+                                <span class="btn alert-warning">Proses</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2021-09-02</td>
+                            <td>B-210903-001</td>
+                            <td>100.000</td>
+                            <td>0.1</td>
+                            <td>Rp 10.000</td>
+                            <td><a href="{{ url('comments') }}"><i class="far fa-envelope"></i></a></td>
+                            <td>
+                                <span class="btn alert-success">Lunas</span>
                             </td>
                         </tr>
                     </tbody>

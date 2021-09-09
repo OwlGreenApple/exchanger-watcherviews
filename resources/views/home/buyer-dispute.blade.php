@@ -16,13 +16,15 @@
                             <input type="text" class="form-control" value="SL-20210902-001">
                           </div>
                           <div class="form-group">
+                            <label for="fl">Upload KTP(Transfer Bank) / Profile (DANA/OVO/GOPAY)</label>
+                            <input type="file" class="form-control" name="ktp" id="fl">
+                          </div>
+                          
+                          <div class="form-group">
                             <label for="fl">Upload Bukti Transfer</label>
                             <input type="file" class="form-control" name="bukti" id="fl">
                           </div>
-                          <div class="form-group">
-                            <label for="fl">Upload KTP</label>
-                            <input type="file" class="form-control" name="ktp" id="fl">
-                          </div>
+                          
                           <div class="form-group">
                             <label for="fl">Upload Mutasi</label>
                             <input type="file" class="form-control" name="mutasi" id="fl">

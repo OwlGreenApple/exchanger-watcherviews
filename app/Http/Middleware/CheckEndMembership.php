@@ -25,7 +25,7 @@ class CheckEndMembership
 
         if( ($membership == 'free' && $trial == 0) || (Carbon::now()->gte($end_membership)))
         {
-            return redirect('end');
+            return response()->json(['err'=>'trial']);
         }
 
         return $next($request);

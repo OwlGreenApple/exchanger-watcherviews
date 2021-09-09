@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\QueryException;
 use App\Models\Orders;
 use App\Models\User;
 use App\Models\Transaction;
@@ -206,11 +207,6 @@ class HomeController extends Controller
         return view('home.buy',['lang'=>new Lang,'pc'=>new Price]);
     }
 
-    public function selling_page()
-    {
-        return view('home.sell',['lang'=>new Lang,'pc'=>new Price]);
-    }
-
     public function wallet()
     {
         $tr = Transaction::where('user_id',Auth::id())->get();
@@ -244,6 +240,10 @@ class HomeController extends Controller
         $user->name = strip_tags($request->name);
         $user->bank_name = strip_tags($request->bank_name);
         $user->bank_no = strip_tags($request->bank_no);
+
+        $user->ovo = $request->file('ovo');
+        $user->gopay = $request->file('gopay');
+        $user->dana = $request->file('dana');
 
         if($request->newpass !== null)
         {

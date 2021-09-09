@@ -5,9 +5,13 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card px-3 py-3">
+                <div class="col-lg-12 text-right">
+                     <div><a href="{{ url('account') }}/wallet"><i class="fas fa-plug text-primary"></i>&nbsp;Connect API</a></div>
+                    <div>Status : <b>Connected</b></div>
+                </div>
                 <div class="mt-3 col-md-12 mb-3">
                     <div class="row">
-                        <div class="col-lg-3">
+                        <div class="col-lg-4">
                             <div class="card text-white text-center bg-primary ml-auto" style="max-width: 18rem;">
                               <div class="card-header"><a class="text-white" href="{{ url('buy') }}">Total Penjualan</a></div>
                               <div class="card-body">
@@ -16,7 +20,7 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-3">
+                        <div class="col-lg-4">
                             <div class="card text-white text-center bg-success ml-auto" style="max-width: 18rem;">
                               <div class="card-header"><a class="text-white" href="{{ url('buy') }}">Total Pembelian</a></div>
                               <div class="card-body">
@@ -25,23 +29,15 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-3">
+                        <div class="col-lg-4">
                             <div class="card text-dark text-center bg-warning" style="max-width: 18rem;">
-                              <div class="card-header"><a class="text-dark" href="{{ url('wallet') }}">Total Coins</a></div>
+                              <div class="card-header"><a class="text-dark" href="{{ url('wallet') }}">My Coins</a></div>
                               <div class="card-body">
                                 <h2 class="card-title">100.000</h2>
                               </div>
                             </div>
                         </div>
 
-                        <div class="col-lg-3">
-                            <div class="card text-dark text-center bg-danger" style="max-width: 18rem;">
-                              <div class="card-header"><a class="text-dark" href="{{ url('wallet') }}">Coin Watcherviews</a></div>
-                              <div class="card-body">
-                                <h2 class="card-title">1000.000</h2>
-                              </div>
-                            </div>
-                        </div>
                     </div>
                     
                 </div>

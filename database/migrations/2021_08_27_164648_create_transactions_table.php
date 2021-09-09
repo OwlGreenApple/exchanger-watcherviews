@@ -15,10 +15,15 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->BigInteger('user_id');
+            $table->BigInteger('seller_id');
+            $table->BigInteger('buyer_id')->default(0);
             $table->string('no');
-            $table->boolean('type')->default(3);
+            $table->float('kurs')->default(0);
+            $table->string('upload')->nullable();
+            $table->integer('coin_fee');
             $table->integer('amount');
+            $table->integer('total');
+            $table->string('date_buy')->nullable();
             $table->timestamps();
             $table->boolean('status')->default(0);
         });
