@@ -68,5 +68,6 @@ class Kernel extends HttpKernel
         'check_coin' => \App\Http\Middleware\CheckMaxCoin::class,
         'end_membership' => \App\Http\Middleware\CheckEndMembership::class,
         'check_connection' => \App\Http\Middleware\CheckValidConnect::class,
+        'check_sell' => \App\Http\Middleware\CheckSelling::class,
     ];
 }

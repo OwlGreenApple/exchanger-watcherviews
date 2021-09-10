@@ -25,13 +25,15 @@ class SellerController extends Controller
 
     public function selling_save(Request $request)
     {
-    	$coin = $request->tr_coin;
+    	$coin = str_replace(".","",$request->tr_coin);
+    	$coin = (int)$coin;
+
     	$pc = new Price;
         $fee = $pc->check_type(Auth::user()->membership)['fee'];
         $rate = $pc::get_rate();
         $coin_fee = ($coin * $fee)/100;
-        $total_coin = $coin - $coin_fee;
-        $total_price = $rate * $total_coin;
+        $total_coin = $coin + $coin_fee;
+        $total_price = round($rate * $coin);
         $seller_name = Auth::user()->name;
         $invoice_name = self::get_name($seller_name);
 
@@ -44,13 +46,19 @@ class SellerController extends Controller
         $tr->no = $order_number;
         $tr->kurs = $rate;
         $tr->coin_fee = $coin_fee;
-        $tr->amount = $total_coin;
+        $tr->amount = $coin;
         $tr->total = $total_price;
+
+        $user = User::find(Auth::id());
+        $coin = $user->coin;
+        $user->coin -= $total_coin;
 
         try
         {
+        	$user->save();
         	$tr->save();
         	$data['err'] = 0;
+        	$data['wallet'] = $user->coin;
         }
         catch(QueryException $e)
         {
@@ -59,6 +67,57 @@ class SellerController extends Controller
         }
 
         return response()->json($data);
+    }
+
+    // DISPLAY TRANSACTION
+    public function display_sell(Request $request)
+    {
+    	$data = array();
+    	$tr = Transaction::where('transactions.seller_id','=',Auth::id())->leftJoin('users','transactions.buyer_id','=','users.id')->select('transactions.*','users.name as buyer')->orderBy('transactions.id','desc')->get();
+
+    	if($tr->count() > 0)
+    	{
+
+    		foreach($tr as $row):
+    			if($row->status == 0)
+	    		{
+	    			$status = '<a data-id="'.$row->id.'" class="text-danger del_sell"><i class="fas fa-trash-alt"></i></a>';
+	    		}
+	    		elseif($row->status == 1)
+	    		{
+	    			$status = '<a target="_blank" href="'.url("transfer").'/'.$row->id.'" class="btn btn-info btn-sm">Konfirmasi</a>';
+	    		}
+	    		else
+	    		{
+	    			$status = '<span class="text-black-50">Lunas</span>';
+	    		}
+
+	    		if($row->date_buy == null)
+	    		{
+	    			$date_buy = '-';
+	    		}
+	    		else
+	    		{
+	    			$date_buy = $row->date_buy;
+	    		}
+
+	    		$price = new Price;
+    			$data[] = [
+    				'id'=>$row->id,
+    				'no'=>$row->no,
+    				'buyer'=>$row->buyer,
+    				'amount'=>$price->pricing_format($row->amount),
+    				'coin_fee'=>$price->pricing_format($row->coin_fee),
+    				'kurs'=>$row->kurs,
+    				'total'=>'Rp '.$price->pricing_format($row->total),
+    				'created_at'=>$row->created_at,
+    				'date_buy'=>$date_buy,
+    				'status'=>$status,
+    			];
+    		endforeach;
+    	}
+
+    	return view('seller.sell-content',['data'=>$data]);
     }
 
     // GET ORDER NUMBER FROM TRANSACTION

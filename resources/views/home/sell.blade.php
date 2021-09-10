@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-9">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header bg-warning text-black">{{ $lang::get('transaction.sell.title') }}</div>
 
@@ -21,7 +21,7 @@
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.total.coin') }}</label>
 
                             <div class="col-md-6 py-2">
-                                 <b>{{ $pc->pricing_format(Auth::user()->coin) }}</b>
+                                 <b id="wallet_coin">{{ $pc->pricing_format(Auth::user()->coin) }}</b>
                             </div>
                         </div>
 
@@ -29,7 +29,7 @@
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.sell') }}</label>
 
                             <div class="col-md-6">
-                                 <input type="number" class="form-control" min="100000" name="tr_coin" />
+                                 <input id="amount" type="text" class="form-control" name="tr_coin" autocomplete="off" />
                                 <span class="error tr_coin"><!--  --></span>
                             </div>
                         </div>
@@ -38,7 +38,7 @@
                             <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.fee') }}&nbsp;({{$fee}} %)</label>
 
                             <div class="col-md-6">
-                                <div id="fee" class="form-control"><!--  --></div>
+                                <div id="fee" class="form-control border-top-0 border-left-0 border-right-0"><!--  --></div>
                             </div>
                         </div> 
 
@@ -46,7 +46,7 @@
                             <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.total') }}&nbsp;{{ $lang::get('custom.currency') }}</label>
 
                             <div class="col-md-6">
-                                <div id="coin" class="form-control"></div>
+                                <div id="coin" class="form-control border-top-0 border-left-0 border-right-0 font-weight-bold"></div>
                                <span class="error wallet"><!--  --></span>
                             </div>
                         </div> 
@@ -78,56 +78,7 @@
             <div class="card mt-4">
                 <div class="card-body">
                 <h4>History Penjualan</h4>
-                <table class="table" id="selling">
-                    <thead>
-                        <th>Tanggal</th>
-                        <th>Invoice</th>
-                        <th>Nama Pembeli</th>
-                        <th>Total Coin</th>
-                        <th>Kurs</th>
-                        <th>Harga</th>
-                        <th>Tanggal Beli</th>
-                        <th>&nbsp;</th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>2021-09-02</td>
-                            <td>B-20210902-002</td>
-                            <td></td>
-                            <td>100.000</td>
-                            <td>0.15</td>
-                            <td>Rp 15.000</td>
-                            <td>2021-09-04</td>
-                            <td>
-                                <a target="_blank" href="{{ url('transfer') }}" class="text-danger"><i class="fas fa-trash-alt"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2021-09-06</td>
-                            <td>B-20210902-003</td>
-                            <td></td>
-                            <td>100.000</td>
-                            <td>0.2</td>
-                            <td>Rp 20.000</td>
-                            <td>2021-09-06</td>
-                            <td>
-                                <a target="_blank" href="{{ url('transfer') }}" class="btn btn-info btn-sm">Konfirmasi</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2021-09-06</td>
-                            <td>B-20210902-003</td>
-                            <td></td>
-                            <td>100.000</td>
-                            <td>0.2</td>
-                            <td>Rp 20.000</td>
-                            <td>2021-09-06</td>
-                            <td>
-                                <span class="text-black-50">Lunas</span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                    <div id="selling"><!--  --></div>
                 </div>
             </div>
             @endif
@@ -138,14 +89,70 @@
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function(){
-        data_table();
+    var coin_fee = "{{ $fee }}";
+    var kurs = "{{ Price::get_rate() }}";
+
+    $(document).ready(function()
+    {
+        count_logic();
         sell_coin();
+        display_sell();
     });
 
-    function data_table()
+    function count_logic()
     {
-        $("#selling").DataTable();
+        $("#amount").on("keyup",delay(function(e){
+            var coin = $(this).val();
+            $("#amount").val(formatNumber(coin));
+
+            var rcoin = return_number(coin);
+            fee = (rcoin * coin_fee)/100;
+            $("#fee").html(formatNumber(fee));
+
+            var total = parseFloat(kurs) * rcoin;
+            total = Math.round(total);
+            $("#coin").html(formatNumber(total));
+            
+        },100));
+    }
+
+     function delay(callback, ms) {
+      var timer = 0;
+      return function() {
+        var context = this, args = arguments;
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+          callback.apply(context, args);
+        }, ms || 0);
+      };
+    }
+
+    function display_sell()
+    {
+        $.ajax({
+            type : 'GET',
+            url : "{{ url('sell-list') }}",
+            dataType : 'html',
+            data : $(this).serialize(),
+            beforeSend: function()
+            {
+               $('#loader').show();
+               $('.div-loading').addClass('background-load');
+               $(".error").hide();
+            },
+            success : function(result)
+            {
+                $('#loader').hide();
+                $('.div-loading').removeClass('background-load');
+                $(".form-control").html('');
+                $("#selling").html(result);
+            },
+            error : function()
+            {
+                $('#loader').hide();
+                $('.div-loading').removeClass('background-load');
+            }
+        });
     }
 
     function sell_coin()
@@ -167,50 +174,32 @@
                 },
                 success : function(result)
                 {
-                    $('#loader').hide();
-                    $('.div-loading').removeClass('background-load');
-
                     if(result.err == 0)
                     {
-                        var cur_coin = $("#coin").attr('data-coin');
-                        cur_coin = parseInt(cur_coin);
-                        cur_coin += result.coin;
-                        $("#coin").html(formatNumber(cur_coin));
-                        $("#msg").html('<div class="alert alert-success">{{ $lang::get("custom.success_coin") }}</div>');
+                        $("#wallet_coin").html(formatNumber(result.wallet));
                         $("input").val('');
+                        display_sell();
                     }
                     else if(result.err == 1)
                     {
                         $(".error").show();
-                        $(".wallet").html('{{ $lang::get("auth.credential") }}');
+                        $(".tr_coin").html(result.tr_coin);
                     }
-                    else if(result.err == 2)
+                    else if(result.err == 'trial')
                     {
                         $(".error").show();
-                        $(".wallet").html('{{ $lang::get("custom.failed") }}');
-                    }
-                    else if(result.err == 'validation')
-                    {
-                        $(".error").show();
-                        $(".wt_email").html(result.wt_email);
-                        $(".wt_pass").html(result.wt_pass);
-                    }
-                    else if(result.pkg !== undefined)
-                    {
-                        $(".error").show();
-                        $(".wallet").html(result.pkg);
-                    }
-                    else if(result.max !== undefined)
-                    {
-                        $(".error").show();
-                        $(".wallet").html(result.max);
+                        $(".tr_coin").html('{!! Lang::get("custom.trial") !!} <a target="_blank" href="{{ url("account/membership") }}">{{ Lang::get("custom.here") }}</a>');
                     }
                     else
                     {
                         $(".error").show();
-                        $(".wt_email").html(result.wt_email);
-                        $(".wt_pass").html(result.wt_pass);
+                        $(".tr_coin").html(result.err);
                     }
+                },
+                complete : function()
+                {
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
                 },
                 error : function()
                 {
@@ -221,8 +210,16 @@
         });
     }
 
+    function return_number(num)
+    {
+       num = num.toString().replace(/\./g,'');
+       num = parseInt(num);
+       return num;
+    }
+
     function formatNumber(num) 
     {
+        num = num.toString().replace(/\./g,'');
         num = parseInt(num);
         if(isNaN(num) == true)
         {

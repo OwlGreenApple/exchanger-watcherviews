@@ -58,8 +58,8 @@ return [
     'tiktok_url'=>'Tiktok URL',
     'tk_link'=>'Mohon gunakan tiktok link yang valid',
     'trade'=>'Kurs', //kurs.blade
-    'trial'=>'Maaf trial anda sudah habis, jika anda masih ingin menjual koin, silahkan beli membership',
-    'trial.wallet'=>'Maaf trial anda sudah habis, jika anda ingin melakukkan transaksi, silahkan beli membership',
+    'trial'=>'Maaf trial / membership anda sudah habis, jika anda masih ingin menjual koin, silahkan beli membership',
+    'trial.wallet'=>'Maaf trial / membership anda sudah habis, jika anda ingin melakukkan transaksi, silahkan beli membership',
     'unique_phone'=>'No yang anda masukkan sudah terdaftar', //rule.CheckUniquePhone
     'valid'=>'tidak valid', //CheckPricing
     'verify_account'=>'Verifikasi Akun', //summary.blade

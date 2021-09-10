@@ -12,20 +12,9 @@ class Transaction extends Model
     protected $table = 'transactions';
 
     /*
-		type : 
-		1 -- buy
-		2 -- sell
-		3 -- withdraw coin
-
 		status : 
-		hanya untuk user tipe 'BUY'
-		0 -- transaksi sedang berjalan
-		1 -- transaksi sudah selesai
-
-		hanya untuk user tipe 'SELL'
-
 		0 -- belum ada transaksi
-		1 -- transaksi sedang berjalan
+		1 -- transaksi sedang berjalan / deal
 		2 -- transaksi sudah selesai
     */
 }

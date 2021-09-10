@@ -114,13 +114,7 @@
     {
         if(segment == 1)
         {
-            $(".target_hide").addClass('d-none');
-            $(".settings").removeClass('active');
-            $("#settings_target_3").removeClass('d-none');
-            $(".mn").addClass('active');
-            $(".mn").removeClass('collapsed');
-            $("#collapseExample").removeClass('collapse');
-            $("#collapseExample").addClass('collapse show');
+           open_billing(3);
         }
 
         if(segment == 'wallet')
@@ -129,6 +123,11 @@
             $(".settings").removeClass('active');
             $("#settings_target_4").removeClass('d-none');
             $(".mn_4").addClass('active');
+        }
+
+        if(segment == 'membership')
+        {
+            open_billing(2);
         }
 
         $(".settings").click(function(){
@@ -146,6 +145,17 @@
                 $(".mn_"+target).addClass('active');
             }
         });
+    }
+
+    function open_billing(page)
+    {
+        $(".target_hide").addClass('d-none');
+        $(".settings").removeClass('active');
+        $("#settings_target_"+page).removeClass('d-none');
+        $(".mn").addClass('active');
+        $(".mn").removeClass('collapsed');
+        $("#collapseExample").removeClass('collapse');
+        $("#collapseExample").addClass('collapse show');
     }
 
     function load_page()
