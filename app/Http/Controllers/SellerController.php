@@ -53,6 +53,11 @@ class SellerController extends Controller
         $coin = $user->coin;
         $user->coin -= $total_coin;
 
+        if($user->membership == 'free')
+        {
+        	$user->trial--;
+        }
+
         try
         {
         	$user->save();
@@ -118,6 +123,38 @@ class SellerController extends Controller
     	}
 
     	return view('seller.sell-content',['data'=>$data]);
+    }
+
+    // DELETE SELL COIN FROM MARKETS
+    public function del_sell(Request $request)
+    {
+    	$tr = Transaction::find($request->id);
+    	$user = User::find(Auth::id());
+    	$res['err'] = 1;
+
+    	if(!is_null($tr))
+    	{
+    		try{
+    			$tr->delete();
+    			$res['err'] = 0;
+    		}
+    		catch(QueryException $e)
+    		{
+    			// $e->getMessage();
+    		}
+
+    		// RETURN USER'S TRIAL IF THEY DELETED TJ
+    		if($res['err'] == 0)
+    		{
+    			if($user->trial < 3 && $user->membership == 'free')
+    			{
+    				$user->trial++;
+    				$user->save();
+    			}
+    		}
+    	}
+
+    	return response()->json($res);
     }
 
     // GET ORDER NUMBER FROM TRANSACTION

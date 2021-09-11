@@ -47,6 +47,7 @@ Route::group(['middleware'=>['auth','web']],function()
 	Route::get('sell',[App\Http\Controllers\SellerController::class, 'selling_page']);
 	Route::post('selling',[App\Http\Controllers\SellerController::class, 'selling_save'])->middleware(['end_membership','check_sell']);
 	Route::get('sell-list',[App\Http\Controllers\SellerController::class, 'display_sell']);
+	Route::get('sell-del',[App\Http\Controllers\SellerController::class, 'del_sell'])->middleware(['end_membership']);
 	Route::get('transfer',[App\Http\Controllers\HomeController::class, 'transfer']);
 	Route::get('seller-dispute',[App\Http\Controllers\HomeController::class, 'seller_dispute']);
 

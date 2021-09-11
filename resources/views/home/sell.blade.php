@@ -78,6 +78,7 @@
             <div class="card mt-4">
                 <div class="card-body">
                 <h4>History Penjualan</h4>
+                    <div id="err_msg"><!-- error --></div>
                     <div id="selling"><!--  --></div>
                 </div>
             </div>
@@ -86,6 +87,33 @@
         </div> 
     </div>
     <!-- end justify -->
+</div>
+
+<!-- Modal Delete -->
+<div class="modal fade" id="del_sell" role="dialog">
+  <div class="modal-dialog text-center">
+    
+    <!-- Modal content-->
+    <div class="modal-content col-lg-8 col-md-9 col-sm-12 col-12 mx-auto">
+      <div class="modal-header" style="display : block">
+        <h5 class="mb-0">Hapus penjualan</h5>
+        <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+      </div>
+      <div class="modal-body">
+        Apakah anda yakin akan menghapus transaksi ini?<br/>Peringatan : <b>Ini tidak dapat di kembalikan</b>
+      </div>
+      <!--  -->
+      <div class="modal-footer" id="foot">
+        <button class="btn btn-primary" id="btn-del" data-dismiss="modal">
+          {{$lang::get('order.yes')}}
+        </button>
+        <button class="btn" data-dismiss="modal">
+          {{$lang::get('order.cancel')}}
+        </button>
+      </div>
+    </div>
+      
+  </div>
 </div>
 
 <script type="text/javascript">
@@ -97,6 +125,8 @@
         count_logic();
         sell_coin();
         display_sell();
+        del_popup();
+        del_act();
     });
 
     function count_logic()
@@ -125,6 +155,64 @@
           callback.apply(context, args);
         }, ms || 0);
       };
+    }
+
+    function del_popup()
+    {
+        $("body").on("click",".del_sell",function(){
+            var id = $(this).attr('data-id');
+            $("#btn-del").attr('data-id',id);
+            $("#del_sell").modal();
+        });
+    }
+
+    function del_act()
+    {
+        $("#btn-del").click(function(){ 
+            var id = $(this).attr('data-id');
+            delete_sell(id) 
+        });
+    }
+
+    function delete_sell(id)
+    {
+        $.ajax({
+            type : 'GET',
+            url : "{{ url('sell-del') }}",
+            dataType : 'json',
+            data : {id : id},
+            beforeSend: function()
+            {
+               $('#loader').show();
+               $('.div-loading').addClass('background-load');
+               $(".error").hide();
+            },
+            success : function(result)
+            {
+                if(result.err == 0)
+                {
+                    display_sell();
+                }
+                else if(result.err == 'trial')
+                {
+                    $("#err_msg").html('<div class="alert alert-warning">{{ Lang::get("custom.trial.wallet") }} <a href="{{ url("account") }}/membership">{{ Lang::get("custom.here") }}</a></div>');
+                }
+                else
+                {
+                    $("#err_msg").html('<div class="alert alert-danger">{{ Lang::get("custom.failed") }}</div>')
+                }
+            },
+            complete : function()
+            {
+                $('#loader').hide();
+                $('.div-loading').removeClass('background-load');
+            },
+            error : function()
+            {
+                $('#loader').hide();
+                $('.div-loading').removeClass('background-load');
+            }
+        });
     }
 
     function display_sell()
