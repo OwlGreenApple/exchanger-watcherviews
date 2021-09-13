@@ -13,6 +13,7 @@ return [
     'coin_fee'=>'Biaya Koin Per Transaksi',
     'complete'=>'Selesai',
     'confirm'=>'Upload',
+    'confirm.sell'=>'Konfirmasi',
     'date'=>'Tanggal Order',
     'date_complete'=>'Tanggal Konfirmasi Admin',
     'desc'=>'Deskripsi',

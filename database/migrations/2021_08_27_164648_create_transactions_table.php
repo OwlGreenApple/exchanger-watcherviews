@@ -24,6 +24,7 @@ class CreateTransactionsTable extends Migration
             $table->integer('amount');
             $table->integer('total');
             $table->string('date_buy')->nullable();
+            $table->string('buyer_comment')->nullable();
             $table->timestamps();
             $table->boolean('status')->default(0);
         });

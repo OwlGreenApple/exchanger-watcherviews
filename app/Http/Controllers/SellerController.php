@@ -90,8 +90,12 @@ class SellerController extends Controller
 	    		}
 	    		elseif($row->status == 1)
 	    		{
-	    			$status = '<a target="_blank" href="'.url("transfer").'/'.$row->id.'" class="btn btn-info btn-sm">Konfirmasi</a>';
+	    			$status = '<span class="text-black">Menunggu konfirmasi pembeli  </span>';
 	    		}
+                elseif($row->status == 2)
+                {
+                    $status = '<a target="_blank" href="'.url("sell-confirm").'/'.$row->no.'" class="btn btn-info btn-sm">Konfirmasi</a>';
+                }
 	    		else
 	    		{
 	    			$status = '<span class="text-black-50">Lunas</span>';
@@ -125,6 +129,74 @@ class SellerController extends Controller
     	return view('seller.sell-content',['data'=>$data]);
     }
 
+    // CONFIRMATION PAGE
+    public function sell_confirm($invoice)
+    {
+    	$tr = Transaction::where([['no',$invoice],['status',2]])->first();
+    	$pc = new Price;
+
+    	if(is_null($tr))
+    	{
+    		return view('error404');
+    	}
+
+    	$user = User::find($tr->buyer_id);
+
+    	if($tr->upload == null)
+    	{
+    		$upload = '-';
+    	}
+    	else
+    	{
+    		$upload = '<img class="zoom" width="300" height="300" src="'.Storage::disk('s3')->url($tr->upload).'">';
+    	}
+
+    	$data = [
+    		'id' => $tr->id,
+    		'buyer_name' => $user->name,
+    		'no' => $tr->no,
+    		'upload'=> $upload,
+    		'coin' => $pc->pricing_format($tr->amount),
+    		'total' => $pc->pricing_format($tr->total),
+    	];
+
+        return view('seller.confirm',['row'=>$data,'pc'=>$pc]);
+    }
+
+    // SELLING CONFIRMATION
+    public function confirm_selling(Request $request)
+    {
+    	$id_transaction = $request->id;
+    	$trans = Transaction::find($id_transaction);
+
+    	if(is_null($trans))
+    	{
+    		return response()->json(['err'=>1]);
+    	}
+
+    	$buyer = User::find($trans->buyer_id);
+
+    	try
+    	{
+    		$trans->status = 3;
+    		$trans->save();
+    		$buyer->coin += $trans->amount;
+    		$buyer->save();
+    		$data['err'] = 0;
+    	}
+    	catch(QueryException $e)
+    	{
+    		$data['err'] = 1;
+    	}
+
+    	return response()->json($data);
+    }
+
+    public function thank_you()
+    {
+    	return view('seller.thankyou-confirm-seller');
+    }
+
     // DELETE SELL COIN FROM MARKETS
     public function del_sell(Request $request)
     {
@@ -155,6 +227,11 @@ class SellerController extends Controller
     	}
 
     	return response()->json($res);
+    }
+
+    public function seller_dispute()
+    {
+        return view('home.seller-dispute');
     }
 
     // GET ORDER NUMBER FROM TRANSACTION

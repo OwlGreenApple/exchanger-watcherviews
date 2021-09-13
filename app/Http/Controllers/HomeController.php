@@ -153,41 +153,6 @@ class HomeController extends Controller
         return view('home.dashboard',['lang'=>new Lang,'pc'=>new Price]);
     }
 
-    public function detail_buy()
-    {
-        return view('home.buy-detail',['lang'=>new Lang,'pc'=>new Price]);
-    }
-
-    public function deal()
-    {
-        return view('home.buy-deal',['pc'=>new Price]);
-    }
-
-    public function buyer_confirm()
-    {
-        return view('home.buyer-confirm',['pc'=>new Price]);
-    }
-
-    public function comments()
-    {
-        return view('home.comments');
-    }
-
-    public function seller_dispute()
-    {
-        return view('home.seller-dispute');
-    }
-
-    public function buyer_dispute()
-    {
-        return view('home.buyer-dispute');
-    }
-
-    public function transfer()
-    {
-        return view('home.transfer',['lang'=>new Lang,'pc'=>new Price]);
-    }
-
     // ORDER FROM BUYER NOT MEMBERSHIP
     public function purchase()
     {
@@ -200,11 +165,6 @@ class HomeController extends Controller
     public function trade()
     {
         return view('home.kurs');
-    }
-
-    public function buying_page()
-    {
-        return view('home.buy',['lang'=>new Lang,'pc'=>new Price]);
     }
 
     public function wallet()

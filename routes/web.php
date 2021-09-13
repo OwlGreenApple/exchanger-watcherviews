@@ -37,19 +37,25 @@ Route::group(['middleware'=>['auth','web']],function()
 	Route::get('comments/{sellerid?}',[App\Http\Controllers\HomeController::class, 'comments']);
 
 	//BUY
-	Route::get('buy',[App\Http\Controllers\HomeController::class, 'buying_page']);
-	Route::get('buy-detail',[App\Http\Controllers\HomeController::class, 'detail_buy']);
-	Route::get('deal',[App\Http\Controllers\HomeController::class, 'deal']);
-	Route::get('buyer-confirm',[App\Http\Controllers\HomeController::class, 'buyer_confirm']);
-	Route::get('buyer-dispute',[App\Http\Controllers\HomeController::class, 'buyer_dispute']);
+	Route::get('buy',[App\Http\Controllers\BuyerController::class, 'buying_page']);
+	Route::post('buy-list',[App\Http\Controllers\BuyerController::class, 'buyer_table']);
+	Route::get('buy-detail/{invoice}',[App\Http\Controllers\BuyerController::class, 'detail_buy']);
+	Route::get('deal/{id}',[App\Http\Controllers\BuyerController::class, 'deal']);
+	Route::get('buy-deal',[App\Http\Controllers\BuyerController::class, 'buyer_deal']);
+	Route::get('buy-history',[App\Http\Controllers\BuyerController::class, 'buyer_history']);
+	Route::get('buyer-confirm/{invoice}',[App\Http\Controllers\BuyerController::class, 'buyer_confirm']);
+	Route::post('buyer-proof',[App\Http\Controllers\BuyerController::class, 'buyer_proof']);
+	Route::get('buyer-dispute',[App\Http\Controllers\BuyerController::class, 'buyer_dispute']);
 
 	//SELL
 	Route::get('sell',[App\Http\Controllers\SellerController::class, 'selling_page']);
 	Route::post('selling',[App\Http\Controllers\SellerController::class, 'selling_save'])->middleware(['end_membership','check_sell']);
 	Route::get('sell-list',[App\Http\Controllers\SellerController::class, 'display_sell']);
 	Route::get('sell-del',[App\Http\Controllers\SellerController::class, 'del_sell'])->middleware(['end_membership']);
-	Route::get('transfer',[App\Http\Controllers\HomeController::class, 'transfer']);
-	Route::get('seller-dispute',[App\Http\Controllers\HomeController::class, 'seller_dispute']);
+	Route::get('sell-confirm/{id}',[App\Http\Controllers\SellerController::class, 'sell_confirm']);
+	Route::get('sell-confirmed',[App\Http\Controllers\SellerController::class, 'confirm_selling']);
+	Route::get('thank-you-sell',[App\Http\Controllers\SellerController::class, 'thank_you']);
+	Route::get('seller-dispute',[App\Http\Controllers\SellerController::class, 'seller_dispute']);
 
 	// SETTINGS
 	// Route::get('trade',[App\Http\Controllers\HomeController::class, 'trade']);

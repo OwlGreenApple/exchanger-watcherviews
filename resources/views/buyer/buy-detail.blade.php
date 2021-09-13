@@ -5,27 +5,21 @@
     <div class="row justify-content-center">
         <div class="col-md-9">
             <div class="card">
-                <div class="card-header bg-success text-white">
-                    Konfimasi Pembelian
+                <div class="card-header bg-danger text-white">
+                    Detail Pembelian
                 </div>
 
                 <div class="card-body">
-                    <form action="/action_page.php">
-                          <div class="form-group">
-                            <label for="email">No Invoice:</label>
-                            <div class="form-control">B-210902-001</div>
-                          </div>
-                          <div class="form-group">
-                            <label for="fl">Upload Bukti Bayar</label>
-                            <input type="file" class="form-control" name="bukti" id="fl">
-                          </div>
-                          <div class="form-group">
-                            <label for="ct">Keterangan</label>
-                            <textarea class="form-control"></textarea>
-                          </div>
-                          <button type="submit" class="btn btn-success">Kirim</button>
-                        </form>
+                    <h5>Anda akan membeli koin dengan detail :</h5>
+                    <div>No Invoice : <b>{{ $row['no'] }}</b></div>
+                    <div>Penjual : {{ $row['seller'] }}&nbsp;<span><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span></div>
+                    <div>Jumlah Coin : {{ $row['coin'] }}</div>
+                    <div class="mb-2">Total : <b>{{ $row['coin'] }}</b></div>
+
+                    <a href="{{ url('deal') }}/{{ $row['id'] }}" class="btn btn-danger">Beli</a>
+                    <a href="{{ url('home') }}" type="button" class="btn btn-danger">Kembali</a>
                 </div>
+
 
             </div>
         </div>

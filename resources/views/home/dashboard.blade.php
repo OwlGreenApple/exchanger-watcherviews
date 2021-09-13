@@ -43,7 +43,7 @@
                 </div>
 
                 <div class="card-body">
-                    <h5 class="text-center">Notifikasi</h5>
+                    <h5 class="alert text-center">Notifikasi</h5>
                     <div class="row">
                         <div class="col-lg-3 text-center"><a href="{{ url('buy') }}" class="btn btn-outline-secondary d-block p-2">Transfer Uang <span class="badge badge-primary">0</span></a></div>  
                         <div class="col-lg-3 text-center"><a href="{{ url('buy') }}" class="btn btn-outline-secondary d-block p-2">Pembayaran <span class="badge badge-success">0</span></a></div>  
@@ -52,63 +52,9 @@
                     </div>   
                 </div>
 
-                <!-- search -->
-                <div class="card-body">
-                    <div class="row justify-content-center">
-                        <div class="col-12 col-md-10 col-lg-8">
-                            <form class="card card-sm">
-                                <div class="card-body row no-gutters align-items-center">
-                                    <div class="col-auto">
-                                        <i class="fas fa-search h4 text-body"></i>
-                                    </div>
-                                    <!--end of col-->
-                                    <div class="col">
-                                        <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Cari Coin">
-                                    </div>
-                                    <!--end of col-->
-                                    <div class="col-auto">
-                                        <button class="btn btn-lg btn-success" type="submit">Cari</button>
-                                    </div>
-                                    <!--end of col-->
-                                </div>
-                            </form>
-                        </div>
-                        <!--end of col-->
-                    </div>
-                </div>
-
-                <div class="card-body table-responsive">
-                    <table id="seller" class="table table-hover shopping-cart-wrap">
-                        <thead class="text-muted">
-                        <tr>
-                          <th scope="col" width="240">{{ $lang::get('transaction.buy.no') }}</th>
-                          <th scope="col">{{ $lang::get('transaction.qty') }}</th>
-                          <th scope="col">{{ $lang::get('transaction.price') }}</th>
-                          <th scope="col">{{ $lang::get('transaction.rate') }}</th>
-                          <th scope="col">{{ $lang::get('transaction.comments') }}</th>
-                          <th scope="col" width="120" class="text-right">Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td><h6 class="title text-truncate">B-210903-002</h6></td>
-                            <td> 100.000</td>
-                            <td> 
-                                <div class="price-wrap"> 
-                                    <var class="price">IDR 10.000</var> 
-                                   <!--  <small class="text-muted">(USD5 each)</small>  -->
-                                </div> <!-- price-wrap .// -->
-                            </td>
-                            <td><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"><i class="fas fa-star"></td>
-                            <td><a href="{{ url('comments') }}"><i class="far fa-envelope"></i></a></td>
-                            <td class="text-right"> 
-                            <a href="{{ url('buy-detail') }}" class="btn btn-outline-success btn-sm">Beli</a> 
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <!--  -->
-                </div>
+                <!-- buy page -->
+                @include('buyer.buy-form')
+                <!--  -->
             </div>
         </div>
     </div>
