@@ -19,10 +19,12 @@
                       <div class="form-group">
                         <label for="fl">Upload Bukti Bayar</label>
                         <input type="file" class="form-control" name="bukti" id="fl">
+                        <span class="error bukti"><!--  --></span>
                       </div>
                       <div class="form-group">
                         <label for="ct">Keterangan</label>
-                        <textarea name="note" class="form-control"></textarea>
+                        <textarea name="note" class="form-control" maxlength="250"></textarea>
+                        <span class="error note"><!--  --></span>
                       </div>
                       <button id="submit" type="button" class="btn btn-success">Kirim</button>
                     </form>
@@ -69,20 +71,19 @@
                     {
                         location.href="{{ url('buy') }}";
                     }
-                    /*else if(result.err == 1)
-                    {
-                        $(".error").show();
-                        
-                    }
                     else if(result.err == 2)
                     {
-                        $(".error").show();
-                        $(".wallet").html('{{ Lang::get("custom.failed") }}');
-                    }*/
-                    else
+                        $("#err_message").html('<div class="alert alert-danger">{{ Lang::get("transaction.proof") }}</div>');
+                    }
+                    else if(result.err == 'validation')
                     {
                         $(".error").show();
-                        $("#err_message").html('{{ Lang::get("custom.failed") }}');
+                        $(".bukti").html(result.bukti);
+                        $(".note").html(result.note);
+                    }
+                    else
+                    {
+                        $("#err_message").html('<div class="alert alert-danger">{{ Lang::get("custom.failed") }}</div>');
                     }
                 },
                 error : function()

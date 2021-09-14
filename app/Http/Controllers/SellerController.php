@@ -206,9 +206,15 @@ class SellerController extends Controller
 
     	if(!is_null($tr))
     	{
+            // RETURN COIN FROM TRANSACTION TO USER / WALLET
+            $total_tr_coin = $tr->coin_fee + $tr->amount;
+            $user->coin += $total_tr_coin;
+
     		try{
+                $user->save();
     			$tr->delete();
-    			$res['err'] = 0;
+    			$res['wallet'] = $user->coin;
+                $res['err'] = 0;
     		}
     		catch(QueryException $e)
     		{

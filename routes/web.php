@@ -34,17 +34,19 @@ Route::group(['middleware'=>['auth','web']],function()
 	Route::get('thankyou',[App\Http\Controllers\OrderController::class,'thankyou']);
 	Route::get('home', [App\Http\Controllers\HomeController::class, 'index']);
 	Route::get('purchase', [App\Http\Controllers\HomeController::class, 'purchase']);
-	Route::get('comments/{sellerid?}',[App\Http\Controllers\HomeController::class, 'comments']);
 
 	//BUY
 	Route::get('buy',[App\Http\Controllers\BuyerController::class, 'buying_page']);
-	Route::post('buy-list',[App\Http\Controllers\BuyerController::class, 'buyer_table']);
+	Route::get('buy-list',[App\Http\Controllers\BuyerController::class, 'buyer_table']);
 	Route::get('buy-detail/{invoice}',[App\Http\Controllers\BuyerController::class, 'detail_buy']);
 	Route::get('deal/{id}',[App\Http\Controllers\BuyerController::class, 'deal']);
 	Route::get('buy-deal',[App\Http\Controllers\BuyerController::class, 'buyer_deal']);
 	Route::get('buy-history',[App\Http\Controllers\BuyerController::class, 'buyer_history']);
 	Route::get('buyer-confirm/{invoice}',[App\Http\Controllers\BuyerController::class, 'buyer_confirm']);
-	Route::post('buyer-proof',[App\Http\Controllers\BuyerController::class, 'buyer_proof']);
+	Route::post('buyer-proof',[App\Http\Controllers\BuyerController::class, 'buyer_proof'])->middleware('check_proof');
+	Route::get('comments/{invoice}',[App\Http\Controllers\BuyerController::class, 'comments']);
+	Route::post('display-comments',[App\Http\Controllers\BuyerController::class, 'display_comments']);
+	Route::post('save-comments',[App\Http\Controllers\BuyerController::class, 'save_comments']);
 	Route::get('buyer-dispute',[App\Http\Controllers\BuyerController::class, 'buyer_dispute']);
 
 	//SELL

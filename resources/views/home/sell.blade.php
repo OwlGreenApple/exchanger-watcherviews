@@ -18,18 +18,18 @@
                     <form id="profile">
 
                         <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.total.coin') }}</label>
+                            <label for="name" class="col-md-4 col-form-label text-md-right">Coin di wallet</label>
 
                             <div class="col-md-6 py-2">
-                                 <b id="wallet_coin">{{ $pc->pricing_format(Auth::user()->coin) }}</b>
+                                 <span id="wallet_coin">{{ $pc->pricing_format(Auth::user()->coin) }}</span>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.sell') }}</label>
+                            <label for="name" class="col-md-4 col-form-label text-md-right">Jual coin</label>
 
                             <div class="col-md-6">
-                                 <input id="amount" type="text" class="form-control" name="tr_coin" autocomplete="off" />
+                                 <input id="amount" type="text" class="form-control" name="tr_coin" autocomplete="off" placeholder="Min 100.000 coin" />
                                 <span class="error tr_coin"><!--  --></span>
                             </div>
                         </div>
@@ -43,7 +43,15 @@
                         </div> 
 
                         <div class="form-group row">
-                            <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.total') }}&nbsp;{{ $lang::get('custom.currency') }}</label>
+                            <label class="col-md-4 col-form-label text-md-right">Total coin terpotong</label>
+
+                            <div class="col-md-6">
+                                <div id="total_coin_pay" class="form-control border-top-0 border-left-0 border-right-0"><!--  --></div>
+                            </div>
+                        </div> 
+
+                        <div class="form-group row">
+                            <label class="col-md-4 col-form-label text-md-right">Nilai Transaksi&nbsp;{{ $lang::get('custom.currency') }}</label>
 
                             <div class="col-md-6">
                                 <div id="coin" class="form-control border-top-0 border-left-0 border-right-0 font-weight-bold"></div>
@@ -55,7 +63,7 @@
                             <label class="col-md-4 col-form-label text-md-right">&nbsp;</label>
 
                             <div class="col-md-6">
-                                {{ $lang::get('transaction.min') }}
+                                <!--  $lang::get('transaction.min')  -->
                             </div>
                         </div> 
 
@@ -139,6 +147,9 @@
             fee = (rcoin * coin_fee)/100;
             $("#fee").html(formatNumber(fee));
 
+            var total_coin = rcoin + fee;
+            $("#total_coin_pay").html(formatNumber(total_coin));
+
             var total = parseFloat(kurs) * rcoin;
             total = Math.round(total);
             $("#coin").html(formatNumber(total));
@@ -191,6 +202,7 @@
             {
                 if(result.err == 0)
                 {
+                    $("#wallet_coin").html(formatNumber(result.wallet));
                     display_sell();
                 }
                 else if(result.err == 'trial')

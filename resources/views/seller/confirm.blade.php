@@ -39,9 +39,8 @@
                     </div>
                     
                     <div class="form-group">
-                        <a type="button" class="btn btn-warning confirm">Konfirmasi</a>
-                        <a href="{{url('sell')}}" type="button" class="btn btn-warning">Kembali</a>
-                        <a target="_blank" href="{{ url('seller-dispute') }}" class="btn btn-danger">Dispute</a>
+                        <a type="button" class="btn btn-primary confirm">Konfirmasi</a>
+                        <a target="_blank" href="{{ url('seller-dispute') }}" class="text-black-50">Dispute</a>
                     </div>
                     
                 </div>

@@ -169,12 +169,13 @@ class HomeController extends Controller
 
     public function wallet()
     {
-        $tr = Transaction::where('user_id',Auth::id())->get();
-        $wt_id = Auth::user()->watcherviews_id;
+        $tr = null;
+       /* $tr = Transaction::where('user_id',Auth::id())->get();
+        $wt_id = Auth::user()->watcherviews_id;*/
         $pc = new Price;
         $coin = 0;
 
-        if($wt_id > 0)
+        /*if($wt_id > 0)
         {
             $api = new Api;
             $wt_coin = $api->get_total_coin($wt_id);
@@ -189,7 +190,7 @@ class HomeController extends Controller
             {
                 $coin = 0;
             }
-        }
+        }*/
 
         return view('home.wallet',['lang'=>new Lang,'pc'=>new Price,'data'=>$tr,'coin'=>$coin]);
     }

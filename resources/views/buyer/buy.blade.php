@@ -25,9 +25,72 @@
 <script type="text/javascript">
     $(document).ready(function()
     {
+       pagination();
        history();
        search_seller();
     });
+
+     //ajax pagination
+      function pagination()
+      {
+          $(".page-item").removeClass('active').removeAttr('aria-current');
+          var mulr = window.location.href;
+          getActiveButtonByUrl(mulr)
+        
+          $('body').on('click', '.pagination .page-link', function (e) {
+              e.preventDefault();
+              var url = $(this).attr('href');
+              // console.log(url);
+              loadPagination(url);
+          });
+      }
+
+      function loadPagination(url) {
+          $.ajax({
+            beforeSend: function()
+              {
+                $('#loader').show();
+                $('.div-loading').addClass('background-load');
+              },
+            url: url,
+            dataType : 'html',
+          }).done(function (data) {
+              $('#loader').hide();
+              $('.div-loading').removeClass('background-load');
+              getActiveButtonByUrl(url);
+              $('#seller_list').html(data);
+          }).fail(function (xhr,attr,throwable) {
+              $('#loader').hide();
+              $('.div-loading').removeClass('background-load');
+              $("#buy_content").html('<div class="alert alert-danger">{{ Lang::get("custom.failed") }}</div>');
+              console.log(xhr.responseText);
+          });
+      }
+
+      function getActiveButtonByUrl(url)
+      {
+        var page = url.split('?');
+        if(page[1] !== undefined)
+        {
+          var pagevalue = page[1].split('=');
+          $(".page-link").each(function(){
+             var text = $(this).text();
+             if(text == pagevalue[1])
+              {
+                $(this).attr('href',url);
+                $(this).addClass('on');
+              } else {
+                $(this).removeClass('on');
+              }
+          });
+        }
+        else {
+            var mod_url = url+'?page=1';
+            getActiveButtonByUrl(mod_url);
+        }
+      }
+
+      //end ajax pagination
 
     function history()
     {
@@ -70,8 +133,8 @@
             var src = $("#search").val();
 
             $.ajax({
-                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-                type : 'POST',
+                // headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                type : 'GET',
                 url : "{{ url('buy-list') }}",
                 dataType : 'html',
                 data : {'data' : src},

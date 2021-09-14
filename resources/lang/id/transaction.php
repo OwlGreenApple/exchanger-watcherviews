@@ -23,6 +23,7 @@ return [
     'no'=>'No Transaksi',
     'placeholder'=>'Contoh : Jual murah coin watcherviews',
     'price'=>'Harga',
+    'proof'=>'Maaf foto yang di upload oleh anda corrupt',
     'qty'=>'Coin',
     'rate'=>'Rate',
     'sell'=>'Jual',

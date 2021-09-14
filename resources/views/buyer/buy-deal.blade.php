@@ -79,7 +79,7 @@
                 {
                     if(result.err == 0)
                     {
-                        location.href="{{ url('buy') }}";
+                        location.href="{{ url('buyer-confirm') }}/{{ $row['no'] }}";
                     }
                     else
                     {

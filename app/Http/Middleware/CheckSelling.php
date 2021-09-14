@@ -188,15 +188,16 @@ class MinCoin implements Rule
         $api = new Price;
         $membership = Auth::user()->membership;
         $arr = $api->check_type($membership);
-        $coin_fee = $arr['fee'];
-        $coin_fee = ($this->coin * $coin_fee)/100;
-        $fee = $this->coin + $coin_fee;
-
+       
         if($arr == false)
         {
             $this->msg = Lang::get('custom.failed');
             return $arr;
         }
+
+        $coin_fee = $arr['fee'];
+        $coin_fee = ($this->coin * $coin_fee)/100;
+        $fee = $this->coin + $coin_fee;
 
         $coin_user = Auth::user()->coin;
         $calculate = $coin_user - $fee;

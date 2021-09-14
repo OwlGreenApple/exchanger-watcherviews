@@ -8,11 +8,12 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Database\QueryException;
 use App\Http\Controllers\OrderController;
 use App\Models\User;
+use App\Models\Comment;
 use App\Models\Transaction;
 use App\Helpers\Price;
 use App\Helpers\Api;
 use Carbon\Carbon;
-use Storage, Session;
+use Storage, Session, Validator;
 
 class BuyerController extends Controller
 {
@@ -21,25 +22,46 @@ class BuyerController extends Controller
         return view('buyer.buy',['pc'=>new Price]);
     }
 
-    public function buyer_table()
+    public function buyer_table(Request $request)
     {
-    	$tr = Transaction::where([['transactions.status','=',0],['users.status','>',0]])->join('users','users.id','=','transactions.seller_id')->select('transactions.*','users.status')->get();
+    	$paginate = 1;
+    	$tr = Transaction::where([['transactions.status','=',0],['users.status','>',0]])->join('users','users.id','=','transactions.seller_id')->select('transactions.*','users.status')->paginate($paginate);
+
     	$pc = new Price;
 
     	if($tr->count() > 0)
     	{
+    		$rate = ' ';
     		foreach($tr as $row):
+    			$seller = User::find($row->seller_id);
+    			$cm = Comment::selectRaw('AVG(rate) AS star')->where('seller_id',$row->seller_id)->first();
+    			$star = round($cm->star);
+
+    			if($star == 0)
+    			{
+    				$rate = '-';
+    			}
+    			else
+    			{
+    				for($x=0;$x<$star;$x++)
+    				{
+    					$rate.='<i class="fas fa-star"></i>';
+    				}
+    			}
+
     			$data[] = [
     				'id'=>$row->id,
     				'no'=>$row->no,
     				'price'=>Lang::get('custom.currency').' '.$pc->pricing_format($row->total),
     				'coin'=>$pc->pricing_format($row->amount),
+    				'seller_name'=>$seller->name,
     				'seller'=>$row->seller_id,
+    				'rate'=>$rate,
     			];
     		endforeach;
     	}
 
-    	return view('buyer.buy-table',['data'=>$data]);
+    	return view('buyer.buy-table',['data'=>$data,'paginate'=>$tr]);
     }
 
     public function detail_buy($invoice)
@@ -119,7 +141,7 @@ class BuyerController extends Controller
     {
     	$data = array();
     	$tr = Transaction::where('buyer_id',Auth::id())->get();
-    	$comments = '-';
+    	$pc = new Price;
 
     	if($tr->count() > 0)
     	{
@@ -128,26 +150,32 @@ class BuyerController extends Controller
     			if($row->status == 1)
     			{
     				$status = '<a target="_blank" href="'.url('buyer-confirm').'/'.$row->no.'" class="btn btn-primary btn-sm">Konfirmasi</a>';
+    				$comments = '-';
     			}
-
-    			if($row->status == 2)
+				elseif($row->status == 2)
     			{
-    				$status = '<span class="text-info">Menunggu konfirmasi dari seller</span>';
+    				$status = '<span class="text-info">Tunggu seller</span>';
+    				$comments = '-';
     			}
-
-    			if($row->status == 3)
+				elseif($row->status == 3)
     			{
     				$status = '<span class="text-black-50">Lunas</span>';
-    				$comments = '<a href="'.url('comments').'"><i class="far fa-envelope"></i></a>';
+    				$comments = '<a href="'.url('comments').'/'.$row->no.'"><i class="far fa-envelope"></i></a>';
     			}
-    		
+    			else
+    			{
+    				$comments = '-';
+    			}
+
+    			$seller = User::find($row->seller_id);
     			$data[] = [
     				'id'=>$row->id,
+    				'seller'=>$seller->name,
     				'date'=>$row->created_at,
     				'no'=>$row->no,
-    				'coin'=>$row->amount,
+    				'coin'=>$pc->pricing_format($row->amount),
     				'kurs'=>$row->kurs,
-    				'price'=>$row->total,
+    				'price'=>Lang::get('custom.currency').' '.$pc->pricing_format($row->total),
     				'comments'=>$comments,
     				'status'=>$status,
     			];
@@ -164,7 +192,7 @@ class BuyerController extends Controller
     	$tr = Transaction::where('no',$invoice)->first();
 
     	// TO AVOID IF USER DELIBERATELY PUT HIS PRODUCT
-    	if(is_null($tr))
+    	if(is_null($tr) || $tr->status > 1)
     	{
     		return view('error404');
     	}
@@ -211,9 +239,80 @@ class BuyerController extends Controller
     	return response()->json($data);
     }
 
-    public function comments()
+    public function comments($invoice)
     {
-        return view('buyer.comments');
+    	$tr = Transaction::where('no',$invoice)->first();
+
+    	// TO AVOID IF USER DELIBERATELY PUT HIS PRODUCT
+    	if(is_null($tr))
+    	{
+    		return view('error404');
+    	}
+
+        return view('buyer.comments',['tr'=>$tr]);
+    }
+
+    // SAVE COMMENT AND RATE FROM BUYER
+    public function save_comments(Request $request)
+    {
+    	$rule = [
+    		'comments'=>['max : 250']
+    	];
+
+    	$validator = Validator::make($request->all(),$rule);
+    	if($validator->fails())
+    	{
+    		$err = $validator->errors();
+    		$error = [
+    			'err'=>'validation',
+    			'comments'=>$err->first('comments'),
+    		];
+
+    		return response()->json($error);
+    	}
+
+    	$cm = new Comment;
+    	$cm->buyer_id = Auth::id();
+    	$cm->seller_id = $request->seller_id;
+    	$cm->comments = $request->comments;
+    	$cm->rate = $request->rate;
+
+    	try
+    	{
+    		$cm->save();
+    		$data['err'] = 0;
+    	}
+    	catch(QueryException $e)
+    	{
+    		$data['err'] = 1;
+    	}
+
+    	return response()->json($data);
+    }
+
+    // DISPLAY COMMENTS VIA AJAX
+    public function display_comments(Request $request)
+    {
+    	$data = array();
+    	$com = Comment::where('seller_id',$request->seller_id)->get();
+
+    	if($com->count() > 0)
+    	{
+    		foreach($com as $row)
+    		{
+    			$buyer = User::find($row->buyer_id);
+    			$seller = User::find($row->seller_id);
+    			$data[] = [
+    				'buyer'=>$buyer->name,
+    				'seller'=>$seller->name,
+    				'comments'=>$row->comments,
+    				'rate'=>$row->rate,
+    				'created_at'=>$row->created_at,
+    			];
+    		}
+
+    		return view('buyer.comments-data',['data'=>$data]);
+    	}
     }
 
     public function buyer_dispute()

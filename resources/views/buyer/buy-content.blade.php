@@ -2,11 +2,12 @@
     <thead>
         <th>Tanggal</th>
         <th>Invoice</th>
+        <th>Penjual</th>
         <th>Total Coin</th>
         <th>Kurs</th>
         <th>Harga</th>
-        <th>Komentar</th>
         <th>Action</th>
+        <th>Penilaian</th>
     </thead>
     <tbody>
         @if(count($data) > 0)
@@ -14,11 +15,12 @@
                 <tr>
                     <td>{{ $row['date'] }}</td>
                     <td>{{ $row['no'] }}</td>
+                    <td>{{ $row['seller'] }}</td>
                     <td>{{ $row['coin'] }}</td>
                     <td>{{ $row['kurs'] }}</td>
                     <td>{{ $row['price'] }}</td>
+                    <td>{!! $row['status'] !!}</td>
                     <td>{!! $row['comments'] !!}</td>
-                    <td>{!! $row['status'] !!}<td>
                 </tr>
             @endforeach
         @endif
