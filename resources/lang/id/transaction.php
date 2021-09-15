@@ -25,7 +25,7 @@ return [
     'price'=>'Harga',
     'proof'=>'Maaf foto yang di upload oleh anda corrupt',
     'qty'=>'Coin',
-    'rate'=>'Rate',
+    'rate'=>'Kurs',
     'sell'=>'Jual',
     'sell.act'=>'Jual',
     'sell.done'=>'Order berhasil',

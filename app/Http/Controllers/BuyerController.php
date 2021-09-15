@@ -24,44 +24,92 @@ class BuyerController extends Controller
 
     public function buyer_table(Request $request)
     {
-    	$paginate = 1;
-    	$tr = Transaction::where([['transactions.status','=',0],['users.status','>',0]])->join('users','users.id','=','transactions.seller_id')->select('transactions.*','users.status')->paginate($paginate);
-
+    	$paginate = 10;
+    	$src = $request->src;
+    	$sort = $request->sort;
+    	$range = $request->range;
     	$pc = new Price;
 
+    	if($src == null)
+    	{
+    		$tr = Transaction::where([['transactions.status','=',0],['users.status','>',0]])->join('users','users.id','=','transactions.seller_id')->select('transactions.*','users.status','users.name');
+    	}
+    	else
+    	{
+    		$tr = Transaction::where([['transactions.status','=',0],['users.status','>',0]])->join('users','users.id','=','transactions.seller_id')
+    			->where(function($query) use ($src) {
+    				$query->where('transactions.total',$src);
+    				$query->orWhere('transactions.amount',$src);
+    				$query->orWhere('transactions.kurs',$src);
+    				$query->orWhere('users.name',$src);
+    			})->select('transactions.*','users.status','users.name');
+    	}
+
+    	// RANGE LOGIC
+    	if($range == '1')
+    	{
+    		$order = 'desc';
+    	}
+    	else
+    	{
+    		$order = 'asc';
+    	}
+
+    	// SORTING LOGIC
+    	if($sort == 'coin')
+    	{
+    		$tr = $tr->orderBy('transactions.amount',$order)->paginate($paginate);
+    	}
+    	elseif($sort == 'rate')
+    	{
+    		$tr = $tr->orderBy('transactions.kurs',$order)->paginate($paginate);
+    	}
+    	elseif($sort == 'price')
+    	{
+    		$tr = $tr->orderBy('transactions.total',$order)->paginate($paginate);
+    	}
+    	else
+    	{
+    		$tr = $tr->orderBy('transactions.id',$order)->paginate($paginate);
+    	}
+
+    	$data = array();
     	if($tr->count() > 0)
     	{
     		$rate = ' ';
     		foreach($tr as $row):
-    			$seller = User::find($row->seller_id);
+    			// $seller = User::find($row->seller_id);
     			$cm = Comment::selectRaw('AVG(rate) AS star')->where('seller_id',$row->seller_id)->first();
     			$star = round($cm->star);
-
-    			if($star == 0)
-    			{
-    				$rate = '-';
-    			}
-    			else
-    			{
-    				for($x=0;$x<$star;$x++)
-    				{
-    					$rate.='<i class="fas fa-star"></i>';
-    				}
-    			}
-
     			$data[] = [
     				'id'=>$row->id,
     				'no'=>$row->no,
     				'price'=>Lang::get('custom.currency').' '.$pc->pricing_format($row->total),
     				'coin'=>$pc->pricing_format($row->amount),
-    				'seller_name'=>$seller->name,
+    				// 'seller_name'=>$seller->name,
+    				'seller_name'=>$row->name,
     				'seller'=>$row->seller_id,
-    				'rate'=>$rate,
+    				'kurs'=>$row->kurs,
+    				'rate'=>$star,
     			];
     		endforeach;
     	}
 
     	return view('buyer.buy-table',['data'=>$data,'paginate'=>$tr]);
+    }
+
+    private static function search_sort($sort)
+    {
+    	$tr = Transaction::where([['transactions.status','=',0],['users.status','>',0]])->join('users','users.id','=','transactions.seller_id')->select('transactions.*','users.status','users.name');
+
+    	if($sort == 'coin')
+    	{
+    		$logic = $tr->orderBy('transactions.coin','asc')->paginate($paginate);
+    	}
+
+    	dd($logic);
+
+    	return $logic;
     }
 
     public function detail_buy($invoice)

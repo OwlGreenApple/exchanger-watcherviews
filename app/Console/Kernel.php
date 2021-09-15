@@ -27,6 +27,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $schedule->command('check:membership')->daily();
         $schedule->command('check:purchase')->everySixHours();
+        $schedule->command('check:transaction')->hourly();
     }
 
     /**

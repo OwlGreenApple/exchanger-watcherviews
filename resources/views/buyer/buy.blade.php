@@ -40,12 +40,15 @@
           $('body').on('click', '.pagination .page-link', function (e) {
               e.preventDefault();
               var url = $(this).attr('href');
+              var src = $("#search").val();
+              var sort = $("select[name='sort']").val();
+              var range = $("select[name='range']").val();
               // console.log(url);
-              loadPagination(url);
+              loadPagination(url,src,sort);
           });
       }
 
-      function loadPagination(url) {
+      function loadPagination(url,src,sort,range) {
           $.ajax({
             beforeSend: function()
               {
@@ -53,6 +56,7 @@
                 $('.div-loading').addClass('background-load');
               },
             url: url,
+            data: {'src':src,'sort':sort,'range':range},
             dataType : 'html',
           }).done(function (data) {
               $('#loader').hide();
@@ -131,13 +135,15 @@
     {
         $("#btn-src").click(function(){
             var src = $("#search").val();
+            var sort = $("select[name='sort']").val();
+            var range = $("select[name='range']").val();
 
             $.ajax({
                 // headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                 type : 'GET',
                 url : "{{ url('buy-list') }}",
                 dataType : 'html',
-                data : {'data' : src},
+                data : {'src' : src,'sort':sort,'range':range},
                 beforeSend: function()
                 {
                    $('#loader').show();

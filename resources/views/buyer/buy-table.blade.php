@@ -4,6 +4,7 @@
       <th scope="col" width="240">Penjual</th>
       <th scope="col">{{ Lang::get('transaction.rate') }}</th>
       <th scope="col">{{ Lang::get('transaction.comments') }}</th>
+      <th scope="col">{{ Lang::get('transaction.rate') }}</th>
       <th scope="col">{{ Lang::get('transaction.qty') }}</th>
       <th scope="col">{{ Lang::get('transaction.price') }}</th>
       <th scope="col" width="120" class="text-right">Action</th>
@@ -14,8 +15,17 @@
       @foreach($data as $row)
       <tr>
           <td><h6 class="title text-truncate">{{ $row['seller_name'] }}</h6></td>
-          <td>{!! $row['rate'] !!}</td>
+          <td>
+            @if($row['rate'] == 0)
+              -
+            @else
+              @for($x=0;$x<$row['rate'];$x++)
+                <i class="fas fa-star"></i>
+              @endfor
+            @endif
+          </td>
           <td><a href="{{ url('comments') }}/{{ $row['no'] }}"><i class="far fa-envelope"></i></a></td>
+          <td>{{ $row['kurs'] }}</td>
           <td>{{ $row['coin'] }}</td>
           <td> 
               <div class="price-wrap"> 
