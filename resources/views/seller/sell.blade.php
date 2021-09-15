@@ -202,15 +202,18 @@
             {
                 if(result.err == 0)
                 {
+                    $(".alert").hide();
                     $("#wallet_coin").html(formatNumber(result.wallet));
                     display_sell();
                 }
                 else if(result.err == 'trial')
                 {
+                    $(".alert").show();
                     $("#err_msg").html('<div class="alert alert-warning">{{ Lang::get("custom.trial.wallet") }} <a href="{{ url("account") }}/membership">{{ Lang::get("custom.here") }}</a></div>');
                 }
                 else
                 {
+                    $(".alert").show();
                     $("#err_msg").html('<div class="alert alert-danger">{{ Lang::get("custom.failed") }}</div>')
                 }
             },

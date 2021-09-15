@@ -39,6 +39,8 @@ return [
     'trade'=>'Kurs',
     'type'=>'Tipe Transaksi',
     'wallet'=>'Lanjutkan',
+    'wallet.withdraw'=>'Penarikan',
+    'wallet.send'=>'Pengiriman',
     'withdraw'=>'Penarikan coin',
     'wd'=>'Tarik coin',
     'wt'=>'Watcherviews : ',

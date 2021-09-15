@@ -9,6 +9,7 @@
         <th>Kurs</th>
         <th>Harga</th>
         <th>Tanggal Beli</th>
+        <th>Trial</th>
         <th>&nbsp;</th>
     </thead>
     <tbody>        
@@ -22,6 +23,7 @@
                 <td>{{ $row['kurs'] }}</td>
                 <td>{{ $row['total'] }}</td>
                 <td>{{ $row['date_buy'] }}</td>
+                <td>{{ $row['trial'] }}</td>
                 <td class="text-center">{!! $row['status'] !!}</td>
             </tr>
     @endforeach

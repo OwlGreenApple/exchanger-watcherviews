@@ -24,14 +24,17 @@ class CheckSelling
     public function handle(Request $request, Closure $next)
     {
 
-        $coin = str_replace(".","",$request->tr_coin);
+        // get string
+        $coin = $request->tr_coin;
+        $coin = str_replace(".","",$coin);
         $coin = (int)$coin;
+
         $api = new Price;
         $kurs = $api->get_rate();
         $total = $kurs * $coin;
 
         $rules = [
-            'tr_coin'=>['bail','required','numeric',new MinCoin($coin),new CheckMaxSell('chance',$total),new CheckMaxSell('day',$total)]
+            'tr_coin'=>['bail','required',new MinCoin($coin),new CheckMaxSell('chance',$total),new CheckMaxSell('day',$total),new CheckMaxSell('month',$total)]
         ];
 
         $validator = Validator::make($request->all(),$rules);
@@ -100,19 +103,20 @@ class CheckMaxSell implements Rule
 
         if($this->status == 'chance')
         {
-            return $this->check_trans_chance($chance_sell,$this->total);
+            return $this->check_trans_chance($chance_sell);
         }
 
-       /* if($this->status == 'month')
+        if($this->status == 'month')
         {
-            return $this->check_trans_month($max_sell);
-        }*/
+            return $this->check_trans_month($max_sell,$this->total);
+        }
         
     }
 
     public function check_trans_day($trans,$total)
     {
-        $err_msg = 'Anda hanya dapat menjual coin maksimal Rp '.$trans.' per hari';
+        $pc = new Price;
+        $err_msg = 'Anda hanya dapat menjual coin maksimal Rp '.$pc->pricing_format($trans).' per hari';
         if($total > $trans)
         {
             $this->msg = $err_msg;
@@ -147,6 +151,21 @@ class CheckMaxSell implements Rule
         {
             return true;
         }
+    }
+
+    public function check_trans_month($max_sell,$total)
+    {
+        $pc = new Price;
+        $tr = Transaction::where('seller_id',Auth::id())->whereRaw('MONTH(date_buy) = MONTH(CURRENT_DATE())')->selectRaw('SUM(total) as total_sell_month')->orWhere('status',0)->first();
+
+        $max_sell_month = $tr->total_sell_month + $total;
+        if($max_sell_month > $max_sell)
+        {
+            $this->msg = 'Kesempatan anda untuk menjual coin hanya '.Lang::get('custom.currency').' '.$pc->pricing_format($max_sell).' per bulan';
+            return false;
+        }
+
+        return true;
     }
 
     /**

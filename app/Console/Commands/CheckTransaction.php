@@ -44,6 +44,31 @@ class CheckTransaction extends Command
             $query->Where('status','<',3);
         })->get();
 
-        dd($tr);
+        if($tr->count() > 0)
+        {
+            foreach($tr as $row):
+                $update_date = Carbon::parse($row->updated_at)->addHours(3)->toDateTimeString();
+                $str = Transaction::find($row->id);
+
+                if(Carbon::now()->gte($update_date)):
+                    // in case if buyer doen't make confirmation
+                    if($row->status == 1)
+                    {
+                        $str->status = 0;
+                        $str->save();
+                    }
+
+                    // in case to show dispute button
+                    if($row->status == 2)
+                    {
+                        $str->status = 4;
+                        $str->save();
+                    }
+
+                endif;
+            endforeach;
+        }
     }
+
+/*end class*/
 }

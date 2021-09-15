@@ -17,5 +17,6 @@ class Transaction extends Model
 		1 -- transaksi sedang berjalan / deal
 		2 -- pembeli sudah konfirmasi
 		3 -- transaksi sudah selesai
+		4 -- dispute
     */
 }

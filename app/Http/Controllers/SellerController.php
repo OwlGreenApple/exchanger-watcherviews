@@ -20,7 +20,7 @@ class SellerController extends Controller
     {
         $pc = new Price;
         $fee = $pc->check_type(Auth::user()->membership)['fee'];
-        return view('home.sell',['lang'=>new Lang,'pc'=>new Price,'fee'=>$fee]);
+        return view('seller.sell',['lang'=>new Lang,'pc'=>new Price,'fee'=>$fee]);
     }
 
     public function selling_save(Request $request)
@@ -55,6 +55,7 @@ class SellerController extends Controller
 
         if($user->membership == 'free')
         {
+            $tr->trial = 1;
         	$user->trial--;
         }
 
@@ -110,6 +111,16 @@ class SellerController extends Controller
 	    			$date_buy = $row->date_buy;
 	    		}
 
+                //SHOW TRIAL TO MAKE DIFFERENT BETWEEN TRIAL AND NON TRIAL
+                if($row->trial == 1)
+                {
+                    $trial = Lang::get('order.yes');
+                }
+                else
+                {
+                    $trial = '-';
+                }
+
 	    		$price = new Price;
     			$data[] = [
     				'id'=>$row->id,
@@ -121,6 +132,7 @@ class SellerController extends Controller
     				'total'=>'Rp '.$price->pricing_format($row->total),
     				'created_at'=>$row->created_at,
     				'date_buy'=>$date_buy,
+                    'trial'=>$trial,
     				'status'=>$status,
     			];
     		endforeach;
@@ -200,12 +212,12 @@ class SellerController extends Controller
     // DELETE SELL COIN FROM MARKETS
     public function del_sell(Request $request)
     {
-    	$tr = Transaction::find($request->id);
-    	$user = User::find(Auth::id());
+    	$tr = Transaction::where([['id',$request->id],['seller_id',Auth::id()]])->first();
     	$res['err'] = 1;
 
     	if(!is_null($tr))
     	{
+            $user = User::find(Auth::id());
             // RETURN COIN FROM TRANSACTION TO USER / WALLET
             $total_tr_coin = $tr->coin_fee + $tr->amount;
             $user->coin += $total_tr_coin;
@@ -224,7 +236,7 @@ class SellerController extends Controller
     		// RETURN USER'S TRIAL IF THEY DELETED TJ
     		if($res['err'] == 0)
     		{
-    			if($user->trial < 3 && $user->membership == 'free')
+    			if($tr->trial == 1 && $user->membership == 'free')
     			{
     				$user->trial++;
     				$user->save();
@@ -237,7 +249,7 @@ class SellerController extends Controller
 
     public function seller_dispute()
     {
-        return view('home.seller-dispute');
+        return view('seller.seller-dispute');
     }
 
     // GET ORDER NUMBER FROM TRANSACTION

@@ -10,6 +10,7 @@ use Illuminate\Database\QueryException;
 use App\Models\Orders;
 use App\Models\User;
 use App\Models\Transaction;
+use App\Models\Wallet;
 use App\Helpers\Price;
 use App\Helpers\Api;
 use Carbon\Carbon;
@@ -121,31 +122,34 @@ class HomeController extends Controller
     {
         // SAVE COIN TO TABLE USER 
         $user = User::find($id);
+
+        // LOGIC TO INSERT INTO TRANSACTION
+        $wt = new Wallet;
+        $wt->user_id = Auth::id();
+        $wt->coin = $coin;
+
         if($method == 1)
         {
             $user->coin += $coin;
+            $wt->type = 1;
         }
         else
         {
             $user->coin -= $coin;
+            $wt->type = 2;
         }
         
-        $user->save();
+        try
+        {
+          $user->save();
+          $wt->save();
+        }
+        catch(queryException $e)
+        {
+          // 
+        }
+
         return $user->coin;
-        
-        // LOGIC TO INSERT INTO TRANSACTION
-       /* $dt = Carbon::now();
-        $str = 'WD-'.$dt->format('ymd').'-'.$dt->format('Hi');
-        $logic = new OrderController;
-        $no_transaction = $logic::autoGenerateID(new \App\Models\Transaction, 'no', $str, 3, '0');
-
-        $data = [
-            'no'=>$no_transaction,
-            'amount'=>$wt_coin['coin'],
-            'type'=>3,
-        ];
-
-        $pc::transaction($data);*/
     }
 
     public function index()
@@ -169,13 +173,12 @@ class HomeController extends Controller
 
     public function wallet()
     {
-        $tr = null;
-       /* $tr = Transaction::where('user_id',Auth::id())->get();
-        $wt_id = Auth::user()->watcherviews_id;*/
+        $wt = Wallet::where('user_id',Auth::id())->get();
+        $wt_id = Auth::user()->watcherviews_id;
         $pc = new Price;
         $coin = 0;
 
-        /*if($wt_id > 0)
+        if($wt_id > 0)
         {
             $api = new Api;
             $wt_coin = $api->get_total_coin($wt_id);
@@ -190,9 +193,9 @@ class HomeController extends Controller
             {
                 $coin = 0;
             }
-        }*/
+        }
 
-        return view('home.wallet',['lang'=>new Lang,'pc'=>new Price,'data'=>$tr,'coin'=>$coin]);
+        return view('home.wallet',['lang'=>new Lang,'pc'=>new Price,'data'=>$wt,'coin'=>$coin]);
     }
 
     public function update_profile(Request $request)

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Carbon\Carbon;
+use App\Models\Transaction;
 
 class CheckEndMembership
 {
@@ -19,9 +20,27 @@ class CheckEndMembership
      */
     public function handle(Request $request, Closure $next)
     {
+
         $membership = Auth::user()->membership;
         $trial = Auth::user()->trial;
         $end_membership = Carbon::parse(Auth::user()->end_membership)->toDateTimeString();
+
+        if($request->id !== null)
+        {
+            $tr_trial = null;
+             $tr = Transaction::find($request->id);
+             if(!is_null($tr))
+             {
+                $tr_trial = $tr->trial;
+             }
+
+             // EXCEPTIONAL FOR TRANSACTION CREATED FROM TRIAL
+             if($tr_trial == 1)
+             {
+                return $next($request);
+             }
+        }
+       
 
         if( ($membership == 'free' && $trial == 0) || (Carbon::now()->gte($end_membership)))
         {

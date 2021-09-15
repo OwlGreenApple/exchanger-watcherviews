@@ -6,7 +6,7 @@
         <div class="col-md-9">
             <div class="card">
                 <div class="card-header bg-danger text-white">{{ $lang::get('custom.wallet') }}
-                    <div class="float-right">{{ $lang::get('custom.coin') }} : <b id="coin">{{ $pc->pricing_format(Auth::user()->coin) }}</b>&nbsp;coin</div>
+                    <div class="float-right">{{ Lang::get('custom.coin') }} : <b id="coin">{{ $pc->pricing_format(Auth::user()->coin) }}</b>&nbsp;coin</div>
                     <span class="clearfix"></span>
                 </div>
 
@@ -67,7 +67,8 @@
                 </div>
                 @endif
             </div>
-            <!--  -->
+
+            <!-- HISTORY -->
             @if(auth()->user()->watcherviews_id > 0)
             <div class="card">
                 <div class="card-body">
@@ -77,19 +78,16 @@
                          No
                         </th>
                         <th class="menu-nomobile">
-                         {{$lang::get('transaction.no')}}
+                          {{Lang::get('transaction.type')}}
                         </th>
                         <th class="menu-nomobile">
-                          {{$lang::get('transaction.type')}}
+                          {{Lang::get('transaction.amount')}}
                         </th>
                         <th class="menu-nomobile">
-                          {{$lang::get('transaction.amount')}}
+                          Biaya Transaksi
                         </th>
                         <th class="menu-nomobile">
-                          {{$lang::get('transaction.created')}}
-                        </th>
-                        <th class="header" action="status">
-                          {{$lang::get('transaction.status')}}
+                          {{Lang::get('transaction.created')}}
                         </th>
                       </thead>
                       <tbody>
@@ -97,34 +95,17 @@
                           @php $no = 1; @endphp
                           @foreach($data as $row)
                              <tr>
-                               <td>{{ $no++ }}</td>
-                               <td>{{ $row->no }}</td>
+                               <td class="text-center">{{ $no++ }}</td>
                                <td class="text-center">
                                   @if($row->type == 1)
-                                    {{ $lang::get('transaction.buy') }}
-                                  @elseif($row->type == 2)
-                                    {{ $lang::get('transaction.sell') }}
+                                    {{ Lang::get('transaction.wallet.withdraw') }}
                                   @else
-                                    {{ $lang::get('transaction.withdraw') }}
+                                    {{ Lang::get('transaction.wallet.send') }}
                                   @endif
                                 </td>
-                               <td class="text-right">{{ str_replace(",",".",number_format($row->amount)) }}</td>
-                               <td>{{ $row->created_at }}</td>
-                               <td>
-                                 @if($row->status == 0 && $row->type == 1)
-                                    {{ $lang::get('transaction.buy.status') }}
-                                 @elseif($row->status == 1 && $row->type == 1)
-                                    {{ $lang::get('transaction.buy.done') }}
-                                 @elseif($row->status == 0 && $row->type == 2)
-                                    {{ $lang::get('transaction.sell.status') }}
-                                 @elseif($row->status == 1 && $row->type == 2)
-                                    {{ $lang::get('transaction.sell.progress') }}
-                                 @elseif($row->status == 2 && $row->type == 2)
-                                    {{ $lang::get('transaction.sell.done') }}
-                                 @else
-                                    -
-                                 @endif
-                               </td>
+                               <td class="text-right">{{ str_replace(",",".",number_format($row->coin)) }}</td>
+                               <td class="text-right">{{ str_replace(",",".",number_format($row->fee)) }}</td>
+                               <td class="text-center">{{ $row->created_at }}</td>
                              </tr>
                           @endforeach
                         @endif
