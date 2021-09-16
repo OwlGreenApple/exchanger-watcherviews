@@ -1,86 +1,99 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Purple Admin</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{{ asset('assets/template/vendors/mdi/css/materialdesignicons.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/template/vendors/css/vendor.bundle.base.css') }}">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="{{ asset('assets/template/css/demo_1/style.css') }}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="{{ asset('assets/template/images/favicon.png') }}"/>
+  </head>
+  <body>
+    <div class="container-scroller">
+      <div class="container-fluid page-body-wrapper full-page-wrapper">
+        <div class="content-wrapper d-flex align-items-center auth">
+          <div class="row flex-grow">
+            <div class="col-lg-4 mx-auto">
+              <div class="auth-form-light text-left p-5">
+                <div class="brand-logo">
+                  <img src="../../../assets/images/logo.svg">
+                </div>
+                <h4>New here?</h4>
+                <h6 class="font-weight-light">Signing up is easy. It only takes a few steps</h6>
+                <form class="pt-3">
+                  <div class="form-group">
+                    <input type="text" class="form-control form-control-lg" id="username" placeholder="Input Your Name" name="username">
+                  </div>
+                  <div class="form-group">
+                    <input type="email" class="form-control form-control-lg" id="email" placeholder="Email" required name="email">
+                  </div>
+                  <div class="form-group">
+                    <input type="text" id="phone" name="phone" class="form-control" placeholder="No HP" required/>
+                    <span class="error phone"></span>
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-9">
-            <div class="card">
-                <div class="card-header">{{ __('Register') }}</div>
+                    <input id="hidden_country_code" type="hidden" class="form-control" name="code_country" />
+                   <input name="data_country" type="hidden" /> 
+                  </div>
 
-                <div class="card-body">
-                    
-                   <div id="div-register">
-                      <form class="add-contact" id="form-register">
-                          <div class="form-group">
-                            <label>{{ $lang::get('custom.name') }}*</label>
-                            <input type="text" name="username" class="form-control" placeholder="Input Your Name" required />
-                            <span class="error username" role="alert"></span>                             
-                          </div>
-
-                          <div class="form-group">
-                            <label>Email*</label>
-                             <input id="email" type="email" class="form-control" name="email" required autocomplete="email" placeholder="Input Your Email">
-                             <span class="error email"></span>
-                          </div>
-
-                          <div class="form-group">
-                            <label>{{ $lang::get('custom.phone') }}* <span class="tooltipstered" title="<div class='panel-content'>
-                                  {{ $lang::get('custom.intl') }}
-                                </div>">
-                                <i class="fa fa-question-circle "></i>
-                              </span>
-                            </label>
-                            <input type="text" id="phone" name="phone" class="form-control" required/>
-                            <span class="error phone"></span>
-
-                            <input id="hidden_country_code" type="hidden" class="form-control" name="code_country" />
-                           <input name="data_country" type="hidden" /> 
-                          </div>
-
-                          <div class="form-group">
-                            <label>Gender*</label>
-                            <div>
-                              <div class="form-check form-check-inline">
-                                <label class="custom-radio">
-                                  <input class="form-check-input" type="radio" name="gender" value="male" id="radio-male" checked>
-                                  <span class="checkmark"></span>
-                                </label>
-                                <label class="form-check-label" for="radio-male">{{ $lang::get('custom.male') }}</label>
-                              </div>
-
-                              <div class="form-check form-check-inline">
-                                <label class="custom-radio">
-                                  <input class="form-check-input" type="radio" name="gender" id="radio-female" value="female">
-                                  <span class="checkmark"></span>
-                                </label>
-                                <label class="form-check-label" for="radio-female">{{ $lang::get('custom.female') }}</label>
-                              </div>
-
-                            </div>
-                            <!-- -->
-                          </div>
-
-                          <div class="form-group">
-                              <label class="custom-checkbox">
-                                  <input type="checkbox" name="agreement" required id="check-terms"/>
-                                  <span class="checkmark-check"></span>
-                              </label>
-                              <label class="checkbox-left" for="check-terms"><sb class="ml-4">{{ $lang::get('custom.agreement') }}<a href="{{ env('APP_URL') }}terms-of-services/" target="_blank" style="text-decoration: underline;">{{ $lang::get('custom.terms') }}</a></sb></label>
-                          </div>
-
-                          <div class="text-left">
-                            <button id="btn-register" type="button" class="btn btn-primary btn-lg">{{ $lang::get('custom.register') }}</button>
-                          </div>
-                          <input type="hidden" name="recaptcha_response" id="recaptchaResponse" readonly="readonly"/>
-                      </form>
+                  <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Gender*</label>
+                    <div class="col-sm-4">
+                      <div class="form-check">
+                        <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="gender" id="membershipRadios1" value="" checked=""> {{ $lang::get('custom.male') }} <i class="input-helper"></i></label>
+                      </div>
                     </div>
-                </div> <!-- end card body -->
-                <!-- end card -->
+                    <div class="col-sm-5">
+                      <div class="form-check">
+                        <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="gender" id="membershipRadios2" value="option2"> {{ $lang::get('custom.female') }} <i class="input-helper"></i></label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mb-4">
+                    <div class="form-check">
+                      <label class="form-check-label text-muted">
+                        <input type="checkbox" name="agreement" required id="check-terms" class="form-check-input"> I agree to all Terms & Conditions </label>
+                    </div>
+                  </div>
+                  <div class="mt-3">
+                    <button class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn" id="btn-register" type="button" >SIGN UP</button>
+                  </div>
+                  <div class="text-center mt-4 font-weight-light"> Already have an account? <a href="{{ url('login')}}" class="text-primary">Login</a>
+                  </div>
+                </form>
+              </div>
             </div>
+          </div>
         </div>
+        <!-- content-wrapper ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
     </div>
-</div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="{{ asset('assets/template/vendors/js/vendor.bundle.base.js') }}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="{{ asset('assets/template/js/off-canvas.js') }}"></script>
+    <script src="{{ asset('assets/template/js/hoverable-collapse.js') }}"></script>
+    <script src="{{ asset('assets/template/js/misc.js') }}"></script>
+    <script src="{{ asset('assets/template/js/settings.js') }}"></script>
+    <script src="{{ asset('assets/template/js/todolist.js') }}"></script>
 
+    
 <!-- JAVASCRIPT -->
 <script src="{{ asset('/assets/intl-tel-input/callback.js') }}" type="text/javascript"></script>
 <script src="{{ asset('/assets/js/custom.js') }}" type="text/javascript"></script>
@@ -149,4 +162,6 @@ $(function(){
     });
  }
  </script>
-@endsection
+    <!-- endinject -->
+  </body>
+</html>
