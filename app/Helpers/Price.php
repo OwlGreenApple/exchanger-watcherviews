@@ -53,6 +53,13 @@ class Price
         return str_replace(",",".",number_format($price));
     }
 
+    public static function convert_number($num)
+    {
+        $coin = str_replace(".","",$num);
+        $coin = (int)$coin;
+        return $coin;
+    }
+
     //TRANSACTION LOGIC
     public static function transaction(array $data)
     {

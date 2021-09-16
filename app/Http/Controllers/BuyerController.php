@@ -98,20 +98,6 @@ class BuyerController extends Controller
     	return view('buyer.buy-table',['data'=>$data,'paginate'=>$tr]);
     }
 
-    private static function search_sort($sort)
-    {
-    	$tr = Transaction::where([['transactions.status','=',0],['users.status','>',0]])->join('users','users.id','=','transactions.seller_id')->select('transactions.*','users.status','users.name');
-
-    	if($sort == 'coin')
-    	{
-    		$logic = $tr->orderBy('transactions.coin','asc')->paginate($paginate);
-    	}
-
-    	dd($logic);
-
-    	return $logic;
-    }
-
     public function detail_buy($invoice)
     {
     	$tr = Transaction::where('no',$invoice)->first();
@@ -210,6 +196,11 @@ class BuyerController extends Controller
     				$status = '<span class="text-black-50">Lunas</span>';
     				$comments = '<a href="'.url('comments').'/'.$row->no.'"><i class="far fa-envelope"></i></a>';
     			}
+                elseif($row->status == 4)
+                {
+                    $status = ' <a target="_blank" href="'.url('buyer-dispute').'/'.$row->id.'" class="btn btn-danger btn-sm">Dispute</a>';
+                    $comments = '-';
+                }
     			else
     			{
     				$comments = '-';
@@ -363,9 +354,17 @@ class BuyerController extends Controller
     	}
     }
 
-    public function buyer_dispute()
+    //DISPUTE
+    public function buyer_dispute($id)
     {
-        return view('buyer.buyer-dispute');
+        $tr = Transaction::where([['id',$id],['buyer_id',Auth::id()]])->first();
+
+        if(is_null($tr))
+        {
+            return view('error404');
+        }
+
+        return view('buyer.buyer-dispute',['tr'=>$tr]);
     }
 
 /*end class*/

@@ -10,18 +10,19 @@
                 </div>
 
                 <div class="card-body">
-                    <form action="/action_page.php">
+                    <div id="err_message"><!--  --></div>
+                    <form id="buyer_dispute">
                           <div class="form-group">
                             <label for="email">No Invoice:</label>
-                            <div class="form-control">B-20210902-001</div>
+                            <div class="form-control">{{ $tr->no }}</div>
                           </div>
                           <div class="form-group">
                             <label for="fl">Upload Bukti</label>
-                            <input type="file" class="form-control" name="bukti" id="fl">
+                            <input type="file" class="form-control" name="proof" id="fl">
                           </div>
                           <div class="form-group">
                             <label for="ct">Komentar</label>
-                            <textarea class="form-control"></textarea>
+                            <textarea name="comments" class="form-control"></textarea>
                           </div>
                           <button type="submit" class="btn btn-success">Kirim</button>
                         </form>
@@ -33,95 +34,12 @@
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function(){
-        withdraw_coin();
-    });
-
-    function withdraw_coin()
-    {
-        $("#profile").submit(function(e){
-            e.preventDefault();
-
-            $.ajax({
-                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-                type : 'POST',
-                url : "{{ url('wallet-top-up') }}",
-                dataType : 'json',
-                data : $(this).serialize(),
-                beforeSend: function()
-                {
-                   $('#loader').show();
-                   $('.div-loading').addClass('background-load');
-                   $(".error").hide();
-                },
-                success : function(result)
-                {
-                    $('#loader').hide();
-                    $('.div-loading').removeClass('background-load');
-
-                    if(result.err == 0)
-                    {
-                        var cur_coin = $("#coin").attr('data-coin');
-                        cur_coin = parseInt(cur_coin);
-                        cur_coin += result.coin;
-                        $("#coin").html(formatNumber(cur_coin));
-                        $("#msg").html('<div class="alert alert-success">{{ Lang::get("custom.success_coin") }}</div>');
-                        $("input").val('');
-                    }
-                    else if(result.err == 1)
-                    {
-                        $(".error").show();
-                        $(".wallet").html('{{ Lang::get("auth.credential") }}');
-                    }
-                    else if(result.err == 2)
-                    {
-                        $(".error").show();
-                        $(".wallet").html('{{ Lang::get("custom.failed") }}');
-                    }
-                    else if(result.err == 'validation')
-                    {
-                        $(".error").show();
-                        $(".wt_email").html(result.wt_email);
-                        $(".wt_pass").html(result.wt_pass);
-                    }
-                    else if(result.pkg !== undefined)
-                    {
-                        $(".error").show();
-                        $(".wallet").html(result.pkg);
-                    }
-                    else if(result.max !== undefined)
-                    {
-                        $(".error").show();
-                        $(".wallet").html(result.max);
-                    }
-                    else
-                    {
-                        $(".error").show();
-                        $(".wt_email").html(result.wt_email);
-                        $(".wt_pass").html(result.wt_pass);
-                    }
-                },
-                error : function()
-                {
-                    $('#loader').hide();
-                    $('.div-loading').removeClass('background-load');
-                }
-            });
-        });
-    }
-
-    function formatNumber(num) 
-    {
-        num = parseInt(num);
-        if(isNaN(num) == true)
-        {
-           return '';
-        }
-        else
-        {
-           return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-        }
-    }
+    var dispute_role = 2;
+    var trans_id = "{{ $tr->id }}";
+    var url = "{{ url('save-dispute') }}";
+    var page_success = "{{ url('page-dispute') }}";
+    var err_message = "{{ Lang::get('custom.failed') }}";
 
 </script>
+<script src="{{ asset('assets/js/dispute.js') }}" type="text/javascript"></script>
 @endsection

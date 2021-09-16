@@ -157,17 +157,6 @@
         },100));
     }
 
-     function delay(callback, ms) {
-      var timer = 0;
-      return function() {
-        var context = this, args = arguments;
-        clearTimeout(timer);
-        timer = setTimeout(function () {
-          callback.apply(context, args);
-        }, ms || 0);
-      };
-    }
-
     function del_popup()
     {
         $("body").on("click",".del_sell",function(){
@@ -312,27 +301,6 @@
             });
         });
     }
-
-    function return_number(num)
-    {
-       num = num.toString().replace(/\./g,'');
-       num = parseInt(num);
-       return num;
-    }
-
-    function formatNumber(num) 
-    {
-        num = num.toString().replace(/\./g,'');
-        num = parseInt(num);
-        if(isNaN(num) == true)
-        {
-           return '';
-        }
-        else
-        {
-           return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-        }
-    }
-
 </script>
+<script src="{{ asset('assets/js/counting.js') }}" type="text/javascript"></script>
 @endsection

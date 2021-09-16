@@ -34,6 +34,8 @@ Route::group(['middleware'=>['auth','web']],function()
 	Route::get('thankyou',[App\Http\Controllers\OrderController::class,'thankyou']);
 	Route::get('home', [App\Http\Controllers\HomeController::class, 'index']);
 	Route::get('purchase', [App\Http\Controllers\HomeController::class, 'purchase']);
+	Route::post('save-dispute', [App\Http\Controllers\HomeController::class, 'save_dispute']);
+	Route::get('page-dispute', [App\Http\Controllers\HomeController::class, 'dispute_page']);
 
 	//BUY
 	Route::get('buy',[App\Http\Controllers\BuyerController::class, 'buying_page']);
@@ -47,7 +49,7 @@ Route::group(['middleware'=>['auth','web']],function()
 	Route::get('comments/{invoice}',[App\Http\Controllers\BuyerController::class, 'comments']);
 	Route::post('display-comments',[App\Http\Controllers\BuyerController::class, 'display_comments']);
 	Route::post('save-comments',[App\Http\Controllers\BuyerController::class, 'save_comments']);
-	Route::get('buyer-dispute',[App\Http\Controllers\BuyerController::class, 'buyer_dispute']);
+	Route::get('buyer-dispute/{id}',[App\Http\Controllers\BuyerController::class, 'buyer_dispute']);
 
 	//SELL
 	Route::get('sell',[App\Http\Controllers\SellerController::class, 'selling_page']);
@@ -57,7 +59,7 @@ Route::group(['middleware'=>['auth','web']],function()
 	Route::get('sell-confirm/{id}',[App\Http\Controllers\SellerController::class, 'sell_confirm']);
 	Route::get('sell-confirmed',[App\Http\Controllers\SellerController::class, 'confirm_selling']);
 	Route::get('thank-you-sell',[App\Http\Controllers\SellerController::class, 'thank_you']);
-	Route::get('seller-dispute',[App\Http\Controllers\SellerController::class, 'seller_dispute']);
+	Route::get('seller-dispute/{id}',[App\Http\Controllers\SellerController::class, 'seller_dispute']);
 
 	// SETTINGS
 	// Route::get('trade',[App\Http\Controllers\HomeController::class, 'trade']);
@@ -66,7 +68,8 @@ Route::group(['middleware'=>['auth','web']],function()
 
 	// WITHDRAW COIN TO WALLET OR SEND COIN TO WATCHERVIEWS
 	Route::get('wallet',[App\Http\Controllers\HomeController::class,'wallet']);
-	Route::post('wallet-transaction',[App\Http\Controllers\HomeController::class,'transaction_watcherviews_coin'])->middleware(['end_membership','check_coin']);
+	Route::post('wallet-transaction',[App\Http\Controllers\HomeController::class,'wallet_transaction'])->middleware(['end_membership','check_coin']);
+	Route::get('wallet-list',[App\Http\Controllers\HomeController::class,'display_wallet']);
 	
 	// ACCOUNT
 	Route::get('orders',[App\Http\Controllers\HomeController::class, 'order_list']);

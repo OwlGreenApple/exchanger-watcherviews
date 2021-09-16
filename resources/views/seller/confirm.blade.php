@@ -40,7 +40,10 @@
                     
                     <div class="form-group">
                         <a type="button" class="btn btn-primary confirm">Konfirmasi</a>
-                        <a target="_blank" href="{{ url('seller-dispute') }}" class="text-black-50">Dispute</a>
+
+                        @if($row['status'] == 4)
+                            <a target="_blank" href="{{ url('seller-dispute') }}/{{ $row['id'] }}" class="text-black-50">Dispute</a>
+                        @endif
                     </div>
                     
                 </div>

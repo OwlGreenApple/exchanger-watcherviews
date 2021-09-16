@@ -8,6 +8,7 @@ use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use App\Helpers\Price;
+use App\Rules\MinCoin;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Validator;
@@ -34,7 +35,7 @@ class CheckSelling
         $total = $kurs * $coin;
 
         $rules = [
-            'tr_coin'=>['bail','required',new MinCoin($coin),new CheckMaxSell('chance',$total),new CheckMaxSell('day',$total),new CheckMaxSell('month',$total)]
+            'tr_coin'=>['bail','required',new MinCoin($coin,true),new CheckMaxSell('chance',$total),new CheckMaxSell('day',$total),new CheckMaxSell('month',$total)]
         ];
 
         $validator = Validator::make($request->all(),$rules);
@@ -166,77 +167,6 @@ class CheckMaxSell implements Rule
         }
 
         return true;
-    }
-
-    /**
-     * Get the validation error message.
-     *
-     * @return string
-     */
-    public function message()
-    {    
-        return $this->msg;
-    }
-
-/*end class*/
-}
-
-class MinCoin implements Rule
-{
-    /**
-     * Create a new rule instance.
-     *
-     * @return void
-     */
-
-    public $msg;
-    public function __construct($coin)
-    {
-        $this->coin = $coin;
-    }
-
-    /**
-     * Determine if the validation rule passes.
-     *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @return bool
-     */
-    public function passes($attribute, $value)
-    {
-        $api = new Price;
-        $membership = Auth::user()->membership;
-        $arr = $api->check_type($membership);
-       
-        if($arr == false)
-        {
-            $this->msg = Lang::get('custom.failed');
-            return $arr;
-        }
-
-        $coin_fee = $arr['fee'];
-        $coin_fee = ($this->coin * $coin_fee)/100;
-        $fee = $this->coin + $coin_fee;
-
-        $coin_user = Auth::user()->coin;
-        $calculate = $coin_user - $fee;
-
-        if($calculate < 0)
-        {
-            $this->msg = 'Saldo coin anda tidak cukup';
-            return false;
-        }
-
-        $min = 100000;
-        if($this->coin < $min)
-        {
-            $this->msg = 'Jumlah minimal coin untuk di jual adalah 100.000';
-            return false;
-        }
-        else
-        {
-            return true;
-        }
     }
 
     /**

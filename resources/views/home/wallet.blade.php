@@ -48,18 +48,34 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.total.coin') }}</label>
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ Lang::get('transaction.total.coin') }}</label>
 
                             <div class="col-md-6">
-                               <input class="form-control" type="number" name="coin_ammount" />
+                               <input id="amount" class="form-control" type="text" name="amount" autocomplete="off" />
                                <span class="error coin_ammount"><!--  --></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="name" class="col-md-4 col-form-label text-md-right">Biaya Transaksi (2.5%)</label>
+
+                            <div class="col-md-6">
+                               <div id="fee" class="form-control border-top-0 border-left-0 border-right-0"><!--  --></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="name" class="col-md-4 col-form-label text-md-right">Total Coin yang di potong</label>
+
+                            <div class="col-md-6">
+                               <div id="total_coin_pay" class="form-control border-top-0 border-left-0 border-right-0"><!--  --></div>
                             </div>
                         </div>
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-danger">
-                                    {{ $lang::get('transaction.wallet') }}
+                                    {{ Lang::get('transaction.wallet') }}
                                 </button>
                             </div>
                         </div>
@@ -71,47 +87,7 @@
             <!-- HISTORY -->
             @if(auth()->user()->watcherviews_id > 0)
             <div class="card">
-                <div class="card-body">
-                    <table class="table table-bordered w-100" style="font-size : 0.65rem" id="data_transaction">
-                      <thead>
-                        <th class="menu-nomobile">
-                         No
-                        </th>
-                        <th class="menu-nomobile">
-                          {{Lang::get('transaction.type')}}
-                        </th>
-                        <th class="menu-nomobile">
-                          {{Lang::get('transaction.amount')}}
-                        </th>
-                        <th class="menu-nomobile">
-                          Biaya Transaksi
-                        </th>
-                        <th class="menu-nomobile">
-                          {{Lang::get('transaction.created')}}
-                        </th>
-                      </thead>
-                      <tbody>
-                        @if($data->count() > 0)
-                          @php $no = 1; @endphp
-                          @foreach($data as $row)
-                             <tr>
-                               <td class="text-center">{{ $no++ }}</td>
-                               <td class="text-center">
-                                  @if($row->type == 1)
-                                    {{ Lang::get('transaction.wallet.withdraw') }}
-                                  @else
-                                    {{ Lang::get('transaction.wallet.send') }}
-                                  @endif
-                                </td>
-                               <td class="text-right">{{ str_replace(",",".",number_format($row->coin)) }}</td>
-                               <td class="text-right">{{ str_replace(",",".",number_format($row->fee)) }}</td>
-                               <td class="text-center">{{ $row->created_at }}</td>
-                             </tr>
-                          @endforeach
-                        @endif
-                      </tbody>
-                    </table>
-                </div>
+                <div id="wallet_list" class="card-body"><!--  --></div>
             </div>
             @endif
             <!--  -->
@@ -122,7 +98,53 @@
 <script type="text/javascript">
     $(document).ready(function(){
         transaction_coin();
+        count_logic();
+        display_wallet();
     });
+
+    function display_wallet()
+    {
+        $.ajax({
+            type : 'GET',
+            url : "{{ url('wallet-list') }}",
+            dataType : 'html',
+            beforeSend: function()
+            {
+               $('#loader').show();
+               $('.div-loading').addClass('background-load');
+            },
+            success : function(result)
+            {
+                $("#wallet_list").html(result);
+            },
+            complete :function()
+            {
+                $('#loader').hide();
+                $('.div-loading').removeClass('background-load');
+                $("#data_transaction").DataTable();
+            },
+            error : function()
+            {
+                $('#loader').hide();
+                $('.div-loading').removeClass('background-load');
+            }
+        });
+    }
+
+    function count_logic()
+    {
+        $("#amount").on("keyup",delay(function(e){
+            var coin = $(this).val();
+            $("#amount").val(formatNumber(coin));
+
+            var rcoin = return_number(coin);
+            fee = (rcoin * 25)/1000;
+            $("#fee").html(formatNumber(fee));
+
+            var total_coin = rcoin + fee;
+            $("#total_coin_pay").html('<b>'+formatNumber(total_coin)+'</b>');            
+        },100));
+    }
 
     function transaction_coin()
     {
@@ -139,7 +161,6 @@
                 {
                    $('#loader').show();
                    $('.div-loading').addClass('background-load');
-                   $(".error").hide();
                 },
                 success : function(result)
                 {
@@ -148,17 +169,18 @@
 
                     if(result.err == 0)
                     {
+                        $(".error").hide();
                         $(".alert-success").show();
                         cur_coin = parseInt(result.wallet_coin);
                         $("#coin").html(formatNumber(cur_coin));
                         $("#total_coin").html(formatNumber(parseInt(result.total_coin)));
-                        $("#msg").html('<div class="alert alert-success text-center">{{ $lang::get("custom.success_coin") }}</div>');
-                        $("input[name='coin_ammount']").val('');
+                        $("#msg").html('<div class="alert alert-success text-center">{{ Lang::get("custom.success_coin") }}</div>');
+                        $("input[name='amount']").val('');
                     }
                     else if(result.err == 1)
                     {
                         $(".error").show();
-                        $(".wallet").html('<div class="alert alert-danger">{{ $lang::get("custom.failed") }}--</div>');
+                        $(".wallet").html('<div class="alert alert-danger">{{ Lang::get("custom.failed") }}--</div>');
                     }
                     else if(result.err == 2)
                     {
@@ -200,6 +222,7 @@
                 complete :function()
                 {
                   $(".alert-success").delay(3000).fadeOut(2000);
+                  display_wallet();
                 },
                 error : function()
                 {
@@ -209,19 +232,6 @@
             });
         });
     }
-
-    function formatNumber(num) 
-    {
-        num = parseInt(num);
-        if(isNaN(num) == true)
-        {
-           return '';
-        }
-        else
-        {
-           return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-        }
-    }
-
 </script>
+<script src="{{ asset('assets/js/counting.js') }}" type="text/javascript"></script>
 @endsection

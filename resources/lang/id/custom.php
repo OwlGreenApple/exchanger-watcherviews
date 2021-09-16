@@ -24,7 +24,7 @@ return [
     'have_account'=>'Sudah punya akun ?', //summary.blade
     'here'=>'disini', //trial.blade
     'intl'=>'Masukkan no hp anda tanpa di awali 0 atau kode negara<br/>Contoh : 8123456789, (201)5555555', //order.index.blade
-    'inscoin'=>'Jumlah coin di wallet anda tidak cukup', //CheckMaxCoin
+    'inscoin'=>'Saldo coin anda tidak cukup', //CheckMaxCoin
     'inv_id'=>'ID tidak valid', //summary.blade
     'login'=>'Login di sini', //summary.blade
     'log_in'=>'Masuk', //summary.blade

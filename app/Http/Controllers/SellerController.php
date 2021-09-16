@@ -25,10 +25,9 @@ class SellerController extends Controller
 
     public function selling_save(Request $request)
     {
-    	$coin = str_replace(".","",$request->tr_coin);
-    	$coin = (int)$coin;
+        $pc = new Price;
+    	$coin = $pc::convert_number($request->tr_coin);
 
-    	$pc = new Price;
         $fee = $pc->check_type(Auth::user()->membership)['fee'];
         $rate = $pc::get_rate();
         $coin_fee = ($coin * $fee)/100;
@@ -93,7 +92,7 @@ class SellerController extends Controller
 	    		{
 	    			$status = '<span class="text-black">Menunggu konfirmasi pembeli  </span>';
 	    		}
-                elseif($row->status == 2)
+                elseif($row->status == 2 || $row->status == 4)
                 {
                     $status = '<a target="_blank" href="'.url("sell-confirm").'/'.$row->no.'" class="btn btn-info btn-sm">Konfirmasi</a>';
                 }
@@ -144,7 +143,7 @@ class SellerController extends Controller
     // CONFIRMATION PAGE
     public function sell_confirm($invoice)
     {
-    	$tr = Transaction::where([['no',$invoice],['status',2]])->first();
+    	$tr = Transaction::where('no',$invoice)->whereIn('status',[2,4])->first();
     	$pc = new Price;
 
     	if(is_null($tr))
@@ -170,6 +169,7 @@ class SellerController extends Controller
     		'upload'=> $upload,
     		'coin' => $pc->pricing_format($tr->amount),
     		'total' => $pc->pricing_format($tr->total),
+            'status' => $tr->status,
     	];
 
         return view('seller.confirm',['row'=>$data,'pc'=>$pc]);
@@ -247,9 +247,15 @@ class SellerController extends Controller
     	return response()->json($res);
     }
 
-    public function seller_dispute()
+    public function seller_dispute($id)
     {
-        return view('seller.seller-dispute');
+        $tr = Transaction::where([['id',$id],['seller_id',Auth::id()]])->first();
+
+        if(is_null($tr))
+        {
+            return view('error404');
+        }
+        return view('seller.seller-dispute',['tr'=>$tr]);
     }
 
     // GET ORDER NUMBER FROM TRANSACTION

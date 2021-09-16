@@ -7,6 +7,7 @@
 */
 return [
     'amount'=>'Jumlah Transaksi Coin',
+    'api'=>'Mohon connect kan akun watcherviews anda',
     'buy'=>'Beli',
     'buy.done'=>'Transaksi pembelian selesai',
     'buy.no'=>'No Invoice',
