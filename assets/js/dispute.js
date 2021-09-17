@@ -25,7 +25,6 @@ function save_dispute()
             {
                $('#loader').show();
                $('.div-loading').addClass('background-load');
-               $(".error").hide();
             },
             success : function(result)
             {
@@ -33,12 +32,21 @@ function save_dispute()
                 {
                     location.href=page_success;
                 }
-                else
+                else if(result.err == 'validation')
                 {
+                    $(".error").show();
                     $('#loader').hide();
                     $('.div-loading').removeClass('background-load');
-
-                    // $(".error").show();
+                    $(".identity").html(result.identity);
+                    $(".proof").html(result.proof);
+                    $(".mutation").html(result.mutation);
+                    $(".comments").html(result.comments);
+                }
+                else
+                {
+                    $(".error").show();
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
                     $("#err_message").html('<div class="alert alert-danger>'+err_message+'</div>');
                 }
             },

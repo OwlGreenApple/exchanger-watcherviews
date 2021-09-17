@@ -200,6 +200,12 @@ class HomeController extends Controller
         return $user->coin;
     }
 
+    /* DISPUTE */
+    public function dispute_page()
+    {
+      return view('dispute');
+    }
+
     // SAVE DISPUTE
     public function save_dispute(Request $request)
     {
@@ -237,7 +243,7 @@ class HomeController extends Controller
       {
         $dir_mt = env('S3path').'/mutation/'.explode(' ',trim(Auth::user()->name))[0].'-'.Auth::id();
         $filename_mt = $invoice.'-mutation.jpg';
-        Storage::disk('s3')->put($dir_mt."/".$filename_mt, file_get_contents($request->file('proof')), 'public');
+        Storage::disk('s3')->put($dir_mt."/".$filename_mt, file_get_contents($request->file('mutation')), 'public');
         $dp->upload_mutation = $dir_mt."/".$filename_mt;
       } 
 
@@ -254,11 +260,6 @@ class HomeController extends Controller
       }
 
       return response()->json($res);
-    }
-
-    public function dispute_page()
-    {
-      return view('dispute');
     }
 
     public function index()

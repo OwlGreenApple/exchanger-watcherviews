@@ -10,6 +10,7 @@ use App\Models\Orders;
 use App\Models\User;
 use App\Models\Membership;
 use App\Models\Notification;
+use App\Models\Dispute;
 use App\Models\Kurs;
 use App\Helpers\Api;
 use App\Helpers\Price;
@@ -18,6 +19,21 @@ use Storage, Validator, DB;
 
 class AdminController extends Controller
 {
+
+    public function dispute()
+    {
+      return view('admin.dispute.index');
+    }
+
+    public function display_dispute(Request $request)
+    {
+       $dp = Dispute::join('users','users.id','=','disputes.user_id')->select(DB::raw('CASE WHEN role = 1 THEN "pembeli" 
+         WHEN role = 2 THEN "penjual" 
+         ELSE "-" 
+         END AS roles
+         '),'disputes.*','users.name','tr.no AS invoice')->join('transactions AS tr','tr.id','=','disputes.trans_id')->get();
+       return view('admin.dispute.content',['data'=>$dp]);
+    }
 
     public function trade()
     {

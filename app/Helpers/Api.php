@@ -55,7 +55,7 @@ class Api
         $data_api = json_encode($data);
 
         // $url = 'https://watcherviews.com/dashboard/exchanger-coin';
-        $url = 'https://192.168.100.49/watcherviews/connect-exchanger';
+        $url = 'https://'.env('APP_URL_API').'/watcherviews/connect-exchanger';
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data_api);
@@ -92,7 +92,7 @@ class Api
         $data_api = json_encode($data);
 
         // $url = 'https://watcherviews.com/dashboard/exchanger-coin';
-        $url = 'https://192.168.100.49/watcherviews/exchanger-total-coin';
+        $url = 'https://'.env('APP_URL_API').'/watcherviews/exchanger-total-coin';
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data_api);
@@ -139,7 +139,7 @@ class Api
         $data_api = json_encode($data);
 
         // $url = 'https://watcherviews.com/dashboard/'.$target;
-        $url = 'https://192.168.100.49/watcherviews/'.$target;
+        $url = 'https://'.env('APP_URL_API').'/watcherviews/'.$target;
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data_api);

@@ -34,7 +34,7 @@ Route::group(['middleware'=>['auth','web']],function()
 	Route::get('thankyou',[App\Http\Controllers\OrderController::class,'thankyou']);
 	Route::get('home', [App\Http\Controllers\HomeController::class, 'index']);
 	Route::get('purchase', [App\Http\Controllers\HomeController::class, 'purchase']);
-	Route::post('save-dispute', [App\Http\Controllers\HomeController::class, 'save_dispute']);
+	Route::post('save-dispute', [App\Http\Controllers\HomeController::class, 'save_dispute'])->middleware('check_dispute');
 	Route::get('page-dispute', [App\Http\Controllers\HomeController::class, 'dispute_page']);
 
 	//BUY
@@ -81,6 +81,8 @@ Route::group(['middleware'=>['auth','web']],function()
 /*ADMIN*/
 Route::group(['middleware'=>['auth','web','is_admin']],function()
 {
+	Route::get('dispute-admin',[App\Http\Controllers\Admin\AdminController::class,'dispute']);
+	Route::get('dispute-list-admin',[App\Http\Controllers\Admin\AdminController::class,'display_dispute']);
 	Route::get('kurs-admin',[App\Http\Controllers\Admin\AdminController::class,'trade']);
 	Route::get('user-list',[App\Http\Controllers\Admin\AdminController::class,'user_list']);
 	Route::get('user-fetch',[App\Http\Controllers\Admin\AdminController::class,'fetch_user']);

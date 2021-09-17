@@ -19,20 +19,24 @@
                           <div class="form-group">
                             <label for="fl">Upload KTP(Transfer Bank) / Profile (DANA/OVO/GOPAY)</label>
                             <input type="file" class="form-control" name="identity" id="fl">
+                            <span class="error identity"><!-- error --></span>
                           </div>
                           
                           <div class="form-group">
                             <label for="f2">Upload Bukti Transfer</label>
                             <input type="file" class="form-control" name="proof" id="f2">
+                            <span class="error proof"><!-- error --></span>
                           </div>
                           
                           <div class="form-group">
                             <label for="f3">Upload Mutasi</label>
                             <input type="file" class="form-control" name="mutation" id="f3">
+                            <span class="error mutation"><!-- error --></span>
                           </div>
                           <div class="form-group">
                             <label for="ct">Komentar</label>
                             <textarea name="comments" class="form-control"></textarea>
+                            <span class="error comments"><!-- error --></span>
                           </div>
                           <button type="submit" class="btn btn-success">Kirim</button>
                         </form>

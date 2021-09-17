@@ -19,10 +19,12 @@
                           <div class="form-group">
                             <label for="fl">Upload Bukti</label>
                             <input type="file" class="form-control" name="proof" id="fl">
+                            <span class="error proof"><!-- error --></span>
                           </div>
                           <div class="form-group">
                             <label for="ct">Komentar</label>
                             <textarea name="comments" class="form-control"></textarea>
+                            <span class="error comments"><!-- error --></span>
                           </div>
                           <button type="submit" class="btn btn-success">Kirim</button>
                         </form>
