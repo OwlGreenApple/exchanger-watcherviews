@@ -3,7 +3,7 @@
 @section('content')
                 <h4>New here?</h4>
                 <h6 class="font-weight-light">Signing up is easy. It only takes a few steps</h6>
-                <form class="pt-3">
+                <form class="pt-3 add-contact" id="form-register">
                   <div class="form-group">
                     <input type="text" class="form-control form-control-lg" id="username" placeholder="Input Your Name" name="username">
                   </div>
