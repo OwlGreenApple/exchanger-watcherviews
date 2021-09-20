@@ -49,9 +49,14 @@
           </td>
           <td>
             @if($row->status == 0)
-              <button data-id="{{ $row->id }}" class="btn btn-danger btn-sm blame">Dispute</button>
+              @if($row->user_id == $row->seller_id)
+                <button data-id="{{ $row->id }}" class="btn btn-warning btn-sm blame">Acc Penjual</button>
+              @endif
+              @if($row->user_id == $row->buyer_id)
+               <button data-id="{{ $row->id }}" class="btn btn-danger btn-sm blame">Acc Pembeli</button>
+              @endif
             @else
-              -
+              {{ Lang::get('order.complete') }}
             @endif
           </td>
         </tr>

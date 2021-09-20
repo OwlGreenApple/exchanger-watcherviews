@@ -35,13 +35,13 @@
                                <div class="form-check">
                                   <input class="form-check-input" type="radio" name="wallet_option" id="flexRadioDefault1" value="1" checked>
                                   <label class="form-check-label" for="flexRadioDefault1">
-                                    {{ $lang::get('transaction.wd') }}&nbsp;(min : <b>100.000</b>)
+                                    {{ $lang::get('transaction.wd') }} ke wallet&nbsp;(min : <b>100.000</b>)
                                   </label>
                                 </div>
                                 <div class="form-check">
                                   <input class="form-check-input" type="radio" name="wallet_option" value="2" id="flexRadioDefault2">
                                   <label class="form-check-label" for="flexRadioDefault2">
-                                    {{ $lang::get('transaction.send') }}
+                                    {{ $lang::get('transaction.send') }} ke watcherviews
                                   </label>
                                 </div>
                             </div>

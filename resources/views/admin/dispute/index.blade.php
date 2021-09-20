@@ -27,7 +27,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="modaltitle">
-          Apakah anda yakin akan me-dispute user ini?
+          Apakah anda yakin akan menerima dispute dari user ini?
         </h5>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
@@ -99,7 +99,7 @@
 
       $.ajax({
         type : 'GET',
-        url : "{{ url('/user-ban') }}",
+        url : "{{ url('dispute-user') }}",
         data : {id:id},
         dataType: 'json',
         beforeSend: function() {
@@ -108,7 +108,7 @@
         },
         success: function(result) 
         {
-          if(result.error == 0)
+          if(result.err == 0)
           {
             $(".alert-danger").hide();
             display_table();

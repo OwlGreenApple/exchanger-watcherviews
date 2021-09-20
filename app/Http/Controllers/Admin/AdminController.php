@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\Membership;
 use App\Models\Notification;
 use App\Models\Dispute;
+use App\Models\Transaction;
 use App\Models\Kurs;
 use App\Helpers\Api;
 use App\Helpers\Price;
@@ -31,8 +32,80 @@ class AdminController extends Controller
          WHEN role = 2 THEN "penjual" 
          ELSE "-" 
          END AS roles
-         '),'disputes.*','users.name','tr.no AS invoice')->join('transactions AS tr','tr.id','=','disputes.trans_id')->get();
+         '),'disputes.*','users.name','tr.no AS invoice','tr.seller_id','tr.buyer_id')->join('transactions AS tr','tr.id','=','disputes.trans_id')->orderBy('disputes.id','desc')->get();
        return view('admin.dispute.content',['data'=>$dp]);
+    }
+
+    public function dispute_user(Request $request)
+    {
+      $dp = Dispute::where('disputes.id',$request->id)->join('users','users.id','=','disputes.user_id')->join('transactions AS tr','tr.id','=','disputes.trans_id')->select('disputes.*','tr.status AS trs','tr.seller_id','tr.buyer_id','users.warning')->first();
+
+      if(is_null($dp))
+      {
+        return response()->json(['err'=>2]);
+      }
+
+      $tr = Transaction::find($dp->trans_id);
+      $coin = $tr->amount;
+
+      // BUYER DISPUTE
+      if($dp->buyer_id == $dp->user_id)
+      {
+        // SELLER GET WARNING
+        $user = User::find($dp->seller_id);
+        $user->warning++;
+        $total_warning = $user->warning;
+
+        // BANNED SELLER IF WARNING HAS REACH 3
+        if($total_warning > 2)
+        {
+          $user->status = 0;
+        }
+
+        try
+        {
+          $user->coin += $coin;
+          $user->save();
+        }
+        catch(QueryException $e)
+        {
+          return response()->json(['err'=>1,['msg'=>$e->getMessage()]]);
+        }
+      }
+
+      // CHANGE TRANSACTION STATUS IF ADMIN HAS DECIDE
+      try
+      {
+        $tr->status = 3;
+        $tr->save();
+      }
+      catch(QueryException $e)
+      {
+         return response()->json(['err'=>1,['msg'=>$e->getMessage()]]);
+      }
+
+      // CHANGE DISPUTE STATUS IF ADMIN HAS DECIDE
+      try
+      {
+        $dispute = Dispute::find($dp->id);
+        $dispute->status = 1;
+        $dispute->save();
+        $ret['err'] = 0;
+      }
+      catch(QueryException $e)
+      {
+        $ret['err'] = 1;
+        $ret['msg'] = $e->getMessage();
+      }
+
+      return response()->json($ret);
+
+      // SELLER CASE
+     /* if($dp->seller_id == $dp_user_id)
+      {
+        $user = 
+      }*/
+
     }
 
     public function trade()

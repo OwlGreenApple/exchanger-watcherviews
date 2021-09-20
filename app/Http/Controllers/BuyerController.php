@@ -175,7 +175,7 @@ class BuyerController extends Controller
     public function buyer_history()
     {
     	$data = array();
-    	$tr = Transaction::where('buyer_id',Auth::id())->get();
+    	$tr = Transaction::where('buyer_id',Auth::id())->orderBy('id','desc')->get();
     	$pc = new Price;
 
     	if($tr->count() > 0)

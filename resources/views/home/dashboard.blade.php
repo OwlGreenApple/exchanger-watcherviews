@@ -6,8 +6,8 @@
         <div class="col-md-12">
             <div class="card px-3 py-3">
                 <div class="col-lg-12 text-right">
-                     <div><a href="{{ url('account') }}/wallet"><i class="fas fa-plug text-primary"></i>&nbsp;Connect API</a></div>
-                    <div>Status : <b>Connected</b></div>
+                     <div><a class="text-danger" href="{{ url('account') }}/wallet"><i class="fas fa-plug"></i>&nbsp;Harap Connect API</a></div>
+                    <div class="text-primary"><i class="fas fa-plug"></i>&nbsp;API Connected</div>
                 </div>
                 <div class="mt-3 col-md-12 mb-3">
                     <div class="row">
