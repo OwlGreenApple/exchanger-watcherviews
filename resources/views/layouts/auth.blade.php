@@ -4,7 +4,9 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Purple Admin</title>
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Exchanger</title>
     <!-- plugins:css -->
     <link rel="stylesheet" href="{{ asset('assets/template/vendors/mdi/css/materialdesignicons.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/template/vendors/css/vendor.bundle.base.css') }}">
@@ -16,7 +18,10 @@
     <!-- Layout styles -->
     <link rel="stylesheet" href="{{ asset('assets/template/css/demo_1/style.css') }}">
     <!-- End layout styles -->
-    <link rel="shortcut icon" href="{{ asset('assets/template/images/favicon.png') }}"/>
+    <link rel="shortcut icon" href="{{url('assets/img/favicon.png')}}"/>
+    <!-- Scripts -->
+    <script src="{{ asset('assets/js/app.js') }}" defer></script>
+    <script src="{{ asset('assets/js/jquery-3.2.1.min.js') }}"></script>
   </head>
   <body>
     <div class="container-scroller">
@@ -26,7 +31,7 @@
             <div class="col-lg-4 mx-auto">
               <div class="auth-form-light text-left p-5">
                 <div class="brand-logo">
-                  <img src="{{url('assets/img/logo.svg')}}">
+                  <img src="{{url('assets/img/logo.png')}}">
                 </div>
                 @yield('content')
               </div>
