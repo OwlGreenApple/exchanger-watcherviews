@@ -96,6 +96,10 @@ class SellerController extends Controller
                 {
                     $status = '<a target="_blank" href="'.url("sell-confirm").'/'.$row->no.'" class="btn btn-info btn-sm">Konfirmasi</a>';
                 }
+                elseif($row->status == 5)
+                {
+                    $status = '<a target="_blank" href="'.url('chat').'/'.$row->id.'/'.Auth::id().'" class="btn btn-outline-primary btn-sm"><i class="far fa-comments"></i>&nbsp;Chat Admin</a>';
+                }
 	    		else
 	    		{
 	    			$status = '<span class="text-black-50">Lunas</span>';
@@ -219,8 +223,8 @@ class SellerController extends Controller
     	{
             $user = User::find(Auth::id());
             // RETURN COIN FROM TRANSACTION TO USER / WALLET
-            $total_tr_coin = $tr->coin_fee + $tr->amount;
-            $user->coin += $total_tr_coin;
+            // $total_tr_coin = $tr->coin_fee + $tr->amount;
+            $user->coin += $tr->amount;
 
     		try{
                 $user->save();

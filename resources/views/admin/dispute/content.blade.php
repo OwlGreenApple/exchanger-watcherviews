@@ -47,7 +47,13 @@
              <a data-read="{{ $row->comments }}">Lihat Komentar</a>
             @endif
           </td>
-          <td>{{ $row->status }}</td>
+          <td>
+            @if($row->status == 0)
+              <button data-id="{{ $row->id }}" class="btn btn-danger btn-sm blame">Dispute</button>
+            @else
+              -
+            @endif
+          </td>
         </tr>
       @endforeach
     @endif

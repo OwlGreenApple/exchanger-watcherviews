@@ -158,7 +158,8 @@ class BuyerController extends Controller
 
     	try
     	{
-    		$tr->buyer_id = Auth::id();
+    		$tr->date_buy = Carbon::now();
+            $tr->buyer_id = Auth::id();
     		$tr->status = 1;
     		$tr->save();
     		$data['err'] = 0;
@@ -200,6 +201,11 @@ class BuyerController extends Controller
                 {
                     $status = ' <a target="_blank" href="'.url('buyer-dispute').'/'.$row->id.'" class="btn btn-danger btn-sm">Dispute</a>';
                     $comments = '-';
+                } 
+                elseif($row->status == 5)
+                {
+                    $status = '<a target="_blank" href="'.url('chat').'/'.$row->id.'/'.Auth::id().'" class="btn btn-outline-primary btn-sm"><i class="far fa-comments"></i>&nbsp;Chat Admin</a>';
+                    $comments = '-';
                 }
     			else
     			{
@@ -210,7 +216,7 @@ class BuyerController extends Controller
     			$data[] = [
     				'id'=>$row->id,
     				'seller'=>$seller->name,
-    				'date'=>$row->created_at,
+    				'date'=>$row->date_buy,
     				'no'=>$row->no,
     				'coin'=>$pc->pricing_format($row->amount),
     				'kurs'=>$row->kurs,

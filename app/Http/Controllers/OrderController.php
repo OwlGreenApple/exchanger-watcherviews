@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\QueryException;
 use App\Helpers\Price;
 use App\Helpers\Api;
 use App\Models\Orders;
 use App\Models\Notification;
+use App\Mail\MemebershipEmail;
 use Carbon\Carbon;
 use Session, Auth, Storage, DB;
 
@@ -119,6 +121,9 @@ class OrderController extends Controller
 
                 // SEND WA MESSAGE IF ORDER SUCCESSFUL  
                 $this->send_message($data['package'],$data['price'],$data['total'],$order_number,Auth::user()->phone_number);
+
+                // SEND EMAIL IF ORDER SUCCESSFUL
+                Mail::to(Auth::user()->email)->send(new MemebershipEmail($order_number,Auth::user()->name,$data['package'],$data['price'],$data['total']));
             }
 
             if(session('order') !== null)
@@ -131,7 +136,7 @@ class OrderController extends Controller
         {
              // dd($e->getMessage());
             $rt['status'] = 0;
-            $rt['msg'] = $this->lang::get('custom.failed');
+            $rt['msg'] = Lang::get('custom.failed');
         }
 
         // in case of ajax
