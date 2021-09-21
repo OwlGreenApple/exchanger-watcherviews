@@ -19,6 +19,35 @@
   </div>
 </div>
 
+<!-- Modal Detail -->
+<div class="modal fade" id="detail_user" role="dialog">
+  <div class="modal-dialog">
+    
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modaltitle">
+          Detail <span id="role_popup"><!-- display role --></span>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div>Nama : <span id="name_popup"><!-- display user name --></span></div>
+        <div>Tanggal Dispute : <span id="date_dispute_popup"><!-- display date dispute --></span></div>
+        <div><a id="identity_popup" class="popup-newWindow">Lihat Bukti Identitas</a></div>
+        <div><a id="proof_popup" class="popup-newWindow">Lihat Bukti Transfer</a></div>
+        <div><a id="mutation_popup" class="popup-newWindow">Lihat Bukti Mutasi</a></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" data-dismiss="modal">
+          Tutup
+        </button>
+      </div>
+    </div>
+      
+  </div>
+</div>
+
 <!-- Modal Confirm -->
 <div class="modal fade" id="confirm_ban" role="dialog">
   <div class="modal-dialog">
@@ -48,11 +77,89 @@
 
   $(document).ready(function() 
   {
+    detail_user();
     dispute_form();
     display_table()
     popup_new_window();
     dispute_user();
+    notify_user();
   });
+
+  function notify_user()
+  {
+    $("body").on("click",".detail",function()
+    {
+      var invoice = $(this).attr('data-invoice');
+      var user_id = $(this).attr('data-id');
+      var data = {'invoice':invoice, 'user_id':user_id}; 
+
+      $.ajax({
+        type : 'GET',
+        url : "{{ url('notify-user') }}",
+        dataType: 'json',
+        data : data,
+        beforeSend: function() {
+          $('#loader').show();
+          $('.div-loading').addClass('background-load');
+        },
+        success: function(result) 
+        {
+          if(result.err == 0)
+          {
+            $("#err").html('<div class="alert alert-success">Notifikasi Telah Dikirim</div>');
+          }
+          else
+          {
+            $("#err").html('<div class="alert alert-danger">{{ Lang::get("custom.failed") }}</div>');
+          }
+        },
+        complete : function()
+        {
+          $('#loader').hide();
+          $('.div-loading').removeClass('background-load');
+        },
+        error : function(xhr)
+        {
+          $('#loader').hide();
+          $('.div-loading').removeClass('background-load');
+          console.log(xhr.responseText);
+        }
+      });
+    });
+  }
+
+  function detail_user()
+  {
+    $("body").on("click",".detail",function()
+    {
+      var role = $(this).attr('role');
+      var name = $(this).attr('data-name');
+      var date_dispute = $(this).attr('date-dispute');
+      var identity = $(this).attr('data-identity');
+      var proof = $(this).attr('data-proof');
+      var mutation = $(this).attr('data-mutation');
+
+      if(role == 1)
+      {
+        $("#identity_popup").show();
+        $("#mutation_popup").show();
+        $("#role_popup").html('Pembeli');
+      }
+      else
+      {
+        $("#identity_popup").hide();
+        $("#mutation_popup").hide();
+        $("#role_popup").html('Penjual');
+      }
+
+      $("#name_popup").html(name);
+      $("#date_dispute_popup").html(date_dispute);
+      $("#identity_popup").attr('href',identity);
+      $("#proof_popup").attr('href',proof);
+      $("#mutation_popup").attr('href',mutation);
+      $("#detail_user").modal();
+    });
+  }
 
   function display_table()
   {

@@ -4,6 +4,7 @@ use App\Models\Transaction;
 use App\Models\Kurs;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
+use Carbon\Carbon;
 
 class Price
 {
@@ -87,6 +88,33 @@ class Price
     {
         $rate = Kurs::select('kurs')->orderBy('id','desc')->first();
         return $rate->kurs;
+    }
+
+    public static function total_dispute()
+    {
+        $tr = Transaction::where('status',4)->orderBy('created_at','desc')->get();
+        $total_dispute = $tr->count();
+        $new_dispute = 0;
+        $today = Carbon::today();
+
+        // TO CHECK IF DISPUTE IS NEW OR OLD
+        if($total_dispute > 0)
+        {
+            foreach($tr as $row)
+            {
+                if($today->lte(Carbon::parse($row->updated_at)))
+                {
+                    $new_dispute = 1;
+                }
+            }
+        }
+
+        $data = [
+            'total'=>$total_dispute,
+            'new'=>$new_dispute,
+        ];
+
+        return $data;
     }
 
 /*end of class*/

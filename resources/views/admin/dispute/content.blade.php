@@ -1,14 +1,12 @@
 <table id="dispute_list" class="table">
   <thead>
     <th>No</th>
-    <th>Nama</th>
-    <th>Peran</th>
-    <th>No Transaksi</th>
-    <th>Bukti Identitias</th>
-    <th>Bukti Pembayaran</th>
-    <th>Bukti Mutasi</th>
-    <th>Komentar</th>
-    <th>Status</th>
+    <th>Tanggal Beli</th>
+    <th>Invoice</th>
+    <th>Pembeli</th>
+    <th>Penjual</th>
+    <th>Chat</th>
+    <th>Keputusan</th>
   </thead>
   <tbody>
     @if($data->count() > 0)
@@ -16,48 +14,35 @@
       @foreach($data as $row)
         <tr>
           <td>{{ $no++ }}</td>
-          <td>{{ $row->name }}</td>
-          <td>{{ $row->roles }}</td>
+          <td>{{ $row->date_buy }}</td>
           <td>{{ $row->invoice }}</td>
           <td>
-            @if($row->upload_identity == null)
-              -
+            @if($row->buyer_id > 0)
+              <button type="button" data-identity="{!! Storage::disk('s3')->url($row->upload_identity) !!}" data-proof="{!! Storage::disk('s3')->url($row->buyer_proof) !!}" data-mutation="{!! Storage::disk('s3')->url($row->upload_mutation) !!}" data-name="{{ $row->buyer_name }}" date-dispute="{{ $row->buyer_dispute_date }}" class="btn btn-success btn-sm detail" role="1">Detail</button>
             @else
-             <a class="popup-newWindow" href="{!! Storage::disk('s3')->url($row->upload_identity) !!}">Lihat identitas</a>
+              -
             @endif
           </td>
           <td>
-            @if($row->upload_proof == null)
-              -
+            @if($row->seller_id > 0)
+              <button type="button" data-proof="{!! Storage::disk('s3')->url($row->seller_proof) !!}" data-name="{{ $row->seller_name }}" date-dispute="{{ $row->seller_dispute_date }}" class="btn btn-primary btn-sm detail" role="2">Detail</button>
             @else
-             <a class="popup-newWindow" href="{!! Storage::disk('s3')->url($row->upload_proof) !!}">Lihat Bukti Bayar</a>
+              -
             @endif
           </td>
+          <td><button data-tr-id="{{ $row->id }}" type="button" class="btn btn-default btn-sm"><i class='far fa-comments'></i>&nbsp;Chat</button></td>
           <td>
-            @if($row->upload_mutation == null)
-              -
+            @if($row->buyer_id > 0)
+              <button type="button" class="btn btn-primary btn-sm">Pembeli Menang</button>
             @else
-             <a class="popup-newWindow" href="{!! Storage::disk('s3')->url($row->upload_mutation) !!}">Lihat Bukti Mutasi</a>
+              <button type="button" data-id="{{ $row->buyer_id }}" data-invoice="{{ $row->invoice }}" class="btn btn-outline-primary btn-sm notify">Notifikasi Pembeli</button>
             @endif
-          </td>
-          <td>
-            @if($row->comments == null)
-              -
+            @if($row->seller_id > 0)
+              <button type="button" class="btn btn-success btn-sm">Penjual Menang</button>
             @else
-             <a data-read="{{ $row->comments }}">Lihat Komentar</a>
+              <button type="button" data-id="{{ $row->seller_id }}" data-invoice="{{ $row->invoice }}" class="btn btn-outline-success btn-sm notify">Notifikasi Penjual</button>
             @endif
-          </td>
-          <td>
-            @if($row->status == 0)
-              @if($row->user_id == $row->seller_id)
-                <button data-id="{{ $row->id }}" class="btn btn-warning btn-sm blame">Acc Penjual</button>
-              @endif
-              @if($row->user_id == $row->buyer_id)
-               <button data-id="{{ $row->id }}" class="btn btn-danger btn-sm blame">Acc Pembeli</button>
-              @endif
-            @else
-              {{ Lang::get('order.complete') }}
-            @endif
+            <button type="button" class="btn btn-warning btn-sm">Dispute selesai</button>
           </td>
         </tr>
       @endforeach

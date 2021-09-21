@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\OrderController as Odc;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Models\Orders;
@@ -15,6 +17,7 @@ use App\Models\Transaction;
 use App\Models\Kurs;
 use App\Helpers\Api;
 use App\Helpers\Price;
+use App\Mail\NotifyEmail;
 use Carbon\Carbon;
 use Storage, Validator, DB;
 
@@ -28,12 +31,44 @@ class AdminController extends Controller
 
     public function display_dispute(Request $request)
     {
-       $dp = Dispute::join('users','users.id','=','disputes.user_id')->select(DB::raw('CASE WHEN role = 1 THEN "pembeli" 
-         WHEN role = 2 THEN "penjual" 
-         ELSE "-" 
-         END AS roles
-         '),'disputes.*','users.name','tr.no AS invoice','tr.seller_id','tr.buyer_id')->join('transactions AS tr','tr.id','=','disputes.trans_id')->orderBy('disputes.id','desc')->get();
+       $dp = Transaction::leftJoin('disputes AS dp','transactions.buyer_dispute_id','=','dp.id')
+            ->leftJoin('disputes AS ds','transactions.seller_dispute_id','=','ds.id')
+            ->leftJoin("users AS us",'us.id','=','dp.user_id')
+            ->leftJoin("users AS ur",'ur.id','=','ds.user_id')
+            ->select('dp.upload_identity',
+              'dp.upload_proof AS buyer_proof',
+              'dp.upload_mutation',
+              'dp.user_id AS buyer_id',
+              'dp.created_at AS buyer_dispute_date',
+              'ds.upload_proof AS seller_proof',
+              'ds.created_at AS seller_dispute_date',
+              'ds.user_id AS seller_id',
+              'us.name AS buyer_name',
+              'ur.name AS seller_name',
+              'transactions.no AS invoice','transactions.date_buy','transactions.id')
+            ->where([['transactions.status','=',4],['transactions.seller_dispute_id','>',0]])->orWhere('transactions.buyer_dispute_id','>',0)->orderBy('transactions.id','desc')->get();
+
+      // dd($dp);
+
        return view('admin.dispute.content',['data'=>$dp]);
+    }
+
+    // PENDING
+    public function notify_user(Request $request)
+    {
+      $user_id = $request->user_id;
+      $invoice = $request->invoice;
+      $odc = new Odc;
+
+      $user = User::find($user_id);
+      if(is_null($user))
+      {
+        return response()->json(['err'=>1]);
+      }
+      
+      Mail::to($user->email)->send(new NotifyEmail($generated_password,$data['username']));
+
+       $odc->send_message($data['package'],$data['price'],$data['total'],$order_number,Auth::user()->phone_number);
     }
 
     public function dispute_user(Request $request)

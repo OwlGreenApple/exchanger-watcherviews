@@ -120,7 +120,7 @@
                                     <a class="nav-link" href="{{ url('order-list') }}">Order List</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ url('dispute-admin') }}">Dispute</a>
+                                    <a class="nav-link" href="{{ url('dispute-admin') }}">@if(Price::total_dispute()['new'] == 1) <u>Dispute</u> @else Dispute @endif @if(Price::total_dispute()['total'] > 0) <span class="badge badge-warning">{!! Price::total_dispute()['total'] !!}</span> @endif</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ url('wa-message') }}">WA Message</a>
