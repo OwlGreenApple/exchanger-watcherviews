@@ -58,6 +58,9 @@
                 </div>
               </div>
             </div>
+            <!-- buy page -->
+            @include('buyer.buy-form')
+            <!--  -->            
             <div class="row">
               <div class="col-md-7 grid-margin stretch-card">
                 <div class="card">
@@ -79,7 +82,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div>            
             <div class="row">
               <div class="col-12 grid-margin">
                 <div class="card">
