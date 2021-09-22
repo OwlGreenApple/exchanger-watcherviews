@@ -213,57 +213,60 @@
             <!--
             https://materialdesignicons.com/
             -->
-            @if (Auth::user()->is_admin == 0)
-              <li class="nav-item nav-logout d-none d-lg-block">
-                <a class="nav-link" href="{{ url('buy') }}">
-                  <i class="mdi mdi-cart-outline"></i> &nbsp
-                  Beli Koin
-                </a>
-              </li>
-              <li class="nav-item nav-logout d-none d-lg-block">
-                <a class="nav-link" href="{{ url('sell') }}">
-                  <i class="mdi mdi-store-24-hour"></i> &nbsp
-                  {{ Lang::get('transaction.sell') }}
-                </a>
-              </li>
-              <li class="nav-item nav-logout d-none d-lg-block">
-                <a class="nav-link" href="{{ url('wallet') }}">
-                  <i class="mdi mdi-wallet-outline"></i> &nbsp
-                  Wallet
-                </a>
-              </li>
+            @guest
             @else
-              <li class="nav-item nav-logout d-none d-lg-block">
-                <a class="nav-link" href="{{ url('kurs-admin') }}">
-                  <i class="mdi mdi-wallet-outline"></i> &nbsp
-                  Kurs Coin
-                </a>
-              </li>
-              <li class="nav-item nav-logout d-none d-lg-block">
-                <a class="nav-link" href="{{ url('user-list') }}">
-                  <i class="mdi mdi-wallet-outline"></i> &nbsp
-                  User List
-                </a>
-              </li>
-              <li class="nav-item nav-logout d-none d-lg-block">
-                <a class="nav-link" href="{{ url('order-list') }}">
-                  <i class="mdi mdi-wallet-outline"></i> &nbsp
-                  Order List
-                </a>
-              </li>
-              <li class="nav-item nav-logout d-none d-lg-block">
-                <a class="nav-link" href="{{ url('dispute-admin') }}">
-                  <i class="mdi mdi-wallet-outline"></i> &nbsp
-                  Dispute User
-                </a>
-              </li>
-              <li class="nav-item nav-logout d-none d-lg-block">
-                <a class="nav-link" href="{{ url('wa-message') }}">
-                  <i class="mdi mdi-wallet-outline"></i> &nbsp
-                  WA Message
-                </a>
-              </li>
-            @endif
+              @if (Auth::user()->is_admin == 0)
+                <li class="nav-item nav-logout d-none d-lg-block">
+                  <a class="nav-link" href="{{ url('buy') }}">
+                    <i class="mdi mdi-cart-outline"></i> &nbsp
+                    Beli Koin
+                  </a>
+                </li>
+                <li class="nav-item nav-logout d-none d-lg-block">
+                  <a class="nav-link" href="{{ url('sell') }}">
+                    <i class="mdi mdi-store-24-hour"></i> &nbsp
+                    {{ Lang::get('transaction.sell') }}
+                  </a>
+                </li>
+                <li class="nav-item nav-logout d-none d-lg-block">
+                  <a class="nav-link" href="{{ url('wallet') }}">
+                    <i class="mdi mdi-wallet-outline"></i> &nbsp
+                    Wallet
+                  </a>
+                </li>
+              @else
+                <li class="nav-item nav-logout d-none d-lg-block">
+                  <a class="nav-link" href="{{ url('kurs-admin') }}">
+                    <i class="mdi mdi-wallet-outline"></i> &nbsp
+                    Kurs Coin
+                  </a>
+                </li>
+                <li class="nav-item nav-logout d-none d-lg-block">
+                  <a class="nav-link" href="{{ url('user-list') }}">
+                    <i class="mdi mdi-wallet-outline"></i> &nbsp
+                    User List
+                  </a>
+                </li>
+                <li class="nav-item nav-logout d-none d-lg-block">
+                  <a class="nav-link" href="{{ url('order-list') }}">
+                    <i class="mdi mdi-wallet-outline"></i> &nbsp
+                    Order List
+                  </a>
+                </li>
+                <li class="nav-item nav-logout d-none d-lg-block">
+                  <a class="nav-link" href="{{ url('dispute-admin') }}">
+                    <i class="mdi mdi-wallet-outline"></i> &nbsp
+                    Dispute User
+                  </a>
+                </li>
+                <li class="nav-item nav-logout d-none d-lg-block">
+                  <a class="nav-link" href="{{ url('wa-message') }}">
+                    <i class="mdi mdi-wallet-outline"></i> &nbsp
+                    WA Message
+                  </a>
+                </li>
+              @endif
+            @endguest
           </ul>
           
           <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
