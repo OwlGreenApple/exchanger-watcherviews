@@ -3,9 +3,11 @@
 <link href="{{ asset('assets/css/order.css') }}" rel="stylesheet" />
 
 @section('content')
-<div class="container">
-    <h2><b>Akun</b></h2>  
-    <div class="row justify-content-center mt-3">
+    <div class="page-header">
+      <h3 class="page-title">
+        Account </h3>
+    </div>
+    <div class="row mt-3">
 
         <!-- LEFT TAB -->
         <div class="col-md-3">
@@ -29,7 +31,7 @@
 
                     <a class="settings text-info border-bottom" href="{{ route('logout') }}"
                                    onclick="event.preventDefault();
-                                                 document.getElementById('logout-form').submit();">Log Out&nbsp;</a>
+                                                 document.getElementById('logout-form').submit();"><i class="mdi mdi-logout text-primary"></i>&nbsp;Log Out&nbsp;</a>
 
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
                     
@@ -76,7 +78,7 @@
                 <div id="connect_api_gui" class="card-body">
                     <span class="wallet mb-2"><!--  --></span>
                     @if($membership == 'free' && $trial == 0)
-                        <a class="settings text-bold alert-warning" data_target="2">{!! $lang::get('custom.trial') !!} {{ $lang::get('custom.here') }}</a></div>
+                        <a class="settings text-bold alert-warning" data_target="2">{!! $lang::get('custom.trial') !!} {{ $lang::get('custom.here') }}</a>
                     @else
                         <div class="msg"><!--  --></div>
                         @if($user->watcherviews_id > 0)
@@ -91,9 +93,10 @@
            
             <!-- end col -->
         </div> 
-    </div>
+    </div> 
+    
     <!-- end justify -->
-</div>
+
 
 
 <script src="{{ asset('/assets/intl-tel-input/callback.js') }}" type="text/javascript"></script>

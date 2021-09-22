@@ -1,11 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+
+    <div class="page-header">
+      <h3 class="page-title">
+        <span class="page-title-icon bg-gradient-primary text-white mr-2">
+          <i class="mdi mdi-store-24-hour"></i>
+        </span> {{ Lang::get('transaction.sell.title') }} </h3>
+    </div>
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header bg-warning text-black">{{ $lang::get('transaction.sell.title') }}</div>
+                <div class="card-header bg-warning text-black">&nbsp</div>
 
                 <div id="msg"><!-- message --></div>
 
@@ -95,7 +101,7 @@
         </div> 
     </div>
     <!-- end justify -->
-</div>
+
 
 <!-- Modal Delete -->
 <div class="modal fade" id="del_sell" role="dialog">
