@@ -21,5 +21,6 @@ return [
     'login'=>'Masuk',
     'notes'=>'Hanya diisi jika ingin mengganti password',
     'remember' => 'Ingat saya',
+    'suspend' => 'Maaf, akun anda tertahan selama 1 minggu, silahkan kontak admin.',
     'throttle' => 'Terlalu banyak usaha masuk. Silahkan coba lagi dalam :seconds detik.',
 ];

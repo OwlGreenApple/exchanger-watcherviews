@@ -20,7 +20,7 @@ class User extends Authenticatable
         0 = banned
         1 = activated - free membership
         2 = activated - paid membership
-        3 = activated - temporary status for seller so that trial will be return if seller delete their product
+        3 = suspended user for 1 week
     */
 
     /**

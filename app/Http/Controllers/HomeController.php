@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\Transaction;
 use App\Models\Wallet;
 use App\Models\Dispute;
+use App\Models\Chat;
 use App\Helpers\Price;
 use App\Helpers\Api;
 use Carbon\Carbon;
@@ -213,6 +214,13 @@ class HomeController extends Controller
       $role = $request->role;
       $tr_id = $request->tr_id;
       $trs = Transaction::find($tr_id);
+
+      if(is_null($trs))
+      {
+         $res['err'] = Lang::get('custom.failed');
+         return response()->json($res);
+      }
+
       $invoice = $trs->no;
 
       $dp = new Dispute;
@@ -247,18 +255,35 @@ class HomeController extends Controller
         $dp->upload_mutation = $dir_mt."/".$filename_mt;
       } 
 
-      $dp->comments = strip_tags($request->comments);
-      $trs->status = 5;
+      $chat = new Chat;
+      $chat->trans_id = $trs->id;
+      $chat->user_id = Auth::id();
+      $chat->comments = strip_tags($request->comments);
+      $chat->role = $role;
+      $trs->status = 4;
 
       try
       {
-        $trs->save();
+        $chat->save();
         $dp->save();
+        $id_dispute = $dp->id;
+
+        if($role == 1)
+        {
+          $trs->buyer_dispute_id = $id_dispute;
+        }
+        else
+        {
+          $trs->seller_dispute_id = $id_dispute;
+        }
+
+        $trs->save();
         $res['err'] = 0;
       }
       catch(QueryException $e)
       {
-        $res['err'] = $e->getMessage();
+        // $res['err'] = $e->getMessage();
+        $res['err'] = Lang::get('custom.failed');
       }
 
       return response()->json($res);

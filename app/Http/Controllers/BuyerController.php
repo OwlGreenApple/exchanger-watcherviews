@@ -199,17 +199,19 @@ class BuyerController extends Controller
     			}
                 elseif($row->status == 4)
                 {
-                    $status = ' <a target="_blank" href="'.url('buyer-dispute').'/'.$row->id.'" class="btn btn-danger btn-sm">Dispute</a>';
+                    if($row->buyer_dispute_id > 0)
+                    {
+                        $status = '<a target="_blank" href="'.url('chat').'/'.$row->id.'" class="btn btn-outline-primary btn-sm"><i class="far fa-comments"></i>&nbsp;Chat Admin</a>';
+                    }
+                    else
+                    {
+                        $status = ' <a target="_blank" href="'.url('buyer-dispute').'/'.$row->id.'" class="btn btn-danger btn-sm">Dispute</a>';
+                    }      
                     $comments = '-';
                 } 
-                elseif($row->status == 5)
-                {
-                    $status = '<a target="_blank" href="'.url('chat').'/'.$row->id.'/'.Auth::id().'" class="btn btn-outline-primary btn-sm"><i class="far fa-comments"></i>&nbsp;Chat Admin</a>';
-                    $comments = '-';
-                }
     			else
     			{
-    				$comments = '-';
+    				$comments = $status = '-';
     			}
 
     			$seller = User::find($row->seller_id);

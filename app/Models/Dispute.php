@@ -15,9 +15,5 @@ class Dispute extends Model
 		role : 
 		1 -- pembeli
 		2 -- penjual
-
-		status:
-		0 -- dispute belum di urus admin
-		0 -- dispute sudah di urus admin
     */
 }

@@ -45,7 +45,8 @@ class AdminController extends Controller
               'ds.user_id AS seller_id',
               'us.name AS buyer_name',
               'ur.name AS seller_name',
-              'transactions.no AS invoice','transactions.date_buy','transactions.id')
+              'transactions.no AS invoice','transactions.date_buy','transactions.id','transactions.status'
+            )
             ->where([['transactions.status','=',4],['transactions.seller_dispute_id','>',0]])->orWhere('transactions.buyer_dispute_id','>',0)->orderBy('transactions.id','desc')->get();
 
       // dd($dp);
@@ -62,6 +63,8 @@ class AdminController extends Controller
 
       $user = User::find($user_id);
       if(is_null($user))
+
+
       {
         return response()->json(['err'=>1]);
       }
@@ -73,76 +76,153 @@ class AdminController extends Controller
 
     public function dispute_user(Request $request)
     {
-      $dp = Dispute::where('disputes.id',$request->id)->join('users','users.id','=','disputes.user_id')->join('transactions AS tr','tr.id','=','disputes.trans_id')->select('disputes.*','tr.status AS trs','tr.seller_id','tr.buyer_id','users.warning')->first();
+      $trans_id = $request->data_trid;
+      $data_buyer = $request->data_buyer;
+      $data_seller = $request->data_seller;
+      $data_win = $request->data_win;
 
-      if(is_null($dp))
+      if($data_win == 1)
       {
-        return response()->json(['err'=>2]);
+        return $this->buyer_win($trans_id,$data_buyer,$data_seller);
+      }
+      elseif($data_win == 2)
+      {
+        return $this->seller_win($trans_id,$data_buyer,$data_seller);
+      }
+      elseif($data_win == 0)
+      {
+        return $this->end_dispute($trans_id,$data_buyer,$data_seller);
+      }
+      else
+      {
+        return response()->json(['err'=>1]);
       }
 
-      $tr = Transaction::find($dp->trans_id);
-      $coin = $tr->amount;
+    }
 
+    // IF ADMIN DECIDE BUYER WIN
+    public function buyer_win($trans_id,$data_buyer,$data_seller)
+    {
+      $tr = Transaction::find($trans_id);
+    
       // BUYER DISPUTE
-      if($dp->buyer_id == $dp->user_id)
+      if(!is_null($tr))
       {
-        // SELLER GET WARNING
-        $user = User::find($dp->seller_id);
-        $user->warning++;
-        $total_warning = $user->warning;
+        $seller_id = $tr->seller_id;
+        $buyer_id = $tr->buyer_id;
 
+        // SELLER GET WARNING
+        self::warning_user($seller_id);
+        return self::change_transaction($tr,3,$buyer_id);
+      }
+      else
+      {
+        return response()->json(['err'=>1]);
+      }
+    }
+
+    // IF ADMIN DECIDE SELLER WIN
+    public function seller_win($trans_id,$data_buyer,$data_seller)
+    {
+      $tr = Transaction::find($trans_id);
+    
+      // SELLER DISPUTE
+      if(!is_null($tr))
+      {
+        $seller_id = $tr->seller_id;
+        $buyer_id = $tr->buyer_id;
+
+        // BUYER GET WARNING
+        self::warning_user($buyer_id);
+        return self::change_transaction($tr,5,$seller_id);
+      }
+      else
+      {
+        // TRANSACTION ID NOT AVAILABLE
+        return response()->json(['err'=>1]);
+      }
+    }
+
+    // IF ADMIN DECIDE TO BLAME ON BOTH
+    public function end_dispute($trans_id,$data_buyer,$data_seller)
+    {
+      $tr = Transaction::find($trans_id);
+    
+      if(!is_null($tr))
+      {
+        $seller_id = $tr->seller_id;
+        $buyer_id = $tr->buyer_id;
+
+        // BOTH GET WARNING
+        self::warning_user($buyer_id);
+        self::warning_user($seller_id);
+        return self::change_transaction($tr,6,0);
+      }
+      else
+      {
+        // TRANSACTION ID NOT AVAILABLE
+        return response()->json(['err'=>1]);
+      }
+    }
+
+    // WARNING USER
+    public static function warning_user($user_id)
+    {
+        $total_warning = 0;
+        $user = User::find($user_id);
+
+        if($user->status > 0)
+        {
+          $user->warning++;
+          $total_warning = $user->warning;
+        }
+        
         // BANNED SELLER IF WARNING HAS REACH 3
-        if($total_warning > 2)
+        if($total_warning > 2 || $user->status == 0)
         {
           $user->status = 0;
+        }
+        else
+        {
+          $user->status = 3; //suspend user
         }
 
         try
         {
-          $user->coin += $coin;
           $user->save();
         }
         catch(QueryException $e)
         {
           return response()->json(['err'=>1,['msg'=>$e->getMessage()]]);
         }
-      }
+    }
 
-      // CHANGE TRANSACTION STATUS IF ADMIN HAS DECIDE
+    // RETURNING USER COIN ON THEIR WALLET AND CHANGE TRANSACTION STATUS
+    public static function change_transaction($tr,$status,$member)
+    {
       try
       {
-        $tr->status = 3;
+        if($member > 0)
+        {
+          // RETURNING USER COIN ON THEIR WALLET
+          $coin = $tr->amount;
+          $user = User::find($member);
+          $user->coin += $coin;
+          $user->save();
+        }
+
+        $tr->status = $status;
         $tr->save();
+        return response()->json(['err'=>0]);
       }
       catch(QueryException $e)
       {
-         return response()->json(['err'=>1,['msg'=>$e->getMessage()]]);
+        return response()->json(['err'=>1,['msg'=>$e->getMessage()]]);
       }
-
-      // CHANGE DISPUTE STATUS IF ADMIN HAS DECIDE
-      try
-      {
-        $dispute = Dispute::find($dp->id);
-        $dispute->status = 1;
-        $dispute->save();
-        $ret['err'] = 0;
-      }
-      catch(QueryException $e)
-      {
-        $ret['err'] = 1;
-        $ret['msg'] = $e->getMessage();
-      }
-
-      return response()->json($ret);
-
-      // SELLER CASE
-     /* if($dp->seller_id == $dp_user_id)
-      {
-        $user = 
-      }*/
 
     }
 
+    // DISPLAY TRADE
     public function trade()
     {
       $kurs = Kurs::all();

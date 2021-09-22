@@ -79,15 +79,75 @@
   {
     detail_user();
     dispute_form();
+    dispute_user();
     display_table()
     popup_new_window();
-    dispute_user();
     notify_user();
   });
 
+  function dispute_form()
+  {
+    $("body").on("click",".blame",function()
+    {
+      var buyer_id = $(this).attr('data-buyer');
+      var seller_id = $(this).attr('data-seller');
+      var trans_id = $(this).attr('data-tr-id');
+      var winner = $(this).attr('data-win');
+      
+      $("#confirm_ban").modal();
+      $("#btn_confirm").attr({'data-buyer' : buyer_id, 'data-seller' : seller_id, 'data-win' : winner,'data-tr-id' : trans_id});
+    });
+  }
+
+  function dispute_user()
+  {
+    $("#btn_confirm").click(function(){
+      var buyer_id = $(this).attr('data-buyer');
+      var seller_id = $(this).attr('data-seller');
+      var trans_id = $(this).attr('data-tr-id');
+      var winner = $(this).attr('data-win');
+
+      var data = {'data_buyer' : buyer_id, 'data_seller' : seller_id, 'data_win' : winner,'data_trid' : trans_id}
+      $.ajax({
+        type : 'GET',
+        url : "{{ url('dispute-user') }}",
+        data : data,
+        dataType: 'json',
+        beforeSend: function() {
+          $('#loader').show();
+          $('.div-loading').addClass('background-load');
+        },
+        success: function(result) 
+        {
+          if(result.err == 0)
+          {
+            $(".alert-danger").hide();
+            display_table();
+          }
+          else
+          {
+            $("#err").html('<div class="alert alert-danger">'+result.msg+'</div>');
+          }
+        },
+        complete : function()
+        {
+          $('#loader').hide();
+          $('.div-loading').removeClass('background-load');
+        },
+        error : function(xhr)
+        {
+          $('#loader').hide();
+          $('.div-loading').removeClass('background-load');
+          console.log(xhr.responseText);
+        }
+      });
+      /**/
+    });
+  }
+
   function notify_user()
   {
-    $("body").on("click",".detail",function()
+    $("body").on("click",".notify",function()
     {
       var invoice = $(this).attr('data-invoice');
       var user_id = $(this).attr('data-id');
@@ -189,56 +249,6 @@
         }
       });
       /**/
-  }
-
-  function dispute_form()
-  {
-    $("body").on("click",".blame",function(){
-      var id_dispute = $(this).attr('data-id');
-      $("#confirm_ban").modal();
-      $("#btn_confirm").attr('data-id',id_dispute);
-    });
-  }
-
-  function dispute_user(){
-    $("#btn_confirm").click(function(){
-      var id = $(this).attr('data-id');
-
-      $.ajax({
-        type : 'GET',
-        url : "{{ url('dispute-user') }}",
-        data : {id:id},
-        dataType: 'json',
-        beforeSend: function() {
-          $('#loader').show();
-          $('.div-loading').addClass('background-load');
-        },
-        success: function(result) 
-        {
-          if(result.err == 0)
-          {
-            $(".alert-danger").hide();
-            display_table();
-          }
-          else
-          {
-            $("#err").html('<div class="alert alert-danger">'+result.msg+'</div>');
-          }
-        },
-        complete : function()
-        {
-          $('#loader').hide();
-          $('.div-loading').removeClass('background-load');
-        },
-        error : function(xhr)
-        {
-          $('#loader').hide();
-          $('.div-loading').removeClass('background-load');
-          console.log(xhr.responseText);
-        }
-      });
-      /**/
-    });
   }
 
   function popup_new_window()

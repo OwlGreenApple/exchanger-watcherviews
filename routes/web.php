@@ -28,7 +28,7 @@ Route::post('loginajax',[App\Http\Controllers\Auth\LoginController::class, 'logi
 Auth::routes();
 
 /*USER*/
-Route::group(['middleware'=>['auth','web']],function()
+Route::group(['middleware'=>['auth','web','suspend']],function()
 {
 	Route::get('end', [App\Http\Controllers\HomeController::class, 'end_membership']);
 	Route::get('thankyou',[App\Http\Controllers\OrderController::class,'thankyou']);
@@ -76,10 +76,13 @@ Route::group(['middleware'=>['auth','web']],function()
 	Route::post('order-confirm-payment',[App\Http\Controllers\HomeController::class, 'confirm_payment_order']);
 	Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'update_profile'])->middleware('check_profile');
 	Route::get('account/{conf?}', [App\Http\Controllers\HomeController::class, 'account']);
+
+	// CHAT
+	Route::get('chat/{trans_id}',[App\Http\Controllers\ChatController::class, 'room']);
 });
 
 /*ADMIN*/
-Route::group(['middleware'=>['auth','web','is_admin']],function()
+Route::group(['middleware'=>['auth','web','is_admin','suspend']],function()
 {
 	Route::get('dispute-admin',[App\Http\Controllers\Admin\AdminController::class,'dispute']);
 	Route::get('dispute-list-admin',[App\Http\Controllers\Admin\AdminController::class,'display_dispute']);

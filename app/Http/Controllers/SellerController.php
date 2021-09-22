@@ -92,13 +92,20 @@ class SellerController extends Controller
 	    		{
 	    			$status = '<span class="text-black">Menunggu konfirmasi pembeli  </span>';
 	    		}
-                elseif($row->status == 2 || $row->status == 4)
+                elseif($row->status == 2)
                 {
                     $status = '<a target="_blank" href="'.url("sell-confirm").'/'.$row->no.'" class="btn btn-info btn-sm">Konfirmasi</a>';
                 }
-                elseif($row->status == 5)
+                elseif($row->status == 4)
                 {
-                    $status = '<a target="_blank" href="'.url('chat').'/'.$row->id.'/'.Auth::id().'" class="btn btn-outline-primary btn-sm"><i class="far fa-comments"></i>&nbsp;Chat Admin</a>';
+                    if($row->seller_dispute_id > 0)
+                    {
+                        $status = '<a target="_blank" href="'.url('chat').'/'.$row->id.'" class="btn btn-outline-primary btn-sm"><i class="far fa-comments"></i>&nbsp;Chat Admin</a>';
+                    }
+                    else
+                    {
+                        $status = '<a target="_blank" href="'.url("sell-confirm").'/'.$row->no.'" class="btn btn-info btn-sm">Konfirmasi</a>';
+                    }      
                 }
 	    		else
 	    		{

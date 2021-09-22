@@ -31,19 +31,32 @@
             @endif
           </td>
           <td><button data-tr-id="{{ $row->id }}" type="button" class="btn btn-default btn-sm"><i class='far fa-comments'></i>&nbsp;Chat</button></td>
-          <td>
-            @if($row->buyer_id > 0)
-              <button type="button" class="btn btn-primary btn-sm">Pembeli Menang</button>
-            @else
-              <button type="button" data-id="{{ $row->buyer_id }}" data-invoice="{{ $row->invoice }}" class="btn btn-outline-primary btn-sm notify">Notifikasi Pembeli</button>
-            @endif
-            @if($row->seller_id > 0)
-              <button type="button" class="btn btn-success btn-sm">Penjual Menang</button>
-            @else
-              <button type="button" data-id="{{ $row->seller_id }}" data-invoice="{{ $row->invoice }}" class="btn btn-outline-success btn-sm notify">Notifikasi Penjual</button>
-            @endif
-            <button type="button" class="btn btn-warning btn-sm">Dispute selesai</button>
-          </td>
+          @if($row->status == 4)
+            <td>
+              <!-- BUYER -->
+              @if($row->buyer_id > 0)
+                <button type="button" data-buyer="{{ $row->buyer_id }}" data-seller="{{ $row->seller_id }}" data-win="1" data-tr-id="{{ $row->id }}" class="btn btn-primary btn-sm blame">Pembeli Menang</button>
+              @else
+                <button type="button" data-id="{{ $row->buyer_id }}" data-invoice="{{ $row->invoice }}" class="btn btn-outline-primary btn-sm notify">Notifikasi Pembeli</button>
+              @endif
+              <!-- SELLER -->
+              @if($row->seller_id > 0)
+                <button type="button" data-buyer="{{ $row->buyer_id }}" data-seller="{{ $row->seller_id }}" data-win="2" data-tr-id="{{ $row->id }}" class="btn btn-success btn-sm blame">Penjual Menang</button>
+              @else
+                <button type="button" data-id="{{ $row->seller_id }}" data-invoice="{{ $row->invoice }}" class="btn btn-outline-success btn-sm notify">Notifikasi Penjual</button>
+              @endif
+              <!-- END DISPUTE -->
+              <button data-buyer="{{ $row->buyer_id }}" data-seller="{{ $row->seller_id }}" data-win="0" data-tr-id="{{ $row->id }}" type="button" class="btn btn-warning btn-sm blame">Dispute selesai</button>
+            </td>
+          @elseif($row->status == 3)
+            <td class="text-primary">Pembeli Menang</td>
+          @elseif($row->status == 5)
+            <td class="text-success">Penjual Menang</td>
+          @elseif($row->status == 6)
+            <td class="text-black-50">Diakhiri Admin</td>
+          @else
+            <td class="text-danger">Error</td>
+          @endif
         </tr>
       @endforeach
     @endif
