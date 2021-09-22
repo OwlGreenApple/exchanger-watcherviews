@@ -1,14 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+    <div class="page-header">
+      <h3 class="page-title">
+        <span class="page-title-icon bg-gradient-primary text-white mr-2">
+          <i class="mdi mdi-cart-outline"></i>
+        </span> {{ Lang::get('transaction.buy.title') }} </h3>
+    </div>
+
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header bg-info text-white">{{ Lang::get('transaction.buy.title') }}</div>
-
-                @include('buyer.buy-form')
-            </div>
+            @include('buyer.buy-form')
 
             <div class="card mt-4">
                 <div class="card-body">
@@ -20,7 +22,7 @@
         <!-- end col -->
         </div>
     </div>
-</div>
+
 
 <script type="text/javascript">
     $(document).ready(function()
