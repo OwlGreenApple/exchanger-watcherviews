@@ -126,7 +126,9 @@ class CheckMaxSell implements Rule
 
         $tr = Transaction::selectRaw('SUM(total) AS total_sell_day')->whereRaw('DATE(created_at) = CURDATE()')->where('seller_id',Auth::id())->first();
 
-        if($tr->total_sell_day > $trans)
+        $total_sell = $tr->total_sell_day + $total;
+
+        if($total_sell > $trans)
         {
             $this->msg = $err_msg;
             return false;

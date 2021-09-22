@@ -83,6 +83,7 @@ Route::group(['middleware'=>['auth','web','is_admin']],function()
 {
 	Route::get('dispute-admin',[App\Http\Controllers\Admin\AdminController::class,'dispute']);
 	Route::get('dispute-list-admin',[App\Http\Controllers\Admin\AdminController::class,'display_dispute']);
+	Route::get('dispute-user',[App\Http\Controllers\Admin\AdminController::class,'dispute_user']);
 	Route::get('kurs-admin',[App\Http\Controllers\Admin\AdminController::class,'trade']);
 	Route::get('user-list',[App\Http\Controllers\Admin\AdminController::class,'user_list']);
 	Route::get('user-fetch',[App\Http\Controllers\Admin\AdminController::class,'fetch_user']);

@@ -3,7 +3,7 @@
     <thead>
         <th>Tanggal</th>
         <th>Invoice</th>
-        <th>Nama Pembeli</th>
+        <th>Pembeli</th>
         <th>Total Coin</th>
         <th>Coin Fee</th>
         <th>Kurs</th>

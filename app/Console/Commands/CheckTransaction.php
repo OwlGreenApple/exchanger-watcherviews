@@ -54,6 +54,8 @@ class CheckTransaction extends Command
                     // in case if buyer doen't make confirmation
                     if($row->status == 1)
                     {
+                        $str->buyer_id = 0;
+                        $str->date_buy = null;
                         $str->status = 0;
                         $str->save();
                     }

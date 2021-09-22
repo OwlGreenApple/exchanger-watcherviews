@@ -13,6 +13,9 @@
       Biaya Transaksi
     </th>
     <th class="menu-nomobile">
+      Total
+    </th>
+    <th class="menu-nomobile">
       {{Lang::get('transaction.created')}}
     </th>
   </thead>
@@ -31,6 +34,7 @@
             </td>
            <td class="text-right">{{ str_replace(",",".",number_format($row->coin)) }}</td>
            <td class="text-right">{{ str_replace(",",".",number_format($row->fee)) }}</td>
+           <td class="text-right">{{ str_replace(",",".",number_format($row->coin + $row->fee)) }}</td>
            <td class="text-center">{{ $row->created_at }}</td>
          </tr>
       @endforeach

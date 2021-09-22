@@ -248,9 +248,11 @@ class HomeController extends Controller
       } 
 
       $dp->comments = strip_tags($request->comments);
+      $trs->status = 5;
 
       try
       {
+        $trs->save();
         $dp->save();
         $res['err'] = 0;
       }

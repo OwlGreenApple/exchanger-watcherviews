@@ -7,11 +7,16 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Exchanger</title>
+    <!-- Styles -->
+    <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet">
     <!-- plugins:css -->
     <link rel="stylesheet" href="{{ asset('assets/template/vendors/mdi/css/materialdesignicons.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/template/vendors/css/vendor.bundle.base.css') }}">
     <!-- endinject -->
     <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="{{ asset('assets/template/vendors/font-awesome/css/font-awesome.min.css')}}" />
+    <link rel="stylesheet" href="{{ asset('assets/template/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css')}}">
     <!-- End plugin css for this page -->
     <!-- inject:css -->
     <!-- endinject -->
@@ -21,13 +26,10 @@
     <link rel="shortcut icon" href="{{url('assets/img/favicon.png')}}"/>
 
 
-    <!-- Scripts -->
+    <!-- Scripts 
     <script src="{{ asset('assets/js/app.js') }}" defer></script>
-    <script src="{{ asset('assets/js/jquery-3.2.1.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery-3.2.1.min.js') }}"></script>-->
 
-    <!-- Styles -->
-    <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet">
     <!-- Custom select -->
     <link href="{{ asset('assets/css/custom-select.css') }}" rel="stylesheet" />
 
@@ -71,7 +73,7 @@
     <div id="app">
       <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-          <a class="navbar-brand brand-logo" href="index.html"><img src="{{url('assets/img/logo.png')}}" alt="logo" /></a>
+          <a class="navbar-brand brand-logo" href="{{ url('home')}}"><img src="{{url('assets/img/logo.png')}}" alt="logo" /></a>
           <!--
           <a class="navbar-brand brand-logo-mini" href="index.html"><img src="../assets/images/logo-mini.svg" alt="logo" /></a>
           -->
@@ -86,6 +88,7 @@
               <div class="input-group">
                 <div class="input-group-prepend bg-transparent">
                   <i class="input-group-text border-0 mdi mdi-magnify"></i>
+
                 </div>
                 <input type="text" class="form-control bg-transparent border-0" placeholder="Search projects">
               </div>
@@ -100,15 +103,15 @@
                   <span class="availability-status online"></span>
                 </div>-->
                 <div class="nav-profile-text">
-                  <p class="mb-1 text-black">David Greymaax</p>
+                  <p class="mb-1 text-black">{{ ucfirst(Auth::user()->name) }}&nbsp;({{ Auth::user()->membership }})</p>
                 </div>
               </a>
               <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
-                <a class="dropdown-item" href="#">
-                  <i class="mdi mdi-cached mr-2 text-success"></i> Activity Log </a>
+                <a class="dropdown-item" href="{{ url('account') }}">
+                  <i class="mdi mdi-cached mr-2 text-success"></i> Account </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">
-                  <i class="mdi mdi-logout mr-2 text-primary"></i> Signout </a>
+                  <i class="mdi mdi-logout mr-2 text-primary"></i> Log out </a>
               </div>
             </li>
             <li class="nav-item d-none d-lg-block full-screen-link">
@@ -116,6 +119,7 @@
                 <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
               </a>
             </li>
+            <!--
             <li class="nav-item dropdown">
               <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
                 <i class="mdi mdi-email-outline"></i>
@@ -157,6 +161,7 @@
                 <h6 class="p-3 mb-0 text-center">4 new messages</h6>
               </div>
             </li>
+            -->
             <li class="nav-item dropdown">
               <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
                 <i class="mdi mdi-bell-outline"></i>
@@ -204,29 +209,63 @@
                 <h6 class="p-3 mb-0 text-center">See all notifications</h6>
               </div>
             </li>
+            <!--
+            https://materialdesignicons.com/
+            -->
             <li class="nav-item nav-logout d-none d-lg-block">
-              <a class="nav-link" href="#">
-                <i class="mdi mdi-power"></i>
+              <a class="nav-link" href="{{ url('buy') }}">
+                <i class="mdi mdi-cart-outline"></i> &nbsp
+                Beli Koin
               </a>
             </li>
-            <li class="nav-item nav-settings d-none d-lg-block">
-              <a class="nav-link" href="#">
-                <i class="mdi mdi-format-line-spacing"></i>
+            <li class="nav-item nav-logout d-none d-lg-block">
+              <a class="nav-link" href="{{ url('sell') }}">
+                <i class="mdi mdi-store-24-hour"></i> &nbsp
+                {{ Lang::get('transaction.sell') }}
               </a>
             </li>
+            <li class="nav-item nav-logout d-none d-lg-block">
+              <a class="nav-link" href="{{ url('wallet') }}">
+                <i class="mdi mdi-wallet-outline"></i> &nbsp
+                Wallet
+              </a>
+            </li>
+
           </ul>
+          
           <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
             <span class="mdi mdi-menu"></span>
           </button>
         </div>
       </nav>
-        <main class="py-4">
+        <!--
+        <main class="py-4 ">
+        -->
+      <div class="container-fluid page-body-wrapper justify-content-center">
+        <div class="main-panel ">
+          <div class="content-wrapper">
             @yield('content')
+            <!-- content-wrapper ends -->
+            <!-- partial:partials/_footer.html -->
+            <footer class="footer">
+              <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2021 <a href="https://exchangerwatcherviews.com/" target="_blank">Exchangerwatcherviews</a>. All rights reserved.</span>
+                <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i></span>
+              </div>
+            </footer>        
+          </div>
+          
+        </div>
+      </div>
+        <!--
         </main>
+        -->
     </div>
     <script src="{{ asset('assets/template/vendors/js/vendor.bundle.base.js') }}"></script>
     <!-- endinject -->
     <!-- Plugin js for this page -->
+    <script src="{{ asset('assets/template/vendors/chart.js/Chart.min.js')}}"></script>
+    <script src="{{ asset('assets/template/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js')}}"></script>
     <!-- End plugin js for this page -->
     <!-- inject:js -->
     <script src="{{ asset('assets/template/js/off-canvas.js') }}"></script>
@@ -235,5 +274,8 @@
     <script src="{{ asset('assets/template/js/settings.js') }}"></script>
     <script src="{{ asset('assets/template/js/todolist.js') }}"></script>
     <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script src="{{ asset('assets/template/js/dashboard.js') }}"></script>
+    <!-- End custom js for this page -->
   </body>
 </html>

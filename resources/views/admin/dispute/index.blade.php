@@ -27,7 +27,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="modaltitle">
-          Apakah anda yakin akan me-ban user ini?
+          Apakah anda yakin akan menerima dispute dari user ini?
         </h5>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
@@ -48,9 +48,10 @@
 
   $(document).ready(function() 
   {
+    dispute_form();
     display_table()
     popup_new_window();
-    // ban_user();
+    dispute_user();
   });
 
   function display_table()
@@ -83,13 +84,22 @@
       /**/
   }
 
-  function ban_user(){
+  function dispute_form()
+  {
+    $("body").on("click",".blame",function(){
+      var id_dispute = $(this).attr('data-id');
+      $("#confirm_ban").modal();
+      $("#btn_confirm").attr('data-id',id_dispute);
+    });
+  }
+
+  function dispute_user(){
     $("#btn_confirm").click(function(){
       var id = $(this).attr('data-id');
 
       $.ajax({
         type : 'GET',
-        url : "{{ url('/user-ban') }}",
+        url : "{{ url('dispute-user') }}",
         data : {id:id},
         dataType: 'json',
         beforeSend: function() {
@@ -98,7 +108,7 @@
         },
         success: function(result) 
         {
-          if(result.error == 0)
+          if(result.err == 0)
           {
             $(".alert-danger").hide();
             display_table();

@@ -21,11 +21,7 @@
                         <input type="file" class="form-control" name="bukti" id="fl">
                         <span class="error bukti"><!--  --></span>
                       </div>
-                      <div class="form-group">
-                        <label for="ct">Keterangan</label>
-                        <textarea name="note" class="form-control" maxlength="250"></textarea>
-                        <span class="error note"><!--  --></span>
-                      </div>
+                    
                       <button id="submit" type="button" class="btn btn-success">Kirim</button>
                     </form>
                 </div>
