@@ -24,6 +24,8 @@
     <link rel="stylesheet" href="{{ asset('assets/template/css/demo_1/style.css') }}">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{{url('assets/img/favicon.png')}}"/>
+    <script src="{{ asset('assets/js/app.js') }}" defer></script>
+    <script src="{{ asset('assets/js/jquery-3.2.1.min.js') }}"></script>
 
 
     <!-- Scripts 
