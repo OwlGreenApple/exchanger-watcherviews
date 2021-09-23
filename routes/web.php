@@ -38,6 +38,7 @@ Route::group(['middleware'=>['auth','web','suspend']],function()
 	Route::get('page-dispute', [App\Http\Controllers\HomeController::class, 'dispute_page']);
 
 	//BUY
+	// Route::get('test-wa',[App\Http\Controllers\BuyerController::class, 'test_wa']);
 	Route::get('buy',[App\Http\Controllers\BuyerController::class, 'buying_page']);
 	Route::get('buy-list',[App\Http\Controllers\BuyerController::class, 'buyer_table']);
 	Route::get('buy-detail/{invoice}',[App\Http\Controllers\BuyerController::class, 'detail_buy']);

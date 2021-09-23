@@ -7,11 +7,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Database\QueryException;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\Admin\AdminController as adm;
 use App\Models\User;
 use App\Models\Comment;
 use App\Models\Transaction;
 use App\Helpers\Price;
 use App\Helpers\Api;
+use App\Mail\SellerEmail;
 use Carbon\Carbon;
 use Storage, Session, Validator;
 
@@ -247,6 +249,21 @@ class BuyerController extends Controller
         return view('buyer.buyer-confirm',['row'=>$tr]);
     }
 
+    public function test_wa()
+    {
+        $tr = 'SSS';
+        $api = new Api;
+
+        $msg ='';
+        $msg .='Selamat coin anda dengan no invoice *SSS*'."\n";
+        $msg .='telah di order'."\n";
+        $msg .='Silahkan login dan lakukan konfimasi di sini'."\n\n";
+        $msg .=url('sell-confirm').'/'.$tr."\n\n";
+        $msg .='Terima Kasih'."\n";
+        $msg .='Team Exchanger';
+        $api->send_wa_message(15,$msg,'62895342472008');
+    }
+
     public function buyer_proof(Request $request)
     {
     	$tr = Transaction::find($request->id);
@@ -269,13 +286,35 @@ class BuyerController extends Controller
 	        return response()->json(['err'=>2]);
 	    }  
 
+        $url = '<a href="'.url('sell-confirm').'/'.$tr->no.'">Konfirmasi Penjualan</a>';
+
+        $msg ='';
+        $msg .='Selamat coin anda dengan no invoice *'.$tr->no.'*'."\n";
+        $msg .='telah di order'."\n";
+        $msg .='Silahkan login dan lakukan konfimasi di sini :'."\n\n";
+        $msg .=url('sell-confirm').'/'.$tr->no."\n\n";
+        $msg .='Terima Kasih'."\n";
+        $msg .='Team Exchanger';
+
+        $seller_id = $tr->seller_id;
+        $user = User::find($seller_id);
+
     	try
     	{
     		$tr->upload = $proof;
     		$tr->date_buy = Carbon::now();
-    		$tr->buyer_comment = strip_tags($request->note);
     		$tr->status = 2;
     		$tr->save();
+                
+            $adm = new adm;
+            $data = [
+                'message'=>$msg,
+                'phone_number'=>$user->phone_number,
+                'email'=>$user->email,
+                'obj'=>new SellerEmail($tr->no,$url),
+            ];
+            $adm->notify_user($data);
+
     		$data['err'] = 0;
     	}
     	catch(QueryException $e)

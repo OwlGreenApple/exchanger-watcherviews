@@ -97,6 +97,19 @@
           </div>
           -->
           <ul class="navbar-nav navbar-nav-right">
+            @guest
+                @if (Route::has('login'))
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                    </li>
+                @endif
+
+                @if (Route::has('register'))
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                    </li>
+                @endif
+            @else
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
                 <!--<div class="nav-profile-img">
@@ -104,7 +117,9 @@
                   <span class="availability-status online"></span>
                 </div>-->
                 <div class="nav-profile-text">
-                  <p class="mb-1 text-black">{{ ucfirst(Auth::user()->name) }}&nbsp;({{ Auth::user()->membership }})</p>
+                    @if(Auth::check() == true)
+                        <p class="mb-1 text-black">{{ ucfirst(Auth::user()->name) }}&nbsp;({{ Auth::user()->membership }})</p>
+                    @endif
                 </div>
               </a>
               <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
@@ -213,8 +228,7 @@
             <!--
             https://materialdesignicons.com/
             -->
-            @guest
-            @else
+            
               @if (Auth::user()->is_admin == 0)
                 <li class="nav-item nav-logout d-none d-lg-block">
                   <a class="nav-link" href="{{ url('buy') }}">

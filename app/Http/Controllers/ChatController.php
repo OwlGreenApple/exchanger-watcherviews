@@ -17,6 +17,9 @@ class ChatController extends Controller
 {
   public function room($tr_id)
   {
+
+  	return view('chats.chat');
+
   	$valid = false;
   	$tr = Transaction::find($tr_id);
 

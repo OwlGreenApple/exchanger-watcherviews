@@ -54,24 +54,24 @@ class AdminController extends Controller
        return view('admin.dispute.content',['data'=>$dp]);
     }
 
-    // PENDING
-    public function notify_user(Request $request)
+    // GLOBAL NOTIFCATION USER THROUGH wa AND EMAIL
+    public function notify_user(array $data)
     {
-      $user_id = $request->user_id;
+      /*$user_id = $request->user_id;
       $invoice = $request->invoice;
       $odc = new Odc;
 
       $user = User::find($user_id);
       if(is_null($user))
-
-
       {
         return response()->json(['err'=>1]);
-      }
-      
-      Mail::to($user->email)->send(new NotifyEmail($generated_password,$data['username']));
-
-       $odc->send_message($data['package'],$data['price'],$data['total'],$order_number,Auth::user()->phone_number);
+      }*/
+      $notif = Notification::all()->first();
+      $admin_id = $notif->admin_id;
+      $api = new Api;
+     
+      $api->send_wa_message($admin_id,$data['message'],$data['phone_number']);
+      Mail::to($data['email'])->send($data['obj']);
     }
 
     public function dispute_user(Request $request)
