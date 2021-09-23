@@ -116,7 +116,6 @@
                   <i class="mdi mdi-logout mr-2 text-primary"></i> Log out </a>
               </div>
             </li>
-            <?php } ?>
             <li class="nav-item d-none d-lg-block full-screen-link">
               <a class="nav-link">
                 <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
@@ -212,6 +211,7 @@
                 <h6 class="p-3 mb-0 text-center">See all notifications</h6>
               </div>
             </li>
+            <?php } ?>
             <!--
             https://materialdesignicons.com/
             -->
