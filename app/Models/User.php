@@ -21,6 +21,9 @@ class User extends Authenticatable
         1 = activated - free membership
         2 = activated - paid membership
         3 = suspended user for 1 week
+
+        warning = 2 --- suspend +1
+        suspend = 2 --- status = 0 -- banned
     */
 
     /**

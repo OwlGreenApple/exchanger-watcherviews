@@ -16,8 +16,15 @@ class Api
         $data_api = json_encode($data);
 
         // note : this using celebfans page link, due same logic
-        $url = 'https://activrespon.com/dashboard/api/celebfans';
-        // $url = 'https://192.168.100.49/activrespon/api/celebfans';
+        if(env('APP_ENV') == 'local')
+        {
+            $url = 'https://192.168.100.49/activrespon/api/celebfans';
+        }
+        else
+        {
+            $url = 'https://activrespon.com/dashboard/api/celebfans';
+        }
+    
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data_api);
@@ -54,8 +61,15 @@ class Api
 
         $data_api = json_encode($data);
 
-        // $url = 'https://watcherviews.com/dashboard/exchanger-coin';
-        $url = 'https://'.env('APP_URL_API').'/watcherviews/connect-exchanger';
+        if(env('APP_ENV') == 'local')
+        {
+            $url = 'https://'.env('APP_URL_API').'/watcherviews/connect-exchanger';
+        }
+        else
+        {
+            $url = 'https://watcherviews.com/dashboard/connect-exchanger';
+        }
+        
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data_api);
@@ -91,8 +105,15 @@ class Api
 
         $data_api = json_encode($data);
 
-        // $url = 'https://watcherviews.com/dashboard/exchanger-coin';
-        $url = 'https://'.env('APP_URL_API').'/watcherviews/exchanger-total-coin';
+        if(env('APP_ENV') == 'local')
+        {
+            $url = 'https://'.env('APP_URL_API').'/watcherviews/exchanger-total-coin';
+        }
+        else
+        {
+            $url = 'https://watcherviews.com/dashboard/exchanger-total-coin';
+        }
+       
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data_api);
@@ -138,8 +159,15 @@ class Api
 
         $data_api = json_encode($data);
 
-        // $url = 'https://watcherviews.com/dashboard/'.$target;
-        $url = 'https://'.env('APP_URL_API').'/watcherviews/'.$target;
+        if(env('APP_ENV') == 'local')
+        {
+            $url = 'https://'.env('APP_URL_API').'/watcherviews/'.$target;
+        }
+        else
+        {
+            $url = 'https://watcherviews.com/dashboard/'.$target;
+        }
+        
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data_api);

@@ -18,12 +18,15 @@ class NotifyEmail extends Mailable
      */
 
     public $invoice;
-    // public $name;
+    public $url_confirm;
+    public $url_dispute;
 
-    public function __construct($invoice)
+    public function __construct($invoice,$url_confirm,$url_dispute,$role)
     {
         $this->invoice = $invoice;
-        // $this->password = $password;
+        $this->url_confirm = $url_confirm;
+        $this->url_dispute = $url_dispute;
+        $this->role = $role;
     }
 
     /**
@@ -38,8 +41,10 @@ class NotifyEmail extends Mailable
         ->subject($this->subject)
         ->view('emails.NotifyEmail')
         ->with([
-          'password' => $this->password,
-          'name' => $this->name,
+          'invoice' => $this->invoice,
+          'url_confirm' => $this->url_confirm,
+          'url_dispute' => $this->url_dispute,
+          'role' => $this->role,
         ]);
     }
 }

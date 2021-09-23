@@ -88,7 +88,7 @@ Route::group(['middleware'=>['auth','web','is_admin','suspend']],function()
 	Route::get('dispute-admin',[App\Http\Controllers\Admin\AdminController::class,'dispute']);
 	Route::get('dispute-list-admin',[App\Http\Controllers\Admin\AdminController::class,'display_dispute']);
 	Route::get('dispute-user',[App\Http\Controllers\Admin\AdminController::class,'dispute_user']);
-	Route::get('notify-user',[App\Http\Controllers\Admin\AdminController::class,'notify_user']);
+	Route::get('dispute-notify',[App\Http\Controllers\Admin\AdminController::class,'dispute_notify']);
 
 	Route::get('kurs-admin',[App\Http\Controllers\Admin\AdminController::class,'trade']);
 	Route::get('user-list',[App\Http\Controllers\Admin\AdminController::class,'user_list']);

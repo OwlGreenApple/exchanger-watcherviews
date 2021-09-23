@@ -100,7 +100,8 @@ class SellerController extends Controller
                 {
                     if($row->seller_dispute_id > 0)
                     {
-                        $status = '<a target="_blank" href="'.url('chat').'/'.$row->id.'" class="btn btn-outline-primary btn-sm"><i class="far fa-comments"></i>&nbsp;Chat Admin</a>';
+                        /*$status = '<a target="_blank" href="'.url('chat').'/'.$row->id.'" class="btn btn-outline-primary btn-sm"><i class="far fa-comments"></i>&nbsp;Chat Admin</a>';*/
+                        $status = '<span class="badge badge-secondary">Dispute sedang diproses</span>';
                     }
                     else
                     {

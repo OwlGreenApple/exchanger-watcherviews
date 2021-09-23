@@ -149,13 +149,17 @@
   {
     $("body").on("click",".notify",function()
     {
-      var invoice = $(this).attr('data-invoice');
+      var trans_id = $(this).attr('data-tr-id');
       var user_id = $(this).attr('data-id');
-      var data = {'invoice':invoice, 'user_id':user_id}; 
+      var role = $(this).attr('data-role');
+      var data = {'trans_id':trans_id, 'user_id':user_id, 'role':role}; 
+
+      /*console.log(data);
+      return false;*/
 
       $.ajax({
         type : 'GET',
-        url : "{{ url('notify-user') }}",
+        url : "{{ url('dispute-notify') }}",
         dataType: 'json',
         data : data,
         beforeSend: function() {
@@ -163,17 +167,6 @@
           $('.div-loading').addClass('background-load');
         },
         success: function(result) 
-        {
-          if(result.err == 0)
-          {
-            $("#err").html('<div class="alert alert-success">Notifikasi Telah Dikirim</div>');
-          }
-          else
-          {
-            $("#err").html('<div class="alert alert-danger">{{ Lang::get("custom.failed") }}</div>');
-          }
-        },
-        complete : function()
         {
           $('#loader').hide();
           $('.div-loading').removeClass('background-load');
