@@ -237,31 +237,26 @@
               @else
                 <li class="nav-item nav-logout d-none d-lg-block">
                   <a class="nav-link" href="{{ url('kurs-admin') }}">
-                    <i class="mdi mdi-wallet-outline"></i> &nbsp
                     Kurs Coin
                   </a>
                 </li>
                 <li class="nav-item nav-logout d-none d-lg-block">
                   <a class="nav-link" href="{{ url('user-list') }}">
-                    <i class="mdi mdi-wallet-outline"></i> &nbsp
                     User List
                   </a>
                 </li>
                 <li class="nav-item nav-logout d-none d-lg-block">
                   <a class="nav-link" href="{{ url('order-list') }}">
-                    <i class="mdi mdi-wallet-outline"></i> &nbsp
                     Order List
                   </a>
                 </li>
                 <li class="nav-item nav-logout d-none d-lg-block">
                   <a class="nav-link" href="{{ url('dispute-admin') }}">
-                    <i class="mdi mdi-wallet-outline"></i> &nbsp
-                    Dispute User
+                    Dispute
                   </a>
                 </li>
                 <li class="nav-item nav-logout d-none d-lg-block">
                   <a class="nav-link" href="{{ url('wa-message') }}">
-                    <i class="mdi mdi-wallet-outline"></i> &nbsp
                     WA Message
                   </a>
                 </li>
