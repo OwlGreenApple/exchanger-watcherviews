@@ -97,6 +97,7 @@
           </div>
           -->
           <ul class="navbar-nav navbar-nav-right">
+            <?php if (Auth::check()) {?>
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
                 <!--<div class="nav-profile-img">
@@ -115,6 +116,7 @@
                   <i class="mdi mdi-logout mr-2 text-primary"></i> Log out </a>
               </div>
             </li>
+            <?php } ?>
             <li class="nav-item d-none d-lg-block full-screen-link">
               <a class="nav-link">
                 <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
