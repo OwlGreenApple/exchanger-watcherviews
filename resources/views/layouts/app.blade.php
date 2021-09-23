@@ -97,19 +97,8 @@
           </div>
           -->
           <ul class="navbar-nav navbar-nav-right">
-            @guest
-                @if (Route::has('login'))
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                    </li>
-                @endif
 
-                @if (Route::has('register'))
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                    </li>
-                @endif
-            @else
+            <?php if (Auth::check()) {?>
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
                 <!--<div class="nav-profile-img">
@@ -225,6 +214,7 @@
                 <h6 class="p-3 mb-0 text-center">See all notifications</h6>
               </div>
             </li>
+            <?php } ?>
             <!--
             https://materialdesignicons.com/
             -->
@@ -251,31 +241,26 @@
               @else
                 <li class="nav-item nav-logout d-none d-lg-block">
                   <a class="nav-link" href="{{ url('kurs-admin') }}">
-                    <i class="mdi mdi-wallet-outline"></i> &nbsp
                     Kurs Coin
                   </a>
                 </li>
                 <li class="nav-item nav-logout d-none d-lg-block">
                   <a class="nav-link" href="{{ url('user-list') }}">
-                    <i class="mdi mdi-wallet-outline"></i> &nbsp
                     User List
                   </a>
                 </li>
                 <li class="nav-item nav-logout d-none d-lg-block">
                   <a class="nav-link" href="{{ url('order-list') }}">
-                    <i class="mdi mdi-wallet-outline"></i> &nbsp
                     Order List
                   </a>
                 </li>
                 <li class="nav-item nav-logout d-none d-lg-block">
                   <a class="nav-link" href="{{ url('dispute-admin') }}">
-                    <i class="mdi mdi-wallet-outline"></i> &nbsp
-                    Dispute User
+                    Dispute
                   </a>
                 </li>
                 <li class="nav-item nav-logout d-none d-lg-block">
                   <a class="nav-link" href="{{ url('wa-message') }}">
-                    <i class="mdi mdi-wallet-outline"></i> &nbsp
                     WA Message
                   </a>
                 </li>
