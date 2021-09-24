@@ -18,6 +18,7 @@ use App\Models\Kurs;
 use App\Helpers\Api;
 use App\Helpers\Price;
 use App\Mail\NotifyEmail;
+use App\Mail\WarningEmail;
 use Carbon\Carbon;
 use Storage, Validator, DB;
 
@@ -47,7 +48,7 @@ class AdminController extends Controller
               'ur.name AS seller_name',
               'transactions.no AS invoice','transactions.date_buy','transactions.id','transactions.status','transactions.seller_dispute_id','transactions.buyer_dispute_id','transactions.buyer_id','transactions.seller_id'
             )
-            ->where([['transactions.status','=',4],['transactions.seller_dispute_id','>',0]])->orWhere('transactions.buyer_dispute_id','>',0)->orderBy('transactions.id','desc')->get();
+            ->where('transactions.seller_dispute_id','>',0)->orWhere('transactions.buyer_dispute_id','>',0)->orderBy('transactions.id','desc')->get();
 
       // dd($dp);
 
@@ -162,8 +163,22 @@ class AdminController extends Controller
         $buyer_id = $tr->buyer_id;
 
         // SELLER GET WARNING
-        self::warning_user($seller_id);
-        return self::change_transaction($tr,3,$buyer_id);
+        $this->warning_user($seller_id,$tr);
+
+        try
+        {
+          // RETURNING USER COIN ON THEIR WALLET
+          $coin = $tr->amount;
+          $user = User::find($buyer_id);
+          $user->coin += $coin;
+          $user->save();
+          return self::change_transaction($tr,3);
+        }
+        catch(QueryException $e)
+        {
+          return response()->json(['err'=>1]);
+        }
+        
       }
       else
       {
@@ -183,8 +198,26 @@ class AdminController extends Controller
         $buyer_id = $tr->buyer_id;
 
         // BUYER GET WARNING
-        self::warning_user($buyer_id);
-        return self::change_transaction($tr,5,$seller_id);
+        $this->warning_user($buyer_id,$tr);
+
+        $trans = new Transaction;
+        $trans->seller_id = $seller_id;
+        $trans->no = $tr->no;
+        $trans->kurs = $tr->kurs;
+        $trans->coin_fee = $tr->coin_fee;
+        $trans->amount = $tr->amount;
+        $trans->total = $tr->total;
+        $trans->trial = $tr->trial;
+
+        try
+        {
+          $trans->save();
+          return self::change_transaction($tr,5);
+        }
+        catch(Queryexception $e)
+        {
+          return response()->json(['err'=>$e->getMessage()]);
+        }
       }
       else
       {
@@ -204,8 +237,8 @@ class AdminController extends Controller
         $buyer_id = $tr->buyer_id;
 
         // BOTH GET WARNING
-        self::warning_user($buyer_id);
-        self::warning_user($seller_id);
+        $this->warning_user($buyer_id);
+        $this->warning_user($seller_id);
         return self::change_transaction($tr,6,0);
       }
       else
@@ -216,7 +249,7 @@ class AdminController extends Controller
     }
 
     // WARNING USER
-    public static function warning_user($user_id)
+    public function warning_user($user_id,$tr)
     {
         $total_warning = $total_suspend = 0;
         $user = User::find($user_id);
@@ -237,6 +270,28 @@ class AdminController extends Controller
         else
         {
           // send notify here
+          $msg ='';
+          $msg .='Mohon perhatian'."\n";
+          $msg .='sehubungan dengan dispute invoice : *'.$tr->no.'* maka akun anda telah mendapatkan warning.'."\n\n";
+
+          $msg .='Jika anda mendapatkan *warning* sebanyak 2 kali'."\n";
+          $msg .='maka akun anda akan di-suspend , sehingga anda tidak dapat melakukkan segala aktifitas di situs kami selama 1 minggu.'."\n\n";
+
+          $msg .='Apabila anda terkena *suspend* sebanyak 2 kali'."\n";
+          $msg .='maka akun anda akan di-non-aktifkan.'."\n\n";
+
+          $msg .='Mohon perhatian dan kerja sama dari anda.'."\n\n";
+          $msg .='Terima Kasih'."\n";
+          $msg .='Team Exchanger';
+
+          $data = [
+              'message'=>$msg,
+              'phone_number'=>$user->phone_number,
+              'email'=>$user->email,
+              'obj'=>new WarningEmail($tr->no),
+          ];
+
+          $this->notify_user($data);
         }
        
         // BANNED SELLER IF SUSPEND HAS REACH 2
@@ -256,19 +311,10 @@ class AdminController extends Controller
     }
 
     // RETURNING USER COIN ON THEIR WALLET AND CHANGE TRANSACTION STATUS
-    public static function change_transaction($tr,$status,$member)
+    public static function change_transaction($tr,$status)
     {
       try
       {
-        if($member > 0)
-        {
-          // RETURNING USER COIN ON THEIR WALLET
-          $coin = $tr->amount;
-          $user = User::find($member);
-          $user->coin += $coin;
-          $user->save();
-        }
-
         $tr->status = $status;
         $tr->save();
         return response()->json(['err'=>0]);

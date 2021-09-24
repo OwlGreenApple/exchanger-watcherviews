@@ -36,6 +36,7 @@ Route::group(['middleware'=>['auth','web','suspend']],function()
 	Route::get('purchase', [App\Http\Controllers\HomeController::class, 'purchase']);
 	Route::post('save-dispute', [App\Http\Controllers\HomeController::class, 'save_dispute'])->middleware('check_dispute');
 	Route::get('page-dispute', [App\Http\Controllers\HomeController::class, 'dispute_page']);
+	Route::get('error',[App\Http\Controllers\HomeController::class, 'error']);
 
 	//BUY
 	// Route::get('test-wa',[App\Http\Controllers\BuyerController::class, 'test_wa']);
@@ -80,6 +81,8 @@ Route::group(['middleware'=>['auth','web','suspend']],function()
 
 	// CHAT
 	Route::get('chat/{trans_id}',[App\Http\Controllers\ChatController::class, 'room']);
+	Route::get('display_chat',[App\Http\Controllers\ChatController::class, 'display_chat']);
+	Route::post('save-chats',[App\Http\Controllers\ChatController::class, 'save_chat']);
 });
 
 /*ADMIN*/

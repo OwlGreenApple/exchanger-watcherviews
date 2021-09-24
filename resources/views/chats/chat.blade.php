@@ -7,12 +7,12 @@
         <div class="col-md-9">
             <div class="card">
                 <div class="card-header bg-primary text-white">
-                    Chat
+                    Chat invoice : {{ $invoice }}
                 </div>
 
-                <div id="comments" class="card-body">
+                <div id="chats" class="card-body">
                     <!-- display table comments -->
-                    @include('chats.chat-data')
+                    <!-- include('chats.chat-data') -->
                 </div>
                 
                 <div class="card-body">
@@ -39,79 +39,46 @@
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function(){
-       /* display_comments();
+    $(document).ready(function()
+    {
+        chat();
+        chat_interval();
         save_comments();
-        rate();*/
     });
 
-    function rate()
+    function chat_interval()
     {
-        $(".rate").click(function(){
-            var pos = $(".rate").index(this);
-            var check = $(this).hasClass( "checked" );
-
-            if(check == true)
-            {
-                 $(this).removeClass('checked');
-                 star_min(pos)
+        setInterval(
+            function()
+            { 
+                chat(); 
             }
-            else
-            {
-                 $(this).addClass('checked');
-                 star_plus(pos)
-            }
-        })
+        , 5000);
     }
 
-    function star_plus(pos)
+    function chat()
     {
-        if(pos == 0)
-        {
-            for(x=1;x<5;x++)
-            {
-                $(".rate").eq(x).removeClass('checked');
-            }
-        }
-        else
-        {
-            for(x=0;x<pos;x++)
-            {
-                $(".rate").eq(x).addClass('checked');
-            }
-        }
-    }
-
-    function star_min(pos)
-    {
-        for(x=4;x>pos;x--)
-        {
-            $(".rate").eq(x).removeClass('checked');
-        }
-    }
-
-    function display_comments()
-    {
+        var results;
         $.ajax({
-            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-            type : 'POST',
-            url : "{{ url('display-comments') }}",
+            // headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            type : 'GET',
+            url : "{{ url('display_chat') }}",
             dataType : 'html',
-            data : {'seller_id' : ""},
-            beforeSend: function()
+            data : {'tr_id' : "{{ $tr_id }}"},
+            /*beforeSend: function()
             {
                $('#loader').show();
                $('.div-loading').addClass('background-load');
-               $(".error").hide();
-            },
+            },*/
             success : function(result)
-            {
-                $("#comments").html(result);
-            },
-            complete : function()
             {
                 $('#loader').hide();
                 $('.div-loading').removeClass('background-load');
+                results = result;
+            },
+            complete : function()
+            {
+                $("#chats").html(results);
             },
             error : function()
             {
@@ -125,24 +92,22 @@
     {
         $("#save_comments").click(function(){
             var comments = $('textarea[name="comments"]').val();
-            var rate = $(".checked").length;
             var data = {
                 'comments' : comments,
-                'rate' : rate,
-                'seller_id' : "",
+                'tr_id' : "{{ $tr_id }}"
             };
 
             $.ajax({
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                 type : 'POST',
-                url : "{{ url('save-comments') }}",
+                url : "{{ url('save-chats') }}",
                 dataType : 'json',
                 data : data,
                 beforeSend: function()
                 {
                    $('#loader').show();
                    $('.div-loading').addClass('background-load');
-                   $(".error").hide();
+                   // $(".error").hide();
                 },
                 success : function(result)
                 {
@@ -151,8 +116,13 @@
 
                     if(result.err == 0)
                     {
-                       display_comments();
+                       chat();
                     }
+                    else if(result.err == 2)
+                    {
+                        $(".error").show();
+                        $("#err_message").html('<div class="alert alert-danger">{{ Lang::get("custom.chat_end") }}</div>');
+                    } 
                     else if(result.err == 'validation')
                     {
                         $(".error").show();

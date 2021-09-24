@@ -18,7 +18,7 @@ class Api
         // note : this using celebfans page link, due same logic
         if(env('APP_ENV') == 'local')
         {
-            $url = 'https://192.168.100.49/activrespon/api/celebfans';
+            $url = 'https://'.env('APP_URL_API').'/activrespon/api/celebfans';
         }
         else
         {

@@ -12,7 +12,7 @@
       <div id="err"><!--  --></div>
     </div>
 
-    <div id="dispute_table" class="col-4 col-md-12 col-lg-12 table-responsive">
+    <div id="dispute_table" class="col-4 col-md-12 col-lg-12 table-responsive px-4 py-4 bg-white">
       <!-- display dispute -->
     </div>
   <!--  -->

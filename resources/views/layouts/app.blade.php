@@ -117,8 +117,12 @@
                 <a class="dropdown-item" href="{{ url('account') }}">
                   <i class="mdi mdi-cached mr-2 text-success"></i> Account </a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="{{ route('logout') }}"
+                                   onclick="event.preventDefault();
+                                                 document.getElementById('logout-form').submit();">
                   <i class="mdi mdi-logout mr-2 text-primary"></i> Log out </a>
+                  <!-- FORM LOGOUT -->
+                  <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
               </div>
             </li>
             <li class="nav-item d-none d-lg-block full-screen-link">
@@ -223,20 +227,25 @@
             
               @if (Auth::user()->is_admin == 0)
                 <li class="nav-item nav-logout d-none d-lg-block">
+                  <a class="nav-link">
+                    <i class="fas fa-coins"></i>&nbsp;{{ Lang::get('custom.currency') }} {{ Price::get_rate() }}/coin
+                  </a>
+                </li> 
+                <li class="nav-item nav-logout d-none d-lg-block">
                   <a class="nav-link" href="{{ url('buy') }}">
-                    <i class="mdi mdi-cart-outline"></i> &nbsp
+                    <i class="mdi mdi-cart-outline"></i> &nbsp;
                     Beli Koin
                   </a>
                 </li>
                 <li class="nav-item nav-logout d-none d-lg-block">
                   <a class="nav-link" href="{{ url('sell') }}">
-                    <i class="mdi mdi-store-24-hour"></i> &nbsp
+                    <i class="mdi mdi-store-24-hour"></i> &nbsp;
                     {{ Lang::get('transaction.sell') }}
                   </a>
                 </li>
                 <li class="nav-item nav-logout d-none d-lg-block">
                   <a class="nav-link" href="{{ url('wallet') }}">
-                    <i class="mdi mdi-wallet-outline"></i> &nbsp
+                    <i class="mdi mdi-wallet-outline"></i> &nbsp;
                     Wallet
                   </a>
                 </li>
@@ -258,7 +267,7 @@
                 </li>
                 <li class="nav-item nav-logout d-none d-lg-block">
                   <a class="nav-link" href="{{ url('dispute-admin') }}">
-                    Dispute
+                    @if(Price::total_dispute()['new'] == 1) <u>Dispute</u> @else Dispute @endif &nbsp;<span class="badge badge-warning">{{ Price::total_dispute()['total']  }}</span>
                   </a>
                 </li>
                 <li class="nav-item nav-logout d-none d-lg-block">

@@ -38,6 +38,12 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
 
+     // DISPLAYING ERROR PAGE
+    public function error()
+    {
+      return view('error404');
+    }
+
     public function end_membership()
     {
         return view('auth.trial',['lang'=>new Lang]);
