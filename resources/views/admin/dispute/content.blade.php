@@ -30,7 +30,7 @@
               -
             @endif
           </td>
-          <td><a href="{{ url('chat') }}/{{ $row->id }}" class="btn btn-default btn-sm popup-newWindow"><i class='far fa-comments'></i>&nbsp;Chat</a>&nbsp;@if($row->status == 4)<a class="btn btn-warning btn-sm text-dark"><i class='far fa-bell'></i></a>@endif</td>
+          <td><a href="{{ url('chat') }}/{{ $row->id }}" class="btn btn-default btn-sm popup-newWindow"><i class='far fa-comments'></i>&nbsp;Chat</a>&nbsp;@if($row->status == 4)<a data-buyer="{{ $row->buyer_id }}" data-seller="{{ $row->seller_id }}" data-tr-id="{{ $row->id }}" class="btn btn-warning btn-sm text-dark bell"><i class='far fa-bell'></i></a>@endif</td>
           @if($row->status == 4)
             <td>
               <!-- BUYER -->
@@ -46,7 +46,9 @@
                 <button type="button" data-id="{{ $row->seller_id }}" data-tr-id="{{ $row->id }}" data-role="2" class="btn btn-outline-success btn-sm notify">Notifikasi Penjual</button>
               @endif
               <!-- END DISPUTE -->
-              <button data-buyer="{{ $row->buyer_id }}" data-seller="{{ $row->seller_id }}" data-win="0" data-tr-id="{{ $row->id }}" type="button" class="btn btn-warning btn-sm blame">Dispute selesai</button>
+              @if($row->buyer_dispute_id > 0 && $row->seller_dispute_id > 0)
+                <button data-buyer="{{ $row->buyer_id }}" data-seller="{{ $row->seller_id }}" data-win="0" data-tr-id="{{ $row->id }}" type="button" class="btn btn-warning btn-sm blame">Dispute selesai</button>
+              @endif
             </td>
           @elseif($row->status == 3)
             <td class="text-primary font-weight-bold">Pembeli Menang</td>

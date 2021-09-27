@@ -18348,7 +18348,8 @@ div.tagsinput {
 .auth .brand-logo {
   margin-bottom: 2rem; }
   .auth .brand-logo img {
-    width: 330px; }
+    width : 100%;
+    max-width: 330px; }
 
 .auth form .form-group {
   margin-bottom: 1.5rem; }

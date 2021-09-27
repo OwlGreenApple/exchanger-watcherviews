@@ -18,6 +18,7 @@ return [
     'dana'=>'QR-Code DANA', //profile.blade
     'end'=>'Trial sudah habis', //trial.blade
     'email_watcherviews'=>'Email Watcherviews anda', //wallet.blade
+    'epayment'=>'Pembayaran Elektronik', //profile.blade
     'failed'=>'Maaf server kami terlalu sibuk, silahkan coba lagi nanti.', //checkout.blade
     'find_help'=>'Temukan Bantuan', //summary.blade
     'female'=>'Wanita', //summary.blade

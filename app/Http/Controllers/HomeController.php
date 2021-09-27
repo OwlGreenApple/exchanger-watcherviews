@@ -49,6 +49,8 @@ class HomeController extends Controller
         return view('auth.trial',['lang'=>new Lang]);
     }
 
+    /* HOME -- PROFILE */
+
     public function account(Request $request)
     {
         $user = Auth::user();
@@ -58,6 +60,120 @@ class HomeController extends Controller
         $confirm = $request->segment(2);
 
         return view('home.account',['user'=>$user,'lang'=>$lang,'pc'=> new Price,'membership'=>$membership,'trial'=>$trial,'conf'=>$confirm]);
+    }
+
+    public function update_profile(Request $request)
+    {
+        $user = User::find(Auth::id());
+        $user->name = strip_tags($request->name);
+        $user->bank_name = strip_tags($request->bank_name);
+        $user->bank_no = strip_tags($request->bank_no);
+
+        if($request->newpass !== null)
+        {
+            $user->password = Hash::make($request->newpass);
+        }
+
+        if($request->phone !== null)
+        {
+            $user->phone_number = $request->code_country.$request->phone;
+        }
+
+        try
+        {
+            $user->save();
+            $data = ['success'=>1,'phone'=>$user->phone_number,'msg'=>Lang::get('custom.success')];
+        }
+        catch(QueryException $e)
+        {
+            //$e->getMessage()
+            $data = ['success'=>0,'msg'=>Lang::get('custom.failed')];
+        }
+
+        return response()->json($data);
+    }
+
+    public function payment_upload(Request $request)
+    {
+      $user = User::find(Auth::id());
+      $payment = $request->epayment;
+      $dir = env('APP_UPLOAD').'/payment_method';
+
+      $image = $request->image;
+      $image_array_1 = explode(";", $image);
+      $image_array_2 = explode(",", $image_array_1[1]);
+      $data = base64_decode($image_array_2[1]);
+
+      if($payment == 'ovo')
+      {
+        $filename = Auth::id().'-ovo.jpg';
+        $path = $dir."/".$filename;
+        $user->ovo = $path;
+      }
+      elseif($payment == 'dana')
+      {
+        $filename = Auth::id().'-dana.jpg';
+        $path = $dir."/".$filename;
+        $user->dana = $path;
+      }
+      else
+      {
+        $filename = Auth::id().'-gopay.jpg';
+        $path = $dir."/".$filename;
+        $user->gopay = $path;
+      }
+      
+      try
+      {
+        $user->save();
+        Storage::disk('s3')->put($path,$data,'public');
+        $res['pay'] = $payment;
+        // $res['img'] = Storage::disk('s3')->url($path);
+      }
+      catch(QueryException $e)
+      {
+        // $e->getMessage();
+        $res['img'] = 0;
+      }
+      
+      return response()->json($res);
+    }
+
+    // DELETE ELECTRONICS PAYMENT
+    public function delete_epayment(Request $request)
+    {
+      $payment = $request->payment;
+      $user = User::find(Auth::id());
+
+      if($payment == 'ovo')
+      {
+        $path = $user->ovo;
+        $user->ovo = null;
+      }
+      elseif($payment == 'dana')
+      {
+        $path = $user->dana;
+        $user->dana = null;
+      }
+      else
+      {
+        $path = $user->gopay;
+        $user->gopay = null;
+      }
+
+      try
+      {
+        $user->save();
+        Storage::disk('s3')->delete($path);
+        $res['err'] = 0;
+      }
+      catch(QueryException $e)
+      {
+        // $e->getMessage();
+        $res['err'] = 1;
+      }
+      
+      return response()->json($res);
     }
 
     // CONNECT TO WATCHERVIEWS TO OBTAIN WATCHERVIEWS ID
@@ -314,41 +430,6 @@ class HomeController extends Controller
         return view('home.kurs');
     }
 
-    public function update_profile(Request $request)
-    {
-        $user = User::find(Auth::id());
-        $user->name = strip_tags($request->name);
-        $user->bank_name = strip_tags($request->bank_name);
-        $user->bank_no = strip_tags($request->bank_no);
-
-        $user->ovo = $request->file('ovo');
-        $user->gopay = $request->file('gopay');
-        $user->dana = $request->file('dana');
-
-        if($request->newpass !== null)
-        {
-            $user->password = Hash::make($request->newpass);
-        }
-
-        if($request->phone !== null)
-        {
-            $user->phone_number = $request->code_country.$request->phone;
-        }
-
-        try
-        {
-            $user->save();
-            $data = ['success'=>1,'phone'=>$user->phone_number,'msg'=>Lang::get('custom.success')];
-        }
-        catch(QueryException $e)
-        {
-            //$e->getMessage()
-            $data = ['success'=>0,'msg'=>Lang::get('custom.failed')];
-        }
-
-        return response()->json($data);
-    }
-
     public function order_list(Request $request)
     {
       $start = $request->start;
@@ -457,17 +538,11 @@ class HomeController extends Controller
         //konfirmasi pembayaran user
         $order = Orders::find($request->id_confirm);
         $folder = $user->email.'/buktibayar';
-        $celeb = null;
         $pathUrl = str_replace(url('/'), '', url()->previous());
 
         if(strlen($request->keterangan) > 300)
         {
             return redirect($pathUrl)->with("error", Lang::get('order.max_notes'));
-        }
-
-        if(env('APP_ENV') == 'local')
-        {
-            $celeb = 'exchanger';
         }
 
         if($order->status==0)
@@ -476,7 +551,7 @@ class HomeController extends Controller
 
           if($request->hasFile('buktibayar'))
           {
-            $dir = $celeb.'/bukti_bayar/'.explode(' ',trim($user->name))[0].'-'.$user->id;
+            $dir = env('APP_UPLOAD').'/bukti_bayar/'.explode(' ',trim($user->name))[0].'-'.$user->id;
             $filename = $order->no_order.'.jpg';
             Storage::disk('s3')->put($dir."/".$filename, file_get_contents($request->file('buktibayar')), 'public');
             $order->proof = $dir."/".$filename;

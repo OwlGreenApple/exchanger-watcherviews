@@ -1,3 +1,21 @@
+@if($pos !== null)
+
+Sehubungan dengan dispute invoice : <b>{{ $invoice }}</b>
+<br>
+maka admin mengundang anda untuk menyelesaikan dispute ini melalui chat
+<br>
+dengan link di bawah ini :
+<br>
+<br>
+<a href="{{ url('chat') }}/{{ $pos }}">Chat Room</a>
+<br>
+<br>
+Terima Kasih
+<br>
+Team Exchanger
+
+@else
+
 Mohon perhatian
 <br>
 sehubungan dengan dispute invoice : <b>{{ $invoice }}</b> maka akun anda telah mendapatkan warning.
@@ -19,3 +37,5 @@ Mohon perhatian dan kerja sama dari anda.
 Terima kasih, 
 <br>
 Team Exchanger
+
+@endif

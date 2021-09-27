@@ -55,6 +55,44 @@ class AdminController extends Controller
        return view('admin.dispute.content',['data'=>$dp]);
     }
 
+    public function dispute_notify_user(Request $request)
+    {
+      $data_buyer = $request->data_buyer;  
+      $data_seller = $request->data_seller;  
+      $data_trid = $request->data_trid;  
+
+      $tr = Transaction::find($data_trid);
+      if(is_null($tr))
+      {
+        return response()->json(['err'=>1]);
+      }
+
+      $msg ='';
+      $msg .='Sehubungan dengan invoice : *'.$tr->no.'*'."\n";
+      $msg .='maka admin mengundang anda untuk menyelesaikan dispute ini melalui chat'."\n";
+      $msg .='dengan link di bawah ini : '."\n\n";
+      $msg .=url('chat').'/'.$tr->id."\n\n"; 
+      $msg .='Terima Kasih'."\n";
+      $msg .='Team Exchanger';
+
+      $users = User::whereIn('id',[$data_buyer,$data_seller])->get();
+
+      if($users->count() > 0)
+      {
+        foreach ($users as $row) 
+        {
+          $data = [
+              'message'=>$msg,
+              'phone_number'=>$row->phone_number,
+              'email'=>$row->email,
+              'obj'=>new WarningEmail($tr->no,$tr->id),
+          ];
+          
+          $this->notify_user($data);
+        }
+      }
+    }
+
     public function dispute_notify(Request $request)
     {
       $user_id = $request->user_id;
@@ -237,8 +275,8 @@ class AdminController extends Controller
         $buyer_id = $tr->buyer_id;
 
         // BOTH GET WARNING
-        $this->warning_user($buyer_id);
-        $this->warning_user($seller_id);
+        $this->warning_user($buyer_id,$tr);
+        $this->warning_user($seller_id,$tr);
         return self::change_transaction($tr,6,0);
       }
       else

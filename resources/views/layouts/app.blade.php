@@ -57,7 +57,11 @@
     <link href="{{ asset('assets/css/order.css') }}" rel="stylesheet" />
 
     <!-- Canvas JS -->
-    <script type="text/javascript" src="{{ asset('assets/canvasjs/canvasjs.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/canvasjs/canvasjs.min.js') }}"></script> 
+
+    <!-- Cropper -->
+    <script type="text/javascript" src="{{ asset('assets/cropper/cropper.min.js') }}"></script>
+    <link href="{{ asset('assets/cropper/cropper.min.css') }}" rel="stylesheet" />
 
     <!-- ReactJS -->
     <script type="text/javascript" src="{{ asset('assets/reactjs/babel.min.js') }}"></script>

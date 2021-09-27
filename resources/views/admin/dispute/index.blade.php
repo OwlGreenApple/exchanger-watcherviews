@@ -78,12 +78,59 @@
   $(document).ready(function() 
   {
     detail_user();
+    dispute_notify();
     dispute_form();
     dispute_user();
     display_table()
     popup_new_window();
     notify_user();
   });
+
+  function dispute_notify()
+  {
+    $("body").on("click",".bell",function(){
+      var buyer_id = $(this).attr('data-buyer');
+      var seller_id = $(this).attr('data-seller');
+      var trans_id = $(this).attr('data-tr-id');
+      var data = {'data_buyer' : buyer_id, 'data_seller' : seller_id,'data_trid' : trans_id}
+      
+      $.ajax({
+        type : 'GET',
+        url : "{{ url('dispute-notify-users') }}",
+        data : data,
+        dataType: 'json',
+        beforeSend: function() 
+        {
+          $('#loader').show();
+          $('.div-loading').addClass('background-load');
+        },
+        success: function(result) 
+        {
+          if(result.err == 0)
+          {
+            $("#err").html('<div class="alert alert-success">Dispute notifikasi sudah terkirim</div>');
+          }
+          else
+          {
+            $("#err").html('<div class="alert alert-danger">'+result.msg+'</div>');
+          }
+        },
+        complete : function()
+        {
+          $('#loader').hide();
+          $('.div-loading').removeClass('background-load');
+          $(".alert").hide();
+        },
+        error : function(xhr)
+        {
+          $('#loader').hide();
+          $('.div-loading').removeClass('background-load');
+          console.log(xhr.responseText);
+        }
+      });
+      /**/
+    });
+  }
 
   function dispute_form()
   {

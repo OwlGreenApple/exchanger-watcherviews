@@ -2,6 +2,60 @@
 <link href="{{ asset('assets/css/settings.css') }}" rel="stylesheet" />
 <link href="{{ asset('assets/css/order.css') }}" rel="stylesheet" />
 
+<style>
+
+        .image_area {
+          position: relative;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+        }
+
+        .preview {
+            overflow: hidden;
+            width: 160px; 
+            height: 160px;
+            margin: 10px;
+            border: 1px solid red;
+        }
+
+        .modal-lg{
+            max-width: 1000px !important;
+        }
+
+        .overlay {
+          position: absolute;
+          bottom: 10px;
+          left: 0;
+          right: 0;
+          background-color: rgba(255, 255, 255, 0.5);
+          overflow: hidden;
+          height: 0;
+          transition: .5s ease;
+          width: 100%;
+        }
+
+        .image_area:hover .overlay {
+          height: 50%;
+          cursor: pointer;
+        }
+
+        .text {
+          color: #333;
+          font-size: 20px;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          -webkit-transform: translate(-50%, -50%);
+          -ms-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+          text-align: center;
+        }
+        
+        </style>
+
 @section('content')
     <div class="page-header">
       <h3 class="page-title">
@@ -106,13 +160,174 @@
     var segment = "{{ $conf }}";
 
     $(document).ready(function(){
+        crop();
         data_tabs();
         load_page();
         save_profile();
         connect_api();
         logout_watcherviews();
+        delete_epayment();
     });
 
+    function delete_epayment()
+    {
+        $("body").on("click",".epay",function()
+        {
+            var payment = $(this).attr('data-value');
+            $("#confirm_payment_delete").modal();
+            $("#btn_payment_delete").attr('data-value',payment);
+        });
+            
+
+        $("body").on("click","#btn_payment_delete",function()
+        {
+            var payment = $(this).attr('data-value');
+            $.ajax({
+                type : 'GET',
+                url : "{{ url('delete-epayment') }}",
+                dataType : 'json',
+                data : {'payment':payment},
+                beforeSend: function()
+                {
+                   $('#loader').show();
+                   $('.div-loading').addClass('background-load');
+                   $(".error").hide();
+                },
+                success : function(result)
+                {
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+
+                    if(result.err == 0)
+                    {
+                        if(payment == 'ovo')
+                        {
+                            $("#display_ovo").html('');
+                        }
+                        else if(payment == 'dana')
+                        {
+                            $("#display_dana").html('');
+                        }
+                        else
+                        {
+                            $("#display_gopay").html('');
+                        }
+                    }
+                    else
+                    {
+                        $(".msg").html('<div class="alert alert-danger">{{ Lang::get("custom.failed") }}</div>');
+                    }
+                },
+                complete : function()
+                {
+                    $(".msg").delay(3000).fadeOut(1000);
+                },
+                error : function()
+                {
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+                }
+            });
+        });
+    }
+
+    function crop()
+    {
+        // TO REMOVE FILE WGHEN USER PRESS CANCEL
+        $(".crop_cancel").click(function(){
+            $("input[name='payment']").val('');
+        });
+
+        var $modal = $('#modal');
+        var image = document.getElementById('sample_image');
+        var cropper;
+
+        $('.upload_payment').change(function(event){
+            var files = event.target.files;
+
+            var done = function(url){
+                image.src = url;
+                $modal.modal('show');
+            };
+
+            if(files && files.length > 0)
+            {
+                reader = new FileReader();
+                reader.onload = function(event)
+                {
+                    done(reader.result);
+                };
+                reader.readAsDataURL(files[0]);
+            }
+        });
+
+        $modal.on('shown.bs.modal', function() {
+        cropper = new Cropper(image, {
+            aspectRatio: 1,
+            viewMode: 3,
+            preview:'.preview'
+        });
+        }).on('hidden.bs.modal', function(){
+            cropper.destroy();
+            cropper = null;
+        });
+
+        $('#crop').click(function(){
+            canvas = cropper.getCroppedCanvas({
+                width:400,
+                height:400
+            });
+
+            canvas.toBlob(function(blob){
+                url = URL.createObjectURL(blob);
+                var reader = new FileReader();
+                reader.readAsDataURL(blob);
+                reader.onloadend = function(){
+                    var base64data = reader.result;
+                    var epayment = $("select[name='epayment'] option:selected").val();
+                    $.ajax({
+                        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                        method:'POST',
+                        url:'{{ url("payment-upload") }}',
+                        data:{'image':base64data,'epayment':epayment},
+                        success:function(data)
+                        {
+                            $modal.modal('hide');
+                            if(data.img == 0)
+                            {
+                                $("#err_profile").html('<div class="alert alert-danger">{{ Lang::get("custom.failed") }}</div>')
+                            }
+                            else
+                            {
+                                if(data.pay == 'ovo')
+                                { 
+                                    // $('#ovo_image').attr('src', data.img);
+                                    $("#display_ovo").html('<div class="mb-2"><button data-value="ovo" type="button" class="btn btn-danger epay">Hapus OVO</button></div>');
+                                }
+                                else if(data.pay == 'dana')
+                                {
+                                    // $('#dana_image').attr('src', data.img);
+                                    $("#display_dana").html('<div class="mb-2"><button data-value="dana" type="button" class="btn btn-danger epay">Hapus DANA</button></div>');
+                                }
+                                else
+                                {
+                                    // $('#gopay_image').attr('src', data.img);
+                                    $("#display_gopay").html('<div class="mb-2"><button data-value="gopay" type="button" class="btn btn-danger epay">Hapus GOPAY</button></div>');
+                                }
+                            }
+                        },
+                        complete : function()
+                        {
+                            $("input[name='payment']").val('');
+                        }
+                    });
+                };
+            });
+        });
+
+    /*end fun*/
+    }
+    
     function data_tabs()
     {
         if(segment == 1)

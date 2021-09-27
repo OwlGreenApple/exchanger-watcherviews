@@ -78,6 +78,8 @@ Route::group(['middleware'=>['auth','web','suspend']],function()
 	Route::post('order-confirm-payment',[App\Http\Controllers\HomeController::class, 'confirm_payment_order']);
 	Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'update_profile'])->middleware('check_profile');
 	Route::get('account/{conf?}', [App\Http\Controllers\HomeController::class, 'account']);
+	Route::post('payment-upload', [App\Http\Controllers\HomeController::class, 'payment_upload']);
+	Route::get('delete-epayment', [App\Http\Controllers\HomeController::class, 'delete_epayment']);
 
 	// CHAT
 	Route::get('chat/{trans_id}',[App\Http\Controllers\ChatController::class, 'room']);
@@ -92,6 +94,7 @@ Route::group(['middleware'=>['auth','web','is_admin','suspend']],function()
 	Route::get('dispute-list-admin',[App\Http\Controllers\Admin\AdminController::class,'display_dispute']);
 	Route::get('dispute-user',[App\Http\Controllers\Admin\AdminController::class,'dispute_user']);
 	Route::get('dispute-notify',[App\Http\Controllers\Admin\AdminController::class,'dispute_notify']);
+	Route::get('dispute-notify-users',[App\Http\Controllers\Admin\AdminController::class,'dispute_notify_user']);
 
 	Route::get('kurs-admin',[App\Http\Controllers\Admin\AdminController::class,'trade']);
 	Route::get('user-list',[App\Http\Controllers\Admin\AdminController::class,'user_list']);

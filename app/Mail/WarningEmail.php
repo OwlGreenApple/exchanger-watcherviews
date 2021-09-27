@@ -19,9 +19,10 @@ class WarningEmail extends Mailable
 
     public $invoice;
 
-    public function __construct($invoice)
+    public function __construct($invoice,$pos = null)
     {
         $this->invoice = $invoice;
+        $this->pos = $pos;
     }
 
     /**
@@ -37,6 +38,7 @@ class WarningEmail extends Mailable
         ->view('emails.WarningEmail')
         ->with([
           'invoice' => $this->invoice,
+          'pos' => $this->pos,
         ]);
     }
 }
