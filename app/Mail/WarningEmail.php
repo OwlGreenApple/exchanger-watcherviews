@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class NotifyEmail extends Mailable
+class WarningEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -18,15 +18,11 @@ class NotifyEmail extends Mailable
      */
 
     public $invoice;
-    public $url_confirm;
-    public $url_dispute;
 
-    public function __construct($invoice,$url_confirm,$url_dispute,$role)
+    public function __construct($invoice,$pos = null)
     {
         $this->invoice = $invoice;
-        $this->url_confirm = $url_confirm;
-        $this->url_dispute = $url_dispute;
-        $this->role = $role;
+        $this->pos = $pos;
     }
 
     /**
@@ -39,12 +35,10 @@ class NotifyEmail extends Mailable
         return $this
         ->from('no-reply@exchanger.com', 'exchanger')
         ->subject($this->subject)
-        ->view('emails.NotifyEmail')
+        ->view('emails.WarningEmail')
         ->with([
           'invoice' => $this->invoice,
-          'url_confirm' => $this->url_confirm,
-          'url_dispute' => $this->url_dispute,
-          'role' => $this->role,
+          'pos' => $this->pos,
         ]);
     }
 }

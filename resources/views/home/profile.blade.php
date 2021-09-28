@@ -1,3 +1,5 @@
+<div id="err_profile"><!--  --></div>
+
 <form id="profile">
     <div class="form-group row">
         <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Nama') }}</label>
@@ -24,6 +26,10 @@
         </div>
     </div>
 
+    <hr/>
+
+    <div align="center" class="mb-3"><b>Metode Pembayaran</b></div>
+
      <div class="form-group row">
         <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.bank_name') }}</label>
 
@@ -43,29 +49,46 @@
     </div>
 
     <div class="form-group row">
-        <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.ovo') }}</label>
+        <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.epayment') }}</label>
 
         <div class="col-md-6">
-            <input type="file" class="form-control" name="ovo" />
-            <span class="error ovo"><!--  --></span>
+           <select class="form-control" name="epayment">
+               <option value="ovo">{{ $lang::get('custom.ovo') }}</option>
+               <option value="dana">{{ $lang::get('custom.dana') }}</option>
+               <option value="gopay">{{ $lang::get('custom.gopay') }}</option>
+           </select>
+        </div>
+    </div>
+
+    <!-- upload form -->
+    <div class="form-group row">
+        <label class="col-md-4 col-form-label text-md-right">&nbsp;</label>
+
+        <div class="col-md-6">
+            <input type="file" class="form-control upload_payment" name="payment" />
+            <span class="error payment"><!--  --></span>
         </div>
     </div>
 
     <div class="form-group row">
-        <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.dana') }}</label>
+        <label class="col-md-4 col-form-label text-md-right"><!--  --></label>
 
-        <div class="col-md-6">
-            <input type="file" class="form-control" name="dana" />
-            <span class="error dana"><!--  --></span>
-        </div>
-    </div>
-
-    <div class="form-group row">
-        <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.gopay') }}</label>
-
-        <div class="col-md-6">
-            <input type="file" class="form-control" name="gopay" />
-            <span class="error gopay"><!--  --></span>
+        <div id="display_epayment" class="col-md-6">
+            <span id="display_ovo">
+                @if($user->ovo !== null)
+                    <div class="mb-2"><button data-value="ovo" type="button" class="btn btn-danger epay">Hapus OVO</button></div>
+                @endif
+            </span>
+            <span id="display_dana">
+                @if($user->dana !== null)
+                    <div class="mb-2"><button data-value="dana" type="button" class="btn btn-danger epay">Hapus DANA</button></div>
+                @endif
+            </span>
+            <span id="display_gopay">
+                @if($user->gopay !== null)
+                    <div class="mb-2"><button data-value="gopay" type="button" class="btn btn-danger epay">Hapus GOPAY</button></div>
+                @endif
+            </span>
         </div>
     </div>
 
@@ -107,3 +130,58 @@
         </div>
     </div>
 </form>
+
+<!-- Modal Confirm -->
+<div class="modal fade" id="confirm_payment_delete" role="dialog">
+  <div class="modal-dialog">
+    
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modaltitle">
+          Apakah anda yakin akan menghapus metode pembayaran ini?
+        </h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-footer" id="foot">
+        <button class="btn btn-primary" id="btn_payment_delete" data-dismiss="modal">
+          Ya
+        </button>
+        <button class="btn" data-dismiss="modal">
+          Batal
+        </button>
+      </div>
+    </div>
+      
+  </div>
+</div>
+
+<!-- MODAL FOR CROPPING QR-CODE -->
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Crop QR-Code Sebelum Upload</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="img-container">
+                <div class="row">
+                    <div class="col-md-7">
+                        <img src="" id="sample_image" />
+                    </div>
+                    <div class="col-md-5">
+                        <div class="preview"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="crop" class="btn btn-primary">Crop</button>
+            <button type="button" class="btn btn-secondary crop_cancel" data-dismiss="modal">Cancel</button>
+        </div>
+    </div>
+</div>
+</div>  

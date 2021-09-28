@@ -36,8 +36,10 @@ Route::group(['middleware'=>['auth','web','suspend']],function()
 	Route::get('purchase', [App\Http\Controllers\HomeController::class, 'purchase']);
 	Route::post('save-dispute', [App\Http\Controllers\HomeController::class, 'save_dispute'])->middleware('check_dispute');
 	Route::get('page-dispute', [App\Http\Controllers\HomeController::class, 'dispute_page']);
+	Route::get('error',[App\Http\Controllers\HomeController::class, 'error']);
 
 	//BUY
+	// Route::get('test-wa',[App\Http\Controllers\BuyerController::class, 'test_wa']);
 	Route::get('buy',[App\Http\Controllers\BuyerController::class, 'buying_page']);
 	Route::get('buy-list',[App\Http\Controllers\BuyerController::class, 'buyer_table']);
 	Route::get('buy-detail/{invoice}',[App\Http\Controllers\BuyerController::class, 'detail_buy']);
@@ -76,9 +78,13 @@ Route::group(['middleware'=>['auth','web','suspend']],function()
 	Route::post('order-confirm-payment',[App\Http\Controllers\HomeController::class, 'confirm_payment_order']);
 	Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'update_profile'])->middleware('check_profile');
 	Route::get('account/{conf?}', [App\Http\Controllers\HomeController::class, 'account']);
+	Route::post('payment-upload', [App\Http\Controllers\HomeController::class, 'payment_upload']);
+	Route::get('delete-epayment', [App\Http\Controllers\HomeController::class, 'delete_epayment']);
 
 	// CHAT
 	Route::get('chat/{trans_id}',[App\Http\Controllers\ChatController::class, 'room']);
+	Route::get('display_chat',[App\Http\Controllers\ChatController::class, 'display_chat']);
+	Route::post('save-chats',[App\Http\Controllers\ChatController::class, 'save_chat']);
 });
 
 /*ADMIN*/
@@ -87,7 +93,8 @@ Route::group(['middleware'=>['auth','web','is_admin','suspend']],function()
 	Route::get('dispute-admin',[App\Http\Controllers\Admin\AdminController::class,'dispute']);
 	Route::get('dispute-list-admin',[App\Http\Controllers\Admin\AdminController::class,'display_dispute']);
 	Route::get('dispute-user',[App\Http\Controllers\Admin\AdminController::class,'dispute_user']);
-	Route::get('notify-user',[App\Http\Controllers\Admin\AdminController::class,'notify_user']);
+	Route::get('dispute-notify',[App\Http\Controllers\Admin\AdminController::class,'dispute_notify']);
+	Route::get('dispute-notify-users',[App\Http\Controllers\Admin\AdminController::class,'dispute_notify_user']);
 
 	Route::get('kurs-admin',[App\Http\Controllers\Admin\AdminController::class,'trade']);
 	Route::get('user-list',[App\Http\Controllers\Admin\AdminController::class,'user_list']);

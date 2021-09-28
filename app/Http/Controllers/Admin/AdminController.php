@@ -18,6 +18,7 @@ use App\Models\Kurs;
 use App\Helpers\Api;
 use App\Helpers\Price;
 use App\Mail\NotifyEmail;
+use App\Mail\WarningEmail;
 use Carbon\Carbon;
 use Storage, Validator, DB;
 
@@ -38,40 +39,128 @@ class AdminController extends Controller
             ->select('dp.upload_identity',
               'dp.upload_proof AS buyer_proof',
               'dp.upload_mutation',
-              'dp.user_id AS buyer_id',
+              // 'dp.user_id AS buyer_id',
               'dp.created_at AS buyer_dispute_date',
               'ds.upload_proof AS seller_proof',
               'ds.created_at AS seller_dispute_date',
-              'ds.user_id AS seller_id',
+              // 'ds.user_id AS seller_id',
               'us.name AS buyer_name',
               'ur.name AS seller_name',
-              'transactions.no AS invoice','transactions.date_buy','transactions.id','transactions.status'
+              'transactions.no AS invoice','transactions.date_buy','transactions.id','transactions.status','transactions.seller_dispute_id','transactions.buyer_dispute_id','transactions.buyer_id','transactions.seller_id'
             )
-            ->where([['transactions.status','=',4],['transactions.seller_dispute_id','>',0]])->orWhere('transactions.buyer_dispute_id','>',0)->orderBy('transactions.id','desc')->get();
+            ->where('transactions.seller_dispute_id','>',0)->orWhere('transactions.buyer_dispute_id','>',0)->orderBy('transactions.id','desc')->get();
 
       // dd($dp);
 
        return view('admin.dispute.content',['data'=>$dp]);
     }
 
-    // PENDING
-    public function notify_user(Request $request)
+    public function dispute_notify_user(Request $request)
     {
-      $user_id = $request->user_id;
-      $invoice = $request->invoice;
-      $odc = new Odc;
+      $data_buyer = $request->data_buyer;  
+      $data_seller = $request->data_seller;  
+      $data_trid = $request->data_trid;  
 
-      $user = User::find($user_id);
-      if(is_null($user))
-
-
+      $tr = Transaction::find($data_trid);
+      if(is_null($tr))
       {
         return response()->json(['err'=>1]);
       }
-      
-      Mail::to($user->email)->send(new NotifyEmail($generated_password,$data['username']));
 
-       $odc->send_message($data['package'],$data['price'],$data['total'],$order_number,Auth::user()->phone_number);
+      $msg ='';
+      $msg .='Sehubungan dengan invoice : *'.$tr->no.'*'."\n";
+      $msg .='maka admin mengundang anda untuk menyelesaikan dispute ini melalui chat'."\n";
+      $msg .='dengan link di bawah ini : '."\n\n";
+      $msg .=url('chat').'/'.$tr->id."\n\n"; 
+      $msg .='Terima Kasih'."\n";
+      $msg .='Team Exchanger';
+
+      $users = User::whereIn('id',[$data_buyer,$data_seller])->get();
+
+      if($users->count() > 0)
+      {
+        foreach ($users as $row) 
+        {
+          $data = [
+              'message'=>$msg,
+              'phone_number'=>$row->phone_number,
+              'email'=>$row->email,
+              'obj'=>new WarningEmail($tr->no,$tr->id),
+          ];
+          
+          $this->notify_user($data);
+        }
+      }
+    }
+
+    public function dispute_notify(Request $request)
+    {
+      $user_id = $request->user_id;
+      $trans_id = $request->trans_id;
+      $role = $request->role;
+
+      /*
+        role 1 = buyer
+        role 2 = seller
+      */
+
+      $user = User::find($user_id);
+      if(is_null($user))
+      {
+        return response()->json(['err'=>1]);
+      }
+
+      $tr = Transaction::find($trans_id);
+      if(is_null($tr))
+      {
+        return response()->json(['err'=>1]);
+      }
+
+      $msg ='';
+      $msg .='Invoice anda : *'.$tr->no.'*'."\n";
+      $msg .='telah di dispute'."\n";
+
+      if($role == 1)
+      {
+        $msg .='Jika anda yakin bahwa anda sudah membayar penjual, maka silahkan menyanggah disini'."\n\n";
+
+        $url_confirm = '-';
+        $url_dispute = url('buyer-dispute').'/'.$tr->id;
+      }
+      else
+      {
+        $url_confirm = url('sell-confirm').'/'.$tr->no;
+        $url_dispute = url('seller-dispute').'/'.$tr->id;
+
+        $msg .='Jika anda belum konfirmasi silahkan konfimasi di sini :'."\n\n";
+        $msg .=$url_confirm."\n\n";
+        $msg .='Jika anda yakin bahwa pembeli belum membayar anda, maka silahkan menyanggah disini'."\n\n";
+      }
+      
+      $msg .=$url_dispute."\n\n";
+      $msg .='Terima Kasih'."\n";
+      $msg .='Team Exchanger';
+
+      $data = [
+          'message'=>$msg,
+          'phone_number'=>$user->phone_number,
+          'email'=>$user->email,
+          'obj'=>new NotifyEmail($tr->no,$url_confirm,$url_dispute,$role),
+      ];
+
+      // dd($data);
+      return $this->notify_user($data);
+    }
+
+    // GLOBAL NOTIFCATION USER THROUGH wa AND EMAIL
+    public function notify_user(array $data)
+    {
+      $notif = Notification::all()->first();
+      $admin_id = $notif->admin_id;
+      $api = new Api;
+
+      $api->send_wa_message($admin_id,$data['message'],$data['phone_number']);
+      Mail::to($data['email'])->send($data['obj']);
     }
 
     public function dispute_user(Request $request)
@@ -112,8 +201,22 @@ class AdminController extends Controller
         $buyer_id = $tr->buyer_id;
 
         // SELLER GET WARNING
-        self::warning_user($seller_id);
-        return self::change_transaction($tr,3,$buyer_id);
+        $this->warning_user($seller_id,$tr);
+
+        try
+        {
+          // RETURNING USER COIN ON THEIR WALLET
+          $coin = $tr->amount;
+          $user = User::find($buyer_id);
+          $user->coin += $coin;
+          $user->save();
+          return self::change_transaction($tr,3);
+        }
+        catch(QueryException $e)
+        {
+          return response()->json(['err'=>1]);
+        }
+        
       }
       else
       {
@@ -133,8 +236,26 @@ class AdminController extends Controller
         $buyer_id = $tr->buyer_id;
 
         // BUYER GET WARNING
-        self::warning_user($buyer_id);
-        return self::change_transaction($tr,5,$seller_id);
+        $this->warning_user($buyer_id,$tr);
+
+        $trans = new Transaction;
+        $trans->seller_id = $seller_id;
+        $trans->no = $tr->no;
+        $trans->kurs = $tr->kurs;
+        $trans->coin_fee = $tr->coin_fee;
+        $trans->amount = $tr->amount;
+        $trans->total = $tr->total;
+        $trans->trial = $tr->trial;
+
+        try
+        {
+          $trans->save();
+          return self::change_transaction($tr,5);
+        }
+        catch(Queryexception $e)
+        {
+          return response()->json(['err'=>$e->getMessage()]);
+        }
       }
       else
       {
@@ -154,8 +275,8 @@ class AdminController extends Controller
         $buyer_id = $tr->buyer_id;
 
         // BOTH GET WARNING
-        self::warning_user($buyer_id);
-        self::warning_user($seller_id);
+        $this->warning_user($buyer_id,$tr);
+        $this->warning_user($seller_id,$tr);
         return self::change_transaction($tr,6,0);
       }
       else
@@ -166,9 +287,9 @@ class AdminController extends Controller
     }
 
     // WARNING USER
-    public static function warning_user($user_id)
+    public function warning_user($user_id,$tr)
     {
-        $total_warning = 0;
+        $total_warning = $total_suspend = 0;
         $user = User::find($user_id);
 
         if($user->status > 0)
@@ -176,15 +297,45 @@ class AdminController extends Controller
           $user->warning++;
           $total_warning = $user->warning;
         }
-        
-        // BANNED SELLER IF WARNING HAS REACH 3
-        if($total_warning > 2 || $user->status == 0)
+
+        if($total_warning > 1)
         {
-          $user->status = 0;
+          $user->suspend++;
+          $user->status = 3; //suspend user
+          $total_suspend = $user->suspend;
+          $user->warning = 0;
         }
         else
         {
-          $user->status = 3; //suspend user
+          // send notify here
+          $msg ='';
+          $msg .='Mohon perhatian'."\n";
+          $msg .='sehubungan dengan dispute invoice : *'.$tr->no.'* maka akun anda telah mendapatkan warning.'."\n\n";
+
+          $msg .='Jika anda mendapatkan *warning* sebanyak 2 kali'."\n";
+          $msg .='maka akun anda akan di-suspend , sehingga anda tidak dapat melakukkan segala aktifitas di situs kami selama 1 minggu.'."\n\n";
+
+          $msg .='Apabila anda terkena *suspend* sebanyak 2 kali'."\n";
+          $msg .='maka akun anda akan di-non-aktifkan.'."\n\n";
+
+          $msg .='Mohon perhatian dan kerja sama dari anda.'."\n\n";
+          $msg .='Terima Kasih'."\n";
+          $msg .='Team Exchanger';
+
+          $data = [
+              'message'=>$msg,
+              'phone_number'=>$user->phone_number,
+              'email'=>$user->email,
+              'obj'=>new WarningEmail($tr->no),
+          ];
+
+          $this->notify_user($data);
+        }
+       
+        // BANNED SELLER IF SUSPEND HAS REACH 2
+        if($total_suspend > 1)
+        {
+          $user->status = 0;
         }
 
         try
@@ -198,19 +349,10 @@ class AdminController extends Controller
     }
 
     // RETURNING USER COIN ON THEIR WALLET AND CHANGE TRANSACTION STATUS
-    public static function change_transaction($tr,$status,$member)
+    public static function change_transaction($tr,$status)
     {
       try
       {
-        if($member > 0)
-        {
-          // RETURNING USER COIN ON THEIR WALLET
-          $coin = $tr->amount;
-          $user = User::find($member);
-          $user->coin += $coin;
-          $user->save();
-        }
-
         $tr->status = $status;
         $tr->save();
         return response()->json(['err'=>0]);

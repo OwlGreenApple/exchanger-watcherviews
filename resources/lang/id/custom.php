@@ -7,6 +7,7 @@ return [
     'bank_name'=>'Nama Bank', //home.blade
     'bank_no'=>'No Rekening', //home.blade
     'cart_summary'=>'Keranjang summary', //summary.blade
+    'chat_end'=>'Maaf, chat ini sudah di tutup oleh admin.', //chat.blade
     'check'=>'Harap centang, syarat dan ketentuan yang berlaku', //register.blade//summary.blade
     'currency'=>'Rp', //navigation
     'coin'=>'My Wallet', //wallet.blade
@@ -17,6 +18,7 @@ return [
     'dana'=>'QR-Code DANA', //profile.blade
     'end'=>'Trial sudah habis', //trial.blade
     'email_watcherviews'=>'Email Watcherviews anda', //wallet.blade
+    'epayment'=>'Pembayaran Elektronik', //profile.blade
     'failed'=>'Maaf server kami terlalu sibuk, silahkan coba lagi nanti.', //checkout.blade
     'find_help'=>'Temukan Bantuan', //summary.blade
     'female'=>'Wanita', //summary.blade

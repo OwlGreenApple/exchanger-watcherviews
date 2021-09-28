@@ -57,7 +57,11 @@
     <link href="{{ asset('assets/css/order.css') }}" rel="stylesheet" />
 
     <!-- Canvas JS -->
-    <script type="text/javascript" src="{{ asset('assets/canvasjs/canvasjs.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/canvasjs/canvasjs.min.js') }}"></script> 
+
+    <!-- Cropper -->
+    <script type="text/javascript" src="{{ asset('assets/cropper/cropper.min.js') }}"></script>
+    <link href="{{ asset('assets/cropper/cropper.min.css') }}" rel="stylesheet" />
 
     <!-- ReactJS -->
     <script type="text/javascript" src="{{ asset('assets/reactjs/babel.min.js') }}"></script>
@@ -97,7 +101,10 @@
           </div>
           -->
           <ul class="navbar-nav navbar-nav-right">
+          @guest
+            @else
             <?php if (Auth::check()) {?>
+
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
                 <!--<div class="nav-profile-img">
@@ -105,7 +112,9 @@
                   <span class="availability-status online"></span>
                 </div>-->
                 <div class="nav-profile-text">
-                  <p class="mb-1 text-black">{{ ucfirst(Auth::user()->name) }}&nbsp;({{ Auth::user()->membership }})</p>
+                    @if(Auth::check() == true)
+                        <p class="mb-1 text-black">{{ ucfirst(Auth::user()->name) }}&nbsp;({{ Auth::user()->membership }})</p>
+                    @endif
                 </div>
               </a>
               <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
@@ -116,6 +125,7 @@
                                                  document.getElementById('logout-form').submit();">
                   <i class="mdi mdi-logout mr-2 text-primary"></i> Log out </a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
+
               </div>
             </li>
             <li class="nav-item d-none d-lg-block full-screen-link">
@@ -217,24 +227,28 @@
             <!--
             https://materialdesignicons.com/
             -->
-            @guest
-            @else
+            
               @if (Auth::user()->is_admin == 0)
                 <li class="nav-item nav-logout d-none d-lg-block">
+                  <a class="nav-link">
+                    <i class="fas fa-coins"></i>&nbsp;{{ Lang::get('custom.currency') }} {{ Price::get_rate() }}/coin
+                  </a>
+                </li> 
+                <li class="nav-item nav-logout d-none d-lg-block">
                   <a class="nav-link" href="{{ url('buy') }}">
-                    <i class="mdi mdi-cart-outline"></i> &nbsp
+                    <i class="mdi mdi-cart-outline"></i> &nbsp;
                     Beli Koin
                   </a>
                 </li>
                 <li class="nav-item nav-logout d-none d-lg-block">
                   <a class="nav-link" href="{{ url('sell') }}">
-                    <i class="mdi mdi-store-24-hour"></i> &nbsp
+                    <i class="mdi mdi-store-24-hour"></i> &nbsp;
                     {{ Lang::get('transaction.sell') }}
                   </a>
                 </li>
                 <li class="nav-item nav-logout d-none d-lg-block">
                   <a class="nav-link" href="{{ url('wallet') }}">
-                    <i class="mdi mdi-wallet-outline"></i> &nbsp
+                    <i class="mdi mdi-wallet-outline"></i> &nbsp;
                     Wallet
                   </a>
                 </li>
@@ -256,7 +270,7 @@
                 </li>
                 <li class="nav-item nav-logout d-none d-lg-block">
                   <a class="nav-link" href="{{ url('dispute-admin') }}">
-                    Dispute
+                    @if(Price::total_dispute()['new'] == 1) <u>Dispute</u> @else Dispute @endif &nbsp;<span class="badge badge-warning">{{ Price::total_dispute()['total']  }}</span>
                   </a>
                 </li>
                 <li class="nav-item nav-logout d-none d-lg-block">
