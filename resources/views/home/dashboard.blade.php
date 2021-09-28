@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
             <div class="page-header">
               <h3 class="page-title">
                 <span class="page-title-icon bg-gradient-primary text-white mr-2">
@@ -8,15 +9,19 @@
                 </span> Dashboard </h3>
               <nav aria-label="breadcrumb">
                 <ul class="breadcrumb">
+                  @if(Auth::user()->watcherviews_id == 0)
                   <li class="breadcrumb-item " aria-current="page">
                     <span></span><a class="text-danger" href="{{ url('account') }}/wallet"><i class="fas fa-plug"></i>&nbsp;Harap Connect API</a> 
                   </li>
+                  @else
                   <li class="breadcrumb-item active" aria-current="page">
                     <span></span><i class="fas fa-plug"></i>&nbsp;API Connected
                   </li>
+                  @endif
                 </ul>
               </nav>
             </div>
+
             <div class="row">
               <div class="col-md-4 stretch-card grid-margin">
                 <div class="card bg-gradient-danger card-img-holder text-white">
@@ -25,8 +30,8 @@
                       <img src="{{url('assets/template/images/dashboard/circle.svg')}}" class="card-img-absolute" alt="circle-image" />
                       <h4 class="font-weight-normal mb-3 text-white">Total Penjualan <i class="mdi mdi-chart-line mdi-24px float-right"></i>
                       </h4>
-                      <h2 class="mb-5 text-white">Rp 100.000</h2>
-                      <h6 class="card-text text-white">Increased by 60%</h6>
+                      <h2 class="mb-5 text-white">{{ Lang::get('custom.currency') }} {{ $pc->pricing_format($total_penjualan) }}</h2>
+                      <h6 class="card-text text-white">{{ $sell_status }}</h6>
                     </a>
                   </div>
                 </div>
@@ -38,12 +43,13 @@
                       <img src="{{url('assets/template/images/dashboard/circle.svg')}}" class="card-img-absolute" alt="circle-image" />
                       <h4 class="font-weight-normal mb-3 text-white">Total Pembelian <i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
                       </h4>
-                      <h2 class="mb-5 text-white">Rp. 100.000</h2>
-                      <h6 class="card-text text-white">Decreased by 10%</h6>
+                      <h2 class="mb-5 text-white">{{ Lang::get('custom.currency') }} {{ $pc->pricing_format($total_pembelian) }}</h2>
+                      <h6 class="card-text text-white">{{ $buy_status }}</h6>
                     </a>
                   </div>
                 </div>
               </div>
+
               <div class="col-md-4 stretch-card grid-margin">
                 <div class="card bg-gradient-success card-img-holder text-white">
                   <div class="card-body">
@@ -51,8 +57,8 @@
                       <img src="{{url('assets/template/images/dashboard/circle.svg')}}" class="card-img-absolute" alt="circle-image" />
                       <h4 class="font-weight-normal mb-3 text-white">My Coins <i class="mdi mdi-diamond mdi-24px float-right"></i>
                       </h4>
-                      <h2 class="mb-5 text-white">95,5741</h2>
-                      <h6 class="card-text text-white">Increased by 5%</h6>
+                      <h2 class="mb-5 text-white">{{ $pc->pricing_format(Auth::user()->coin) }}</h2>
+                      <!-- <h6 class="card-text text-white">Increased by 5%</h6> -->
                     </a>
                   </div>
                 </div>
@@ -342,7 +348,7 @@
     <!-- Modal content-->
     <div class="modal-content col-lg-8 col-md-9 col-sm-12 col-12 mx-auto">
       <div class="modal-header" style="display : block">
-        <h5 class="mb-0">{{$lang::get('transaction.conf')}}</h5>
+        <h5 class="mb-0">{{Lang::get('transaction.conf')}}</h5>
         <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
       </div>
       <div class="modal-body">
@@ -354,10 +360,10 @@
       <!--  -->
       <div class="modal-footer" id="foot">
         <button class="btn btn-primary" id="btn-promote" data-dismiss="modal">
-          {{$lang::get('order.yes')}}
+          {{Lang::get('order.yes')}}
         </button>
         <button class="btn" data-dismiss="modal">
-          {{$lang::get('order.cancel')}}
+          {{Lang::get('order.cancel')}}
         </button>
       </div>
     </div>
@@ -405,18 +411,18 @@
                         cur_coin = parseInt(cur_coin);
                         cur_coin += result.coin;
                         $("#coin").html(formatNumber(cur_coin));
-                        $("#msg").html('<div class="alert alert-success">{{ $lang::get("custom.success_coin") }}</div>');
+                        $("#msg").html('<div class="alert alert-success">{{ Lang::get("custom.success_coin") }}</div>');
                         $("input").val('');
                     }
                     else if(result.err == 1)
                     {
                         $(".error").show();
-                        $(".wallet").html('{{ $lang::get("auth.credential") }}');
+                        $(".wallet").html('{{ Lang::get("auth.credential") }}');
                     }
                     else if(result.err == 2)
                     {
                         $(".error").show();
-                        $(".wallet").html('{{ $lang::get("custom.failed") }}');
+                        $(".wallet").html('{{ Lang::get("custom.failed") }}');
                     }
                     else if(result.err == 'validation')
                     {

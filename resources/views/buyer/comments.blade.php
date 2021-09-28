@@ -7,7 +7,7 @@
         <div class="col-md-9">
             <div class="card">
                 <div class="card-header bg-primary text-white">
-                    Penilaian
+                    Penilaian : <b>{{ $seller->name }}</b>
                 </div>
 
                 <div id="comments" class="card-body">
@@ -19,7 +19,8 @@
                     <span id="err_message"><!--  --></span>
                     <div class="form-group">
                          <div class="bg-light p-2">
-                            <div class="px-1 py-2">Buat Komentar</div>
+                            <div class="px-1 py-1">Buat Komentar :</div>
+                            <div class="px-1 py-1"><b>{{ $tr->no }}</b></div>
                             <div class="px-1 py-2 text-black-50">
                                 <i class="rate fas fa-star"></i>
                                 <i class="rate fas fa-star"></i>
@@ -136,6 +137,7 @@
                 'comments' : comments,
                 'rate' : rate,
                 'seller_id' : "{{ $tr->seller_id }}",
+                'no_trans' : "{{ $tr->no }}",
             };
 
             $.ajax({

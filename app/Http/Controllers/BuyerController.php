@@ -81,7 +81,7 @@ class BuyerController extends Controller
     		$rate = ' ';
     		foreach($tr as $row):
     			// $seller = User::find($row->seller_id);
-    			$cm = Comment::selectRaw('AVG(rate) AS star')->where('seller_id',$row->seller_id)->first();
+    			$cm = self::star_rate($row->seller_id);
     			$star = round($cm->star);
     			$data[] = [
     				'id'=>$row->id,
@@ -100,9 +100,9 @@ class BuyerController extends Controller
     	return view('buyer.buy-table',['data'=>$data,'paginate'=>$tr]);
     }
 
-    public function detail_buy($invoice)
+    public function detail_buy($id)
     {
-    	$tr = Transaction::where('no',$invoice)->first();
+    	$tr = Transaction::where([['id',$id],['status',0]])->first();
 
     	// TO AVOID IF USER DELIBERATELY PUT HIS PRODUCT
     	if(is_null($tr) || $tr->seller_id == Auth::id())
@@ -112,16 +112,24 @@ class BuyerController extends Controller
 
     	$user = User::find($tr->seller_id);
     	$pc = new Price;
+        $cm = self::star_rate($tr->seller_id);
 
     	$data = [
     		'id'=>$tr->id,
     		'no'=>$tr->no,
+            'star'=>round($cm->star),
     		'seller'=>$user->name,
     		'coin'=>$pc->pricing_format($tr->amount),
-    		'total'=>Lang::get('custom.currency').$pc->pricing_format($tr->total),
+    		'total'=>Lang::get('custom.currency').' '.$pc->pricing_format($tr->total),
     	];
 
         return view('buyer.buy-detail',['row'=>$data]);
+    }
+
+    public static function star_rate($seller_id)
+    {
+        $cm = Comment::selectRaw('AVG(rate) AS star')->where('seller_id',$seller_id)->first();
+        return $cm;
     }
 
     public function deal($id)
@@ -137,10 +145,30 @@ class BuyerController extends Controller
     	//seller stuff
     	$seller_id = $tr->seller_id;
     	$user = User::find($seller_id);
+        $ovo = $dana = $gopay = null;
+
+        if($user->ovo !== null)
+        {
+            $ovo = Storage::disk('s3')->url($user->ovo);
+        }
+
+        if($user->dana !== null)
+        {
+            $dana = Storage::disk('s3')->url($user->dana);
+        }
+
+        if($user->gopay !== null)
+        {
+            $gopay = Storage::disk('s3')->url($user->gopay);
+        }
+
     	$data = [
     		'id'=>$tr->id,
     		'no'=>$tr->no,
     		'seller'=>$user->name,
+            'ovo'=>$ovo,
+            'dana'=>$dana,
+            'gopay'=>$gopay,
     		'coin'=>$pc->pricing_format($tr->amount),
     		'total'=>Lang::get('custom.currency').' '.$pc->pricing_format($tr->total),
     	];
@@ -151,6 +179,7 @@ class BuyerController extends Controller
     public function buyer_deal(Request $request)
     {
     	$id = $request->id;
+        $payment_method = $request->payment_method;
     	$tr = Transaction::find($id);
 
     	if(is_null($tr))
@@ -162,6 +191,7 @@ class BuyerController extends Controller
     	{
     		$tr->date_buy = Carbon::now();
             $tr->buyer_id = Auth::id();
+            $tr->payment = $payment_method;
     		$tr->status = 1;
     		$tr->save();
     		$data['err'] = 0;
@@ -186,7 +216,7 @@ class BuyerController extends Controller
     		{
     			if($row->status == 1)
     			{
-    				$status = '<a target="_blank" href="'.url('buyer-confirm').'/'.$row->no.'" class="btn btn-primary btn-sm">Konfirmasi</a>';
+    				$status = '<a target="_blank" href="'.url('buyer-confirm').'/'.$row->id.'" class="btn btn-primary btn-sm">Konfirmasi</a>';
     				$comments = '-';
     			}
 				elseif($row->status == 2)
@@ -226,7 +256,8 @@ class BuyerController extends Controller
     				'coin'=>$pc->pricing_format($row->amount),
     				'kurs'=>$row->kurs,
     				'price'=>Lang::get('custom.currency').' '.$pc->pricing_format($row->total),
-    				'comments'=>$comments,
+    				'payment'=>$row->payment,
+                    'comments'=>$comments,
     				'status'=>$status,
     			];
     		}
@@ -237,9 +268,9 @@ class BuyerController extends Controller
         return view('buyer.buy-content',['data'=>$data]);
     }
 
-    public function buyer_confirm($invoice)
+    public function buyer_confirm($id)
     {
-    	$tr = Transaction::where('no',$invoice)->first();
+    	$tr = Transaction::where([['id',$id],['status',1]])->first();
 
     	// TO AVOID IF USER DELIBERATELY PUT HIS PRODUCT
     	if(is_null($tr) || $tr->status > 1)
@@ -336,7 +367,8 @@ class BuyerController extends Controller
     		return view('error404');
     	}
 
-        return view('buyer.comments',['tr'=>$tr]);
+        $seller = User::find($tr->seller_id);
+        return view('buyer.comments',['tr'=>$tr,'seller'=>$seller]);
     }
 
     // SAVE COMMENT AND RATE FROM BUYER
@@ -363,6 +395,7 @@ class BuyerController extends Controller
     	$cm->seller_id = $request->seller_id;
     	$cm->comments = $request->comments;
     	$cm->rate = $request->rate;
+        $cm->no_trans = $request->no_trans;
 
     	try
     	{
@@ -392,6 +425,7 @@ class BuyerController extends Controller
     			$data[] = [
     				'buyer'=>$buyer->name,
     				'seller'=>$seller->name,
+                    'no_trans'=>$row->no_trans,
     				'comments'=>$row->comments,
     				'rate'=>$row->rate,
     				'created_at'=>$row->created_at,

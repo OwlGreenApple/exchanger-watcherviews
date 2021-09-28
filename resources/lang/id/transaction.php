@@ -19,7 +19,7 @@ return [
     'created'=>'Tanggal Transaksi',
     'fee'=>'Coin fee',
     'home'=>'Beranda',
-    'min'=>'Minimal transaksi jual coin adalah 100.000 coin',
+    'min'=>'Min 100.000 coin',
     'name'=>'Transaksi',
     'no'=>'No Transaksi',
     'placeholder'=>'Contoh : Jual murah coin watcherviews',

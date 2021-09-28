@@ -1,27 +1,34 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-9">
-            <div class="card">
-                <div class="card-header bg-danger text-white">
-                    Detail Pembelian
+
+<div class="page-header">
+  <h3 class="page-title">
+    <span class="page-title-icon bg-gradient-primary text-white mr-2">
+      <i class="mdi mdi-store-24-hour"></i>
+    </span> Detail Pembelian </h3>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body card-font-size list-group">
+                <h5 class="alert alert-info">Anda akan membeli koin dengan detail :</h5>
+                <div class="list-group-item">No Invoice : <b>{{ $row['no'] }}</b></div>
+                <div class="list-group-item">Penjual : {{ $row['seller'] }}&nbsp;<span>
+                @for($x=1;$x<=$row['star'];$x++)
+                    <i class="fas fa-star"></i>
+                @endfor
+                </span></div>
+                <div class="list-group-item">Jumlah Coin : {{ $row['coin'] }}</div>
+                <div class="list-group-item">Total : <b>{{ $row['total'] }}</b></div>
+
+                <div class="list-group-item">
+                    <a href="{{ url('deal') }}/{{ $row['id'] }}" class="btn btn-gradient-info">Beli</a>
+                    <a href="{{ url('buy') }}" type="button" class="btn btn-gradient-info">Kembali</a>
                 </div>
-
-                <div class="card-body">
-                    <h5>Anda akan membeli koin dengan detail :</h5>
-                    <div>No Invoice : <b>{{ $row['no'] }}</b></div>
-                    <div>Penjual : {{ $row['seller'] }}&nbsp;<span><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span></div>
-                    <div>Jumlah Coin : {{ $row['coin'] }}</div>
-                    <div class="mb-2">Total : <b>{{ $row['coin'] }}</b></div>
-
-                    <a href="{{ url('deal') }}/{{ $row['id'] }}" class="btn btn-danger">Beli</a>
-                    <a href="{{ url('home') }}" type="button" class="btn btn-danger">Kembali</a>
-                </div>
-
-
             </div>
+
         </div>
     </div>
 </div>

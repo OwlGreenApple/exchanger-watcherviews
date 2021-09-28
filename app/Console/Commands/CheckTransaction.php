@@ -47,7 +47,7 @@ class CheckTransaction extends Command
         if($tr->count() > 0)
         {
             foreach($tr as $row):
-                $update_date = Carbon::parse($row->updated_at)->addHours(3)->toDateTimeString();
+                $update_date = Carbon::parse($row->updated_at)->addHours(12)->toDateTimeString();
                 $str = Transaction::find($row->id);
 
                 if(Carbon::now()->gte($update_date)):
@@ -56,6 +56,7 @@ class CheckTransaction extends Command
                     {
                         $str->buyer_id = 0;
                         $str->date_buy = null;
+                        $str->payment = null;
                         $str->status = 0;
                         $str->save();
                     }

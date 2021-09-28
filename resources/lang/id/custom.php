@@ -42,6 +42,7 @@ return [
     'package_terms'=>'per tahun', //checkout.blade
     'paket'=>'Paket yang tersedia', //checkout.blade
     'pass_watcherviews'=>'Password watcherviews anda', //wallet.blade
+    'payment'=>'Setidaknya anda harus mengisi 1 metode pembayaran', //CheckPaymentMethods
     'phone'=>'Hp', //summary.blade
     'pilih_paket'=>'Silahkan pilih paket anda', //checkout.blade
     'policy'=>'Kebijakan privasi', //summary.blade

@@ -10,6 +10,7 @@ use App\Rules\CheckCallCode;
 use App\Rules\InternationalTel;
 use App\Rules\CheckUserPhone;
 use App\Rules\CheckUniquePhone;
+use App\Rules\CheckPaymentMethods;
 use Closure;
 
 class CheckProfile
@@ -26,8 +27,8 @@ class CheckProfile
         $userid = Auth::id();
         $rules = [
             'name' => ['required','string','max:255'],
-            'bank_name' => ['string','max:50'],
-            'bank_no' => ['numeric','digits_between:4,30'],
+            'bank_name' => ['bail',new CheckPaymentMethods,'string','max:50'],
+            'bank_no' => ['bail','required_with:bank_name','nullable','numeric','digits_between:4,30'],
         ];
 
         if(!empty($request->phone))
@@ -56,7 +57,7 @@ class CheckProfile
               'status'=>'error',
               'name'=>$err->first('name'),
               'bank_name'=>$err->first('bank_name'),
-              'bank_no'=>$err->first('bank_no'),
+              'bank_no'=>str_replace(array('bank no','bank name'),array('No Rekening','Nama Bank'),$err->first('bank_no')),
               'code_country'=>$err->first('code_country'),
               'phone'=>$err->first('phone'),
               'oldpass'=>$err->first('oldpass'),

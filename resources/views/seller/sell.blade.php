@@ -8,16 +8,16 @@
           <i class="mdi mdi-store-24-hour"></i>
         </span> {{ Lang::get('transaction.sell.title') }} </h3>
     </div>
+
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header bg-warning text-black">&nbsp</div>
-
+                
                 <div id="msg"><!-- message --></div>
 
                 @if(auth()->user()->bank_name == null && auth()->user()->bank_no == null  && auth()->user()->ovo == null  && auth()->user()->gopay == null  && auth()->user()->dana == null)
 
-                <div class="alert alert-info">Mohon isi metode pembayaran anda <a href="{{ url('account') }}">disini</a></div>
+                <div class="alert mt-3">Mohon isi metode pembayaran anda <b><a href="{{ url('account') }}">disini</a></b></div>
 
                 @else
                 <div class="card-body">
@@ -35,7 +35,7 @@
                             <label for="name" class="col-md-4 col-form-label text-md-right">Jual coin</label>
 
                             <div class="col-md-6">
-                                 <input id="amount" type="text" class="form-control" name="tr_coin" autocomplete="off" placeholder="Min 100.000 coin" />
+                                 <input id="amount" type="text" class="form-control" name="tr_coin" autocomplete="off" placeholder="{{ Lang::get('transaction.min') }}" />
                                 <span class="error tr_coin"><!--  --></span>
                             </div>
                         </div>
@@ -65,17 +65,9 @@
                             </div>
                         </div> 
 
-                        <div class="form-group row">
-                            <label class="col-md-4 col-form-label text-md-right">&nbsp;</label>
-
-                            <div class="col-md-6">
-                                <!--  $lang::get('transaction.min')  -->
-                            </div>
-                        </div> 
-
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-warning">
+                                <button type="submit" class="btn bg-gradient-warning">
                                     {{ $lang::get('transaction.sell.act') }}
                                 </button>
                             </div>
@@ -93,7 +85,7 @@
                 <div class="card-body">
                 <h4>History Penjualan</h4>
                     <div id="err_msg"><!-- error --></div>
-                    <div id="selling"><!--  --></div>
+                    <div id="selling" class="table-responsive"><!--  --></div>
                 </div>
             </div>
             @endif
@@ -142,6 +134,13 @@
         del_popup();
         del_act();
     });
+
+    function data_table()
+    {
+        $("#sell_list").DataTable({
+            "ordering": false
+        });
+    }
 
     function count_logic()
     {
@@ -244,6 +243,10 @@
                 $('.div-loading').removeClass('background-load');
                 $(".form-control").html('');
                 $("#selling").html(result);
+            },
+            complete : function()
+            {
+                data_table();
             },
             error : function()
             {

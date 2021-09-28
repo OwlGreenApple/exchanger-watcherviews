@@ -1,32 +1,33 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-9">
-            <div class="card">
-                <div class="card-header bg-success text-white">
-                    Konfimasi Pembelian
-                </div>
+<div class="page-header">
+  <h3 class="page-title">
+    <span class="page-title-icon bg-gradient-primary text-white mr-2">
+      <i class="mdi mdi-store-24-hour"></i>
+    </span>Konfimasi Pembelian</h3>
+</div>
 
-                <div class="card-body">
-                    <div id="err_message"><!--  --></div>
-                    <form id="proof">
-                      <div class="form-group">
-                        <label for="email">No Invoice:</label>
-                        <div class="form-control">{{ $row->no }}</div>
-                      </div>
-                      <div class="form-group">
-                        <label for="fl">Upload Bukti Bayar</label>
-                        <input type="file" class="form-control" name="bukti" id="fl">
-                        <span class="error bukti"><!--  --></span>
-                      </div>
-                    
-                      <button id="submit" type="button" class="btn btn-success">Kirim</button>
-                    </form>
-                </div>
-
+<div class="row justify-content-center">
+    <div class="col-12 col-md-12 col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div id="err_message"><!--  --></div>
+                <form id="proof">
+                  <div class="form-group">
+                    <label for="email">No Invoice:</label>
+                    <div class="form-control">{{ $row->no }}</div>
+                  </div>
+                  <div class="form-group">
+                    <label for="fl">Upload Bukti Bayar</label>
+                    <input type="file" class="form-control" name="bukti" id="fl">
+                    <span class="error bukti"><!--  --></span>
+                  </div>
+                
+                  <button id="submit" type="button" class="btn btn-success">Kirim</button>
+                </form>
             </div>
+
         </div>
     </div>
 </div>

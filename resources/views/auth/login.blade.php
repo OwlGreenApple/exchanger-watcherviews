@@ -7,7 +7,7 @@
                    </div>
                 @endif
                 <h4>Halo! Selamat Datang</h4>
-                <h6 class="font-weight-light">Sign in to continue.</h6>
+                <h6 class="font-weight-light">Masuk untuk melanjutkan.</h6>
                 <form class="pt-3" method="POST" action="{{ route('login') }}">
                   @csrf
                   <div class="form-group">
@@ -40,7 +40,7 @@
                     <button type="button" class="btn btn-block btn-facebook auth-form-btn">
                       <i class="mdi mdi-facebook mr-2"></i>Connect using facebook </button>
                   </div>-->
-                  <div class="text-center mt-4 font-weight-light"> Don't have an account? <a href="{{url('register')}}" class="text-primary">Create</a>
+                  <div class="text-center mt-4 font-weight-light">Belum punya akun? <a href="{{url('register')}}" class="text-primary">Buat disini</a>
                   </div>
                 </form>
 @endsection

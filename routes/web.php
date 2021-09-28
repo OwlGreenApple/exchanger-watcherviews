@@ -30,10 +30,10 @@ Auth::routes();
 /*USER*/
 Route::group(['middleware'=>['auth','web','suspend']],function()
 {
+	Route::get('home', [App\Http\Controllers\HomeController::class, 'index']);
 	Route::get('end', [App\Http\Controllers\HomeController::class, 'end_membership']);
 	Route::get('thankyou',[App\Http\Controllers\OrderController::class,'thankyou']);
-	Route::get('home', [App\Http\Controllers\HomeController::class, 'index']);
-	Route::get('purchase', [App\Http\Controllers\HomeController::class, 'purchase']);
+	// Route::get('purchase', [App\Http\Controllers\HomeController::class, 'purchase']);
 	Route::post('save-dispute', [App\Http\Controllers\HomeController::class, 'save_dispute'])->middleware('check_dispute');
 	Route::get('page-dispute', [App\Http\Controllers\HomeController::class, 'dispute_page']);
 	Route::get('error',[App\Http\Controllers\HomeController::class, 'error']);
@@ -46,7 +46,7 @@ Route::group(['middleware'=>['auth','web','suspend']],function()
 	Route::get('deal/{id}',[App\Http\Controllers\BuyerController::class, 'deal']);
 	Route::get('buy-deal',[App\Http\Controllers\BuyerController::class, 'buyer_deal']);
 	Route::get('buy-history',[App\Http\Controllers\BuyerController::class, 'buyer_history']);
-	Route::get('buyer-confirm/{invoice}',[App\Http\Controllers\BuyerController::class, 'buyer_confirm']);
+	Route::get('buyer-confirm/{id}',[App\Http\Controllers\BuyerController::class, 'buyer_confirm']);
 	Route::post('buyer-proof',[App\Http\Controllers\BuyerController::class, 'buyer_proof'])->middleware('check_proof');
 	Route::get('comments/{invoice}',[App\Http\Controllers\BuyerController::class, 'comments']);
 	Route::post('display-comments',[App\Http\Controllers\BuyerController::class, 'display_comments']);

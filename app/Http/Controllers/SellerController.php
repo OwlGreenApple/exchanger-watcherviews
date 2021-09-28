@@ -108,10 +108,14 @@ class SellerController extends Controller
                         $status = '<a target="_blank" href="'.url("sell-confirm").'/'.$row->no.'" class="btn btn-info btn-sm">Konfirmasi</a>';
                     }      
                 }
-	    		else
+	    		elseif($row->status == 5)
 	    		{
-	    			$status = '<span class="text-black-50">Lunas</span>';
+	    			$status = '<span class="text-black-50">Dispute</span>';
 	    		}
+                else
+                {
+                    $status = '<span class="text-black-50">Lunas</span>';
+                }
 
 	    		if($row->date_buy == null)
 	    		{
@@ -144,6 +148,7 @@ class SellerController extends Controller
     				'created_at'=>$row->created_at,
     				'date_buy'=>$date_buy,
                     'trial'=>$trial,
+                    'payment'=>$row->payment,
     				'status'=>$status,
     			];
     		endforeach;

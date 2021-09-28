@@ -38,6 +38,57 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
 
+    public function index()
+    {
+        $pc = new Price;
+
+        // PENJUALAN
+
+        $total_penjualan = Transaction::where('seller_id',Auth::id())->selectRaw('SUM(total) AS total_penjualan')->first()->total_penjualan;
+
+        $total_penjualan_previous = Transaction::where('seller_id',Auth::id())->selectRaw('SUM(total) AS total_penjualan')->whereRaw("MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) = MONTH(STR_TO_DATE(date_buy, '%Y-%m-%d'))")->first()->total_penjualan;
+
+        $total_penjualan_current = Transaction::where('seller_id',Auth::id())->selectRaw('SUM(total) AS total_penjualan')->whereRaw('MONTH(date_buy) = MONTH(CURRENT_DATE())')->first()->total_penjualan;
+
+        $seller_diff = $total_penjualan_current - $total_penjualan_previous;
+
+        if($seller_diff < 0)
+        {
+          $seller_diff = abs($seller_diff);
+          $seller_diff = $pc->pricing_format($seller_diff);
+          $sell_status = 'Penjualan turun : '.Lang::get('custom.currency').' '.$seller_diff;
+        }
+        else
+        {
+          $seller_diff = $pc->pricing_format($seller_diff);
+          $sell_status = 'Penjualan naik : '.Lang::get('custom.currency').' '.$seller_diff;
+        }
+
+        // PEMBELIAN
+
+        $total_pembelian = Transaction::where('buyer_id',Auth::id())->selectRaw('SUM(total) AS total_pembelian')->first()->total_pembelian;
+
+        $total_pembelian_previous = Transaction::where('buyer_id',Auth::id())->selectRaw('SUM(total) AS total_pembelian')->whereRaw("MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) = MONTH(STR_TO_DATE(date_buy, '%Y-%m-%d'))")->first()->total_pembelian;
+
+        $total_pembelian_current = Transaction::where('buyer_id',Auth::id())->selectRaw('SUM(total) AS total_pembelian')->whereRaw('MONTH(date_buy) = MONTH(CURRENT_DATE())')->first()->total_pembelian;
+
+        $buyer_diff = $total_pembelian_current - $total_pembelian_previous;
+
+        if($buyer_diff < 0)
+        {
+          $buyer_diff = abs($buyer_diff);
+          $buyer_diff = $pc->pricing_format($buyer_diff);
+          $buy_status = 'Pembelian turun : '.Lang::get('custom.currency').' '.$buyer_diff;
+        }
+        else
+        {
+          $buyer_diff = $pc->pricing_format($buyer_diff);
+          $buy_status = 'Pembelian naik : '.Lang::get('custom.currency').' '.$buyer_diff;
+        }
+
+        return view('home.dashboard',['pc'=>$pc,'total_penjualan'=>$total_penjualan,'total_pembelian'=>$total_pembelian,'buy_status'=>$buy_status,'sell_status'=>$sell_status]);
+    }
+
      // DISPLAYING ERROR PAGE
     public function error()
     {
@@ -411,15 +462,10 @@ class HomeController extends Controller
       return response()->json($res);
     }
 
-    public function index()
-    {
-        return view('home.dashboard',['lang'=>new Lang,'pc'=>new Price]);
-    }
-
     // ORDER FROM BUYER NOT MEMBERSHIP
     public function purchase()
     {
-        return view('home.purchasing');
+        return view('home.purchasing',['lang'=>new Lang]);
     }
 
     /*

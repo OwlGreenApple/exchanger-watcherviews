@@ -37,7 +37,7 @@
           @if($row['seller'] == auth()->user()->id)
             -
           @else
-            <a href="{{ url('buy-detail') }}/{{ $row['no'] }}" class="btn btn-outline-success btn-sm conf" data-toggle="tooltip" data-original-title="Save to Wishlist">Beli</a>
+            <a href="{{ url('buy-detail') }}/{{ $row['id'] }}" class="btn btn-outline-success btn-sm conf" data-toggle="tooltip" data-original-title="Save to Wishlist">Beli</a>
           @endif 
           </td>
       </tr>

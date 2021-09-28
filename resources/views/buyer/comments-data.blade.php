@@ -6,6 +6,7 @@
                 <div class="title h5">
                     <b>{{ $row['buyer'] }}</b>
                 </div>
+                <div class="title">{{ $row['no_trans'] }}</div>
                 <div class="py-2">
                     @for($x= 0; $x < $row['rate']; $x++ )
                         <i class="fas fa-star gold"></i>
@@ -14,7 +15,7 @@
                 <h6 class="text-muted time">{{ $row['created_at'] }}</h6>
             </div>
         </div> 
-        <div class="post-description"> 
+        <div class="post-description mt-1"> 
             <p>{{ $row['comments'] }}</p>
         </div>
     </div>

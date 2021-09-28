@@ -6,6 +6,7 @@
         <th>Total Coin</th>
         <th>Kurs</th>
         <th>Harga</th>
+        <th>Pembayaran</th>
         <th>Action</th>
         <th>Penilaian</th>
     </thead>
@@ -19,6 +20,7 @@
                     <td>{{ $row['coin'] }}</td>
                     <td>{{ $row['kurs'] }}</td>
                     <td>{{ $row['price'] }}</td>
+                    <td>{{ $row['payment'] }}</td>
                     <td>{!! $row['status'] !!}</td>
                     <td>{!! $row['comments'] !!}</td>
                 </tr>

@@ -1,20 +1,33 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-9">
-            <div class="card">
-                <div class="card-header bg-danger text-white">
-                   Summary
+<div class="page-header">
+  <h3 class="page-title">
+    <span class="page-title-icon bg-gradient-primary text-white mr-2">
+      <i class="mdi mdi-store-24-hour"></i>
+    </span>Summary
+  </h3>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body col-12 col-md-12 card-font-size">
+                <div class="err_message"><!-- error messages --></div>
+                <h5 class="alert alert-info">Terima kasih atas pembelian koin anda, silahkan lakukan pembayaran</h5>
+
+                <div class="form-group">
+                    <label>No Invoice :</label>
+                    <div class="form-control form-control-sm border-top-0 border-left-0 border-right-0"><b>{{ $row['no'] }}</b></div>
                 </div>
 
-                <div class="card-body">
-                    <div class="err_message"><!-- error messages --></div>
-                    <h5>Terima kasih atas pembelian koin anda, silahkan lakukan pembayaran</h5>
-                    <div>No Invoice : <b>{{ $row['no'] }}</b></div>
-                    <div>Total : <b>{{ $row['total'] }}</b></div>
-                    <div>Methode Pembayaran :</b></div>
+                <div class="form-group">
+                    <label>Total :</label>
+                    <div class="form-control form-control-sm border-top-0 border-left-0 border-right-0"><b>{{ $row['total'] }}</b></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Methode Pembayaran :</label>
                     <div class="mb-2">
                         <select name="payment" class="form-control">
                             @if($user->bank_name !== null && $user->bank_no !== null)
@@ -31,23 +44,39 @@
                             @endif
                         </select>
                     </div>
-
+                </div>
+                
+                <div class="form-group">
                     <div id="bank">
-                        <ul>
-                            <li>No Rekening : <b>{{ $user->bank_no }}</b></li>
-                            <li>Bank : {{ $user->bank_name }}&nbsp;<b>{{ $user->name }}</b></li>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">No Rekening : <b>{{ $user->bank_no }}</b></li>
+                            <li class="list-group-item">Bank : {{ $user->bank_name }}</li>
+                            <li class="list-group-item">A/N : <b>{{ $user->name }}</b></li>
                         </ul>
                     </div>
 
                     <div id="electronic">
-                         <h5>Silahkan scan qr code di bawah ini sesuai payment method anda <b><span id="pmt"></span></b></h5>
-                         <img id='barcode' src="https://api.qrserver.com/v1/create-qr-code/?data=HelloWorld&amp;size=200x200" alt="" title="HELLO" width="200" height="200" />
-                    </div>
+                         <h5 class="alert alert-secondary">Silahkan scan qr code di bawah ini sesuai payment method anda : <b><span id="pmt"></span></b></h5>
 
-                    <div class="mt-2">Lakukan konfirmasi apabila sudah melakukan pembayaran disini : <a id="conf" data-id="{{ $row['id'] }}" class="btn btn-info">Konfirmasi</a></div>
+                        <div id="pay_ovo">
+                            <img src="{{ $row['ovo'] }}" width="150" height="150" />
+                        </div>
+                        <div id="pay_dana">
+                            <img src="{{ $row['dana'] }}" width="150" height="150" />
+                        </div>
+                        <div id="pay_gopay">
+                            <img src="{{ $row['gopay'] }}" width="150" height="150" />
+                        </div>
+                    </div>
                 </div>
 
+                <div class="mt-4 form-group">
+                    <label><u>Lakukan konfirmasi apabila sudah melakukan pembayaran disini :</u></label>
 
+                    <div class="border-top-0 border-left-0 border-right-0"><a id="conf" data-id="{{ $row['id'] }}" class="btn btn-info">Konfirmasi</a></div>
+                </div>
+
+            <!-- end card body -->
             </div>
         </div>
     </div>
@@ -63,12 +92,13 @@
     {
         $("#conf").click(function(){
             var id = $(this).attr('data-id');
+            var payment_method = $("select[name='payment'] option:selected").val();
 
             $.ajax({
                 type : 'GET',
                 url : "{{ url('buy-deal') }}",
                 dataType : 'json',
-                data : {'id':id},
+                data : {'id':id, 'payment_method' : payment_method},
                 beforeSend: function()
                 {
                    $('#loader').show();
@@ -79,7 +109,7 @@
                 {
                     if(result.err == 0)
                     {
-                        location.href="{{ url('buyer-confirm') }}/{{ $row['no'] }}";
+                        location.href="{{ url('buyer-confirm') }}/{{ $row['id'] }}";
                     }
                     else
                     {
@@ -120,6 +150,25 @@
         {
             $("#bank").hide();
             $("#electronic").show();
+
+            if(value == 'ovo')
+            {
+                $("#pay_ovo").show();
+                $("#pay_dana").hide();
+                $("#pay_gopay").hide();
+            }
+            else if(value == 'dana')
+            {
+                $("#pay_ovo").hide();
+                $("#pay_dana").show();
+                $("#pay_gopay").hide();
+            }
+            else
+            {
+                $("#pay_ovo").hide();
+                $("#pay_dana").hide();
+                $("#pay_gopay").show();
+            }
         }
     }
 

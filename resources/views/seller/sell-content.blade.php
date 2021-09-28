@@ -1,5 +1,5 @@
 @if(count($data) > 0)
- <table class="table" id="sell_list">
+ <table class="table table-striped table-bordered" id="sell_list">
     <thead>
         <th>Tanggal</th>
         <th>Invoice</th>
@@ -9,6 +9,7 @@
         <th>Kurs</th>
         <th>Harga</th>
         <th>Tanggal Beli</th>
+        <th>Pembayaran</th>
         <th>Trial</th>
         <th>&nbsp;</th>
     </thead>
@@ -23,6 +24,7 @@
                 <td>{{ $row['kurs'] }}</td>
                 <td>{{ $row['total'] }}</td>
                 <td>{{ $row['date_buy'] }}</td>
+                <td>{{ $row['payment'] }}</td>
                 <td>{{ $row['trial'] }}</td>
                 <td class="text-center">{!! $row['status'] !!}</td>
             </tr>
@@ -30,16 +32,3 @@
         </tbody>
     </table>
 @endif
-
-<script type="text/javascript">
-    $(function(){
-        data_table();
-    });
-
-    function data_table()
-    {
-        $("#sell_list").DataTable({
-            "ordering": false
-        });
-    }
-</script>
