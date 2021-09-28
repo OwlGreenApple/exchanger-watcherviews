@@ -112,8 +112,10 @@
                 <a class="dropdown-item" href="{{ url('account') }}">
                   <i class="mdi mdi-cached mr-2 text-success"></i> Account </a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="{{ url('logout') }}" onclick="event.preventDefault();
+                                                 document.getElementById('logout-form').submit();">
                   <i class="mdi mdi-logout mr-2 text-primary"></i> Log out </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
               </div>
             </li>
             <li class="nav-item d-none d-lg-block full-screen-link">
