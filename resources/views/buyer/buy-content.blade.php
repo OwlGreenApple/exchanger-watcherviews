@@ -1,4 +1,4 @@
-<table class="table" id="selling">
+<table class="table stripe" id="selling">
     <thead>
         <th>Tanggal</th>
         <th>Invoice</th>

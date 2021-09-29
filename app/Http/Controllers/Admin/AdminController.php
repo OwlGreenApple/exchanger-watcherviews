@@ -304,6 +304,7 @@ class AdminController extends Controller
           $user->status = 3; //suspend user
           $total_suspend = $user->suspend;
           $user->warning = 0;
+          $user->suspend_date = Carbon::now();
         }
         else
         {

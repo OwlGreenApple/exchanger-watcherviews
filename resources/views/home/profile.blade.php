@@ -10,11 +10,11 @@
         </div>
     </div>
 
-    <div class="form-group row">
+    <div class="form-group row mb-5">
         <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('No HP Anda') }}</label>
 
         <div class="col-md-6">
-            <div id="phone_number" class="form-control alert-success">{{ $user->phone_number }}</div>
+            <div id="phone_number" class="form-control alert-secondary">{{ $user->phone_number }}</div>
             <!--  -->
             <div class="col-md-12 row mt-2">
               <input type="text" id="phone" name="phone" class="form-control"/>
@@ -26,9 +26,11 @@
         </div>
     </div>
 
-    <hr/>
+    <!-- PAYMENT METHOD -->
 
-    <div align="center" class="mb-3"><b>Metode Pembayaran</b></div>
+    <div align="center" class="mb-3 alert alert-secondary"><b>Metode Pembayaran</b></div>
+
+    <span id="crop_save"><!-- message success if crop saved --></span>
 
      <div class="form-group row">
         <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.bank_name') }}</label>
@@ -92,9 +94,9 @@
         </div>
     </div>
 
-    <hr/>
+    <!-- PASSWORD -->
 
-    <div align="center" class="mb-3"><b>{{ $lang::get('auth.notes') }}</b></div>
+    <div align="center" class="mb-3 alert alert-secondary"><b>{{ $lang::get('auth.notes') }}</b></div>
 
     <div class="form-group row">
         <label class="col-md-4 col-form-label text-md-right"> Password Lama</label>
@@ -179,7 +181,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" id="crop" class="btn btn-primary">Crop</button>
+            <button type="button" id="crop" class="btn btn-primary">Simpan</button>
             <button type="button" class="btn btn-secondary crop_cancel" data-dismiss="modal">Cancel</button>
         </div>
     </div>

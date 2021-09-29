@@ -44,6 +44,9 @@ class HomeController extends Controller
 
         // PENJUALAN
 
+        $data_penjualan = Transaction::where('seller_id',Auth::id())->select('created_at','total')->get()->toArray();
+        $data_penjualan = json_encode($data_penjualan);
+
         $total_penjualan = Transaction::where('seller_id',Auth::id())->selectRaw('SUM(total) AS total_penjualan')->first()->total_penjualan;
 
         $total_penjualan_previous = Transaction::where('seller_id',Auth::id())->selectRaw('SUM(total) AS total_penjualan')->whereRaw("MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) = MONTH(STR_TO_DATE(date_buy, '%Y-%m-%d'))")->first()->total_penjualan;
@@ -66,6 +69,9 @@ class HomeController extends Controller
 
         // PEMBELIAN
 
+        $data_pembelian = Transaction::where('buyer_id',Auth::id())->select('created_at','total')->get()->toArray();
+        $data_pembelian = json_encode($data_pembelian);
+
         $total_pembelian = Transaction::where('buyer_id',Auth::id())->selectRaw('SUM(total) AS total_pembelian')->first()->total_pembelian;
 
         $total_pembelian_previous = Transaction::where('buyer_id',Auth::id())->selectRaw('SUM(total) AS total_pembelian')->whereRaw("MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) = MONTH(STR_TO_DATE(date_buy, '%Y-%m-%d'))")->first()->total_pembelian;
@@ -86,7 +92,41 @@ class HomeController extends Controller
           $buy_status = 'Pembelian naik : '.Lang::get('custom.currency').' '.$buyer_diff;
         }
 
-        return view('home.dashboard',['pc'=>$pc,'total_penjualan'=>$total_penjualan,'total_pembelian'=>$total_pembelian,'buy_status'=>$buy_status,'sell_status'=>$sell_status]);
+        // WALLET
+        $wallet_data = Wallet::where('user_id',Auth::id())->select('created_at','coin')->get()->toArray();
+        $wallet_data = json_encode($wallet_data);
+
+        $wallet_previous = Wallet::where('user_id',Auth::id())->whereRaw("MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) = MONTH(created_at)")->selectRaw('SUM(coin) AS total_coin')->first()->total_coin;
+
+        $wallet = Wallet::where('user_id',Auth::id())->whereRaw("MONTH(created_at) = MONTH(CURDATE())")->selectRaw('SUM(coin) AS total_coin')->first()->total_coin;
+
+        $wallet_diff = $wallet - $wallet_previous;
+
+        if($wallet_diff < 0)
+        {
+          $wallet_diff = abs($wallet_diff);
+          $wallet_diff = $pc->pricing_format($wallet_diff);
+          $wallet_status = 'Transaksi turun : '.$wallet_diff;
+        }
+        else
+        {
+          $wallet_diff = $pc->pricing_format($wallet_diff);
+          $wallet_status = 'Transaksi naik : '.$wallet_diff;
+        }
+
+        $data = [
+          'pc'=>$pc,
+          'total_penjualan'=>$total_penjualan,
+          'total_pembelian'=>$total_pembelian,
+          'buy_status'=>$buy_status,
+          'sell_status'=>$sell_status,
+          'wallet_status'=>$wallet_status,
+          'data_penjualan'=>$data_penjualan,
+          'data_pembelian'=>$data_pembelian,
+          'wallet_data'=>$wallet_data
+        ];
+
+        return view('home.dashboard',$data);
     }
 
      // DISPLAYING ERROR PAGE

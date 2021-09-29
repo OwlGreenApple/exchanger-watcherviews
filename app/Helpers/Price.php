@@ -61,27 +61,16 @@ class Price
         return $coin;
     }
 
-    //TRANSACTION LOGIC
-    public static function transaction(array $data)
+    //NOTIFICATION SELLER LOGIC
+    public static function transaction()
     {
-    	$tr = new Transaction;
-    	$tr->user_id = Auth::id();
-    	$tr->no = $data['no'];
-    	$tr->type = $data['type'];
-    	$tr->amount = $data['amount'];
-
-    	try
-    	{
-    		$tr->save();
-    		$response['err'] = 0;
-    	}
-    	catch(QueryException $e)
-    	{
-    		// $response['err'] = $e->getMessage();
-    		$response['err'] = 1;
-    	}
-
-    	return $response ;
+    	$tr = Transaction::where([['seller_id',Auth::id()],['status',2]])->get();
+    	$total_tr = $tr->count();
+        $data = [
+            'total'=>$total_tr,
+            'data'=>$tr
+        ];
+    	return $data;
     }
 
     public static function get_rate()

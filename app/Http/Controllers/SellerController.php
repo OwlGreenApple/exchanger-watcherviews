@@ -84,6 +84,8 @@ class SellerController extends Controller
     	{
 
     		foreach($tr as $row):
+                $confirm_sell = '<a target="_blank" href="'.url("sell-confirm").'/'.$row->id.'" class="btn btn-info btn-sm">Konfirmasi</a>';
+                
     			if($row->status == 0)
 	    		{
 	    			$status = '<a data-id="'.$row->id.'" class="text-danger del_sell"><i class="fas fa-trash-alt"></i></a>';
@@ -94,7 +96,7 @@ class SellerController extends Controller
 	    		}
                 elseif($row->status == 2)
                 {
-                    $status = '<a target="_blank" href="'.url("sell-confirm").'/'.$row->no.'" class="btn btn-info btn-sm">Konfirmasi</a>';
+                    $status = $confirm_sell;
                 }
                 elseif($row->status == 4)
                 {
@@ -105,7 +107,7 @@ class SellerController extends Controller
                     }
                     else
                     {
-                        $status = '<a target="_blank" href="'.url("sell-confirm").'/'.$row->no.'" class="btn btn-info btn-sm">Konfirmasi</a>';
+                        $status = $confirm_sell;
                     }      
                 }
 	    		elseif($row->status == 5)
@@ -158,9 +160,9 @@ class SellerController extends Controller
     }
 
     // CONFIRMATION PAGE
-    public function sell_confirm($invoice)
+    public function sell_confirm($id)
     {
-    	$tr = Transaction::where('no',$invoice)->whereIn('status',[2,4])->first();
+    	$tr = Transaction::where([['id',$id],['seller_id',Auth::id()]])->whereIn('status',[2,4])->first();
     	$pc = new Price;
 
     	if(is_null($tr))
@@ -183,6 +185,7 @@ class SellerController extends Controller
     		'id' => $tr->id,
     		'buyer_name' => $user->name,
     		'no' => $tr->no,
+            'seller_dispute_id' => $tr->seller_dispute_id,
     		'upload'=> $upload,
     		'coin' => $pc->pricing_format($tr->amount),
     		'total' => $pc->pricing_format($tr->total),
@@ -266,7 +269,7 @@ class SellerController extends Controller
 
     public function seller_dispute($id)
     {
-        $tr = Transaction::where([['id',$id],['seller_id',Auth::id()]])->first();
+        $tr = Transaction::where([['id',$id],['seller_id',Auth::id()],['seller_dispute_id','=',0]])->first();
 
         if(is_null($tr))
         {

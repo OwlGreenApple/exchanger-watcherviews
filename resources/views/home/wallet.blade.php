@@ -1,97 +1,102 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-9">
-            <div class="card">
-                <div class="card-header bg-danger text-white">{{ $lang::get('custom.wallet') }}
-                    <div class="float-right">{{ Lang::get('custom.coin') }} : <b id="coin">{{ $pc->pricing_format(Auth::user()->coin) }}</b>&nbsp;coin</div>
-                    <span class="clearfix"></span>
-                </div>
 
-                <div id="msg"><!-- message --></div>
+<div class="page-header">
+  <h3 class="page-title">
+    <span class="page-title-icon bg-gradient-primary text-white mr-2">
+      <i class="mdi mdi-cart-outline"></i>
+    </span> {{ $lang::get('custom.wallet') }} </h3>
+</div>
 
-                <div class="card-body">
-                    <form id="wallet_coin">
-                    
-                        @if(auth()->user()->watcherviews_id == 0)
-                          <div class="alert alert-info">Silahkan hubungkan akun watcherviews anda di link ini <a href="{{ url('account') }}/wallet">connect wallet</a></div>
-                        @else
-
-                        <span class="error wallet"><!--  --></span>
-                        <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.wt') }}</label>
-
-                            <div class="col-md-6">
-                               <label for="name" class="col-form-label text-md-right"><b id="total_coin">{!! $coin !!}</b>&nbsp;coin</label>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right"><!--  --></label>
-
-                            <div class="col-md-6">
-                               <div class="form-check">
-                                  <input class="form-check-input" type="radio" name="wallet_option" id="flexRadioDefault1" value="1" checked>
-                                  <label class="form-check-label" for="flexRadioDefault1">
-                                    {{ $lang::get('transaction.wd') }} ke wallet&nbsp;(min : <b>100.000</b>)
-                                  </label>
-                                </div>
-                                <div class="form-check">
-                                  <input class="form-check-input" type="radio" name="wallet_option" value="2" id="flexRadioDefault2">
-                                  <label class="form-check-label" for="flexRadioDefault2">
-                                    {{ $lang::get('transaction.send') }} ke watcherviews
-                                  </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ Lang::get('transaction.total.coin') }}</label>
-
-                            <div class="col-md-6">
-                               <input id="amount" class="form-control" type="text" name="amount" autocomplete="off" />
-                               <span class="error coin_ammount"><!--  --></span>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">Biaya Transaksi (2.5%)</label>
-
-                            <div class="col-md-6">
-                               <div id="fee" class="form-control border-top-0 border-left-0 border-right-0"><!--  --></div>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">Total Coin yang di potong</label>
-
-                            <div class="col-md-6">
-                               <div id="total_coin_pay" class="form-control border-top-0 border-left-0 border-right-0"><!--  --></div>
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-danger">
-                                    {{ Lang::get('transaction.wallet') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                @endif
+<div class="row justify-content-center">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-gradient-warning">
+                {{ Lang::get('custom.coin') }} : <b id="coin">{{ $pc->pricing_format(Auth::user()->coin) }}</b>&nbsp;coin
             </div>
 
-            <!-- HISTORY -->
-            @if(auth()->user()->watcherviews_id > 0)
-            <div class="card">
-                <div id="wallet_list" class="card-body"><!--  --></div>
+            <div id="msg"><!-- message --></div>
+
+            <div class="card-body">
+                <form id="wallet_coin">
+                
+                    @if(auth()->user()->watcherviews_id == 0)
+                      <div class="alert alert-secondary">Silahkan hubungkan akun watcherviews anda di link ini <a href="{{ url('account') }}/wallet">Connect Wallet</a></div>
+                    @else
+
+                    <span class="error wallet"><!--  --></span>
+                    <div class="form-group row">
+                        <label for="name" class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.wt') }}</label>
+
+                        <div class="col-md-6">
+                           <label for="name" class="col-form-label text-md-right"><b id="total_coin">{!! $coin !!}</b>&nbsp;coin</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="name" class="col-md-4 col-form-label text-md-right"><!--  --></label>
+
+                        <div class="col-md-6">
+                           <div class="form-check">
+                              <input class="form-check-input" type="radio" name="wallet_option" id="flexRadioDefault1" value="1" checked>
+                              <label class="form-check-label" for="flexRadioDefault1">
+                                {{ $lang::get('transaction.wd') }} ke wallet&nbsp;(min : <b>100.000</b>)
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio" name="wallet_option" value="2" id="flexRadioDefault2">
+                              <label class="form-check-label" for="flexRadioDefault2">
+                                {{ $lang::get('transaction.send') }} ke watcherviews
+                              </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="name" class="col-md-4 col-form-label text-md-right">{{ Lang::get('transaction.total.coin') }}</label>
+
+                        <div class="col-md-6">
+                           <input id="amount" class="form-control" type="text" name="amount" autocomplete="off" />
+                           <span class="error coin_ammount"><!--  --></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="name" class="col-md-4 col-form-label text-md-right">Biaya Transaksi (2.5%)</label>
+
+                        <div class="col-md-6">
+                           <div id="fee" class="form-control border-top-0 border-left-0 border-right-0"><!--  --></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="name" class="col-md-4 col-form-label text-md-right">Total Coin yang di potong</label>
+
+                        <div class="col-md-6">
+                           <div id="total_coin_pay" class="form-control border-top-0 border-left-0 border-right-0"><!--  --></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row mb-0">
+                        <div class="col-md-6 offset-md-4">
+                            <button type="submit" class="btn btn-gradient-danger">
+                                {{ Lang::get('transaction.wallet') }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
             @endif
-            <!--  -->
         </div>
+
+        <!-- HISTORY -->
+        @if(auth()->user()->watcherviews_id > 0)
+        <div class="card mt-5">
+            <div id="wallet_list" class="card-body"><!--  --></div>
+        </div>
+        @endif
+        <!--  -->
     </div>
 </div>
 

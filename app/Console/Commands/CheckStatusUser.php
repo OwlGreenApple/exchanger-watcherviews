@@ -45,7 +45,7 @@ class CheckStatusUser extends Command
         if($users->count() > 0)
         {
             foreach($users as $row):
-                if($current_time->gte(Carbon::parse($row->updated_at)->addWeek()))
+                if($current_time->gte(Carbon::parse($row->suspend_date)->addWeek()))
                 {
                     $user = User::find($row->id);
                     self::restore_user_status($user);
@@ -65,6 +65,8 @@ class CheckStatusUser extends Command
             $status = 2;
         }
 
+        $user->suspend = 0;
+        $user->suspend_date = null;
         $user->status = $status;
         $user->save();
     }

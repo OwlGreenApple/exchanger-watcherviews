@@ -1,55 +1,61 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-9">
-            <div class="card">
-                <div class="card-header bg-warning">
-                    Konfirmasi Penjualan
-                </div> 
 
-                <div class="card-body">
-                    <div id="err_message"><!--  --></div>
-                    <h5>Anda akan konfirmasi penjualan koin anda dengan detail :</h5>
-                    <hr/>
-                    <div class="form-group">
-                        <label>Nama Pembeli :</label>
-                        <div class="form-control border-top-0 border-left-0 border-right-0">{{ $row['buyer_name'] }}</div>
-                    </div>
+<div class="page-header">
+    <h3 class="page-title">
+    <span class="page-title-icon bg-gradient-primary text-white mr-2">
+      <i class="mdi mdi-store-24-hour"></i>
+    </span> Konfirmasi Penjualan </h3>
+</div>
 
-                    <div class="form-group">
-                        <label>No Invoice :</label>
-                        <div class="form-control border-top-0 border-left-0 border-right-0">{{ $row['no'] }}</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Jumlah Coin :</label>
-                        <div class="form-control border-top-0 border-left-0 border-right-0"><b>{{ $row['coin'] }}</b></div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Total :</label>
-                        <div class="form-control border-top-0 border-left-0 border-right-0">{{ Lang::get('custom.currency') }}&nbsp;<b>{!! $row['total'] !!}</b></div>
-                    </div>
-
-                    <div class="form-group">
-                       <label>Bukti Bayar :</label>
-                       <div>{!! $row['upload'] !!}</div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <a type="button" class="btn btn-primary confirm">Konfirmasi</a>
-
-                        @if($row['status'] == 4)
-                            <a target="_blank" href="{{ url('seller-dispute') }}/{{ $row['id'] }}" class="text-black-50">Dispute</a>
-                        @endif
-                    </div>
-                    
+<div class="row justify-content-center">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div id="err_message"><!--  --></div>
+                <h5 class="alert alert-warning">Anda akan konfirmasi penjualan koin anda dengan detail :</h5>
+                <hr/>
+                <div class="form-group">
+                    <label>Nama Pembeli :</label>
+                    <div class="form-control border-top-0 border-left-0 border-right-0">{{ $row['buyer_name'] }}</div>
                 </div>
 
+                <div class="form-group">
+                    <label>No Invoice :</label>
+                    <div class="form-control border-top-0 border-left-0 border-right-0">{{ $row['no'] }}</div>
+                </div>
 
+                <div class="form-group">
+                    <label>Jumlah Coin :</label>
+                    <div class="form-control border-top-0 border-left-0 border-right-0"><b>{{ $row['coin'] }}</b></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Total :</label>
+                    <div class="form-control border-top-0 border-left-0 border-right-0">{{ Lang::get('custom.currency') }}&nbsp;<b>{!! $row['total'] !!}</b></div>
+                </div>
+
+                <div class="form-group">
+                   <label>Bukti Bayar :</label>
+                   <div>{!! $row['upload'] !!}</div>
+                </div>
+                
+                <div class="form-group">
+                    <a type="button" class="btn bg-gradient-primary confirm">Konfirmasi</a>
+
+                    @if($row['status'] == 4)
+                        @if($row['seller_dispute_id'] == 0)
+                            <a target="_blank" href="{{ url('seller-dispute') }}/{{ $row['id'] }}" class="text-black-50">Dispute</a>
+                        @else
+                            <span class="text-black-50">Tunggu Admin</span>
+                        @endif
+                    @endif
+                </div>
+                
             </div>
+
+
         </div>
     </div>
 </div>
@@ -65,7 +71,7 @@
         <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
       </div>
       <div class="modal-body">
-        Apakah anda yakin akan mengkonfirmasi transaksi ini?<br/>Peringatan : pastikan bahwa pembeli <b>sudah</b> melakukan pembayaran, Karena coin <b>tidak</b> akan dikembalikan apabila anda sudah menekan tombol <b>Konfirmasi</b>
+        Apakah anda yakin akan mengkonfirmasi transaksi ini?<br/><b>Perhatian</b> : pastikan bahwa pembeli <b>sudah</b> melakukan pembayaran, Karena coin <b>tidak</b> akan dikembalikan apabila anda sudah menekan tombol <b>Konfirmasi</b>
       </div>
       <!--  -->
       <div class="modal-footer" id="foot">

@@ -26,7 +26,7 @@ class BuyerController extends Controller
 
     public function buyer_table(Request $request)
     {
-    	$paginate = 10;
+    	$paginate = 2;
     	$src = $request->src;
     	$sort = $request->sort;
     	$range = $request->range;

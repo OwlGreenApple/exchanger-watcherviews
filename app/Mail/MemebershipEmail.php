@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Helpers\Price;
 
 class MemebershipEmail extends Mailable
 {
@@ -49,6 +50,7 @@ class MemebershipEmail extends Mailable
           'package' => $this->package,
           'price' => $this->price,
           'total' => $this->total,
+          'pc' => new Price,
         ]);
     }
 }

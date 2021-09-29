@@ -54,7 +54,7 @@ return [
     'remember'=>'Ingat akun saya', //summary.blade
     'review'=>'Harap periksa lagi email dan nomer hp anda sebelum melanjutkan order', //summary.blade
     'save'=>'Simpan', //wallet.blade
-    'success'=>'Data and telah di simpan',
+    'success'=>'Data anda telah di simpan',
     'success_coin'=>'Transaksi berhasil',
     'sell'=>'Kesempatan jual per hari',
     'terms'=>'Syarat dan ketentuan yang berlaku', //checkout.blade

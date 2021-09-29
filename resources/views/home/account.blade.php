@@ -151,8 +151,6 @@
     
     <!-- end justify -->
 
-
-
 <script src="{{ asset('/assets/intl-tel-input/callback.js') }}" type="text/javascript"></script>
 <script src="{{ asset('/assets/js/custom.js') }}" type="text/javascript"></script>
 
@@ -314,6 +312,8 @@
                                     // $('#gopay_image').attr('src', data.img);
                                     $("#display_gopay").html('<div class="mb-2"><button data-value="gopay" type="button" class="btn btn-danger epay">Hapus GOPAY</button></div>');
                                 }
+
+                                $("#crop_save").html('<div class="alert alert-success">{{ Lang::get("custom.success") }}</div>')
                             }
                         },
                         complete : function()

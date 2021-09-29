@@ -5,8 +5,8 @@ Detail order anda : <br>
 <br>
 No Order : <b>{{$no}}</b><br>
 Paket : {{$package}}<br>
-Harga : Rp.{{ Price::pricing_format($price) }}<br>
-Total : Rp.<b>{{ Price::pricing_format($total) }}</b><br>
+Harga : Rp.{{ $pc->pricing_format($price) }}<br>
+Total : Rp.<b>{{ $pc->pricing_format($total) }}</b><br>
 <br/>
 Transfer ke BCA : <b>{{ env('NO_REK') }}</b> Sugiarto Lasjim<br>
 Langkah sesudah transfer :<br>

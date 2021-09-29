@@ -179,23 +179,31 @@
             <li class="nav-item dropdown">
               <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
                 <i class="mdi mdi-bell-outline"></i>
-                <span class="count-symbol bg-danger"></span>
+                @if(Price::transaction()['total'] > 0)
+                  <span class="count-symbol bg-danger"></span>
+                @endif
               </a>
+              @if(Price::transaction()['total'] > 0)
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
-                <h6 class="p-3 mb-0">Notifications</h6>
+                <h6 class="p-3 mb-0">Notifikasi</h6>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item preview-item">
+
+                @foreach(Price::transaction()['data'] AS $row)
+                <a target="_blank" href="{{ url('sell-confirm') }}/{{ $row->id }}" class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
                     <div class="preview-icon bg-success">
                       <i class="mdi mdi-calendar"></i>
                     </div>
                   </div>
+
                   <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                    <h6 class="preview-subject font-weight-normal mb-1">Event today</h6>
-                    <p class="text-gray ellipsis mb-0"> Just a reminder that you have an event today </p>
+                    <h6 class="preview-subject font-weight-normal mb-1">{{ $row->no }}</h6>
+                    <p class="text-gray ellipsis mb-0">Selamat ada pembeli yang ingin beli coin anda</p>
                   </div>
                 </a>
                 <div class="dropdown-divider"></div>
+                @endforeach
+                <!-- <div class="dropdown-divider"></div>
                 <a class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
                     <div class="preview-icon bg-warning">
@@ -220,8 +228,9 @@
                   </div>
                 </a>
                 <div class="dropdown-divider"></div>
-                <h6 class="p-3 mb-0 text-center">See all notifications</h6>
+                <h6 class="p-3 mb-0 text-center">See all notifications</h6> -->
               </div>
+              @endif
             </li>
             <?php } ?>
             <!--
