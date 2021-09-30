@@ -79,9 +79,9 @@
       <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
           <a class="navbar-brand brand-logo" href="{{ url('home')}}"><img src="{{url('assets/img/logo.png')}}" alt="logo" /></a>
-          <!--
-          <a class="navbar-brand brand-logo-mini" href="index.html"><img src="../assets/images/logo-mini.svg" alt="logo" /></a>
-          -->
+          
+          <a class="navbar-brand brand-logo-mini" href="{{ url('home')}}"><img src="{{url('assets/img/favicon.png')}}" alt="logo" /></a>
+          
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-stretch">
         <!--
@@ -308,7 +308,7 @@
             <footer class="footer">
               <div class="d-sm-flex justify-content-center justify-content-sm-between">
                 <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2021 <a href="https://exchangerwatcherviews.com/" target="_blank">Exchangerwatcherviews</a>. All rights reserved.</span>
-                <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i></span>
+                <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Bangga menggunakan produk lokal <i class="mdi mdi-heart text-danger"></i></span>
               </div>
             </footer>        
           </div>
