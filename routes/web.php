@@ -30,10 +30,11 @@ Auth::routes();
 /*USER*/
 Route::group(['middleware'=>['auth','web']],function()
 {
+	Route::get('thankyou',[App\Http\Controllers\OrderController::class,'thankyou']);
 	Route::get('home', [App\Http\Controllers\HomeController::class, 'index']);
 	Route::get('end', [App\Http\Controllers\HomeController::class, 'end_membership']);
-	Route::get('thankyou',[App\Http\Controllers\OrderController::class,'thankyou']);
-	// Route::get('purchase', [App\Http\Controllers\HomeController::class, 'purchase']);
+	Route::get('event/{id}', [App\Http\Controllers\HomeController::class, 'event_page']);
+	Route::get('change-event', [App\Http\Controllers\HomeController::class, 'change_event']);
 	Route::post('save-dispute', [App\Http\Controllers\HomeController::class, 'save_dispute'])->middleware('check_dispute');
 	Route::get('page-dispute', [App\Http\Controllers\HomeController::class, 'dispute_page']);
 	Route::get('error',[App\Http\Controllers\HomeController::class, 'error']);

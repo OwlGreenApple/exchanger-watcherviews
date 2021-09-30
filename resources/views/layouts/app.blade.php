@@ -179,43 +179,47 @@
             <li class="nav-item dropdown">
               <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
                 <i class="mdi mdi-bell-outline"></i>
-                @if(Price::transaction()['total'] > 0)
+                @if(Price::events()['total'] > 0)
                   <span class="count-symbol bg-danger"></span>
                 @endif
               </a>
-              @if(Price::transaction()['total'] > 0)
+              @if(Price::events()['total'] > 0)
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
                 <h6 class="p-3 mb-0">Notifikasi</h6>
                 <div class="dropdown-divider"></div>
 
-                @foreach(Price::transaction()['data'] AS $row)
-                <a target="_blank" href="{{ url('sell-confirm') }}/{{ $row->id }}" class="dropdown-item preview-item">
-                  <div class="preview-thumbnail">
-                    <div class="preview-icon bg-success">
-                      <i class="mdi mdi-calendar"></i>
-                    </div>
-                  </div>
+                @foreach(Price::events()['data'] AS $row)
+                  @if($row->type == 0)
+                    <a target="_blank" data-id="{{ $row->id }}" class="dropdown-item preview-item evt">
+                      <div class="preview-thumbnail">
+                        <div class="preview-icon bg-warning">
+                          <i class="mdi mdi-settings"></i>
+                        </div>
+                      </div>
+                      <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
+                        <h6 class="preview-subject font-weight-normal mb-1">{{ $row->event_name }}</h6>
+                        <p style="max-height: 55px" class="text-gray ellipsis mb-0">{!! $row->message !!}</p>
+                      </div>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                  @else
+                    <a target="_blank" data-id="{{ $row->id }}" class="dropdown-item preview-item evt">
+                      <div class="preview-thumbnail">
+                        <div class="preview-icon bg-success">
+                          <i class="mdi mdi-calendar"></i>
+                        </div>
+                      </div>
 
-                  <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                    <h6 class="preview-subject font-weight-normal mb-1">{{ $row->no }}</h6>
-                    <p class="text-gray ellipsis mb-0">Selamat ada pembeli yang ingin beli coin anda</p>
-                  </div>
-                </a>
-                <div class="dropdown-divider"></div>
+                      <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
+                        <h6 class="preview-subject font-weight-normal mb-1">{{ $row->event_name }}</h6>
+                        <p style="max-height: 55px" class="text-gray ellipsis mb-0">{!! $row->message !!}</p>
+                      </div>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                  @endif
                 @endforeach
                 <!-- <div class="dropdown-divider"></div>
-                <a class="dropdown-item preview-item">
-                  <div class="preview-thumbnail">
-                    <div class="preview-icon bg-warning">
-                      <i class="mdi mdi-settings"></i>
-                    </div>
-                  </div>
-                  <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                    <h6 class="preview-subject font-weight-normal mb-1">Settings</h6>
-                    <p class="text-gray ellipsis mb-0"> Update dashboard </p>
-                  </div>
-                </a>
-                <div class="dropdown-divider"></div>
+                
                 <a class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
                     <div class="preview-icon bg-info">
@@ -335,5 +339,49 @@
     <!-- Custom js for this page -->
     <script src="{{ asset('assets/template/js/dashboard.js') }}"></script>
     <!-- End custom js for this page -->
+
+    <!-- event -->
+    <script type="text/javascript">
+      $(document).ready(function(){
+        change_event_notification();
+      });
+
+      function change_event_notification()
+      {
+        $(".evt").click(function(){
+            var id = $(this).attr('data-id');
+
+            $.ajax({
+                type : 'GET',
+                url : "{{ url('change-event') }}",
+                dataType : 'json',
+                data : {'id':id},
+                beforeSend: function()
+                {
+                   $('#loader').show();
+                   $('.div-loading').addClass('background-load');
+                },
+                success : function(result)
+                {
+                    if(result.res == 1)
+                    {
+                      $('#loader').hide();
+                      $('.div-loading').removeClass('background-load');
+                      $("#err_message").html('<div class="alert alert-danger">{{ Lang::get("custom.failed") }}</div>');
+                    }
+                    else
+                    {
+                      location.href="{{ url('/') }}/"+result.res;
+                    }
+                },
+                error : function()
+                {
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+                }
+            });
+        });
+      }
+    </script>
   </body>
 </html>

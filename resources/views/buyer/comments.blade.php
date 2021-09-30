@@ -2,45 +2,50 @@
 <link href="{{ asset('assets/css/comments.css') }}" rel="stylesheet" />
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-9">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    Penilaian : <b>{{ $seller->name }}</b>
-                </div>
+<div class="page-header">
+  <h3 class="page-title">
+    <span class="page-title-icon bg-gradient-primary text-white mr-2">
+      <i class="mdi mdi-cart-outline"></i>
+    </span>Penilaian</h3>
+</div>
 
-                <div id="comments" class="card-body">
-                    <!-- display table comments -->
-                </div>
-                
-                @if($tr->status == 3 && (auth()->user()->id == $tr->buyer_id))
-                <div class="card-body">
-                    <span id="err_message"><!--  --></span>
-                    <div class="form-group">
-                         <div class="bg-light p-2">
-                            <div class="px-1 py-1">Buat Komentar :</div>
-                            <div class="px-1 py-1"><b>{{ $tr->no }}</b></div>
-                            <div class="px-1 py-2 text-black-50">
-                                <i class="rate fas fa-star"></i>
-                                <i class="rate fas fa-star"></i>
-                                <i class="rate fas fa-star"></i>
-                                <i class="rate fas fa-star"></i>
-                                <i class="rate fas fa-star"></i>
-                            </div>
-                            <div class="d-flex flex-row align-items-start">
-                                <textarea name="comments" class="form-control ml-1 shadow-none textarea"></textarea>
-                            </div>
-                             <div class="error comments px-1"><!-- error --></div>
-                            <div class="mt-2 text-right">
-                                <button id="save_comments" class="btn btn-primary btn-sm shadow-none" type="button">Post</button><button class="btn btn-outline-primary btn-sm ml-1 shadow-none" type="button">Batal</button>
-                            </div>
+<div class="row justify-content-center">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+               Nama Penjual : <b>{{ $seller->name }}</b>
+            </div>
+
+            <div id="comments" class="card-body">
+                <!-- display table comments -->
+            </div>
+            
+            @if($tr->status == 3 && (auth()->user()->id == $tr->buyer_id))
+            <div class="card-body">
+                <span id="err_message"><!--  --></span>
+                <div class="form-group">
+                     <div class="bg-light p-2">
+                        <div class="px-1 py-1">Buat Komentar :</div>
+                        <div class="px-1 py-1"><b>{{ $tr->no }}</b></div>
+                        <div class="px-1 py-2 text-black-50">
+                            <i class="rate fas fa-star"></i>
+                            <i class="rate fas fa-star"></i>
+                            <i class="rate fas fa-star"></i>
+                            <i class="rate fas fa-star"></i>
+                            <i class="rate fas fa-star"></i>
+                        </div>
+                        <div class="d-flex flex-row align-items-start">
+                            <textarea name="comments" class="form-control ml-1 shadow-none textarea"></textarea>
+                        </div>
+                         <div class="error comments px-1"><!-- error --></div>
+                        <div class="mt-2 text-right">
+                            <button id="save_comments" class="btn btn-primary btn-sm shadow-none" type="button">Post</button><button class="btn btn-outline-primary btn-sm ml-1 shadow-none" type="button">Batal</button>
                         </div>
                     </div>
                 </div>
-                @endif
-                <!--  -->
             </div>
+            @endif
+            <!--  -->
         </div>
     </div>
 </div>

@@ -12,6 +12,10 @@ class Event extends Model
     protected $table = 'events';
 
     /*
+		type : 
+		0 -- warning admin
+		1 -- transaction
+
 		is read : 
 		0 -- blm dibaca
 		1 -- sdh dibaca

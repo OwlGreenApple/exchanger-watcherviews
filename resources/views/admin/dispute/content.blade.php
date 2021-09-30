@@ -2,6 +2,7 @@
   <thead class="bg-light">
     <th>No</th>
     <th>Tanggal Beli</th>
+    <th>Tanggal Dispute</th>
     <th>Invoice</th>
     <th>Pembeli</th>
     <th>Penjual</th>
@@ -15,6 +16,7 @@
         <tr>
           <td>{{ $no++ }}</td>
           <td>{{ $row->date_buy }}</td>
+          <td>{{ $row->updated_at }}</td>
           <td>{{ $row->invoice }}</td>
           <td>
             @if($row->buyer_dispute_id > 0)

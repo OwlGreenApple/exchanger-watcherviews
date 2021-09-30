@@ -2,6 +2,7 @@
 namespace App\Helpers;
 use App\Models\Transaction;
 use App\Models\Kurs;
+use App\Models\Event;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
 use Carbon\Carbon;
@@ -62,13 +63,13 @@ class Price
     }
 
     //NOTIFICATION SELLER LOGIC
-    public static function transaction()
+    public static function events()
     {
-    	$tr = Transaction::where([['seller_id',Auth::id()],['status',2]])->get();
-    	$total_tr = $tr->count();
+    	$ev = Event::where([['user_id',Auth::id()],['is_read',0]])->get();
+    	$total_ev = $ev->count();
         $data = [
-            'total'=>$total_tr,
-            'data'=>$tr
+            'total'=>$total_ev,
+            'data'=>$ev
         ];
     	return $data;
     }

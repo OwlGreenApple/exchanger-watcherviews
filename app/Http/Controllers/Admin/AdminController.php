@@ -15,6 +15,7 @@ use App\Models\Notification;
 use App\Models\Dispute;
 use App\Models\Transaction;
 use App\Models\Kurs;
+use App\Models\Event;
 use App\Helpers\Api;
 use App\Helpers\Price;
 use App\Mail\NotifyEmail;
@@ -48,7 +49,7 @@ class AdminController extends Controller
               'ur.name AS seller_name',
               'tb.status AS buyer_status',
               'ts.status AS seller_status',
-              'transactions.no AS invoice','transactions.date_buy','transactions.id','transactions.status','transactions.seller_dispute_id','transactions.buyer_dispute_id','transactions.buyer_id','transactions.seller_id'
+              'transactions.no AS invoice','transactions.date_buy','transactions.id','transactions.status','transactions.seller_dispute_id','transactions.buyer_dispute_id','transactions.buyer_id','transactions.seller_id','transactions.updated_at'
             )
             ->where('transactions.seller_dispute_id','>',0)->orWhere('transactions.buyer_dispute_id','>',0)->orderBy('transactions.id','desc')->get();
 
@@ -288,10 +289,30 @@ class AdminController extends Controller
       }
     }
 
+    // display on notifcation event
+    public static function suspend_message($invoice)
+    {
+      $msg ='';
+      $msg .='Mohon perhatian'."<br>";
+      $msg .='sehubungan dengan dispute invoice : <b>'.$invoice.'</b> maka akun anda telah mendapatkan warning sebanyak 2x.'."<br/><br/>";
+
+      $msg .='Maka dengan demikian akun anda telah di-suspend , sehingga anda tidak dapat melakukkan transaksi di situs kami selama 1 minggu.'."<br/><br/>";
+
+      $msg .='Apabila anda terkena <b>suspend</b> sebanyak 2 kali'."<br/>";
+      $msg .='maka akun anda akan di-non-aktifkan.'."<br/><br/>";
+
+      $msg .='Mohon perhatian dan kerja sama dari anda.'."<br/><br/>";
+      $msg .='Terima Kasih'."<br/>";
+      $msg .='Team Exchanger';
+
+      return $msg;
+    }
+
     // WARNING USER
     public function warning_user($user_id,$tr)
     {
-        $total_warning = $total_suspend = 0;
+        $total_warning = $total_suspend = $nextId = 0;
+        $evt = null;
         $user = User::find($user_id);
 
         if($user->status > 0)
@@ -307,6 +328,19 @@ class AdminController extends Controller
           $total_suspend = $user->suspend;
           $user->warning = 0;
           $user->suspend_date = Carbon::now();
+
+          $nextId = 1;
+          $notif = new Event;
+          $notif->user_id = $tr->seller_id;
+          $notif->event_name = 'Akun Ter-Suspend';
+          $notif->message = self::suspend_message($tr->no);
+          $notif->url = '-';
+          $notif->save();
+
+          $next_id = $notif->id;
+          $evt = Event::find($next_id);
+          $evt->url = 'event/'.$next_id;
+          $evt->save();
         }
         else
         {
@@ -316,7 +350,7 @@ class AdminController extends Controller
           $msg .='sehubungan dengan dispute invoice : *'.$tr->no.'* maka akun anda telah mendapatkan warning.'."\n\n";
 
           $msg .='Jika anda mendapatkan *warning* sebanyak 2 kali'."\n";
-          $msg .='maka akun anda akan di-suspend , sehingga anda tidak dapat melakukkan segala aktifitas di situs kami selama 1 minggu.'."\n\n";
+          $msg .='maka akun anda akan di-suspend , sehingga anda tidak dapat melakukkan transaksi di situs kami selama 1 minggu.'."\n\n";
 
           $msg .='Apabila anda terkena *suspend* sebanyak 2 kali'."\n";
           $msg .='maka akun anda akan di-non-aktifkan.'."\n\n";

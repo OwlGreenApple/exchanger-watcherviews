@@ -2,8 +2,8 @@
   <table id="seller" class="table table-hover shopping-cart-wrap">
       <thead class="text-muted">
       <tr>
-        <th scope="col" width="240">Penjual</th>
-        <th scope="col">{{ Lang::get('transaction.rate') }}</th>
+        <th scope="col" width="240">{{ Lang::get('transaction.seller') }}</th>
+        <th scope="col">{{ Lang::get('transaction.star') }}</th>
         <th scope="col">{{ Lang::get('transaction.comments') }}</th>
         <th scope="col">{{ Lang::get('transaction.rate') }}</th>
         <th scope="col">{{ Lang::get('transaction.qty') }}</th>
@@ -27,7 +27,7 @@
             </td>
             <td><a href="{{ url('comments') }}/{{ $row['no'] }}"><i class="far fa-envelope"></i></a></td>
             <td>{{ $row['kurs'] }}</td>
-            <td>{{ $row['coin'] }}</td>
+            <td>{!! $row['coin'] !!}</td>
             <td> 
                 <div class="price-wrap"> 
                     <var class="price">{{ $row['price'] }}</var> 

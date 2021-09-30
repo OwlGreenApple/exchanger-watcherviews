@@ -61,25 +61,28 @@
                 },
                 success : function(result)
                 {
-                    $('#loader').hide();
-                    $('.div-loading').removeClass('background-load');
-
                     if(result.err == 0)
                     {
                         location.href="{{ url('buy') }}";
                     }
                     else if(result.err == 2)
                     {
+                        $('#loader').hide();
+                        $('.div-loading').removeClass('background-load');
                         $("#err_message").html('<div class="alert alert-danger">{{ Lang::get("transaction.proof") }}</div>');
                     }
                     else if(result.err == 'validation')
                     {
+                        $('#loader').hide();
+                        $('.div-loading').removeClass('background-load');
                         $(".error").show();
                         $(".bukti").html(result.bukti);
                         $(".note").html(result.note);
                     }
                     else
                     {
+                        $('#loader').hide();
+                        $('.div-loading').removeClass('background-load');
                         $("#err_message").html('<div class="alert alert-danger">{{ Lang::get("custom.failed") }}</div>');
                     }
                 },

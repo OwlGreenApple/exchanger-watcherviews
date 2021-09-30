@@ -13,6 +13,7 @@ use App\Models\Transaction;
 use App\Models\Wallet;
 use App\Models\Dispute;
 use App\Models\Chat;
+use App\Models\Event;
 use App\Helpers\Price;
 use App\Helpers\Api;
 use Carbon\Carbon;
@@ -523,10 +524,37 @@ class HomeController extends Controller
       return response()->json($res);
     }
 
-    // ORDER FROM BUYER NOT MEMBERSHIP
-    public function purchase()
+    // DISPLAY EVENT FROM NOTIFICATION
+    public function event_page($id)
     {
-        return view('home.purchasing',['lang'=>new Lang]);
+        $ev = Event::where([['id',$id],['user_id',Auth::id()]])->first();
+
+        if(is_null($ev))
+        {
+          return view('error404');
+        }
+
+        return view('home.event',['row'=>$ev]);
+    }
+
+    // CHANGE EVENT IS READ TO 1
+    public function change_event(Request $request)
+    {
+       $id = $request->id;
+       $ev = Event::find($id);
+
+       try
+       {
+          $ev->is_read = 1;
+          $ev->save();
+          $data['res'] = $ev->url;
+       }
+       catch(QueryException $e)
+       {
+          $data['res'] = 1;
+       }
+
+       return response()->json($data);
     }
 
     /*

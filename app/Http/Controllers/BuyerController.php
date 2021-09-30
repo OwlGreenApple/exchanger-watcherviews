@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\AdminController as adm;
 use App\Models\User;
 use App\Models\Comment;
 use App\Models\Transaction;
+use App\Models\Event;
 use App\Helpers\Price;
 use App\Helpers\Api;
 use App\Mail\SellerEmail;
@@ -26,7 +27,7 @@ class BuyerController extends Controller
 
     public function buyer_table(Request $request)
     {
-    	$paginate = 2;
+    	$paginate = 10;
     	$src = $request->src;
     	$sort = $request->sort;
     	$range = $request->range;
@@ -88,7 +89,6 @@ class BuyerController extends Controller
     				'no'=>$row->no,
     				'price'=>Lang::get('custom.currency').' '.$pc->pricing_format($row->total),
     				'coin'=>$pc->pricing_format($row->amount),
-    				// 'seller_name'=>$seller->name,
     				'seller_name'=>$row->name,
     				'seller'=>$row->seller_id,
     				'kurs'=>$row->kurs,
@@ -318,21 +318,29 @@ class BuyerController extends Controller
 	        return response()->json(['err'=>2]);
 	    }  
 
-        $url = '<a href="'.url('sell-confirm').'/'.$tr->no.'">Konfirmasi Penjualan</a>';
+        $url = '<a href="'.url('sell-confirm').'/'.$tr->id.'">Konfirmasi Penjualan</a>';
 
         $msg ='';
         $msg .='Selamat coin anda dengan no invoice *'.$tr->no.'*'."\n";
         $msg .='telah di order'."\n";
         $msg .='Silahkan login dan lakukan konfimasi di sini :'."\n\n";
-        $msg .=url('sell-confirm').'/'.$tr->no."\n\n";
+        $msg .=url('sell-confirm').'/'.$tr->id."\n\n";
         $msg .='Terima Kasih'."\n";
         $msg .='Team Exchanger';
 
         $seller_id = $tr->seller_id;
         $user = User::find($seller_id);
 
+        $notif = new Event;
+        $notif->user_id = $seller_id;
+        $notif->type = 1;
+        $notif->event_name = 'Invoice : '.$tr->no;
+        $notif->message = 'Selamat ada order atas coin anda';
+        $notif->url = 'sell-confirm/'.$tr->id;
+
     	try
     	{
+            $notif->save();
     		$tr->upload = $proof;
     		$tr->date_buy = Carbon::now();
     		$tr->status = 2;
