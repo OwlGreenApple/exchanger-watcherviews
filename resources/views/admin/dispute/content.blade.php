@@ -53,6 +53,7 @@
               @else
                   <span class="btn text-danger">Pembeli terkenan ban</span>
               @endif
+              
               <!-- SELLER -->
               @if($row->seller_status > 0)
                 @if($row->seller_dispute_id > 0)

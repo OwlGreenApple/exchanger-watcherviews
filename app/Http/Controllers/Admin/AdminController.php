@@ -36,18 +36,18 @@ class AdminController extends Controller
             ->leftJoin('disputes AS ds','transactions.seller_dispute_id','=','ds.id')
             ->leftJoin("users AS us",'us.id','=','dp.user_id')
             ->leftJoin("users AS ur",'ur.id','=','ds.user_id')
+            ->leftJoin("users AS tb",'tb.id','=','transactions.buyer_id')
+            ->leftJoin("users AS ts",'ts.id','=','transactions.seller_id')
             ->select('dp.upload_identity',
               'dp.upload_proof AS buyer_proof',
               'dp.upload_mutation',
-              // 'dp.user_id AS buyer_id',
               'dp.created_at AS buyer_dispute_date',
               'ds.upload_proof AS seller_proof',
               'ds.created_at AS seller_dispute_date',
-              // 'ds.user_id AS seller_id',
               'us.name AS buyer_name',
-              'us.status AS buyer_status',
               'ur.name AS seller_name',
-              'ur.status AS seller_status',
+              'tb.status AS buyer_status',
+              'ts.status AS seller_status',
               'transactions.no AS invoice','transactions.date_buy','transactions.id','transactions.status','transactions.seller_dispute_id','transactions.buyer_dispute_id','transactions.buyer_id','transactions.seller_id'
             )
             ->where('transactions.seller_dispute_id','>',0)->orWhere('transactions.buyer_dispute_id','>',0)->orderBy('transactions.id','desc')->get();
