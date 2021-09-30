@@ -45,7 +45,9 @@ class AdminController extends Controller
               'ds.created_at AS seller_dispute_date',
               // 'ds.user_id AS seller_id',
               'us.name AS buyer_name',
+              'us.status AS buyer_status',
               'ur.name AS seller_name',
+              'ur.status AS seller_status',
               'transactions.no AS invoice','transactions.date_buy','transactions.id','transactions.status','transactions.seller_dispute_id','transactions.buyer_dispute_id','transactions.buyer_id','transactions.seller_id'
             )
             ->where('transactions.seller_dispute_id','>',0)->orWhere('transactions.buyer_dispute_id','>',0)->orderBy('transactions.id','desc')->get();

@@ -19,6 +19,10 @@
 
                 <div class="alert mt-3">Mohon isi metode pembayaran anda <b><a href="{{ url('account') }}">disini</a></b></div>
 
+                @elseif(Auth::user()->status == 3)
+
+                <div class="col-md-12"><div class="alert alert-danger mt-3">{{ Lang::get('auth.suspend') }}</div></div>
+
                 @else
                 <div class="card-body">
                     <form id="profile">

@@ -65,7 +65,6 @@ class CheckStatusUser extends Command
             $status = 2;
         }
 
-        $user->suspend = 0;
         $user->suspend_date = null;
         $user->status = $status;
         $user->save();

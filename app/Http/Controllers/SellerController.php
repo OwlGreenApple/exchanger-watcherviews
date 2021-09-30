@@ -88,7 +88,15 @@ class SellerController extends Controller
                 
     			if($row->status == 0)
 	    		{
-	    			$status = '<a data-id="'.$row->id.'" class="text-danger del_sell"><i class="fas fa-trash-alt"></i></a>';
+                    // SUSPENDED USER
+                    if(Auth::user()->status == 3)
+                    {
+                        $status = '<span class="text-danger">Suspend</span>';
+                    }
+                    else
+                    {
+                        $status = '<a data-id="'.$row->id.'" class="text-danger del_sell"><i class="fas fa-trash-alt"></i></a>';
+                    }
 	    		}
 	    		elseif($row->status == 1)
 	    		{
@@ -234,6 +242,12 @@ class SellerController extends Controller
     {
     	$tr = Transaction::where([['id',$request->id],['seller_id',Auth::id()]])->first();
     	$res['err'] = 1;
+
+        // PREVENT SUSPEND USER
+        if(Auth::user()->status == 3)
+        {
+            return response()->json($res);
+        }
 
     	if(!is_null($tr))
     	{

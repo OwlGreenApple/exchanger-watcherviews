@@ -28,7 +28,7 @@ Route::post('loginajax',[App\Http\Controllers\Auth\LoginController::class, 'logi
 Auth::routes();
 
 /*USER*/
-Route::group(['middleware'=>['auth','web','suspend']],function()
+Route::group(['middleware'=>['auth','web']],function()
 {
 	Route::get('home', [App\Http\Controllers\HomeController::class, 'index']);
 	Route::get('end', [App\Http\Controllers\HomeController::class, 'end_membership']);
@@ -38,17 +38,21 @@ Route::group(['middleware'=>['auth','web','suspend']],function()
 	Route::get('page-dispute', [App\Http\Controllers\HomeController::class, 'dispute_page']);
 	Route::get('error',[App\Http\Controllers\HomeController::class, 'error']);
 
-	//BUY
+	//BUY 
 	// Route::get('test-wa',[App\Http\Controllers\BuyerController::class, 'test_wa']);
 	Route::get('buy',[App\Http\Controllers\BuyerController::class, 'buying_page']);
 	Route::get('buy-list',[App\Http\Controllers\BuyerController::class, 'buyer_table']);
-	Route::get('buy-detail/{invoice}',[App\Http\Controllers\BuyerController::class, 'detail_buy']);
-	Route::get('deal/{id}',[App\Http\Controllers\BuyerController::class, 'deal']);
+
+	Route::group(['middleware'=>['suspend']],function()
+	{
+		Route::get('buy-detail/{invoice}',[App\Http\Controllers\BuyerController::class, 'detail_buy']);
+		Route::get('deal/{id}',[App\Http\Controllers\BuyerController::class, 'deal']);
+		Route::get('comments/{invoice}',[App\Http\Controllers\BuyerController::class, 'comments']);
+	});
 	Route::get('buy-deal',[App\Http\Controllers\BuyerController::class, 'buyer_deal']);
-	Route::get('buy-history',[App\Http\Controllers\BuyerController::class, 'buyer_history']);
 	Route::get('buyer-confirm/{id}',[App\Http\Controllers\BuyerController::class, 'buyer_confirm']);
+	Route::get('buy-history',[App\Http\Controllers\BuyerController::class, 'buyer_history']);
 	Route::post('buyer-proof',[App\Http\Controllers\BuyerController::class, 'buyer_proof'])->middleware('check_proof');
-	Route::get('comments/{invoice}',[App\Http\Controllers\BuyerController::class, 'comments']);
 	Route::post('display-comments',[App\Http\Controllers\BuyerController::class, 'display_comments']);
 	Route::post('save-comments',[App\Http\Controllers\BuyerController::class, 'save_comments']);
 	Route::get('buyer-dispute/{id}',[App\Http\Controllers\BuyerController::class, 'buyer_dispute']);

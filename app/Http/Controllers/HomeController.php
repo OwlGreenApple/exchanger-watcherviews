@@ -149,8 +149,20 @@ class HomeController extends Controller
         $membership = Auth::user()->membership;
         $trial = Auth::user()->trial;
         $confirm = $request->segment(2);
+        $date_suspend = Auth::user()->suspend_date;
+        $date_suspend = Carbon::parse($date_suspend)->addWeek()->format('d-m-Y h:i:s');
 
-        return view('home.account',['user'=>$user,'lang'=>$lang,'pc'=> new Price,'membership'=>$membership,'trial'=>$trial,'conf'=>$confirm]);
+        $data = [
+          'user'=>$user,
+          'lang'=>$lang,
+          'pc'=> new Price,
+          'membership'=>$membership,
+          'trial'=>$trial,
+          'conf'=>$confirm,
+          'date_suspend'=>$date_suspend
+        ];
+
+        return view('home.account',$data);
     }
 
     public function update_profile(Request $request)
@@ -280,29 +292,38 @@ class HomeController extends Controller
         if($wt['err'] == 0)
         {
             // CHECK IF WATCHERVIEWS ID AVAILABLE ON OTHER ID
-            self::check_watcherviews_id($wt['id']);
-            $user = User::find(Auth::id());
-            $user->watcherviews_id = $wt['id'];
-            $user->save();
+            return self::check_watcherviews_id($wt['id']);
         }
 
         return response()->json($wt);
     }
 
-    // CHECK IF WATCHERVIEWS ID AVAILABLE ON OTHER ID AND LOGOUT OR SET 0 IF EXIST
+    // CHECK IF WATCHERVIEWS_ID AVAILABLE ON OTHER ACCOUNTS AND RETURN ERROR IF WATCHERVIEWS_ID HAD CONNECTED WITH ANOTHER ACCOUNT
     private static function check_watcherviews_id($wt_id)
     {
         $user = User::where('watcherviews_id',$wt_id)->first();
 
         if(!is_null($user))
         {
+           /* 
+            // CHECK IF WATCHERVIEWS_ID AVAILABLE ON OTHER ID AND LOGOUT OR SET 0 IF EXIST
             $user_id = $user->id;
             $mb = User::find($user_id);
             $mb->watcherviews_id = 0;
-            $mb->save();
+            $mb->save();*/
+            $wt['err'] = 3;
         }
-    }
+        else
+        {
+            $user = User::find(Auth::id());
+            $user->watcherviews_id = $wt_id;
+            $user->save();
+            $wt['id'] = $wt_id;
+            $wt['err'] = 0;
+        }
 
+        return response()->json($wt);
+    }
 
     /*WALLET*/
     public function wallet()
@@ -311,7 +332,7 @@ class HomeController extends Controller
         $pc = new Price;
         $coin = 0;
 
-        if($wt_id > 0)
+        if($wt_id > 0 && Auth::user()->status !== 3)
         {
             $api = new Api;
             $wt_coin = $api->get_total_coin($wt_id);

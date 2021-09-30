@@ -63,7 +63,7 @@ class LoginController extends Controller
     // CHECK BANNED USER
     private static function check_banned(Request $request)
     {
-        if(Auth::check() == true && (Auth::user()->status == 0 || Auth::user()->status == 3))
+        if(Auth::check() == true && (Auth::user()->status == 0))
         {
             $status = Auth::user()->status;
             Auth::logout();
@@ -73,11 +73,6 @@ class LoginController extends Controller
             if($request->ajax() == false && $status == 0)
             {
                 return redirect()->route('login')->with('error', Lang::get('auth.banned'));
-            }
-
-            if($request->ajax() == false && $status == 3)
-            {
-                return redirect()->route('login')->with('error', Lang::get('auth.suspend'));
             }
         }
     }

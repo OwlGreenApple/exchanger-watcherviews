@@ -70,7 +70,7 @@
                 <div class="font-weight-bold">
                     <a class="settings text-black-50 border-bottom mn_1 active" data_target="1"><i class="far fa-user text-primary"></i>&nbsp;Profile</a>
 
-                    @if(Auth::user()->is_admin == 0)
+                    @if(Auth::user()->is_admin == 0 && Auth::user()->status !== 3)
                     <a class="text-black-50 d-block border-bottom mn" data-toggle="collapse" href="#collapseExample"><i class="fas fa-receipt text-warning"></i>&nbsp;Billing&nbsp;<i align="right" class="fas fa-caret-down float-right mt-1"></i></a>
                         <span class="clearfix"><!--  --></span>
 
@@ -105,6 +105,7 @@
                 </div>
             </div>
 
+            @if(Auth::user()->status !== 3)
             <!-- UPGRADE PACKAGE -->
             <div id="settings_target_2" class="card target_hide d-none">
                 <div class="card-body bg-white text-black-50 border-bottom"><h5 class="mb-0"><b>Upgrade</b></h5></div>
@@ -144,7 +145,7 @@
                     @endif
                 </div>
             </div>
-           
+            @endif
             <!-- end col -->
         </div> 
     </div> 
@@ -493,6 +494,11 @@
                     {
                         $(".error").show();
                         $(".wallet").html('<div class="alert alert-danger">{{ $lang::get("custom.failed") }}</div>');
+                    }
+                    else if(result.err == 3)
+                    {
+                        $(".error").show();
+                        $(".wallet").html('<div class="alert alert-danger">{{ Lang::get("auth.api_registered") }}</div>');
                     }
                     else if(result.err == 'validation')
                     {

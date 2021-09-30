@@ -19,12 +19,9 @@ class CheckSuspend
     {
         $users = Auth::user();
 
-        if($users->status == 3 || $users->status == 0)
+        if($users->status == 3)
         {
-            Auth::logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-            return redirect('login');
+            return redirect('account');
         }
 
         return $next($request);

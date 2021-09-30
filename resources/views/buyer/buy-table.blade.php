@@ -43,6 +43,8 @@
             </td>
         </tr>
         @endforeach
+      @else
+        <tr><td colspan="7"><div class="alert alert-secondary">{{ Lang::get('transaction.no_transaction') }}</div></td></tr>
       @endif
       </tbody>
   </table>

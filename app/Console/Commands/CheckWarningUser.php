@@ -38,7 +38,7 @@ class CheckWarningUser extends Command
      */
     public function handle()
     {
-        $users = User::where('warning','>',0)->get();
+        $users = User::where([['warning','>',0],['status','>',0]])->orWhere('suspend','>',0)->get();
         $id = array();
 
         if($users->count() > 0)
@@ -51,7 +51,7 @@ class CheckWarningUser extends Command
         // SET WARNING TO 0 IF USER HAVE WARNING
         if(count($id) > 0)
         {
-            $user = User::whereIn('id',$id)->update(['warning'=>0]);
+            $user = User::whereIn('id',$id)->update(['warning'=>0,'suspend'=>0]);
         }
     }
 }

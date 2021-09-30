@@ -30,24 +30,46 @@
               -
             @endif
           </td>
-          <td><a href="{{ url('chat') }}/{{ $row->id }}" class="btn btn-default btn-sm popup-newWindow"><i class='far fa-comments'></i>&nbsp;Chat</a>&nbsp;@if($row->status == 4)<a data-buyer="{{ $row->buyer_id }}" data-seller="{{ $row->seller_id }}" data-tr-id="{{ $row->id }}" class="btn btn-warning btn-sm text-dark bell"><i class='far fa-bell'></i></a>@endif</td>
+          <td>
+            <a href="{{ url('chat') }}/{{ $row->id }}" class="btn btn-default btn-sm popup-newWindow"><i class='far fa-comments'></i>&nbsp;Chat</a>&nbsp;
+
+            @if($row->status == 4)
+              @if($row->seller_status == 0 || $row->buyer_status == 0)
+                &nbsp;
+              @else
+                <a data-buyer="{{ $row->buyer_id }}" data-seller="{{ $row->seller_id }}" data-tr-id="{{ $row->id }}" class="btn btn-warning btn-sm text-dark bell"><i class='far fa-bell'></i></a>
+              @endif
+            @endif
+        </td>
           @if($row->status == 4)
             <td>
               <!-- BUYER -->
-              @if($row->buyer_dispute_id > 0)
-                <button type="button" data-buyer="{{ $row->buyer_id }}" data-seller="{{ $row->seller_id }}" data-win="1" data-tr-id="{{ $row->id }}" class="btn btn-primary btn-sm blame">Pembeli Menang</button>
+              @if($row->buyer_status > 0)
+                @if($row->buyer_dispute_id > 0)
+                    <button type="button" data-buyer="{{ $row->buyer_id }}" data-seller="{{ $row->seller_id }}" data-win="1" data-tr-id="{{ $row->id }}" class="btn btn-primary btn-sm blame">Pembeli Menang</button>
+                @else
+                  <button type="button" data-id="{{ $row->buyer_id }}" data-tr-id="{{ $row->id }}" data-role="1" class="btn btn-outline-primary btn-sm notify">Notifikasi Pembeli</button>
+                @endif
               @else
-                <button type="button" data-id="{{ $row->buyer_id }}" data-tr-id="{{ $row->id }}" data-role="1" class="btn btn-outline-primary btn-sm notify">Notifikasi Pembeli</button>
+                  <span class="btn text-danger">Pembeli terkenan ban</span>
               @endif
               <!-- SELLER -->
-              @if($row->seller_dispute_id > 0)
-                <button type="button" data-buyer="{{ $row->buyer_id }}" data-seller="{{ $row->seller_id }}" data-win="2" data-tr-id="{{ $row->id }}" class="btn btn-success btn-sm blame">Penjual Menang</button>
+              @if($row->seller_status > 0)
+                @if($row->seller_dispute_id > 0)
+                  <button type="button" data-buyer="{{ $row->buyer_id }}" data-seller="{{ $row->seller_id }}" data-win="2" data-tr-id="{{ $row->id }}" class="btn btn-success btn-sm blame">Penjual Menang</button>
+                @else
+                  <button type="button" data-id="{{ $row->seller_id }}" data-tr-id="{{ $row->id }}" data-role="2" class="btn btn-outline-success btn-sm notify">Notifikasi Penjual</button>
+                @endif
               @else
-                <button type="button" data-id="{{ $row->seller_id }}" data-tr-id="{{ $row->id }}" data-role="2" class="btn btn-outline-success btn-sm notify">Notifikasi Penjual</button>
+                  <span class="btn text-danger">Penjual terkenan ban</span>
               @endif
               <!-- END DISPUTE -->
-              @if($row->buyer_dispute_id > 0 && $row->seller_dispute_id > 0)
-                <button data-buyer="{{ $row->buyer_id }}" data-seller="{{ $row->seller_id }}" data-win="0" data-tr-id="{{ $row->id }}" type="button" class="btn btn-warning btn-sm blame">Dispute selesai</button>
+              @if($row->seller_status == 0 || $row->buyer_status == 0)
+                &nbsp;
+              @else
+                @if(($row->buyer_dispute_id > 0 && $row->seller_dispute_id > 0))
+                  <button data-buyer="{{ $row->buyer_id }}" data-seller="{{ $row->seller_id }}" data-win="0" data-tr-id="{{ $row->id }}" type="button" class="btn btn-warning btn-sm blame">Dispute selesai</button>
+                @endif
               @endif
             </td>
           @elseif($row->status == 3)

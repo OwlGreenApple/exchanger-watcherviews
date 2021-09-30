@@ -1,3 +1,7 @@
+@if(Auth::user()->status == 3)
+    <div class="alert alert-danger">{{ Lang::get('auth.suspend-time') }}<b>{{ $date_suspend }}</b></div>
+@endif
+
 <div id="err_profile"><!--  --></div>
 
 <form id="profile">

@@ -11,6 +11,10 @@
 
 <div class="row justify-content-center">
     <div class="col-md-12">
+        @if(Auth::user()->status == 3)
+            <div class="card col-md-12"><div class="alert alert-danger mt-3">{{ Lang::get('auth.suspend') }}</div></div>
+
+        @else
         <div class="card">
             <div class="card-header bg-gradient-warning">
                 {{ Lang::get('custom.coin') }} : <b id="coin">{{ $pc->pricing_format(Auth::user()->coin) }}</b>&nbsp;coin
@@ -87,8 +91,11 @@
                     </div>
                 </form>
             </div>
+            <!-- endif API  -->
             @endif
         </div>
+        <!-- endif AUTH -->
+        @endif
 
         <!-- HISTORY -->
         @if(auth()->user()->watcherviews_id > 0)

@@ -1,4 +1,8 @@
  <!-- search -->
+
+@if(Auth::user()->status == 3)
+    <div class="card col-md-12"><div class="alert alert-danger mt-3">{{ Lang::get('auth.suspend') }}</div></div>
+@else
 <div class="card-body">
     <div class="row justify-content-center">
         <div class="col-12 col-md-10 col-lg-8">
@@ -44,3 +48,4 @@
 <div id="seller_list" class="card-body table-responsive">
     <!-- buyer table -->
 </div>
+@endif

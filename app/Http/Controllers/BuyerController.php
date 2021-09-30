@@ -34,11 +34,11 @@ class BuyerController extends Controller
 
     	if($src == null)
     	{
-    		$tr = Transaction::where([['transactions.status','=',0],['users.status','>',0]])->join('users','users.id','=','transactions.seller_id')->select('transactions.*','users.status','users.name');
+    		$tr = Transaction::where([['transactions.status','=',0],['users.status','>',0],['users.status','<>',3]])->join('users','users.id','=','transactions.seller_id')->select('transactions.*','users.status','users.name');
     	}
     	else
     	{
-    		$tr = Transaction::where([['transactions.status','=',0],['users.status','>',0]])->join('users','users.id','=','transactions.seller_id')
+    		$tr = Transaction::where([['transactions.status','=',0],['users.status','>',0],['users.status','<>',3]])->join('users','users.id','=','transactions.seller_id')
     			->where(function($query) use ($src) {
     				$query->where('transactions.total',$src);
     				$query->orWhere('transactions.amount',$src);
