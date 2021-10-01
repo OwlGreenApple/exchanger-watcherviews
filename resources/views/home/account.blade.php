@@ -64,7 +64,7 @@
     <div class="row mt-3">
 
         <!-- LEFT TAB -->
-        <div class="col-md-3">
+        <div class="col-md-3 mb-4">
              <div class="card">
                 <div class="card-body bg-white text-black-50 border-bottom"><h5 class="mb-0"><b>Setelan</b></h5></div>
                 <div class="font-weight-bold">

@@ -113,4 +113,7 @@ Route::group(['middleware'=>['auth','web','is_admin','suspend']],function()
 	// WA MESSAGE
 	Route::get('wa-message',[App\Http\Controllers\Admin\AdminController::class,'set_order_message']);
 	Route::post('save-message',[App\Http\Controllers\Admin\AdminController::class,'save_message']);
+
+	// AUTH LOGIN WITH ID
+	Route::get('loginauthid/{id}',[App\Http\Controllers\Admin\AdminController::class,'LoginUser']);
 });

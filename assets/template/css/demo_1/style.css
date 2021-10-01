@@ -4732,10 +4732,10 @@ input[type="button"].btn-block {
   padding: 0.25rem 1.5rem;
   clear: both;
   font-weight: 400;
-  color: #343a40;
+  color: inherit;
   text-align: inherit;
   white-space: nowrap;
-  background-color: transparent;
+  background-color: #fff !important;
   border: 0; }
   .dropdown-item:hover, .dropdown-item:focus {
     color: #16181b;
@@ -13572,7 +13572,7 @@ code {
       background: initial; }
     .dropdown .dropdown-menu .dropdown-item:hover {
       background-color: #f8f9fa;
-      color: #ffffff; }
+      color: #fff0a4; }
 
 /* Forms */
 .form-group {
@@ -20227,7 +20227,14 @@ footer {
     -webkit-transition: all 0.25s ease-out;
     transition: all 0.25s ease-out; }
     .sidebar-offcanvas.active {
-      right: 0; } }
+      right: 0; } 
+}
+
+@media screen and (min-width: 992px) {
+  .sidebar-offcanvas {
+    display : none;
+  }
+}
 
 /* Layouts */
 .navbar.fixed-top + .page-body-wrapper {
@@ -20520,7 +20527,7 @@ footer {
 
 .content-wrapper {
   background: #f2edf3;
-  padding: 2.75rem 2.25rem;
+  padding: 2.75rem 0.75rem;
   width: 100%;
   -webkit-box-flex: 1;
   -ms-flex-positive: 1;

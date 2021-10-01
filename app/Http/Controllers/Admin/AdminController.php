@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\OrderController as Odc;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Models\Orders;
@@ -844,6 +845,10 @@ class AdminController extends Controller
         return response()->json($data);
     }
 
+    public function LoginUser($id){
+      Auth::loginUsingId($id, true);
+      return redirect('account');
+    }
 
 /*end controller*/
 }
