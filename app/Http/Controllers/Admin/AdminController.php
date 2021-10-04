@@ -315,19 +315,19 @@ class AdminController extends Controller
         $total_warning = $total_suspend = $nextId = 0;
         $evt = null;
         $user = User::find($user_id);
+        $previous_warning = $user->warning;
+        $previous_suspend = $user->suspend;
 
-        if($user->status > 0)
+        if($user->status > 0 && $user->warning < 1)
         {
           $user->warning++;
-          $total_warning = $user->warning;
         }
 
-        if($total_warning > 1)
+        if($previous_warning > 0 && $previous_suspend == 0)
         {
           $user->suspend++;
           $user->status = 3; //suspend user
           $total_suspend = $user->suspend;
-          $user->warning = 0;
           $user->suspend_date = Carbon::now();
 
           $nextId = 1;
@@ -359,22 +359,23 @@ class AdminController extends Controller
           $msg .='Mohon perhatian dan kerja sama dari anda.'."\n\n";
           $msg .='Terima Kasih'."\n";
           $msg .='Team Exchanger';
-
-          $data = [
-              'message'=>$msg,
-              'phone_number'=>$user->phone_number,
-              'email'=>$user->email,
-              'obj'=>new WarningEmail($tr->no),
-          ];
-
-          $this->notify_user($data);
         }
        
         // BANNED SELLER IF SUSPEND HAS REACH 2
-        if($total_suspend > 1)
+        if($previous_suspend > 0)
         {
           $user->status = 0;
+          $user->suspend_date = Carbon::now();
         }
+
+        /* $data = [
+            'message'=>$msg,
+            'phone_number'=>$user->phone_number,
+            'email'=>$user->email,
+            'obj'=>new WarningEmail($tr->no),
+        ];
+
+        $this->notify_user($data);*/
 
         try
         {

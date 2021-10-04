@@ -1,18 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="page-header">
+  <h3 style="font-size : 0.95rem" class="page-title">
+    <span class="page-title-icon bg-gradient-primary text-white mr-2">
+      <i class="mdi mdi-cart-outline"></i>
+    </span>Daftar User</h3>
+</div>
 
-<div class="container mb-5 main-cont">
-  <div class="row">
-
-    <div class="col-md-12">
-      <h2><b>Users</b></h2>  
-      <h5>Daftar User</h5>
-      <hr>
-      <div id="err"><!--  --></div>
-    </div>
-
-    <div class="col-4 col-md-12 col-lg-12 table-responsive">
+<div class="mb-5 main-cont">
+  <div class="row card px-2 py-3">
+    <div id="err"><!--  --></div>
+    <div class="col-md-12 col-lg-12 table-responsive">
       <table class="table" id="order_table">
         <thead>
           <th>No</th>

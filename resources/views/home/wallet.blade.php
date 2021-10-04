@@ -100,7 +100,7 @@
         <!-- HISTORY -->
         @if(auth()->user()->watcherviews_id > 0)
         <div class="card mt-5">
-            <div id="wallet_list" class="card-body"><!--  --></div>
+            <div id="wallet_list" class="card-body table-responsive"><!--  --></div>
         </div>
         @endif
         <!--  -->

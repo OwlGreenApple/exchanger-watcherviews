@@ -11227,7 +11227,7 @@ code {
   border-radius: 4px; }
 
 .page-header {
-  margin: 0 0 1.5rem 0; }
+  margin: 0 0 1.5rem 0; margin-top : 60px; }
   .page-header .breadcrumb {
     border: 0;
     margin-bottom: 0; }
@@ -20226,14 +20226,42 @@ footer {
     right: -260px;
     -webkit-transition: all 0.25s ease-out;
     transition: all 0.25s ease-out; }
-    .sidebar-offcanvas.active {
+  
+  .sidebar-offcanvas.active {
       right: 0; } 
+
+  .buy-form-mt-0 {margin-top : 5px;}
+  .buy-form-mt {margin-top : 10px;}
+  .open_wrapper {display : none;}
+  .nav-wrapper {display : none;}
+}
+
+@media screen and (max-width: 1279px) {
+  .nav-wrapper {
+    display : none;
+    position: absolute;
+    right: 30px;
+    z-index: 999;
+    margin-top: 355px;
+    margin-right: 0;
+    background: #fff;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .open_wrapper {display : none;}
+  .nav-wrapper {
+    position : relative;
+    margin-top : 0;
+    display : flex;}
 }
 
 @media screen and (min-width: 992px) {
   .sidebar-offcanvas {
     display : none;
   }
+
+  .buy-form-mt-0 .buy-form-mt {margin-top : 0;}
 }
 
 /* Layouts */

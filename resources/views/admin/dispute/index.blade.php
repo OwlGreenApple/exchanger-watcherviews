@@ -1,18 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="page-header">
+  <h3 style="font-size : 0.95rem" class="page-title">
+    <span class="page-title-icon bg-gradient-primary text-white mr-2">
+      <i class="mdi mdi-cart-outline"></i>
+    </span>Daftar Dispute</h3>
+</div>
 
-<div class="container mb-5 main-cont">
-  <div class="row">
-
-    <div class="col-md-12">
-      <h2><b>Dispute</b></h2>  
-      <h5>Daftar dispute</h5>
-      <hr>
-      <div id="err"><!--  --></div>
-    </div>
-
-    <div id="dispute_table" class="col-4 col-md-12 col-lg-12 table-responsive px-4 py-4 bg-white">
+<div class="mb-5 main-cont">
+  <div class="row card px-2 py-3">
+    <div id="err"><!--  --></div>
+    <div id="dispute_table" class="col-md-12 col-lg-12 table-responsive px-4 py-4 bg-white">
       <!-- display dispute -->
     </div>
   <!--  -->

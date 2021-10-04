@@ -82,13 +82,15 @@
       <!-- NAVIGATION RESPONSIVE -->
       @include('layouts.nav-mobile')
         
-      <!-- FOOTER -->
+      <!-- CONTENT -->
       <div class="container-fluid page-body-wrapper justify-content-center">
         <div class="main-panel ">
           <div class="content-wrapper">
             @yield('content')
             <!-- content-wrapper ends -->
             <!-- partial:partials/_footer.html -->
+
+            <!-- FOOTER -->
             <footer class="footer">
               <div class="d-sm-flex justify-content-center justify-content-sm-between">
                 <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2021 <a href="https://exchangerwatcherviews.com/" target="_blank">Exchangerwatcherviews</a>. All rights reserved.</span>
@@ -125,7 +127,15 @@
     <script type="text/javascript">
       $(document).ready(function(){
         change_event_notification();
+        display_menu_tab();
       });
+
+      function display_menu_tab()
+      {
+        $(".open_wrapper").click(function(){
+            $(".nav-wrapper").toggle();
+        });
+      }
 
       function change_event_notification()
       {

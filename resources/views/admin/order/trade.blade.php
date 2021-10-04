@@ -1,50 +1,54 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header bg-info text-white">Kurs harga coin hari ini</div>
+<div class="page-header">
+  <h3 style="font-size : 0.95rem" class="page-title">
+    <span class="page-title-icon bg-gradient-primary text-white mr-2">
+      <i class="mdi mdi-cart-outline"></i>
+    </span>Kurs harga coin hari ini</h3>
+</div>
 
-                <div id="msg"><!-- message --></div>
+<div class="row justify-content-center">
+    <div class="col-md-12">
+        <div class="card">
 
-                <div class="card-body">
-                    <form id="save-rate">
+            <div id="msg"><!-- message --></div>
 
-                        <div class="form-group row">
-                            <label class="col-md-4 col-form-label text-md-right">Kurs Sekarang</label>
+            <div class="card-body">
+                <form id="save-rate">
 
-                            <div class="col-md-6">
-                                <div class="form-control" id="kurs">{{ Lang::get('custom.currency') }}&nbsp;0.1 / coin</div>
-                            </div>
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label text-md-right">Kurs Sekarang</label>
+
+                        <div class="col-md-6">
+                            <div class="form-control" id="kurs">{{ Lang::get('custom.currency') }}&nbsp;0.1 / coin</div>
                         </div>
+                    </div>
 
-                        <div class="form-group row">
-                            <label class="col-md-4 col-form-label text-md-right">Kurs baru</label>
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label text-md-right">Kurs baru</label>
 
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" name="kurs"  />
-                                <span class="error kurs"><!--  --></span>
-                            </div>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" name="kurs"  />
+                            <span class="error kurs"><!--  --></span>
                         </div>
+                    </div>
 
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Simpan') }}
-                                </button>
-                            </div>
+                    <div class="form-group row mb-0">
+                        <div class="col-md-6 offset-md-4">
+                            <button type="submit" class="btn btn-primary">
+                                {{ __('Simpan') }}
+                            </button>
                         </div>
-                    </form>
-                </div>
-                <!--  -->
-                <div class="mt-4 px-2">
-                      <!-- chart -->
-                      <div id="user-charts" class="wd-100" style="height: 300px;"></div>
-                </div>
-                <!--  -->
+                    </div>
+                </form>
             </div>
+            <!--  -->
+            <div class="mt-4 px-2">
+                  <!-- chart -->
+                  <div id="user-charts" class="wd-100" style="height: 300px;"></div>
+            </div>
+            <!--  -->
         </div>
     </div>
 </div>

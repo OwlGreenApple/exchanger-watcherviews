@@ -2,59 +2,59 @@
 
 @section('content')
 
-<div class="container mb-5 main-cont" style="">
-  <div class="row">
+<div class="page-header">
+  <h3 class="page-title">
+    <span class="page-title-icon bg-gradient-primary text-white mr-2">
+      <i class="mdi mdi-cart-outline"></i>
+    </span>Orders</h3>
+</div>
 
-    <div class="col-md-12">
-      <h2><b>Orders</b></h2>  
-      <h5>Order-order dari user</h5>
-      <hr>
-      <div id="err"><!--  --></div>
+  <div class="row justify-content-center">
+    <div class="card px-2 py-3">
+      <div class="col-md-12 col-lg-12 table-responsive">
+        <div id="err"><!--  --></div>
+        <table class="table" id="order_table">
+          <thead>
+            <th>No Order</th>
+            <th>Paket</th>
+            <th>Harga</th>
+            <th>Total Harga</th>
+            <th>Bukti Bayar</th>
+            <th>Catatan</th>
+            <th>Tanggal Order</th>
+            <th>Tanggal Konfirmasi</th>
+            <th>Konfirmasi</th>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    <!-- order user -->
     </div>
-
-    <div class="col-4 col-md-12 col-lg-12">
-      <table class="table" id="order_table">
-        <thead>
-          <th>No Order</th>
-          <th>Paket</th>
-          <th>Harga</th>
-          <th>Total Harga</th>
-          <th>Bukti Bayar</th>
-          <th>Catatan</th>
-          <th>Tanggal Order</th>
-          <th>Tanggal Konfirmasi</th>
-          <th>Konfirmasi</th>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  <!-- order user -->
-  </div>
+   </div>
 </div>
 
 <!-- Modal Confirm -->
 <div class="modal fade" id="confirm_popup" role="dialog">
-  <div class="modal-dialog">
-    
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modaltitle">
-          Konfirmasi Pembayaran
-        </h5>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-      <div class="modal-footer" id="foot">
-        <button class="btn btn-primary" id="btn_confirm" data-dismiss="modal">
-          Ya
-        </button>
-        <button class="btn" data-dismiss="modal">
-          Batal
-        </button>
-      </div>
+<div class="modal-dialog">
+  
+  <!-- Modal content-->
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="modaltitle">
+        Konfirmasi Pembayaran
+      </h5>
+      <button type="button" class="close" data-dismiss="modal">&times;</button>
     </div>
-      
+    <div class="modal-footer" id="foot">
+      <button class="btn btn-primary" id="btn_confirm" data-dismiss="modal">
+        Ya
+      </button>
+      <button class="btn" data-dismiss="modal">
+        Batal
+      </button>
+    </div>
   </div>
+    
 </div>
 
 <!-- Modal Cancel -->

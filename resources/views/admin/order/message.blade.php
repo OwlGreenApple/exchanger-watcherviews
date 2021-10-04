@@ -1,69 +1,73 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header bg-info text-white">Pesan untuk notifikasi order WA</div>
+<div class="page-header">
+  <h3 style="font-size : 0.95rem" class="page-title">
+    <span class="page-title-icon bg-gradient-primary text-white mr-2">
+      <i class="mdi mdi-cart-outline"></i>
+    </span>Pesan untuk notifikasi order WA</h3>
+</div>
 
-                <div id="msg"><!-- message --></div>
+<div class="row justify-content-center">
+    <div class="col-md-12">
+        <div class="card">
 
-                <div class="card-body">
-                    <form id="message">
-                    
-                        <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Notifikasi setelah order') }}</label>
+            <div id="msg"><!-- message --></div>
 
-                            <div class="col-md-6">
-                                <textarea class="form-control" name="notif">{{ $notif->notif_order }}</textarea>
-                                <span class="error notif"><!--  --></span>
-                            </div>
+            <div class="card-body">
+                <form id="message">
+                
+                    <div class="form-group row">
+                        <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Notifikasi setelah order') }}</label>
+
+                        <div class="col-md-6">
+                            <textarea class="form-control" name="notif">{{ $notif->notif_order }}</textarea>
+                            <span class="error notif"><!--  --></span>
                         </div>
+                    </div>
 
-                        <div class="form-group row">
-                            <label class="col-md-4 col-form-label text-md-right"> Notifikasi 6 jam setelah order</label>
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label text-md-right"> Notifikasi 6 jam setelah order</label>
 
-                            <div class="col-md-6">
-                                <textarea class="form-control" name="notif_order">{{ $notif->notif_after }}</textarea>
-                                <span class="error notif_order"><!--  --></span>
-                            </div>
+                        <div class="col-md-6">
+                            <textarea class="form-control" name="notif_order">{{ $notif->notif_after }}</textarea>
+                            <span class="error notif_order"><!--  --></span>
                         </div>
+                    </div>
 
-                        <div class="form-group row">
-                            <label class="col-md-4 col-form-label text-md-right"> Daftar variabel yg bisa dipakai</label>
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label text-md-right"> Daftar variabel yg bisa dipakai</label>
 
-                            <div class="col-md-6">
-                                <ul>
-                                    <li>[NO-ORDER]</li>
-                                    <li>[PACKAGE]</li>
-                                    <li>[PRICE]</li>
-                                    <li>[TOTAL]</li>
-                                    <!-- <li>[LINK]</li> -->
-                                </ul>
-                            </div>
+                        <div class="col-md-6">
+                            <ul>
+                                <li>[NO-ORDER]</li>
+                                <li>[PACKAGE]</li>
+                                <li>[PRICE]</li>
+                                <li>[TOTAL]</li>
+                                <!-- <li>[LINK]</li> -->
+                            </ul>
                         </div>
+                    </div>
 
-                        <div class="form-group row">
-                           <!--  <label class="col-md-4 col-form-label text-md-right">Admin id activrespon</label> -->
+                    <div class="form-group row">
+                       <!--  <label class="col-md-4 col-form-label text-md-right">Admin id activrespon</label> -->
 
-                            <div class="col-md-6">
-                                <input type="hidden" readonly="readonly" class="form-control" name="admin_id" value="{{ $notif->admin_id }}" />
-                                <span class="error admin_id"><!--  --></span>
-                            </div>
+                        <div class="col-md-6">
+                            <input type="hidden" readonly="readonly" class="form-control" name="admin_id" value="{{ $notif->admin_id }}" />
+                            <span class="error admin_id"><!--  --></span>
                         </div>
+                    </div>
 
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Simpan') }}
-                                </button>
-                            </div>
+                    <div class="form-group row mb-0">
+                        <div class="col-md-6 offset-md-4">
+                            <button type="submit" class="btn btn-primary">
+                                {{ __('Simpan') }}
+                            </button>
                         </div>
-                    </form>
-                </div>
-                <!--  -->
+                    </div>
+                </form>
             </div>
+            <!--  -->
         </div>
     </div>
 </div>

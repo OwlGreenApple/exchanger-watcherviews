@@ -1,17 +1,16 @@
-<div class="bg-white">
-  <table id="seller" class="table table-hover shopping-cart-wrap">
-      <thead class="text-muted">
-      <tr>
-        <th scope="col" width="240">{{ Lang::get('transaction.seller') }}</th>
-        <th scope="col">{{ Lang::get('transaction.star') }}</th>
-        <th scope="col">{{ Lang::get('transaction.comments') }}</th>
-        <th scope="col">{{ Lang::get('transaction.rate') }}</th>
-        <th scope="col">{{ Lang::get('transaction.qty') }}</th>
-        <th scope="col">{{ Lang::get('transaction.price') }}</th>
-        <th scope="col" width="120" class="text-right">Action</th>
-      </tr>
-      </thead>
-      <tbody>
+<table id="seller" class="table table-hover shopping-cart-wrap card-body">
+  <thead class="text-muted">
+    <tr>
+      <th scope="col">{{ Lang::get('transaction.seller') }}</th>
+      <th scope="col">{{ Lang::get('transaction.star') }}</th>
+      <th scope="col">{{ Lang::get('transaction.comments') }}</th>
+      <th scope="col">{{ Lang::get('transaction.rate') }}</th>
+      <th scope="col">{{ Lang::get('transaction.qty') }}</th>
+      <th scope="col">{{ Lang::get('transaction.price') }}</th>
+      <th scope="col" class="text-right">Action</th>
+    </tr>
+  </thead>
+  <tbody>
       @if(count($data) > 0)
         @foreach($data as $row)
         <tr>
@@ -46,9 +45,8 @@
       @else
         <tr><td colspan="7"><div class="alert alert-secondary">{{ Lang::get('transaction.no_transaction') }}</div></td></tr>
       @endif
-      </tbody>
-  </table>
-</div>
+  </tbody>
+</table>
 
 <div class="paging" style="overflow-x: auto">
   {{ $paginate }}
