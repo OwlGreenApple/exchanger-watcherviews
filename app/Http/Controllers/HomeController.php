@@ -395,7 +395,7 @@ class HomeController extends Controller
 
     public function display_wallet()
     {
-      $wt = Wallet::where('user_id',Auth::id())->get();
+      $wt = Wallet::where('user_id',Auth::id())->orderBy('id','desc')->get();
       return view('home.wallet-content',['data'=>$wt]);
     }
 

@@ -19,10 +19,11 @@ class WarningEmail extends Mailable
 
     public $invoice;
 
-    public function __construct($invoice,$pos = null)
+    public function __construct($invoice,$pos = null,$subject_mail)
     {
         $this->invoice = $invoice;
         $this->pos = $pos;
+        $this->subject_mail = $subject_mail;
     }
 
     /**
@@ -34,11 +35,12 @@ class WarningEmail extends Mailable
     {
         return $this
         ->from('no-reply@exchanger.com', 'exchanger')
-        ->subject($this->subject)
+        ->subject($this->subject_mail)
         ->view('emails.WarningEmail')
         ->with([
           'invoice' => $this->invoice,
           'pos' => $this->pos,
+          'subject' => $this->subject_mail,
         ]);
     }
 }

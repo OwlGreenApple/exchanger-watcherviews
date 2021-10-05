@@ -4,8 +4,11 @@ return [
     'and'=>'dan :', //summary.blade
     'agreement'=>'Saya menyetujui semua pernyataan di : ', //checkout.blade
     'api'=>'Connect ke akun watcherviews anda', //checkout.blade
+    'bank'=>'Bank', //profile.blade
     'bank_name'=>'Nama Bank', //home.blade
+    'bank_name_other'=>'Nama Bank 2 (optional)', //home.blade
     'bank_no'=>'No Rekening', //home.blade
+    'bank_no_other'=>'No Rekening Bank 2 (optional)', //home.blade
     'cart_summary'=>'Keranjang summary', //summary.blade
     'chat_end'=>'Maaf, chat ini sudah di tutup oleh admin.', //chat.blade
     'check'=>'Harap centang, syarat dan ketentuan yang berlaku', //register.blade//summary.blade
@@ -18,6 +21,7 @@ return [
     'dana'=>'QR-Code DANA', //profile.blade
     'end'=>'Trial sudah habis', //trial.blade
     'email_watcherviews'=>'Email Watcherviews anda', //wallet.blade
+    'epay'=>'Nama Pembayaran Elektronik contoh : ovo', //profile.blade
     'epayment'=>'Pembayaran Elektronik', //profile.blade
     'failed'=>'Maaf server kami terlalu sibuk, silahkan coba lagi nanti.', //checkout.blade
     'find_help'=>'Temukan Bantuan', //summary.blade
@@ -43,6 +47,7 @@ return [
     'paket'=>'Paket yang tersedia', //checkout.blade
     'pass_watcherviews'=>'Password watcherviews anda', //wallet.blade
     'payment'=>'Setidaknya anda harus mengisi 1 metode pembayaran', //CheckPaymentMethods
+    'pay.choose'=>'Pilih metode pembayaran', //profile.blade
     'phone'=>'Hp', //summary.blade
     'pilih_paket'=>'Silahkan pilih paket anda', //checkout.blade
     'policy'=>'Kebijakan privasi', //summary.blade

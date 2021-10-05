@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\User;
+use Carbon\Carbon;
 
 class CheckWarningUser extends Command
 {
@@ -38,20 +39,34 @@ class CheckWarningUser extends Command
      */
     public function handle()
     {
-        $users = User::where([['warning','>',0],['status','>',0]])->orWhere('suspend','>',0)->get();
-        $id = array();
+        $users = User::where([['warning','>',0],['status','>',0]])->orWhere('suspend','>',0)->select('id','suspend_date')->get()->toArray();
 
-        if($users->count() > 0)
+        if(count($users) > 0)
         {
             foreach($users as $row):
-                $id[] = $row->id;
-            endforeach;
-        }
+                $user = User::find($row['id']);
+                $date_suspend = Carbon::parse($row['suspend_date'])->addMonths(3)->toDateString();
 
-        // SET WARNING TO 0 IF USER HAVE WARNING
-        if(count($id) > 0)
-        {
-            $user = User::whereIn('id',$id)->update(['warning'=>0,'suspend'=>0]);
+                if(Carbon::today()->lt($date_suspend))
+                {
+                    continue;
+                }
+
+                if($user->suspend > 0)
+                {
+                    $user->suspend = 0;
+                    $user->suspend_date = Carbon::now();
+                    $user->save();
+                    continue;
+                }
+                
+                if($user->warning > 0)
+                {
+                    $user->warning = 0;
+                    $user->suspend_date = null;
+                    $user->save();
+                }
+            endforeach;
         }
     }
 }

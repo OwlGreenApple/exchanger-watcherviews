@@ -14,24 +14,58 @@ Terima Kasih
 <br>
 Team Exchanger
 
+@elseif($subject == 'Warning Email')
+
+Mohon perhatian
+<br>
+Sehubungan dengan dispute invoice : <b>{{ $invoice }}</b> maka akun anda telah mendapatkan warning.
+<br>
+<br>
+Jika anda mendapatkan <b>warning</b> sekali lagi,
+<br/>
+maka akun anda akan di-<b>suspend</b> , sehingga anda tidak dapat melakukkan transaksi di situs kami selama 1 minggu.
+<br>
+<br>
+Mohon perhatian dan kerja sama dari anda.
+<br>
+<br>
+Terima kasih, 
+<br>
+Team Exchanger
+
+@elseif($subject == 'Suspend Email')
+
+Mohon perhatian
+<br>
+sehubungan dengan dispute invoice : <b>{{ $invoice }}</b> maka akun anda telah ter-<b>suspend</b>.
+<br>
+<br>
+Maka dengan demikian anda tidak dapat melakukkan transaksi di situs kami selama 1 minggu.
+<br/>
+<br/>
+Apabila anda terkena <b>suspend</b> sekali lagi
+<br>
+maka akun anda akan di-<b>non-aktifkan</b>.
+<br>
+<br>
+Mohon perhatian dan kerja sama dari anda.
+<br>
+<br>
+Terima kasih, 
+<br>
+Team Exchanger
+
 @else
 
 Mohon perhatian
 <br>
-sehubungan dengan dispute invoice : <b>{{ $invoice }}</b> maka akun anda telah mendapatkan warning.
+Sehubungan dengan dispute invoice : <b>{{ $invoice }}</b> maka akun anda telah di-<b>non-aktifkan</b>.
 <br>
 <br>
-Jika anda mendapatkan <b>warning</b> sebanyak 2 kali
-<br/>
-maka akun anda akan di-suspend , sehingga anda tidak dapat melakukkan segala aktifitas di situs kami selama 1 minggu.
+Maka dengan demikian anda tidak dapat melakukan segala aktifitas di situs kami, karena menurut system kami anda telah melanggar syarat dan ketentuan berulang kali.
 <br/>
 <br/>
-Apabila anda terkena <b>suspend</b> sebanyak 2 kali
-<br>
-maka akun anda akan di-non-aktifkan.
-<br>
-<br>
-Mohon perhatian dan kerja sama dari anda.
+Mohon pengertian anda.
 <br>
 <br>
 Terima kasih, 

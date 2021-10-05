@@ -36,12 +36,13 @@
 
     <span id="crop_save"><!-- message success if crop saved --></span>
 
-     <div class="form-group row">
+    <!-- BANK 1 -->
+    <div class="form-group row">
         <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.bank_name') }}</label>
 
         <div class="col-md-6">
-            <input type="text" value="{{ $user->bank_name }}" class="form-control" name="bank_name" />
-            <span class="error bank_name"><!--  --></span>
+            <input type="text" value="{{ $user->bank_name_1 }}" class="form-control" name="bank_name_1" />
+            <span class="error bank_name_1"><!--  --></span>
         </div>
     </div> 
 
@@ -49,11 +50,31 @@
         <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.bank_no') }}</label>
 
         <div class="col-md-6">
-            <input type="text" value="{{ $user->bank_no }}" class="form-control" name="bank_no" />
-            <span class="error bank_no"><!--  --></span>
+            <input type="text" value="{{ $user->bank_no_1 }}" class="form-control" name="bank_no_1" />
+            <span class="error bank_no_1"><!--  --></span>
         </div>
     </div>
 
+    <!-- BANK 2 -->
+    <div class="form-group row">
+        <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.bank_name_other') }}</label>
+
+        <div class="col-md-6">
+            <input type="text" value="{{ $user->bank_name_2 }}" class="form-control" name="bank_name_2" />
+            <span class="error bank_name_1"><!--  --></span>
+        </div>
+    </div> 
+
+    <div class="form-group row">
+        <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.bank_no_other') }}</label>
+
+        <div class="col-md-6">
+            <input type="text" value="{{ $user->bank_no_2 }}" class="form-control" name="bank_no_2" />
+            <span class="error bank_no_2"><!--  --></span>
+        </div>
+    </div>
+    
+    <!-- EPAYMENT -->
     <div class="form-group row">
         <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.epayment') }}</label>
 
@@ -71,6 +92,7 @@
         <label class="col-md-4 col-form-label text-md-right">&nbsp;</label>
 
         <div class="col-md-6">
+            <input type="text" class="form-control mb-2" placeholder="{{ Lang::get('custom.epay') }}" name="epayment_1" />
             <input type="file" class="form-control upload_payment" name="payment" />
             <span class="error payment"><!--  --></span>
         </div>

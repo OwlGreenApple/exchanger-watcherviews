@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('check:purchase')->everySixHours();
         $schedule->command('check:transaction')->hourly();
         $schedule->command('check:user')->cron('0 */12 * * *');
-        $schedule->command('check:warning')->monthly();
+        $schedule->command('check:warning')->dailyAt('02:00');
     }
 
     /**

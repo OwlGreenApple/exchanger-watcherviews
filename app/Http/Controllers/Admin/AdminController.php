@@ -17,8 +17,10 @@ use App\Models\Dispute;
 use App\Models\Transaction;
 use App\Models\Kurs;
 use App\Models\Event;
+use App\Models\Wallet;
 use App\Helpers\Api;
 use App\Helpers\Price;
+use App\Helpers\Messages;
 use App\Mail\NotifyEmail;
 use App\Mail\WarningEmail;
 use Carbon\Carbon;
@@ -89,7 +91,7 @@ class AdminController extends Controller
               'message'=>$msg,
               'phone_number'=>$row->phone_number,
               'email'=>$row->email,
-              'obj'=>new WarningEmail($tr->no,$tr->id),
+              'obj'=>new WarningEmail($tr->no,$tr->id,'Chat Dispute'),
           ];
           
           $this->notify_user($data);
@@ -194,7 +196,7 @@ class AdminController extends Controller
     }
 
     // IF ADMIN DECIDE BUYER WIN
-    public function buyer_win($trans_id,$data_buyer,$data_seller)
+    public function buyer_win($trans_id,$data_buyer,$data_seller,$end_dispute = null)
     {
       $tr = Transaction::find($trans_id);
     
@@ -209,12 +211,16 @@ class AdminController extends Controller
 
         try
         {
-          // RETURNING USER COIN ON THEIR WALLET
+          // GIVING COIN FROM SELLER TO BUYER
           $coin = $tr->amount;
           $user = User::find($buyer_id);
           $user->coin += $coin;
           $user->save();
-          return self::change_transaction($tr,3);
+
+          if($end_dispute == null)
+          {
+            return self::change_transaction($tr,3);
+          }
         }
         catch(QueryException $e)
         {
@@ -229,8 +235,9 @@ class AdminController extends Controller
     }
 
     // IF ADMIN DECIDE SELLER WIN
-    public function seller_win($trans_id,$data_buyer,$data_seller)
+    public function seller_win($trans_id,$data_buyer,$data_seller,$end_dispute = null)
     {
+      $return_coin = 0;
       $tr = Transaction::find($trans_id);
     
       // SELLER DISPUTE
@@ -242,19 +249,26 @@ class AdminController extends Controller
         // BUYER GET WARNING
         $this->warning_user($buyer_id,$tr);
 
-        $trans = new Transaction;
-        $trans->seller_id = $seller_id;
-        $trans->no = $tr->no;
-        $trans->kurs = $tr->kurs;
-        $trans->coin_fee = $tr->coin_fee;
-        $trans->amount = $tr->amount;
-        $trans->total = $tr->total;
-        $trans->trial = $tr->trial;
+        $wallet = new Wallet;
+        $wallet->user_id = $seller_id;
+        $wallet->type = 3;
+        $wallet->coin = $tr->amount;
+        $wallet->fee = $tr->coin_fee;
+
+        // RETURNING COIN TO WALLET
+        $return_coin = $tr->coin_fee + $tr->amount;
+        $user = User::find($seller_id);
+        $user->coin += $return_coin;
 
         try
         {
-          $trans->save();
-          return self::change_transaction($tr,5);
+          $wallet->save();
+          $user->save();
+
+          if($end_dispute == null)
+          {
+            return self::change_transaction($tr,5);
+          }
         }
         catch(Queryexception $e)
         {
@@ -278,9 +292,9 @@ class AdminController extends Controller
         $seller_id = $tr->seller_id;
         $buyer_id = $tr->buyer_id;
 
-        // BOTH GET WARNING
-        $this->warning_user($buyer_id,$tr);
-        $this->warning_user($seller_id,$tr);
+        // BOTH WIN GETS WARNING
+        $this->buyer_win($trans_id,$data_buyer,$data_seller,true);
+        $this->seller_win($trans_id,$data_buyer,$data_seller,true);
         return self::change_transaction($tr,6,0);
       }
       else
@@ -290,51 +304,23 @@ class AdminController extends Controller
       }
     }
 
-    // display on notifcation event
-    public static function suspend_message($invoice)
-    {
-      $msg ='';
-      $msg .='Mohon perhatian'."<br>";
-      $msg .='sehubungan dengan dispute invoice : <b>'.$invoice.'</b> maka akun anda telah mendapatkan warning sebanyak 2x.'."<br/><br/>";
-
-      $msg .='Maka dengan demikian akun anda telah di-suspend , sehingga anda tidak dapat melakukkan transaksi di situs kami selama 1 minggu.'."<br/><br/>";
-
-      $msg .='Apabila anda terkena <b>suspend</b> sebanyak 2 kali'."<br/>";
-      $msg .='maka akun anda akan di-non-aktifkan.'."<br/><br/>";
-
-      $msg .='Mohon perhatian dan kerja sama dari anda.'."<br/><br/>";
-      $msg .='Terima Kasih'."<br/>";
-      $msg .='Team Exchanger';
-
-      return $msg;
-    }
-
     // WARNING USER
     public function warning_user($user_id,$tr)
     {
         $total_warning = $total_suspend = $nextId = 0;
         $evt = null;
         $user = User::find($user_id);
+        $msg = new Messages;
+        $notif = new Event;
         $previous_warning = $user->warning;
         $previous_suspend = $user->suspend;
+        $notif->user_id = $user->id;
 
+        // WARNING
         if($user->status > 0 && $user->warning < 1)
         {
-          $user->warning++;
-        }
-
-        if($previous_warning > 0 && $previous_suspend == 0)
-        {
-          $user->suspend++;
-          $user->status = 3; //suspend user
-          $total_suspend = $user->suspend;
-          $user->suspend_date = Carbon::now();
-
-          $nextId = 1;
-          $notif = new Event;
-          $notif->user_id = $tr->seller_id;
-          $notif->event_name = 'Akun Ter-Suspend';
-          $notif->message = self::suspend_message($tr->no);
+          $notif->event_name = 'Warning Akun';
+          $notif->message = $msg::warning_message($tr->no);
           $notif->url = '-';
           $notif->save();
 
@@ -342,40 +328,52 @@ class AdminController extends Controller
           $evt = Event::find($next_id);
           $evt->url = 'event/'.$next_id;
           $evt->save();
+
+          $user->warning++;
+          $msg = $msg::message_warning($tr->no);
+          $notification_email = new WarningEmail($tr->no,null,'Warning Email');
         }
-        else
+
+        // SUSPEND
+        if($previous_warning > 0 && $previous_suspend == 0)
         {
-          // send notify here
-          $msg ='';
-          $msg .='Mohon perhatian'."\n";
-          $msg .='sehubungan dengan dispute invoice : *'.$tr->no.'* maka akun anda telah mendapatkan warning.'."\n\n";
+          $user->suspend++;
+          $user->status = 3; //suspend user
+          $total_suspend = $user->suspend;
+          $user->suspend_date = Carbon::now();
 
-          $msg .='Jika anda mendapatkan *warning* sebanyak 2 kali'."\n";
-          $msg .='maka akun anda akan di-suspend , sehingga anda tidak dapat melakukkan transaksi di situs kami selama 1 minggu.'."\n\n";
+          $notif->event_name = 'Akun Ter-Suspend';
+          $notif->message = $msg::suspend_message($tr->no);
+          $notif->url = '-';
+          $notif->save();
 
-          $msg .='Apabila anda terkena *suspend* sebanyak 2 kali'."\n";
-          $msg .='maka akun anda akan di-non-aktifkan.'."\n\n";
+          $next_id = $notif->id;
+          $evt = Event::find($next_id);
+          $evt->url = 'event/'.$next_id;
+          $evt->save();
 
-          $msg .='Mohon perhatian dan kerja sama dari anda.'."\n\n";
-          $msg .='Terima Kasih'."\n";
-          $msg .='Team Exchanger';
+          // send wa notify here
+          $notification_email = new WarningEmail($tr->no,null,'Suspend Email');
+          $msg = $msg::message_suspend($tr->no);
         }
-       
-        // BANNED SELLER IF SUSPEND HAS REACH 2
+        
+        // BANNED
         if($previous_suspend > 0)
         {
           $user->status = 0;
           $user->suspend_date = Carbon::now();
+          $notification_email = new WarningEmail($tr->no,null,'Banned Email');
+          $msg = $msg::message_ban($tr->no);
         }
 
-        /* $data = [
+        // SEND WA AND MAIL AS NOTIFICATION
+         $data = [
             'message'=>$msg,
             'phone_number'=>$user->phone_number,
             'email'=>$user->email,
-            'obj'=>new WarningEmail($tr->no),
+            'obj'=>$notification_email,
         ];
-
-        $this->notify_user($data);*/
+        $this->notify_user($data);
 
         try
         {

@@ -10,10 +10,10 @@
       {{Lang::get('transaction.amount')}}
     </th>
     <th class="menu-nomobile">
-      Biaya Transaksi
+      {{Lang::get('transaction.trans.fee')}}
     </th>
     <th class="menu-nomobile">
-      Total
+      {{Lang::get('transaction.total')}}
     </th>
     <th class="menu-nomobile">
       {{Lang::get('transaction.created')}}
@@ -28,8 +28,10 @@
            <td class="text-center">
               @if($row->type == 1)
                 {{ Lang::get('transaction.wallet.withdraw') }}
-              @else
+              @elseif($row->type == 2)
                 {{ Lang::get('transaction.wallet.send') }}
+              @else
+                {{ Lang::get('transaction.wallet.return') }}
               @endif
             </td>
            <td class="text-right">{{ str_replace(",",".",number_format($row->coin)) }}</td>

@@ -7,7 +7,7 @@
                         {{ session('status') }}
                     </div>
                 @endif
-                <h6 class="font-weight-light">You can reset your password here.</h6>
+                <h6 class="font-weight-light">Reset Password Anda Disini.</h6>
                 <form class="pt-3" method="POST" action="{{ route('password.email') }}">
                   @csrf
                   <div class="form-group">
@@ -19,9 +19,9 @@
                     @enderror
                   </div>
                   <div class="mt-3">
-                    <button type="submit" class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn">{{ __('Send Password Reset Link') }}</button>
+                    <button type="submit" class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn">{{ __('Kirim Password Reset Link') }}</button>
                   </div>
-                  <div class="text-center mt-4 font-weight-light"> Don't have an account? <a href="{{url('register')}}" class="text-primary">Create</a>
+                  <div class="text-center mt-4 font-weight-light"> Belum punya akun? Silahkan daftar disini <a href="{{url('register')}}" class="text-primary">Daftar</a>
                   </div>
                 </form>
 @endsection

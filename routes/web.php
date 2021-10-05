@@ -28,7 +28,7 @@ Route::post('loginajax',[App\Http\Controllers\Auth\LoginController::class, 'logi
 Auth::routes();
 
 /*USER*/
-Route::group(['middleware'=>['auth','web']],function()
+Route::group(['middleware'=>['auth','web','banned']],function()
 {
 	Route::get('thankyou',[App\Http\Controllers\OrderController::class,'thankyou']);
 	Route::get('home', [App\Http\Controllers\HomeController::class, 'index']);
@@ -81,7 +81,7 @@ Route::group(['middleware'=>['auth','web']],function()
 	// ACCOUNT
 	Route::get('orders',[App\Http\Controllers\HomeController::class, 'order_list']);
 	Route::post('order-confirm-payment',[App\Http\Controllers\HomeController::class, 'confirm_payment_order']);
-	Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'update_profile'])->middleware('check_profile');
+	Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'update_profile'])/*->middleware('check_profile')*/;
 	Route::get('account/{conf?}', [App\Http\Controllers\HomeController::class, 'account']);
 	Route::post('payment-upload', [App\Http\Controllers\HomeController::class, 'payment_upload']);
 	Route::get('delete-epayment', [App\Http\Controllers\HomeController::class, 'delete_epayment']);
@@ -93,7 +93,7 @@ Route::group(['middleware'=>['auth','web']],function()
 });
 
 /*ADMIN*/
-Route::group(['middleware'=>['auth','web','is_admin','suspend']],function()
+Route::group(['middleware'=>['auth','web','is_admin','banned']],function()
 {
 	Route::get('dispute-admin',[App\Http\Controllers\Admin\AdminController::class,'dispute']);
 	Route::get('dispute-list-admin',[App\Http\Controllers\Admin\AdminController::class,'display_dispute']);

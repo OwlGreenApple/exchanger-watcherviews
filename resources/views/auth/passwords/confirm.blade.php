@@ -1,8 +1,8 @@
 @extends('layouts.auth')
 
 @section('content')
-                <h4>{{ __('Confirm Password') }}</h4>
-                <h6 class="font-weight-light">{{ __('Please confirm your password before continuing.') }}</h6>
+                <h4>{{ __('Konfirmasi Password') }}</h4>
+                <h6 class="font-weight-light">{{ __('Mohon konfirmasi password dari anda sebelum melanjutkan.') }}</h6>
                 <form class="pt-3" method="POST" action="{{ route('password.confirm') }}">
                   @csrf
                   <div class="form-group">
@@ -14,9 +14,9 @@
                     @enderror
                   </div>
                   <div class="mt-3">
-                    <button type="submit" class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn">{{ __('Confirm Password') }}</button>
+                    <button type="submit" class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn">{{ __('Konfirmasi Password') }}</button>
                   </div>
-                  <div class="text-center mt-4 font-weight-light"><a href="route('password.request')" class="text-primary">{{ __('Forgot Your Password?') }}</a>
+                  <div class="text-center mt-4 font-weight-light"><a href="route('password.request')" class="text-primary">{{ __('Lupa Password?') }}</a>
                   </div>
                 </form>
 @endsection
