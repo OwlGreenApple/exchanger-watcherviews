@@ -30,7 +30,7 @@ class CheckPaymentMethods implements Rule
         $auth = Auth::user();
         $illegal = false;
 
-        if($auth->ovo == null && $auth->dana == null && $auth->ovo == null)
+        if($auth->bank_1 == null && $auth->bank_2 == null && $auth->epayment_1 == null && $auth->epayment_2 == null && $auth->epayment_3 == null)
         {
             $illegal = true;
         }

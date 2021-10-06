@@ -14,8 +14,8 @@ class Transaction extends Model
     /*
 		status : 
 		0 -- belum ada transaksi
-		1 -- transaksi sedang berjalan / deal
-		2 -- pembeli sudah konfirmasi
+		1 -- ada request dari pembeli
+		2 -- penjual setuju
 		3 -- transaksi sudah selesai / pembeli menang dispute
 		4 -- dispute
 		5 -- penjual menang

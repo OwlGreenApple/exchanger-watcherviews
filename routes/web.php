@@ -46,6 +46,7 @@ Route::group(['middleware'=>['auth','web','banned']],function()
 
 	Route::group(['middleware'=>['suspend']],function()
 	{
+		Route::get('buy-request',[App\Http\Controllers\BuyerController::class, 'buy_request']);
 		Route::get('buy-detail/{invoice}',[App\Http\Controllers\BuyerController::class, 'detail_buy']);
 		Route::get('deal/{id}',[App\Http\Controllers\BuyerController::class, 'deal']);
 		Route::get('comments/{invoice}',[App\Http\Controllers\BuyerController::class, 'comments']);
@@ -81,7 +82,7 @@ Route::group(['middleware'=>['auth','web','banned']],function()
 	// ACCOUNT
 	Route::get('orders',[App\Http\Controllers\HomeController::class, 'order_list']);
 	Route::post('order-confirm-payment',[App\Http\Controllers\HomeController::class, 'confirm_payment_order']);
-	Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'update_profile'])/*->middleware('check_profile')*/;
+	Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'update_profile'])->middleware('check_profile');
 	Route::get('account/{conf?}', [App\Http\Controllers\HomeController::class, 'account']);
 	Route::post('payment-upload', [App\Http\Controllers\HomeController::class, 'payment_upload']);
 	Route::get('delete-epayment', [App\Http\Controllers\HomeController::class, 'delete_epayment']);

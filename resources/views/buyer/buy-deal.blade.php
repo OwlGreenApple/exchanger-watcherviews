@@ -30,17 +30,17 @@
                     <label>Methode Pembayaran :</label>
                     <div class="mb-2">
                         <select name="payment" class="form-control">
-                            @if($user->bank_name !== null && $user->bank_no !== null)
+                            @if(($user->bank_1 !== null) || ($user->bank_2 !== null))
                                 <option value="bank">Transfer Bank</option>
                             @endif
-                            @if($user->ovo !== null)
-                                <option value="ovo">OVO</option>
+                            @if($user->epayment_1 !== null)
+                                <option value="{{ Price::explode_payment($user->epayment_1)[0] }}">{{ Price::explode_payment($user->epayment_1)[0] }}</option>
                             @endif
-                            @if($user->gopay !== null)
-                                <option value="gopay">GoPay</option>
+                            @if($user->epayment_2 !== null)
+                                <option value="{{ Price::explode_payment($user->epayment_2)[0] }}">{{ Price::explode_payment($user->epayment_2)[0] }}</option>
                             @endif
-                            @if($user->dana !== null)
-                                <option value="dana">Dana</option>
+                            @if($user->epayment_3 !== null)
+                                <option value="{{ Price::explode_payment($user->epayment_3)[0] }}">{{ Price::explode_payment($user->epayment_3)[0] }}</option>
                             @endif
                         </select>
                     </div>
@@ -48,24 +48,34 @@
                 
                 <div class="form-group">
                     <div id="bank">
+                        @if($user->bank_1 !== null)
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item">No Rekening : <b>{{ $user->bank_no }}</b></li>
-                            <li class="list-group-item">Bank : {{ $user->bank_name }}</li>
+                            <li class="list-group-item">No Rekening : <b>{{ Price::explode_payment($user->bank_1)[1] }}</b></li>
+                            <li class="list-group-item">Bank : {{ Price::explode_payment($user->bank_1)[0] }}</li>
                             <li class="list-group-item">A/N : <b>{{ $user->name }}</b></li>
                         </ul>
+                        @endif
+                        <hr>
+                        @if($user->bank_2 !== null)
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">No Rekening 2 : <b>{{ Price::explode_payment($user->bank_2)[1] }}</b></li>
+                            <li class="list-group-item">Bank 2 : {{ Price::explode_payment($user->bank_2)[0] }}</li>
+                            <li class="list-group-item">A/N : <b>{{ $user->name }}</b></li>
+                        </ul>
+                        @endif
                     </div>
 
                     <div id="electronic">
                          <h5 class="alert alert-secondary">Silahkan scan qr code di bawah ini sesuai payment method anda : <b><span id="pmt"></span></b></h5>
 
                         <div id="pay_ovo">
-                            <img src="{{ $row['ovo'] }}" width="150" height="150" />
+                            <img src="{{ $row['epay_1'] }}" width="150" height="150" />
                         </div>
                         <div id="pay_dana">
-                            <img src="{{ $row['dana'] }}" width="150" height="150" />
+                            <img src="{{ $row['epay_2'] }}" width="150" height="150" />
                         </div>
                         <div id="pay_gopay">
-                            <img src="{{ $row['gopay'] }}" width="150" height="150" />
+                            <img src="{{ $row['epay_3'] }}" width="150" height="150" />
                         </div>
                     </div>
                 </div>
@@ -151,13 +161,13 @@
             $("#bank").hide();
             $("#electronic").show();
 
-            if(value == 'ovo')
+            if(value == '{{ Price::explode_payment($user->epayment_1)[0] }}')
             {
                 $("#pay_ovo").show();
                 $("#pay_dana").hide();
                 $("#pay_gopay").hide();
             }
-            else if(value == 'dana')
+            else if(value == '{{ Price::explode_payment($user->epayment_2)[0] }}')
             {
                 $("#pay_ovo").hide();
                 $("#pay_dana").show();

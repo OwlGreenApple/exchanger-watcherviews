@@ -14,6 +14,7 @@ use App\Models\Transaction;
 use App\Models\Event;
 use App\Helpers\Price;
 use App\Helpers\Api;
+use App\Helpers\Messages;
 use App\Mail\SellerEmail;
 use Carbon\Carbon;
 use Storage, Session, Validator;
@@ -100,6 +101,57 @@ class BuyerController extends Controller
     	return view('buyer.buy-table',['data'=>$data,'paginate'=>$tr]);
     }
 
+    // REQUEST BUY TO SELLER
+    public function buy_request(Request $request)
+    {
+        $tr = Transaction::where([['id',$request->id],['status',0]])->first();
+
+        if(is_null($tr))
+        {
+            return response()->json(['err'=>1]);
+        }
+
+        $ts = Transaction::find($tr->id);
+        $ts->buyer_id = Auth::id();
+        $ts->date_buy = Carbon::now();
+        $ts->status = 1;
+
+        $seller = User::find($tr->seller_id);
+        $msg = new Messages;
+        $msg = $msg::seller_notification($tr->id);
+
+        $notif = new Event;
+        $notif->user_id = $seller->id;
+        $notif->type = 1;
+        $notif->event_name = 'Invoice : '.$tr->no;
+        $notif->message = 'Selamat ada request order atas coin anda';
+        $notif->url = 'sell';
+
+        $url = '<a href="'.url('sell').'">Respon ke pembeli</a>';
+        $data = [
+          'message'=>$msg,
+          'phone_number'=>$seller->phone_number,
+          'email'=>$seller->email,
+          'obj'=>new SellerEmail($tr->no,$url),
+        ];
+
+        try
+        {
+           $notif->save();
+           $ts->save();
+           $adm = new adm;
+           $adm->notify_user($data);
+           $res['err'] = 0;
+        }
+        catch(QueryException $e)
+        {
+            //dd($e->getMessage())
+           $res['err'] = 0;
+        }
+
+        return response()->json($res);
+    }
+
     public function detail_buy($id)
     {
     	$tr = Transaction::where([['id',$id],['status',0]])->first();
@@ -145,30 +197,30 @@ class BuyerController extends Controller
     	//seller stuff
     	$seller_id = $tr->seller_id;
     	$user = User::find($seller_id);
-        $ovo = $dana = $gopay = null;
+        $epay_1 = $epay_2 = $epay_3 = null;
 
-        if($user->ovo !== null)
+        if($user->epayment_1 !== null)
         {
-            $ovo = Storage::disk('s3')->url($user->ovo);
+            $epay_1 = Storage::disk('s3')->url($pc::explode_payment($user->epayment_1)[1]);
         }
 
-        if($user->dana !== null)
+        if($user->epayment_2 !== null)
         {
-            $dana = Storage::disk('s3')->url($user->dana);
+            $epay_2 = Storage::disk('s3')->url($pc::explode_payment($user->epayment_2)[1]);
         }
 
-        if($user->gopay !== null)
+        if($user->epayment_3 !== null)
         {
-            $gopay = Storage::disk('s3')->url($user->gopay);
+            $epay_3 = Storage::disk('s3')->url($pc::explode_payment($user->epayment_3)[1]);
         }
 
     	$data = [
     		'id'=>$tr->id,
     		'no'=>$tr->no,
     		'seller'=>$user->name,
-            'ovo'=>$ovo,
-            'dana'=>$dana,
-            'gopay'=>$gopay,
+            'epay_1'=>$epay_1,
+            'epay_2'=>$epay_2,
+            'epay_3'=>$epay_3,
     		'coin'=>$pc->pricing_format($tr->amount),
     		'total'=>Lang::get('custom.currency').' '.$pc->pricing_format($tr->total),
     	];
@@ -318,43 +370,15 @@ class BuyerController extends Controller
 	        return response()->json(['err'=>2]);
 	    }  
 
-        $url = '<a href="'.url('sell-confirm').'/'.$tr->id.'">Konfirmasi Penjualan</a>';
-
-        $msg ='';
-        $msg .='Selamat coin anda dengan no invoice *'.$tr->no.'*'."\n";
-        $msg .='telah di order'."\n";
-        $msg .='Silahkan login dan lakukan konfimasi di sini :'."\n\n";
-        $msg .=url('sell-confirm').'/'.$tr->id."\n\n";
-        $msg .='Terima Kasih'."\n";
-        $msg .='Team Exchanger';
-
         $seller_id = $tr->seller_id;
         $user = User::find($seller_id);
 
-        $notif = new Event;
-        $notif->user_id = $seller_id;
-        $notif->type = 1;
-        $notif->event_name = 'Invoice : '.$tr->no;
-        $notif->message = 'Selamat ada order atas coin anda';
-        $notif->url = 'sell-confirm/'.$tr->id;
-
     	try
     	{
-            $notif->save();
     		$tr->upload = $proof;
     		$tr->date_buy = Carbon::now();
     		$tr->status = 2;
     		$tr->save();
-                
-            $adm = new adm;
-            $data = [
-                'message'=>$msg,
-                'phone_number'=>$user->phone_number,
-                'email'=>$user->email,
-                'obj'=>new SellerEmail($tr->no,$url),
-            ];
-            $adm->notify_user($data);
-
     		$data['err'] = 0;
     	}
     	catch(QueryException $e)

@@ -199,11 +199,11 @@
 
                     if(result.err == 0)
                     {
-                        if(payment == 'ovo')
+                        if(payment == 'epayment_1')
                         {
                             $("#display_ovo").html('');
                         }
-                        else if(payment == 'dana')
+                        else if(payment == 'epayment_2')
                         {
                             $("#display_dana").html('');
                         }
@@ -284,34 +284,40 @@
                 reader.onloadend = function(){
                     var base64data = reader.result;
                     var epayment = $("select[name='epayment'] option:selected").val();
+                    var epayname = $("input[name='epayname']").val();
+
                     $.ajax({
                         headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                         method:'POST',
                         url:'{{ url("payment-upload") }}',
-                        data:{'image':base64data,'epayment':epayment},
+                        data:{'image':base64data,'epayment':epayment,'epayname':epayname},
                         success:function(data)
                         {
                             $modal.modal('hide');
-                            if(data.img == 0)
+                            if(data.pay == 0)
                             {
-                                $("#err_profile").html('<div class="alert alert-danger">{{ Lang::get("custom.failed") }}</div>')
+                                $("#crop_save").html('<div class="alert alert-danger">{{ Lang::get("custom.failed") }}</div>');
+                            }
+                            else if(data.pay == 1)
+                            {
+                                $(".epayname").html('<span class="text-danger">{{ Lang::get("auth.epayname") }}</span>');
                             }
                             else
                             {
-                                if(data.pay == 'ovo')
+                                if(data.pay == 'epayment_1')
                                 { 
                                     // $('#ovo_image').attr('src', data.img);
-                                    $("#display_ovo").html('<div class="mb-2"><button data-value="ovo" type="button" class="btn btn-danger epay">Hapus OVO</button></div>');
+                                    $("#display_ovo").html('<div class="mb-2"><button data-value="epayment_1" type="button" class="btn btn-danger epay">Hapus '+data.epayname+'</button></div>');
                                 }
-                                else if(data.pay == 'dana')
+                                else if(data.pay == 'epayment_2')
                                 {
                                     // $('#dana_image').attr('src', data.img);
-                                    $("#display_dana").html('<div class="mb-2"><button data-value="dana" type="button" class="btn btn-danger epay">Hapus DANA</button></div>');
+                                    $("#display_dana").html('<div class="mb-2"><button data-value="epayment_2" type="button" class="btn btn-danger epay">Hapus '+data.epayname+'</button></div>');
                                 }
                                 else
                                 {
                                     // $('#gopay_image').attr('src', data.img);
-                                    $("#display_gopay").html('<div class="mb-2"><button data-value="gopay" type="button" class="btn btn-danger epay">Hapus GOPAY</button></div>');
+                                    $("#display_gopay").html('<div class="mb-2"><button data-value="epayment_3" type="button" class="btn btn-danger epay">Hapus '+data.epayname+'</button></div>');
                                 }
 
                                 $("#crop_save").html('<div class="alert alert-success">{{ Lang::get("custom.success") }}</div>')
@@ -431,8 +437,10 @@
                     {
                         $(".error").show();
                         $(".name").html(result.name);
-                        $(".bank_name").html(result.bank_name);
-                        $(".bank_no").html(result.bank_no);
+                        $(".bank_name_1").html(result.bank_name_1);
+                        $(".bank_name_2").html(result.bank_name_2);
+                        $(".bank_no_1").html(result.bank_no_1);
+                        $(".bank_no_2").html(result.bank_no_2);
                         $(".phone").html(result.phone);
                         $(".phone").html(result.code_country); //exceptional
                         $(".oldpass").html(result.oldpass);
@@ -442,7 +450,7 @@
                     else
                     {
                         $("#phone_number").html(result.phone);
-                        $(".msg").html('<div class="alert alert-success">'+result.msg+'</div>');
+                        $("#err_profile").html('<div class="alert alert-success">'+result.msg+'</div>');
                     }
                 },
                 complete : function()

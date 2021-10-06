@@ -4,35 +4,39 @@ function search_seller()
         var src = $("#search").val();
         var sort = $("select[name='sort']").val();
         var range = $("select[name='range']").val();
-
-        $.ajax({
-            // headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-            type : 'GET',
-            url : url_global,
-            dataType : 'html',
-            data : {'src' : src,'sort':sort,'range':range},
-            beforeSend: function()
-            {
-               $('#loader').show();
-               $('.div-loading').addClass('background-load');
-               $(".error").hide();
-            },
-            success : function(result)
-            {
-                $("#seller_list").html(result);                    
-            },
-            complete : function()
-            {
-                $('#loader').hide();
-                $('.div-loading').removeClass('background-load');
-            },
-            error : function()
-            {
-                $('#loader').hide();
-                $('.div-loading').removeClass('background-load');
-            }
-        });
+        display_buy_list(src,sort,range)
     });
+}
+
+function display_buy_list(src,sort,range)
+{
+   $.ajax({
+      // headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+      type : 'GET',
+      url : url_global,
+      dataType : 'html',
+      data : {'src' : src,'sort':sort,'range':range},
+      beforeSend: function()
+      {
+         $('#loader').show();
+         $('.div-loading').addClass('background-load');
+         $(".error").hide();
+      },
+      success : function(result)
+      {
+          $("#seller_list").html(result);                    
+      },
+      complete : function()
+      {
+          $('#loader').hide();
+          $('.div-loading').removeClass('background-load');
+      },
+      error : function()
+      {
+          $('#loader').hide();
+          $('.div-loading').removeClass('background-load');
+      }
+  });
 }
 
 //ajax pagination

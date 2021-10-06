@@ -15,7 +15,7 @@
                 
                 <div id="msg"><!-- message --></div>
 
-                @if(auth()->user()->bank_name == null && auth()->user()->bank_no == null  && auth()->user()->ovo == null  && auth()->user()->gopay == null  && auth()->user()->dana == null)
+                @if(auth()->user()->bank_1 == null && auth()->user()->bank_no_1 == null  && auth()->user()->bank_2 == null && auth()->user()->bank_no_2 == null  && auth()->user()->epayment_1 == null  && auth()->user()->epayment_2 == null  && auth()->user()->epayment_3 == null)
 
                 <div class="alert mt-3">Mohon isi metode pembayaran anda <b><a href="{{ url('account') }}">disini</a></b></div>
 

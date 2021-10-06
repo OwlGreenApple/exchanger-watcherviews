@@ -14,9 +14,10 @@ return [
     */
 
     'api'=>'Anda telah terhubung dengan akun watcherviews anda, klik disini untuk',
-    'api_registered'=>'Maaf, akun watcherviews ini telah terhubung di akun yang lain, jika anda merasa tidak pernah menghubungkan aku watcherviews anda di akun ini, silahkan kontak admin.',
+    'api_registered'=>'Maaf, akun watcherviews ini telah terhubung di situs kami, jika anda merasa tidak pernah menghubungkan akun watcherviews anda di situs kami, silahkan kontak admin.',
     'banned'=>'Maaf, akun anda sudah di banned, karena anda telah ber-ulang-kali melanggar syarat dan ketentuan.',
     'credential'=>'Maaf, password atau email yang anda masukkan salah.',
+    'epayname'=>'Nama pembayaran elektronik tidak boleh kosong.',
     'failed' => 'Identitas tersebut tidak cocok dengan data kami.',
     'forgot' => 'Lupa Password',
     'login'=>'Masuk',

@@ -107,5 +107,20 @@ class Price
         return $data;
     }
 
+    // EXPLODE DATA FROM PAYMENT METHOD
+    public static function explode_payment($data)
+    {
+        if($data !== null)
+        {
+          $result = explode("|",$data);
+        }
+        else
+        {
+          $result[0] = $result[1] = $data;
+        }
+
+        return $result;
+    }
+
 /*end of class*/
 }

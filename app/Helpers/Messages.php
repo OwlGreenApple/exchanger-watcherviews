@@ -94,5 +94,20 @@ class Messages
 
       return $msg;
     }
+
+    public static function seller_notification($invoice)
+    {
+      $msg ='';
+      $msg .='Selamat coin anda dengan no invoice *'.$invoice.'*'."\n";
+      $msg .='telah di order'."\n\n";
+      $msg .='Anda dapat menerima / menolak request order ini.'."\n";
+      $msg .='*Harap dicatat* : Apabila anda tidak merespon entah itu *menerima* atau *menolak* dalam 1x24 jam, maka system akan menganggap anda *menerima* order tersebut.'."\n\n";
+      $msg .='Silahkan login di sini untuk merespon :'."\n";
+      $msg .=url('sell')."\n\n";
+      $msg .='Terima Kasih'."\n";
+      $msg .='Team Exchanger';
+
+      return $msg;
+    }
 /*end of class*/
 }

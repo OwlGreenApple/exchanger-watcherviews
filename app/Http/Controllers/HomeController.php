@@ -19,7 +19,7 @@ use App\Helpers\Api;
 use Carbon\Carbon;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Auth\RegisterController;
-use Storage, Session;
+use Storage, Session, Validator;
 
 class HomeController extends Controller
 {
@@ -147,20 +147,33 @@ class HomeController extends Controller
     {
         $user = Auth::user();
         $lang = new Lang;
+        $pc = new Price;
         $membership = Auth::user()->membership;
         $trial = Auth::user()->trial;
         $confirm = $request->segment(2);
         $date_suspend = Auth::user()->suspend_date;
         $date_suspend = Carbon::parse($date_suspend)->addWeek()->format('d-m-Y h:i:s');
 
+        $bank_1 = $pc::explode_payment($user->bank_1);
+        $bank_2 = $pc::explode_payment($user->bank_2);
+
+        $epayment_1 = $pc::explode_payment($user->epayment_1);
+        $epayment_2 = $pc::explode_payment($user->epayment_2);
+        $epayment_3 = $pc::explode_payment($user->epayment_3);
+       
         $data = [
           'user'=>$user,
           'lang'=>$lang,
-          'pc'=> new Price,
+          'pc'=> $pc,
           'membership'=>$membership,
           'trial'=>$trial,
           'conf'=>$confirm,
-          'date_suspend'=>$date_suspend
+          'date_suspend'=>$date_suspend,
+          'bank_1'=>$bank_1,
+          'bank_2'=>$bank_2,
+          'epayment_1'=>$epayment_1,
+          'epayment_2'=>$epayment_2,
+          'epayment_3'=>$epayment_3,
         ];
 
         return view('home.account',$data);
@@ -168,10 +181,13 @@ class HomeController extends Controller
 
     public function update_profile(Request $request)
     {
+        $bank_1 = strip_tags($request->bank_name_1).'|'.strip_tags($request->bank_no_1);
+        $bank_2 = strip_tags($request->bank_name_2).'|'.strip_tags($request->bank_no_2);
+        
         $user = User::find(Auth::id());
         $user->name = strip_tags($request->name);
-        $user->bank_name = strip_tags($request->bank_name);
-        $user->bank_no = strip_tags($request->bank_no);
+        $user->bank_1 = $bank_1;
+        $user->bank_2 = $bank_2;
 
         if($request->newpass !== null)
         {
@@ -190,7 +206,7 @@ class HomeController extends Controller
         }
         catch(QueryException $e)
         {
-            //$e->getMessage()
+            // dd($e->getMessage());
             $data = ['success'=>0,'msg'=>Lang::get('custom.failed')];
         }
 
@@ -201,6 +217,14 @@ class HomeController extends Controller
     {
       $user = User::find(Auth::id());
       $payment = $request->epayment;
+      $epayname = strip_tags($request->epayname);
+
+      if($epayname == null)
+      {
+        $res['pay'] = 1;
+        return response()->json($res);
+      }
+    
       $dir = env('APP_UPLOAD').'/payment_method';
 
       $image = $request->image;
@@ -208,36 +232,34 @@ class HomeController extends Controller
       $image_array_2 = explode(",", $image_array_1[1]);
       $data = base64_decode($image_array_2[1]);
 
-      if($payment == 'ovo')
+      if($payment == 'epayment_1')
       {
-        $filename = Auth::id().'-ovo.jpg';
-        $path = $dir."/".$filename;
-        $user->ovo = $path;
+        $filename = Auth::id().'-ep1.jpg';
       }
-      elseif($payment == 'dana')
+      elseif($payment == 'epayment_2')
       {
-        $filename = Auth::id().'-dana.jpg';
-        $path = $dir."/".$filename;
-        $user->dana = $path;
+        $filename = Auth::id().'-ep2.jpg';
       }
       else
       {
-        $filename = Auth::id().'-gopay.jpg';
-        $path = $dir."/".$filename;
-        $user->gopay = $path;
+        $filename = Auth::id().'-ep3.jpg';
       }
       
+      $path = $dir."/".$filename;
+      $user->$payment = $epayname.'|'.$path;
+
       try
       {
         $user->save();
         Storage::disk('s3')->put($path,$data,'public');
         $res['pay'] = $payment;
+        $res['epayname'] = $epayname;
         // $res['img'] = Storage::disk('s3')->url($path);
       }
       catch(QueryException $e)
       {
         // $e->getMessage();
-        $res['img'] = 0;
+        $res['pay'] = 0;
       }
       
       return response()->json($res);
@@ -247,22 +269,23 @@ class HomeController extends Controller
     public function delete_epayment(Request $request)
     {
       $payment = $request->payment;
+      $pc = new Price;
       $user = User::find(Auth::id());
 
-      if($payment == 'ovo')
+      if($payment == 'epayment_1')
       {
-        $path = $user->ovo;
-        $user->ovo = null;
+        $path = $pc::explode_payment($user->epayment_1)[1];
+        $user->epayment_1 = null;
       }
-      elseif($payment == 'dana')
+      elseif($payment == 'epayment_2')
       {
-        $path = $user->dana;
-        $user->dana = null;
+        $path = $pc::explode_payment($user->epayment_2)[1];
+        $user->epayment_2 = null;
       }
       else
       {
-        $path = $user->gopay;
-        $user->gopay = null;
+        $path = $pc::explode_payment($user->epayment_3)[1];
+        $user->epayment_3 = null;
       }
 
       try

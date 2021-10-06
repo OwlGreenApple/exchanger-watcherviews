@@ -40,9 +40,17 @@ class CheckEndMembership
                 return $next($request);
              }
         }
-       
 
-        if( ($membership == 'free' && $trial == 0) || (Carbon::now()->gte($end_membership)))
+        $valid_membership = true;
+        if(Auth::user()->end_membership !== null)
+        {
+            if(Carbon::now()->gte($end_membership))
+            {
+                $valid_membership = false;
+            }
+        }
+
+        if( ($membership == 'free' && $trial == 0) || $valid_membership == false)
         {
             return response()->json(['err'=>'trial']);
         }

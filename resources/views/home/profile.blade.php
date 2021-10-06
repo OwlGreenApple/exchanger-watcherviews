@@ -41,7 +41,7 @@
         <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.bank_name') }}</label>
 
         <div class="col-md-6">
-            <input type="text" value="{{ $user->bank_name_1 }}" class="form-control" name="bank_name_1" />
+            <input type="text" value="{{ $bank_1[0] }}" class="form-control" name="bank_name_1" />
             <span class="error bank_name_1"><!--  --></span>
         </div>
     </div> 
@@ -50,7 +50,7 @@
         <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.bank_no') }}</label>
 
         <div class="col-md-6">
-            <input type="text" value="{{ $user->bank_no_1 }}" class="form-control" name="bank_no_1" />
+            <input type="text" value="{{ $bank_1[1] }}" class="form-control" name="bank_no_1" />
             <span class="error bank_no_1"><!--  --></span>
         </div>
     </div>
@@ -60,8 +60,8 @@
         <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.bank_name_other') }}</label>
 
         <div class="col-md-6">
-            <input type="text" value="{{ $user->bank_name_2 }}" class="form-control" name="bank_name_2" />
-            <span class="error bank_name_1"><!--  --></span>
+            <input type="text" value="{{ $bank_2[0] }}" class="form-control" name="bank_name_2" />
+            <span class="error bank_name_2"><!--  --></span>
         </div>
     </div> 
 
@@ -69,7 +69,7 @@
         <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.bank_no_other') }}</label>
 
         <div class="col-md-6">
-            <input type="text" value="{{ $user->bank_no_2 }}" class="form-control" name="bank_no_2" />
+            <input type="text" value="{{ $bank_2[1] }}" class="form-control" name="bank_no_2" />
             <span class="error bank_no_2"><!--  --></span>
         </div>
     </div>
@@ -80,9 +80,9 @@
 
         <div class="col-md-6">
            <select class="form-control" name="epayment">
-               <option value="ovo">{{ $lang::get('custom.ovo') }}</option>
-               <option value="dana">{{ $lang::get('custom.dana') }}</option>
-               <option value="gopay">{{ $lang::get('custom.gopay') }}</option>
+               <option value="epayment_1">{{ $lang::get('custom.epayment_1') }}</option>
+               <option value="epayment_2">{{ $lang::get('custom.epayment_2') }}</option>
+               <option value="epayment_3">{{ $lang::get('custom.epayment_3') }}</option>
            </select>
         </div>
     </div>
@@ -92,9 +92,9 @@
         <label class="col-md-4 col-form-label text-md-right">&nbsp;</label>
 
         <div class="col-md-6">
-            <input type="text" class="form-control mb-2" placeholder="{{ Lang::get('custom.epay') }}" name="epayment_1" />
+            <input type="text" class="form-control mb-2" placeholder="{{ Lang::get('custom.epay') }}" name="epayname" />
+            <span class="error epayname"><!--  --></span>
             <input type="file" class="form-control upload_payment" name="payment" />
-            <span class="error payment"><!--  --></span>
         </div>
     </div>
 
@@ -103,18 +103,18 @@
 
         <div id="display_epayment" class="col-md-6">
             <span id="display_ovo">
-                @if($user->ovo !== null)
-                    <div class="mb-2"><button data-value="ovo" type="button" class="btn btn-danger epay">Hapus OVO</button></div>
+                @if($user->epayment_1 !== null)
+                    <div class="mb-2"><button data-value="epayment_1" type="button" class="btn btn-danger epay text-capitalize">Hapus <span class="text-uppercase">{{ $epayment_1[0] }}</span></button></div>
                 @endif
             </span>
             <span id="display_dana">
-                @if($user->dana !== null)
-                    <div class="mb-2"><button data-value="dana" type="button" class="btn btn-danger epay">Hapus DANA</button></div>
+                @if($user->epayment_2 !== null)
+                    <div class="mb-2"><button data-value="epayment_2" type="button" class="btn btn-danger epay text-capitalize">Hapus <span class="text-uppercase">{{ $epayment_2[0] }}</span></button></div>
                 @endif
             </span>
             <span id="display_gopay">
-                @if($user->gopay !== null)
-                    <div class="mb-2"><button data-value="gopay" type="button" class="btn btn-danger epay">Hapus GOPAY</button></div>
+                @if($user->epayment_3 !== null)
+                    <div class="mb-2"><button data-value="epayment_3" type="button" class="btn btn-danger epay">Hapus <span class="text-uppercase">{{ $epayment_3[0] }}</span></button></div>
                 @endif
             </span>
         </div>
