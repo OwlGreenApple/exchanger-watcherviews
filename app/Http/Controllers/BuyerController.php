@@ -16,6 +16,7 @@ use App\Helpers\Price;
 use App\Helpers\Api;
 use App\Helpers\Messages;
 use App\Mail\SellerEmail;
+use App\Mail\BuyerEmail;
 use Carbon\Carbon;
 use Storage, Session, Validator;
 
@@ -105,12 +106,6 @@ class BuyerController extends Controller
     public function buy_request(Request $request)
     {
         $tr = Transaction::where([['id',$request->id],['status',0]])->first();
-
-        if(is_null($tr))
-        {
-            return response()->json(['err'=>1]);
-        }
-
         $ts = Transaction::find($tr->id);
         $ts->buyer_id = Auth::id();
         $ts->date_buy = Carbon::now();
@@ -118,7 +113,7 @@ class BuyerController extends Controller
 
         $seller = User::find($tr->seller_id);
         $msg = new Messages;
-        $msg = $msg::seller_notification($tr->id);
+        $msg = $msg::seller_notification($tr->no);
 
         $notif = new Event;
         $notif->user_id = $seller->id;
@@ -133,7 +128,7 @@ class BuyerController extends Controller
           'phone_number'=>$seller->phone_number,
           'email'=>$seller->email,
           'obj'=>new SellerEmail($tr->no,$url),
-        ];
+        ]; 
 
         try
         {
@@ -146,15 +141,34 @@ class BuyerController extends Controller
         catch(QueryException $e)
         {
             //dd($e->getMessage())
-           $res['err'] = 0;
+           $res['err'] = 1;
         }
 
         return response()->json($res);
     }
 
+    //NOTIFICATION FOR BUYER WHEN SELLER ACCEPT REQUEST ORDER
+    public static function notify_buyer($invoice,$buyer_id,$trans_id)
+    {
+        $url = '<a href="'.url('buy-detail').'/'.$trans_id.'">Konfirmasi Pembayaran</a>';
+        $msg = new Messages;
+        $msg = $msg::buyer_notification($invoice,$trans_id);
+
+        $buyer = User::find($buyer_id);
+        $data = [
+          'message'=>$msg,
+          'phone_number'=>$buyer->phone_number,
+          'email'=>$buyer->email,
+          'obj'=>new BuyerEmail($invoice,$url),
+        ];
+
+        $adm = new adm;
+        $adm->notify_user($data);
+    }
+
     public function detail_buy($id)
     {
-    	$tr = Transaction::where([['id',$id],['status',0]])->first();
+    	$tr = Transaction::where([['id',$id],['status',2]])->first();
 
     	// TO AVOID IF USER DELIBERATELY PUT HIS PRODUCT
     	if(is_null($tr) || $tr->seller_id == Auth::id())
@@ -189,7 +203,7 @@ class BuyerController extends Controller
     	$tr = Transaction::find($id);
     	$pc = new Price;
 
-    	if(is_null($tr) || $tr->status > 0)
+    	if(is_null($tr) || $tr->status <> 2)
     	{
     		return view('error404');
     	}
@@ -228,34 +242,6 @@ class BuyerController extends Controller
         return view('buyer.buy-deal',['row'=>$data,'user'=>$user]);
     }
 
-    public function buyer_deal(Request $request)
-    {
-    	$id = $request->id;
-        $payment_method = $request->payment_method;
-    	$tr = Transaction::find($id);
-
-    	if(is_null($tr))
-    	{
-    		return response()->json(['err'=>1]);
-    	}
-
-    	try
-    	{
-    		$tr->date_buy = Carbon::now();
-            $tr->buyer_id = Auth::id();
-            $tr->payment = $payment_method;
-    		$tr->status = 1;
-    		$tr->save();
-    		$data['err'] = 0;
-    	}
-    	catch(QueryException $e)
-    	{
-    		$data['err'] = 1;
-    	}
-
-    	return response()->json($data);
-    }
-
     public function buyer_history()
     {
     	$data = array();
@@ -268,12 +254,12 @@ class BuyerController extends Controller
     		{
     			if($row->status == 1)
     			{
-    				$status = '<a target="_blank" href="'.url('buyer-confirm').'/'.$row->id.'" class="btn btn-primary btn-sm">Konfirmasi</a>';
+    				$status = '<span class="text-info">Tunggu seller</span>';
     				$comments = '-';
     			}
 				elseif($row->status == 2)
     			{
-    				$status = '<span class="text-info">Tunggu seller</span>';
+                    $status = '<a target="_blank" href="'.url('buy-detail').'/'.$row->id.'" class="btn btn-primary btn-sm">Konfirmasi</a>';
     				$comments = '-';
     			}
 				elseif($row->status == 3)
@@ -294,6 +280,11 @@ class BuyerController extends Controller
                     }      
                     $comments = '-';
                 } 
+                elseif($row->status == 7)
+                {
+                    $status = '<span class="text-primary">Tunggu konfirmasi seller</span>';
+                    $comments = '-';
+                }
     			else
     			{
     				$comments = $status = '-';
@@ -322,10 +313,10 @@ class BuyerController extends Controller
 
     public function buyer_confirm($id)
     {
-    	$tr = Transaction::where([['id',$id],['status',1]])->first();
+    	$tr = Transaction::where([['id',$id],['status',2]])->first();
 
     	// TO AVOID IF USER DELIBERATELY PUT HIS PRODUCT
-    	if(is_null($tr) || $tr->status > 1)
+    	if(is_null($tr) || $tr->status <> 2)
     	{
     		return view('error404');
     	}
@@ -333,19 +324,30 @@ class BuyerController extends Controller
         return view('buyer.buyer-confirm',['row'=>$tr]);
     }
 
-    public function test_wa()
+    // UPDATE TRANSACTION PAYMENT METHOD
+    public function buyer_deal(Request $request)
     {
-        $tr = 'SSS';
-        $api = new Api;
+        $id = $request->id;
+        $payment_method = $request->payment_method;
+        $tr = Transaction::find($id);
 
-        $msg ='';
-        $msg .='Selamat coin anda dengan no invoice *SSS*'."\n";
-        $msg .='telah di order'."\n";
-        $msg .='Silahkan login dan lakukan konfimasi di sini'."\n\n";
-        $msg .=url('sell-confirm').'/'.$tr."\n\n";
-        $msg .='Terima Kasih'."\n";
-        $msg .='Team Exchanger';
-        $api->send_wa_message(15,$msg,'62895342472008');
+        if(is_null($tr))
+        {
+            return response()->json(['err'=>1]);
+        }
+
+        try
+        {
+            $tr->payment = $payment_method;
+            $tr->save();
+            $data['err'] = 0;
+        }
+        catch(QueryException $e)
+        {
+            $data['err'] = 1;
+        }
+
+        return response()->json($data);
     }
 
     public function buyer_proof(Request $request)
@@ -373,12 +375,33 @@ class BuyerController extends Controller
         $seller_id = $tr->seller_id;
         $user = User::find($seller_id);
 
+         /* notification to seller */
+        $adm = new adm;
+        $msg = new Messages;
+        $msg = $msg::seller_notification($tr->no,$tr->id);
+
+        $notif = new Event;
+        $notif->user_id = $user->id;
+        $notif->type = 1;
+        $notif->event_name = 'Invoice : '.$tr->no;
+        $notif->message = 'Pembeli telah upload bukti bayar';
+        $notif->url = 'sell-confirm/'.$tr->id;
+
+        $url = '<a href="'.url('sell-confirm').'/'.$tr->id.'">Konfirmasi Penjualan</a>';
+        $data = [
+          'message'=>$msg,
+          'phone_number'=>$user->phone_number,
+          'email'=>$user->email,
+          'obj'=>new SellerEmail($tr->no,$url,$tr->id),
+        ]; 
+
     	try
     	{
     		$tr->upload = $proof;
-    		$tr->date_buy = Carbon::now();
-    		$tr->status = 2;
+    		$tr->status = 7;
     		$tr->save();
+            $notif->save();
+            $adm->notify_user($data);
     		$data['err'] = 0;
     	}
     	catch(QueryException $e)
@@ -479,6 +502,21 @@ class BuyerController extends Controller
         }
 
         return view('buyer.buyer-dispute',['tr'=>$tr]);
+    }
+
+    public function test_wa()
+    {
+        $tr = 'SSS';
+        $api = new Api;
+
+        $msg ='';
+        $msg .='Selamat coin anda dengan no invoice *SSS*'."\n";
+        $msg .='telah di order'."\n";
+        $msg .='Silahkan login dan lakukan konfimasi di sini'."\n\n";
+        $msg .=url('sell-confirm').'/'.$tr."\n\n";
+        $msg .='Terima Kasih'."\n";
+        $msg .='Team Exchanger';
+        $api->send_wa_message(15,$msg,'62895342472008');
     }
 
 /*end class*/

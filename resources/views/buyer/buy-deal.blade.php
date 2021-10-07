@@ -31,7 +31,8 @@
                     <div class="mb-2">
                         <select name="payment" class="form-control">
                             @if(($user->bank_1 !== null) || ($user->bank_2 !== null))
-                                <option value="bank">Transfer Bank</option>
+                                <option value="bank_1">Transfer {{ Price::explode_payment($user->bank_1)[0] }}</option>
+                                <option value="bank_2">Transfer {{ Price::explode_payment($user->bank_2)[0] }}</option>
                             @endif
                             @if($user->epayment_1 !== null)
                                 <option value="{{ Price::explode_payment($user->epayment_1)[0] }}">{{ Price::explode_payment($user->epayment_1)[0] }}</option>
@@ -47,20 +48,21 @@
                 </div>
                 
                 <div class="form-group">
-                    <div id="bank">
+                    <div id="bank_1">
                         @if($user->bank_1 !== null)
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">No Rekening : <b>{{ Price::explode_payment($user->bank_1)[1] }}</b></li>
                             <li class="list-group-item">Bank : {{ Price::explode_payment($user->bank_1)[0] }}</li>
-                            <li class="list-group-item">A/N : <b>{{ $user->name }}</b></li>
+                            <li class="list-group-item">A/N : <b>{{ Price::explode_payment($user->bank_1)[2] }}</b></li>
                         </ul>
                         @endif
-                        <hr>
+                    </div>
+                    <div id="bank_2">
                         @if($user->bank_2 !== null)
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">No Rekening 2 : <b>{{ Price::explode_payment($user->bank_2)[1] }}</b></li>
                             <li class="list-group-item">Bank 2 : {{ Price::explode_payment($user->bank_2)[0] }}</li>
-                            <li class="list-group-item">A/N : <b>{{ $user->name }}</b></li>
+                            <li class="list-group-item">A/N : <b>{{ Price::explode_payment($user->bank_2)[2] }}</b></li>
                         </ul>
                         @endif
                     </div>
@@ -102,7 +104,7 @@
     {
         $("#conf").click(function(){
             var id = $(this).attr('data-id');
-            var payment_method = $("select[name='payment'] option:selected").val();
+            var payment_method = $("select[name='payment'] option:selected").html();
 
             $.ajax({
                 type : 'GET',
@@ -151,14 +153,22 @@
     function payment_content(value)
     {
         $("#pmt").html(value);
-        if(value == 'bank')
+        if(value == 'bank_1')
         {
-            $("#bank").show();
+            $("#bank_1").show();
+            $("#bank_2").hide();
+            $("#electronic").hide();
+        }
+        else if(value == 'bank_2')
+        {
+            $("#bank_1").hide();
+            $("#bank_2").show();
             $("#electronic").hide();
         }
         else
         {
-            $("#bank").hide();
+            $("#bank_1").hide();
+            $("#bank_2").hide();
             $("#electronic").show();
 
             if(value == '{{ Price::explode_payment($user->epayment_1)[0] }}')

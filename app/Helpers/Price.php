@@ -116,10 +116,26 @@ class Price
         }
         else
         {
-          $result[0] = $result[1] = $data;
+          $result[0] = $result[1] = $result[2] = $data;
         }
 
         return $result;
+    }
+
+    public static function buyer_limit_day($total_transaction)
+    {
+        if($total_transaction <= 10)
+        {
+            return 20000;
+        }
+        elseif($total_transaction <= 30)
+        {
+            return 100000;
+        }
+        else
+        {
+            return 200000;
+        }
     }
 
 /*end of class*/

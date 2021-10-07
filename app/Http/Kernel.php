@@ -73,5 +73,6 @@ class Kernel extends HttpKernel
         'check_dispute' => \App\Http\Middleware\CheckDispute::class,
         'suspend' => \App\Http\Middleware\CheckSuspend::class,
         'banned' => \App\Http\Middleware\CheckBanned::class,
+        'buyer_limit' => \App\Http\Middleware\CheckBuyerLimit::class,
     ];
 }

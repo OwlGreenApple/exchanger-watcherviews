@@ -3,8 +3,11 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Http\Controllers\Admin\AdminController as adm;
+use App\Http\Controllers\BuyerController;
 use App\Models\Transaction;
-use Carbon\Carbon;;
+use App\Helpers\Messages;
+use Carbon\Carbon;
 
 class CheckTransaction extends Command
 {
@@ -41,33 +44,39 @@ class CheckTransaction extends Command
     {
         $tr = Transaction::where(function($query){
             $query->where('status','>',0);
-            $query->Where('status','<',3);
+            $query->where('status','<',3);
         })->get();
 
         if($tr->count() > 0)
         {
             foreach($tr as $row):
-                $update_date = Carbon::parse($row->updated_at)->addHours(12)->toDateTimeString();
+                $req_buy = Carbon::parse($row->date_buy)->addHours(24)->toDateTimeString();
+                $dispute_date = Carbon::parse($row->updated_at)->addHours(12)->toDateTimeString();
+                $cancel_order = Carbon::parse($row->updated_at)->addHours(6)->toDateTimeString();
                 $str = Transaction::find($row->id);
 
-                if(Carbon::now()->gte($update_date)):
-                    // in case if buyer doen't make confirmation
-                    if($row->status == 1)
-                    {
-                        $str->buyer_id = 0;
-                        $str->date_buy = null;
-                        $str->payment = null;
-                        $str->status = 0;
-                        $str->save();
-                    }
+                // in case if seller doen't make respond
+                if(Carbon::now()->gte($req_buy) && $row->status == 1):
+                    $str->status = 2;
+                    $str->save();
 
-                    // in case to show dispute button
-                    if($row->status == 2)
-                    {
-                        $str->status = 4;
-                        $str->save();
-                    }
+                    // MAIL TO BUYER IF ORDER HAS ACCEPTED
+                    $buy = new BuyerController;
+                    $buy::notify_buyer($row->no,$row->buyer_id,$row->id);
+                endif;
 
+                // in case to buyer doesn't make confirmation
+                if(Carbon::now()->gte($cancel_order) && $row->status == 2):
+                    $str->buyer_id = 0;
+                    $str->date_buy = null;
+                    $str->status = 0;
+                    $str->save();
+                endif;
+
+                // in case to show dispute button
+                if(Carbon::now()->gte($dispute_date) && $row->status == 7):
+                    $str->status = 4;
+                    $str->save();
                 endif;
             endforeach;
         }

@@ -95,17 +95,44 @@ class Messages
       return $msg;
     }
 
-    public static function seller_notification($invoice)
+    public static function buyer_notification($invoice,$trans_id)
     {
       $msg ='';
-      $msg .='Selamat coin anda dengan no invoice *'.$invoice.'*'."\n";
-      $msg .='telah di order'."\n\n";
-      $msg .='Anda dapat menerima / menolak request order ini.'."\n";
-      $msg .='*Harap dicatat* : Apabila anda tidak merespon entah itu *menerima* atau *menolak* dalam 1x24 jam, maka system akan menganggap anda *menerima* order tersebut.'."\n\n";
-      $msg .='Silahkan login di sini untuk merespon :'."\n";
-      $msg .=url('sell')."\n\n";
+      $msg .='Selamat, request order anda dengan no invoice *'.$invoice.'*'."\n";
+      $msg .='telah di setujui oleh seller'."\n\n";
+      $msg .='*Harap dicatat* : Apabila anda tidak konfirmasi pembayaran dalam 6 jam, maka order ini akan dianggap batal.'."\n\n";
+      $msg .='Silahkan login di sini untuk konfirmasi :'."\n";
+      $msg .=url('buy-detail').'/'.$trans_id."\n\n";
       $msg .='Terima Kasih'."\n";
       $msg .='Team Exchanger';
+
+      return $msg;
+    }
+
+    public static function seller_notification($invoice,$tr_id = null)
+    {
+      $msg ='';
+      if($tr_id == null)
+      {
+        $msg .='Selamat, coin anda dengan no invoice *'.$invoice.'*'."\n";
+        $msg .='telah di order'."\n\n";
+        $msg .='Anda dapat menerima / menolak request order ini.'."\n";
+        $msg .='*Harap dicatat* : Apabila anda tidak merespon entah itu *menerima* atau *menolak* dalam 1x24 jam, maka system akan menganggap anda *menerima* order tersebut.'."\n\n";
+        $msg .='Silahkan login di sini untuk merespon :'."\n";
+        $msg .=url('sell')."\n\n";
+        $msg .='Terima Kasih'."\n";
+        $msg .='Team Exchanger';
+      }
+      else
+      {
+        $msg .='Mohon perhatian,'."\n\n";
+        $msg .='pembeli coin anda dengan no invoice *'.$invoice.'*'."\n";
+        $msg .='telah upload bukti bayar'."\n\n";
+        $msg .='*Harap* segera di konfirmasi di sini :'."\n";
+        $msg .=url('sell-confirm').'/'.$tr_id."\n\n";
+        $msg .='Terima Kasih'."\n";
+        $msg .='Team Exchanger';
+      }
 
       return $msg;
     }

@@ -46,7 +46,7 @@ Route::group(['middleware'=>['auth','web','banned']],function()
 
 	Route::group(['middleware'=>['suspend']],function()
 	{
-		Route::get('buy-request',[App\Http\Controllers\BuyerController::class, 'buy_request']);
+		Route::get('buy-request',[App\Http\Controllers\BuyerController::class, 'buy_request'])->middleware('buyer_limit');
 		Route::get('buy-detail/{invoice}',[App\Http\Controllers\BuyerController::class, 'detail_buy']);
 		Route::get('deal/{id}',[App\Http\Controllers\BuyerController::class, 'deal']);
 		Route::get('comments/{invoice}',[App\Http\Controllers\BuyerController::class, 'comments']);

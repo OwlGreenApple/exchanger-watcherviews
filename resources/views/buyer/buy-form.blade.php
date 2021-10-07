@@ -4,6 +4,7 @@
 @else
 <div class="card-body">
     <div class="row justify-content-center">
+        <span class="err_buy"><!--  --></span>
         <div class="col-12 col-md-10 col-lg-9">
             <form class="card card-sm">
                 <div class="px-3 py-3 mx-auto my-auto row no-gutters align-items-center">

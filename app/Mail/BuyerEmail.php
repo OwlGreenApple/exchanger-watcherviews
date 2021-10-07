@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SellerEmail extends Mailable
+class BuyerEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -19,13 +19,11 @@ class SellerEmail extends Mailable
 
     public $invoice;
     public $url;
-    public $trans_id;
 
-    public function __construct($invoice,$url,$trans_id = null)
+    public function __construct($invoice,$url)
     {
         $this->invoice = $invoice;
         $this->url = $url;
-        $this->trans_id = $trans_id;
     }
 
     /**
@@ -38,11 +36,10 @@ class SellerEmail extends Mailable
         return $this
         ->from('no-reply@exchanger.com', 'exchanger')
         ->subject($this->subject)
-        ->view('emails.SellerEmail')
+        ->view('emails.BuyerEmail')
         ->with([
           'invoice' => $this->invoice,
           'url' => $this->url,
-          'trans_id' => $this->trans_id,
         ]);
     }
 }

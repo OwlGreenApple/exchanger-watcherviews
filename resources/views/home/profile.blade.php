@@ -36,6 +36,16 @@
 
     <span id="crop_save"><!-- message success if crop saved --></span>
 
+    
+
+     <div class="form-group row">
+        <label class="col-md-4 col-form-label text-md-right">&nbsp;</label>
+
+        <div class="col-md-6">
+           <button class="btn btn-info">Tambah Akun Bank</button>
+        </div>
+    </div> 
+
     <!-- BANK 1 -->
     <div class="form-group row">
         <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.bank_name') }}</label>

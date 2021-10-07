@@ -170,7 +170,7 @@ class SellerController extends Controller
     // CONFIRMATION PAGE
     public function sell_confirm($id)
     {
-    	$tr = Transaction::where([['id',$id],['seller_id',Auth::id()]])->whereIn('status',[2,4])->first();
+    	$tr = Transaction::where([['id',$id],['seller_id',Auth::id()]])->whereIn('status',[7,4])->first();
     	$pc = new Price;
 
     	if(is_null($tr))

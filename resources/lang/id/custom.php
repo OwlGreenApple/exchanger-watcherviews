@@ -12,6 +12,7 @@ return [
     'cart_summary'=>'Keranjang summary', //summary.blade
     'chat_end'=>'Maaf, chat ini sudah di tutup oleh admin.', //chat.blade
     'check'=>'Harap centang, syarat dan ketentuan yang berlaku', //register.blade//summary.blade
+    'close'=>'Tutup',
     'currency'=>'Rp', //navigation
     'coin'=>'My Wallet', //wallet.blade
     'conf_order'=>'Order konfirmasi anda akan di email ke : ', //summary.blade
