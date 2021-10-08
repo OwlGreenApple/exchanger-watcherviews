@@ -37,7 +37,7 @@
             @if($row['seller'] == auth()->user()->id)
               -
             @else
-              <a data-id="{{ $row['id'] }}" class="btn btn-outline-success btn-sm conf request_buy" data-toggle="tooltip" data-original-title="Save to Wishlist">{{ Lang::get('transaction.buy') }}</a>
+              <a href="{{ url('buy-detail') }}/{{ $row['id'] }}" data-id="{{ $row['id'] }}" class="btn btn-outline-success btn-sm conf request_buy" data-toggle="tooltip" data-original-title="Save to Wishlist">{{ Lang::get('transaction.buy') }}</a>
             @endif 
             </td>
         </tr>

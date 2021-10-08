@@ -150,7 +150,7 @@ class BuyerController extends Controller
     //NOTIFICATION FOR BUYER WHEN SELLER ACCEPT REQUEST ORDER
     public static function notify_buyer($invoice,$buyer_id,$trans_id)
     {
-        $url = '<a href="'.url('buy-detail').'/'.$trans_id.'">Konfirmasi Pembayaran</a>';
+        $url = '<a href="'.url('deal').'/'.$trans_id.'">Konfirmasi Pembayaran</a>';
         $msg = new Messages;
         $msg = $msg::buyer_notification($invoice,$trans_id);
 
@@ -168,7 +168,7 @@ class BuyerController extends Controller
 
     public function detail_buy($id)
     {
-    	$tr = Transaction::where([['id',$id],['status',2]])->first();
+    	$tr = Transaction::where([['id',$id],['status',0]])->first();
 
     	// TO AVOID IF USER DELIBERATELY PUT HIS PRODUCT
     	if(is_null($tr) || $tr->seller_id == Auth::id())
@@ -245,7 +245,7 @@ class BuyerController extends Controller
     public function buyer_history()
     {
     	$data = array();
-    	$tr = Transaction::where('buyer_id',Auth::id())->orderBy('id','desc')->get();
+    	$tr = Transaction::where('buyer_id',Auth::id())->orderBy('updated_at','desc')->get();
     	$pc = new Price;
 
     	if($tr->count() > 0)
@@ -259,7 +259,7 @@ class BuyerController extends Controller
     			}
 				elseif($row->status == 2)
     			{
-                    $status = '<a target="_blank" href="'.url('buy-detail').'/'.$row->id.'" class="btn btn-primary btn-sm">Konfirmasi</a>';
+                    $status = '<a target="_blank" href="'.url('deal').'/'.$row->id.'" class="btn btn-primary btn-sm">Konfirmasi</a>';
     				$comments = '-';
     			}
 				elseif($row->status == 3)

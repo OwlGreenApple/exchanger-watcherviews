@@ -10,7 +10,6 @@ use App\Rules\CheckCallCode;
 use App\Rules\InternationalTel;
 use App\Rules\CheckUserPhone;
 use App\Rules\CheckUniquePhone;
-use App\Rules\CheckPaymentMethods;
 use Closure;
 
 class CheckProfile
@@ -26,11 +25,7 @@ class CheckProfile
     {
         $userid = Auth::id();
         $rules = [
-            'name' => ['required','string','max:255'],
-            'bank_name_1' => ['bail',new CheckPaymentMethods,'string','max:20'],
-            'bank_no_1' => ['bail','required_with:bank_name_1','nullable','numeric','digits_between:4,30'],
-            'bank_name_2' => ['bail','max:20'],
-            'bank_no_2' => ['bail','required_with:bank_name_2','nullable','numeric','digits_between:4,30'],
+            'name' => ['required','string','max:30'],
         ];
 
         if(!empty($request->phone))
@@ -58,10 +53,6 @@ class CheckProfile
             $error = array(
               'status'=>'error',
               'name'=>$err->first('name'),
-              'bank_name_1'=>str_replace('bank name','Nama Bank',$err->first('bank_name_1')),
-              'bank_name_2'=>str_replace('bank name','Nama Bank',$err->first('bank_name_2')),
-              'bank_no_1'=>str_replace(array('bank no','bank name'),array('No Rekening','Nama Bank'),$err->first('bank_no_1')),
-              'bank_no_2'=>str_replace(array('bank no','bank name'),array('No Rekening','Nama Bank'),$err->first('bank_no_2')),
               'code_country'=>$err->first('code_country'),
               'phone'=>$err->first('phone'),
               'oldpass'=>$err->first('oldpass'),

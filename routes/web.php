@@ -83,9 +83,10 @@ Route::group(['middleware'=>['auth','web','banned']],function()
 	Route::get('orders',[App\Http\Controllers\HomeController::class, 'order_list']);
 	Route::post('order-confirm-payment',[App\Http\Controllers\HomeController::class, 'confirm_payment_order']);
 	Route::post('/update-profile', [App\Http\Controllers\HomeController::class, 'update_profile'])->middleware('check_profile');
+	Route::post('/save-bank-payment', [App\Http\Controllers\HomeController::class, 'save_bank_payment']);
 	Route::get('account/{conf?}', [App\Http\Controllers\HomeController::class, 'account']);
 	Route::post('payment-upload', [App\Http\Controllers\HomeController::class, 'payment_upload']);
-	Route::get('delete-epayment', [App\Http\Controllers\HomeController::class, 'delete_epayment']);
+	Route::get('delete-payment', [App\Http\Controllers\HomeController::class, 'delete_payment']);
 
 	// CHAT
 	Route::get('chat/{trans_id}',[App\Http\Controllers\ChatController::class, 'room']);

@@ -1,60 +1,8 @@
 @extends('layouts.app')
 <link href="{{ asset('assets/css/settings.css') }}" rel="stylesheet" />
 <link href="{{ asset('assets/css/order.css') }}" rel="stylesheet" />
+<link href="{{ asset('assets/css/account.css') }}" rel="stylesheet" />
 
-<style>
-
-        .image_area {
-          position: relative;
-        }
-
-        img {
-            display: block;
-            max-width: 100%;
-        }
-
-        .preview {
-            overflow: hidden;
-            width: 160px; 
-            height: 160px;
-            margin: 10px;
-            border: 1px solid red;
-        }
-
-        .modal-lg{
-            max-width: 1000px !important;
-        }
-
-        .overlay {
-          position: absolute;
-          bottom: 10px;
-          left: 0;
-          right: 0;
-          background-color: rgba(255, 255, 255, 0.5);
-          overflow: hidden;
-          height: 0;
-          transition: .5s ease;
-          width: 100%;
-        }
-
-        .image_area:hover .overlay {
-          height: 50%;
-          cursor: pointer;
-        }
-
-        .text {
-          color: #333;
-          font-size: 20px;
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          -webkit-transform: translate(-50%, -50%);
-          -ms-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
-          text-align: center;
-        }
-        
-        </style>
 
 @section('content')
     <div class="page-header">
@@ -128,12 +76,12 @@
 
             <!-- CONNECT API -->
             <div id="settings_target_4" class="card target_hide d-none">
-                <div class="card-body bg-white text-black-50 border-bottom"><h5 class="mb-0"><b>{{ $lang::get('custom.api') }}</b></h5></div>
+                <div class="card-body bg-white text-black-50 border-bottom"><h5 class="mb-0"><b>{{ Lang::get('custom.api') }}</b></h5></div>
 
                 <div id="connect_api_gui" class="card-body">
                     <span class="wallet mb-2"><!--  --></span>
                     @if($membership == 'free' && $trial == 0)
-                        <a class="settings text-bold alert-warning" data_target="2">{!! $lang::get('custom.trial') !!} {{ $lang::get('custom.here') }}</a>
+                        <a class="settings text-bold alert-warning" data_target="2">{!! Lang::get('custom.trial') !!} {{ Lang::get('custom.here') }}</a>
                     @else
                         <div class="msg"><!--  --></div>
                         @if($user->watcherviews_id > 0)
@@ -165,12 +113,132 @@
         save_profile();
         connect_api();
         logout_watcherviews();
-        delete_epayment();
+        delete_payment();
+        add_payment();
+        display_detail_payment();
+        save_bank_method();
     });
 
-    function delete_epayment()
+    function add_payment()
     {
-        $("body").on("click",".epay",function()
+        $("#add-payment").click(function(){
+            $("#dropdown-payment").show();
+        });
+
+        $("select[name='mpayment']").change(function(){
+            var val = $(this).val();
+            var method = $("option:selected").attr('method');
+
+            if(val == 'bank')
+            {
+                $("#bank-payment").show();
+                $("#e-payment").hide();
+                $("#save-bank").attr('method',method);
+            }
+            else if(val == 'epay')
+            {
+                $("#bank-payment").hide();
+                $("#e-payment").show();
+            }
+            else
+            {
+                $("#bank-payment, #e-payment").hide();
+            }
+        });
+    }
+
+    function save_bank_method()
+    {
+        $("#save-bank").click(function()
+        {   
+            var name = $("input[name='bank_name']").val();
+            var no = $("input[name='bank_no']").val();
+            var owner = $("input[name='bank_customer']").val();
+            var method = $(this).attr('method');
+
+            var data = {'bank_name':name,'bank_no':no,'bank_customer':owner,'method':method};
+
+            $.ajax({
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                type : 'POST',
+                url : "{{ url('save-bank-payment') }}",
+                dataType : 'json',
+                data : data,
+                beforeSend: function()
+                {
+                   $('#loader').show();
+                   $('.div-loading').addClass('background-load');
+                },
+                success : function(result)
+                {
+                    if(result.status == 'error')
+                    {
+                        $(".error").show();
+                        $(".bank_name").html(result.bank_name);
+                        $(".bank_customer").html(result.bank_customer);
+                        $(".bank_no").html(result.bank_no);
+                    }
+                    else if(result.status == 0)
+                    {
+                        $("#err_profile").html('<div class="alert alert-danger">'+result.msg+'</div>');
+                    }
+                    else
+                    {
+                        $(".error").hide();
+                        $("#err_profile").html('<div class="alert alert-success">'+result.msg+'</div>');
+
+                        var el = '<div class="mb-2"><button data-value="'+result.bank[3]+'" data-name="'+result.bank[0]+'" data-no="'+result.bank[1]+'" data-owner="'+result.bank[2]+'" type="button" class="btn btn-info text-capitalize b_payment w-100"><span class="text-uppercase">'+result.bank[0]+'</span></button>';
+
+                        if(result.bank[3] == 'bank_1')
+                        {
+                            $("#bank_1_method").html(el);
+                        }
+                        else
+                        {
+                            $("#bank_2_method").html(el);
+                        }
+
+                        $(".alert-danger").hide();
+                        $("select[name='mpayment'] option:first").prop('selected',true);   
+                        $("#bank-payment, #dropdown-payment").hide(); 
+                    }
+                },
+                complete : function()
+                {
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+                    $(".msg").delay(3000).fadeOut(1000);
+                },
+                error : function()
+                {
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
+                }
+            });
+        });
+    }
+
+    function display_detail_payment()
+    {
+        $("body").on("click",".b_payment",function()
+        {
+            var name = $(this).attr('data-name');
+            var no = $(this).attr('data-no');
+            var owner = $(this).attr('data-owner');
+            var method = $(this).attr('data-value');
+
+            $("input[name='bank_name']").val(name);
+            $("input[name='bank_no']").val(no);
+            $("input[name='bank_customer']").val(owner);
+            $("#save-bank").attr('method',method);
+            $("#bank-del").attr('data-value',method).show();
+            $("#bank-payment").show();
+        });
+    }
+
+    function delete_payment()
+    {
+        $("body").on("click",".delpay",function()
         {
             var payment = $(this).attr('data-value');
             $("#confirm_payment_delete").modal();
@@ -183,7 +251,7 @@
             var payment = $(this).attr('data-value');
             $.ajax({
                 type : 'GET',
-                url : "{{ url('delete-epayment') }}",
+                url : "{{ url('delete-payment') }}",
                 dataType : 'json',
                 data : {'payment':payment},
                 beforeSend: function()
@@ -199,7 +267,15 @@
 
                     if(result.err == 0)
                     {
-                        if(payment == 'epayment_1')
+                        if(payment == 'bank_1')
+                        {
+                            $("#bank_1_method").html('');
+                        }
+                        else if(payment == 'bank_2')
+                        {
+                            $("#bank_2_method").html('');
+                        }
+                        else if(payment == 'epayment_1')
                         {
                             $("#display_ovo").html('');
                         }
@@ -211,10 +287,18 @@
                         {
                             $("#display_gopay").html('');
                         }
+
+                        $(".alert-danger").hide();
+                        $("select[name='mpayment'] option:first").prop('selected',true);
+                        $("#bank-payment, #dropdown-payment, #bank-del").hide(); 
+                    }
+                    else if(result.err == 2)
+                    {
+                        $("#crop_save").html('<div class="alert alert-danger">{{ Lang::get("custom.payment"); }}</div>');
                     }
                     else
                     {
-                        $(".msg").html('<div class="alert alert-danger">{{ Lang::get("custom.failed") }}</div>');
+                        $("#crop_save").html('<div class="alert alert-danger">{{ Lang::get("custom.failed") }}</div>');
                     }
                 },
                 complete : function()
@@ -263,7 +347,7 @@
         $modal.on('shown.bs.modal', function() {
         cropper = new Cropper(image, {
             aspectRatio: 1,
-            viewMode: 3,
+            viewMode: 1,
             preview:'.preview'
         });
         }).on('hidden.bs.modal', function(){
@@ -273,8 +357,8 @@
 
         $('#crop').click(function(){
             canvas = cropper.getCroppedCanvas({
-                width:400,
-                height:400
+                width:150,
+                height:150
             });
 
             canvas.toBlob(function(blob){
@@ -300,24 +384,26 @@
                             }
                             else if(data.pay == 1)
                             {
-                                $(".epayname").html('<span class="text-danger">{{ Lang::get("auth.epayname") }}</span>');
+                                $(".epayname").html('<span class="text-danger">'+data.epayname+'</span>');
                             }
                             else
                             {
+                                var el = '<div class="mb-2"><button data-value="epayment_3" type="button" class="btn btn-info epay text-capitalize w-100">{{ Lang::get("custom.del") }} <span class="text-uppercase">'+data.epayname+'</span></button></div>';
+
                                 if(data.pay == 'epayment_1')
                                 { 
                                     // $('#ovo_image').attr('src', data.img);
-                                    $("#display_ovo").html('<div class="mb-2"><button data-value="epayment_1" type="button" class="btn btn-danger epay">Hapus '+data.epayname+'</button></div>');
+                                    $("#display_ovo").html(el);
                                 }
                                 else if(data.pay == 'epayment_2')
                                 {
                                     // $('#dana_image').attr('src', data.img);
-                                    $("#display_dana").html('<div class="mb-2"><button data-value="epayment_2" type="button" class="btn btn-danger epay">Hapus '+data.epayname+'</button></div>');
+                                    $("#display_dana").html(el);
                                 }
                                 else
                                 {
                                     // $('#gopay_image').attr('src', data.img);
-                                    $("#display_gopay").html('<div class="mb-2"><button data-value="epayment_3" type="button" class="btn btn-danger epay">Hapus '+data.epayname+'</button></div>');
+                                    $("#display_gopay").html(el);
                                 }
 
                                 $("#crop_save").html('<div class="alert alert-success">{{ Lang::get("custom.success") }}</div>')
@@ -437,10 +523,6 @@
                     {
                         $(".error").show();
                         $(".name").html(result.name);
-                        $(".bank_name_1").html(result.bank_name_1);
-                        $(".bank_name_2").html(result.bank_name_2);
-                        $(".bank_no_1").html(result.bank_no_1);
-                        $(".bank_no_2").html(result.bank_no_2);
                         $(".phone").html(result.phone);
                         $(".phone").html(result.code_country); //exceptional
                         $(".oldpass").html(result.oldpass);

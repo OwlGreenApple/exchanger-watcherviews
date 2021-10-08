@@ -3,10 +3,9 @@
 namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 
-class CheckPaymentMethods implements Rule
+class CheckSpecialChar implements Rule
 {
     /**
      * Create a new rule instance.
@@ -27,18 +26,10 @@ class CheckPaymentMethods implements Rule
      */
     public function passes($attribute, $value)
     {
-        $auth = Auth::user();
-        $illegal = false;
-
-        if($auth->bank_1 == null && $auth->bank_2 == null && $auth->epayment_1 == null && $auth->epayment_2 == null && $auth->epayment_3 == null)
-        {
-            $illegal = true;
-        }
-
-        if($value == null && $illegal == true)
+        if(preg_match('/\|/i',$value) == true)
         {
             return false;
-        } 
+        }
         else
         {
             return true;
@@ -52,6 +43,6 @@ class CheckPaymentMethods implements Rule
      */
     public function message()
     {
-        return Lang::get('custom.payment');
+        return Lang::get('custom.special_char');
     }
 }

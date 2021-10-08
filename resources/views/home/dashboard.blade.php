@@ -152,43 +152,7 @@
   {
       search_seller();
       pagination();
-      request_buy();
   });
-
-  function request_buy()
-  {
-      $("body").on("click",".request_buy",function()
-      {
-          var id = $(this).attr('data-id');
-
-          $.ajax({
-              type : 'GET',
-              url : "{{ url('buy-request') }}",
-              dataType : 'html',
-              data : {'id' : id},
-              beforeSend: function()
-              {
-                 $('#loader').show();
-                 $('.div-loading').addClass('background-load');
-                 $(".error").hide();
-              },
-              success : function(result)
-              {
-                  display_buy_list(null,null,null);
-              },
-              complete : function()
-              {
-                  $('#loader').hide();
-                  $('.div-loading').removeClass('background-load');
-              },
-              error : function()
-              {
-                  $('#loader').hide();
-                  $('.div-loading').removeClass('background-load');
-              }
-          });
-      });
-  }
 
   window.onload = function () 
   {

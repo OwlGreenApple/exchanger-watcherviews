@@ -8,6 +8,7 @@
 return [
     'amount'=>'Jumlah Transaksi Coin',
     'api'=>'Mohon connect kan akun watcherviews anda',
+    'bank'=>'Bank',
     'buy'=>'Request Beli',
     'buy.done'=>'Transaksi pembelian selesai',
     'buy.no'=>'No Invoice',
@@ -17,8 +18,10 @@ return [
     'conf'=>'Konfirmasi pembelian Coin',
     'comments'=>'Komentar',
     'created'=>'Tanggal Transaksi',
+    'epay'=>'Pembayaran Elektronik',
     'fee'=>'Coin fee',
     'home'=>'Beranda',
+    'max_payment'=>'Maksimal epayment adalah 3',
     'min'=>'Min 100.000 coin',
     'name'=>'Transaksi',
     'no'=>'No Transaksi',

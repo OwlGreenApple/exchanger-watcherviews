@@ -30,109 +30,9 @@
         </div>
     </div>
 
-    <!-- PAYMENT METHOD -->
+     <!-- PASSWORD -->
 
-    <div align="center" class="mb-3 alert alert-secondary"><b>Metode Pembayaran</b></div>
-
-    <span id="crop_save"><!-- message success if crop saved --></span>
-
-    
-
-     <div class="form-group row">
-        <label class="col-md-4 col-form-label text-md-right">&nbsp;</label>
-
-        <div class="col-md-6">
-           <button class="btn btn-info">Tambah Akun Bank</button>
-        </div>
-    </div> 
-
-    <!-- BANK 1 -->
-    <div class="form-group row">
-        <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.bank_name') }}</label>
-
-        <div class="col-md-6">
-            <input type="text" value="{{ $bank_1[0] }}" class="form-control" name="bank_name_1" />
-            <span class="error bank_name_1"><!--  --></span>
-        </div>
-    </div> 
-
-    <div class="form-group row">
-        <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.bank_no') }}</label>
-
-        <div class="col-md-6">
-            <input type="text" value="{{ $bank_1[1] }}" class="form-control" name="bank_no_1" />
-            <span class="error bank_no_1"><!--  --></span>
-        </div>
-    </div>
-
-    <!-- BANK 2 -->
-    <div class="form-group row">
-        <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.bank_name_other') }}</label>
-
-        <div class="col-md-6">
-            <input type="text" value="{{ $bank_2[0] }}" class="form-control" name="bank_name_2" />
-            <span class="error bank_name_2"><!--  --></span>
-        </div>
-    </div> 
-
-    <div class="form-group row">
-        <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.bank_no_other') }}</label>
-
-        <div class="col-md-6">
-            <input type="text" value="{{ $bank_2[1] }}" class="form-control" name="bank_no_2" />
-            <span class="error bank_no_2"><!--  --></span>
-        </div>
-    </div>
-    
-    <!-- EPAYMENT -->
-    <div class="form-group row">
-        <label class="col-md-4 col-form-label text-md-right">{{ $lang::get('custom.epayment') }}</label>
-
-        <div class="col-md-6">
-           <select class="form-control" name="epayment">
-               <option value="epayment_1">{{ $lang::get('custom.epayment_1') }}</option>
-               <option value="epayment_2">{{ $lang::get('custom.epayment_2') }}</option>
-               <option value="epayment_3">{{ $lang::get('custom.epayment_3') }}</option>
-           </select>
-        </div>
-    </div>
-
-    <!-- upload form -->
-    <div class="form-group row">
-        <label class="col-md-4 col-form-label text-md-right">&nbsp;</label>
-
-        <div class="col-md-6">
-            <input type="text" class="form-control mb-2" placeholder="{{ Lang::get('custom.epay') }}" name="epayname" />
-            <span class="error epayname"><!--  --></span>
-            <input type="file" class="form-control upload_payment" name="payment" />
-        </div>
-    </div>
-
-    <div class="form-group row">
-        <label class="col-md-4 col-form-label text-md-right"><!--  --></label>
-
-        <div id="display_epayment" class="col-md-6">
-            <span id="display_ovo">
-                @if($user->epayment_1 !== null)
-                    <div class="mb-2"><button data-value="epayment_1" type="button" class="btn btn-danger epay text-capitalize">Hapus <span class="text-uppercase">{{ $epayment_1[0] }}</span></button></div>
-                @endif
-            </span>
-            <span id="display_dana">
-                @if($user->epayment_2 !== null)
-                    <div class="mb-2"><button data-value="epayment_2" type="button" class="btn btn-danger epay text-capitalize">Hapus <span class="text-uppercase">{{ $epayment_2[0] }}</span></button></div>
-                @endif
-            </span>
-            <span id="display_gopay">
-                @if($user->epayment_3 !== null)
-                    <div class="mb-2"><button data-value="epayment_3" type="button" class="btn btn-danger epay">Hapus <span class="text-uppercase">{{ $epayment_3[0] }}</span></button></div>
-                @endif
-            </span>
-        </div>
-    </div>
-
-    <!-- PASSWORD -->
-
-    <div align="center" class="mb-3 alert alert-secondary"><b>{{ $lang::get('auth.notes') }}</b></div>
+    <div align="center" class="mb-3 alert alert-secondary"><b>{{ Lang::get('auth.notes') }}</b></div>
 
     <div class="form-group row">
         <label class="col-md-4 col-form-label text-md-right"> Password Lama</label>
@@ -160,11 +60,125 @@
         </div>
     </div>
 
-    <div class="form-group row mb-0">
+    <div class="form-group row mb-3">
         <div class="col-md-6 offset-md-4">
             <button type="submit" class="btn btn-success">
                 {{ __('Ubah') }}
             </button>
+        </div>
+    </div>
+
+    <!-- PAYMENT METHOD -->
+
+    <div align="center" class="mb-3 alert alert-secondary"><b>Metode Pembayaran</b></div>
+
+    <span id="crop_save"><!-- message success if crop saved --></span>
+
+     <div class="form-group row">
+        <label class="col-md-4 col-form-label text-md-right">&nbsp;</label>
+
+        <div class="col-md-6">
+           <button type="button" id="add-payment" class="btn btn-success"><i class="fas fa-plus"></i>&nbsp;Tambah Akun Pembayaran</button>
+        </div>
+    </div> 
+
+    <!-- DROPDOWN METHOD -->
+    <span id="dropdown-payment">
+         <div class="form-group row">
+            <label class="col-md-4 col-form-label text-md-right"><!--  --></label>
+
+            <div class="col-md-6">
+               <select class="form-control" name="mpayment">
+                   <option>{{ Lang::get('custom.choose_pay') }}</option>
+                   <option method="@if($user->bank_1 == null) bank_1 @else bank_2 @endif" value="bank">{{ Lang::get('transaction.bank') }}</option>
+                   <option value="epay">{{ Lang::get('transaction.epay') }}</option>
+               </select>
+            </div>
+        </div>
+    </span>
+
+    <!-- BANK -->
+    <div id="bank-payment">
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label text-md-right">{{ Lang::get('custom.bank_name') }}</label>
+
+            <div class="col-md-6">
+                <input type="text" class="form-control" name="bank_name" />
+                <span class="error bank_name"><!--  --></span>
+            </div>
+        </div> 
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label text-md-right">{{ Lang::get('custom.bank_no') }}</label>
+
+            <div class="col-md-6">
+                <input type="text" class="form-control" name="bank_no" />
+                <span class="error bank_no"><!--  --></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label text-md-right">{{ Lang::get('custom.bank_customer') }}</label>
+
+            <div class="col-md-6">
+                <input type="text" class="form-control" name="bank_customer" />
+                <span class="error bank_customer"><!--  --></span><br/>
+
+                <!-- BUTTON SAVE -->
+                <button type="button" method="@if($user->bank_1 == null) bank_1 @else bank_2 @endif" id="save-bank" class="btn btn-success btn-sm mt-1">{{ Lang::get('custom.save') }}</button>
+
+                <button id="bank-del" type="button" class="mt-1 btn btn-danger btn-sm delpay">{{ Lang::get('custom.del') }}</button>
+            </div>
+        </div>
+     <!--  -->
+    </div> 
+
+    
+    <!-- EPAYMENT -->
+    <div id="e-payment">
+        <!-- upload form -->
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label text-md-right">&nbsp;</label>
+
+            <div class="col-md-6">
+                <input type="text" class="form-control mb-2" placeholder="{{ Lang::get('custom.epay') }}" name="epayname" />
+                <span class="error epayname"><!--  --></span>
+                <input type="file" class="form-control upload_payment" name="payment" />
+            </div>
+        </div>
+        <!-- end e-payment -->
+    </div>
+
+    <!-- LIST OF PAYMENTS -->
+    <div class="form-group row">
+        <label class="col-md-4 col-form-label text-md-right"><!--  --></label>
+
+        <div id="display_epayment" class="col-md-6">
+            <span id="bank_1_method">
+                @if($user->bank_1 !== null)
+                    <div class="mb-2"><button data-value="bank_1" data-name="{{ $bank_1[0] }}" data-no="{{ $bank_1[1] }}" data-owner="{{ $bank_1[2] }}" type="button" class="btn btn-info b_payment text-capitalize w-100"><span class="text-uppercase">{{ $bank_1[0] }}</span></button></div>
+                @endif
+            </span>
+            <span id="bank_2_method">
+                @if($user->bank_2 !== null)
+                    <div class="mb-2"><button data-value="bank_2" data-name="{{ $bank_2[0] }}" data-no="{{ $bank_2[1] }}" data-owner="{{ $bank_2[2] }}" type="button" class="btn btn-info text-capitalize b_payment w-100"><span class="text-uppercase">{{ $bank_2[0] }}</span></button></div>
+                @endif
+            </span>
+            <span id="display_ovo">
+                @if($user->epayment_1 !== null)
+                    <div class="mb-2"><button data-value="epayment_1" type="button" class="btn btn-info delpay text-capitalize w-100">{{ Lang::get('custom.del') }} <span class="text-uppercase">{{ $epayment_1[0] }}</span></button></div>
+                @endif
+            </span>
+            <span id="display_dana">
+                @if($user->epayment_2 !== null)
+                    <div class="mb-2"><button data-value="epayment_2" type="button" class="btn btn-info delpay text-capitalize w-100">{{ Lang::get('custom.del') }} <span class="text-uppercase">{{ $epayment_2[0] }}</span></button></div>
+                @endif
+            </span>
+            <span id="display_gopay">
+                @if($user->epayment_3 !== null)
+                    <div class="mb-2"><button data-value="epayment_3" type="button" class="btn btn-info delpay text-capitalize w-100">{{ Lang::get('custom.del') }} <span class="text-uppercase">{{ $epayment_3[0] }}</span></button></div>
+                @endif
+            </span>
         </div>
     </div>
 </form>

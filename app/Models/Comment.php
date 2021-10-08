@@ -11,6 +11,9 @@ class Comment extends Model
 
     /*
 		parent_id == ini di pake kalo suatu saat diminta spy bisa buat reply comment
+		is_seller :
+		0 == buyer
+		1 == seller
     */
 
     protected $table = "comments";

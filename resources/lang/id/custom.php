@@ -5,6 +5,7 @@ return [
     'agreement'=>'Saya menyetujui semua pernyataan di : ', //checkout.blade
     'api'=>'Connect ke akun watcherviews anda', //checkout.blade
     'bank'=>'Bank', //profile.blade
+    'bank_customer'=>'Nama Pemilik', //profile.blade
     'bank_name'=>'Nama Bank', //home.blade
     'bank_name_other'=>'Nama Bank 2 (tidak wajib)', //home.blade
     'bank_no'=>'No Rekening', //home.blade
@@ -12,6 +13,7 @@ return [
     'cart_summary'=>'Keranjang summary', //summary.blade
     'chat_end'=>'Maaf, chat ini sudah di tutup oleh admin.', //chat.blade
     'check'=>'Harap centang, syarat dan ketentuan yang berlaku', //register.blade//summary.blade
+    'choose_pay'=>'Pilih Metode Pembayaran', //profile.blade
     'close'=>'Tutup',
     'currency'=>'Rp', //navigation
     'coin'=>'My Wallet', //wallet.blade
@@ -19,13 +21,11 @@ return [
     'connect'=>'Sambungkan ke watcherviews', //connect_api.blade
     'create_account'=>'Buat Akun', //summary.blade
     'currency'=>'Rp', //summary.blade
+    'del'=>'Hapus', //profile.blade
     'end'=>'Trial sudah habis', //trial.blade
     'email_watcherviews'=>'Email Watcherviews anda', //wallet.blade
     'epay'=>'Contoh : ovo', //profile.blade
     'epayment'=>'Pembayaran Elektronik', //profile.blade
-    'epayment_1'=>'Pembayaran Elektronik 1', //profile.blade
-    'epayment_2'=>'Pembayaran Elektronik 2', //profile.blade
-    'epayment_3'=>'Pembayaran Elektronik 3', //profile.blade
     'failed'=>'Maaf server kami terlalu sibuk, silahkan coba lagi nanti.', //checkout.blade
     'find_help'=>'Temukan Bantuan', //summary.blade
     'female'=>'Wanita', //summary.blade
@@ -47,7 +47,7 @@ return [
     'package_terms'=>'per tahun', //checkout.blade
     'paket'=>'Paket yang tersedia', //checkout.blade
     'pass_watcherviews'=>'Password watcherviews anda', //wallet.blade
-    'payment'=>'Setidaknya anda harus mengisi 1 metode pembayaran', //CheckPaymentMethods
+    'payment'=>'Setidaknya anda harus memiliki 1 metode pembayaran', //CheckPaymentMethods
     'pay.choose'=>'Pilih metode pembayaran', //profile.blade
     'phone'=>'Hp', //summary.blade
     'pilih_paket'=>'Silahkan pilih paket anda', //checkout.blade
@@ -60,6 +60,7 @@ return [
     'remember'=>'Ingat akun saya', //summary.blade
     'review'=>'Harap periksa lagi email dan nomer hp anda sebelum melanjutkan order', //summary.blade
     'save'=>'Simpan', //wallet.blade
+    'special_char'=>'Mohon gunakan huruf atau angka.', //CheckSpecialChar
     'success'=>'Data anda telah di simpan',
     'success_coin'=>'Transaksi berhasil',
     'sell'=>'Kesempatan jual per hari',

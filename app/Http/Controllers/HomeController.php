@@ -19,6 +19,7 @@ use App\Helpers\Api;
 use Carbon\Carbon;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Rules\CheckSpecialChar;
 use Storage, Session, Validator;
 
 class HomeController extends Controller
@@ -181,14 +182,9 @@ class HomeController extends Controller
 
     public function update_profile(Request $request)
     {
-        $bank_1 = strip_tags($request->bank_name_1).'|'.strip_tags($request->bank_no_1);
-        $bank_2 = strip_tags($request->bank_name_2).'|'.strip_tags($request->bank_no_2);
-        
         $user = User::find(Auth::id());
         $user->name = strip_tags($request->name);
-        $user->bank_1 = $bank_1;
-        $user->bank_2 = $bank_2;
-
+        
         if($request->newpass !== null)
         {
             $user->password = Hash::make($request->newpass);
@@ -213,18 +209,100 @@ class HomeController extends Controller
         return response()->json($data);
     }
 
+    // SAVE BANK METHOD PAYMENT
+    public function save_bank_payment(Request $request)
+    {
+      $rules = [
+            'bank_name' => ['bail','required',new CheckSpecialChar,'string','max:20'],
+            'bank_no' => ['bail','required',new CheckSpecialChar,'numeric','digits_between:4,30'],
+            'bank_customer' => ['bail','required',new CheckSpecialChar,'string','max:30'],
+      ];
+
+      $validator = Validator::make($request->all(),$rules);
+
+      if($validator->fails())
+      {
+          $err = $validator->errors();
+          $error = array(
+            'status'=>'error',
+            'bank_name'=>str_replace('bank name','Nama Bank',$err->first('bank_name')),
+            'bank_no'=>str_replace(array('bank no','bank name'),array('No Rekening','Nama Bank'),$err->first('bank_no')),
+            'bank_customer'=>str_replace('bank customer','Nama Customer',$err->first('bank_customer')),
+          );
+
+          return response()->json($error);
+      }
+
+      $bank_name = strip_tags($request->bank_name);
+      $bank_no = strip_tags($request->bank_no);
+      $bank_customer = strip_tags($request->bank_customer);
+
+      $bank = $bank_name.'|'.$bank_no.'|'.$bank_customer;
+      $user = User::find(Auth::id());
+
+      if($request->method == 'bank_1')
+      {
+        $user->bank_1 = $bank;
+        $method = 'bank_1';
+      }
+      else
+      {
+        $user->bank_2 = $bank;
+        $method = 'bank_2';
+      }
+
+      $bdata = [$bank_name,$bank_no,$bank_customer,$method];
+      
+      try
+      {
+          $user->save();
+          $data = ['status'=>1,'bank'=>$bdata,'msg'=>Lang::get('custom.success')];
+      }
+      catch(QueryException $e)
+      {
+          // dd($e->getMessage());
+          $data = ['status'=>0,'msg'=>Lang::get('custom.failed')];
+      }
+
+      return response()->json($data);
+    }
+
+    // SAVE E-PAYMENT METHOD
     public function payment_upload(Request $request)
     {
       $user = User::find(Auth::id());
-      $payment = $request->epayment;
+      $pass = true;
       $epayname = strip_tags($request->epayname);
 
-      if($epayname == null)
+      $rules = [
+            'epayname' => ['bail','required',new CheckSpecialChar,'string','max:20'],
+      ];
+
+      $validator = Validator::make($request->all(),$rules);
+      if($validator->fails())
       {
-        $res['pay'] = 1;
-        return response()->json($res);
+          $err = $validator->errors();
+          $error = array(
+            'pay'=>1,
+            'epayname'=>str_replace('epayname','nama epayment',$err->first('epayname')),
+          );
+          $pass = false;
       }
-    
+
+      if($user->epayment_1 !== null && $user->epayment_2 !== null && $user->epayment_3 !== null)
+      {
+          $error = array(
+            'pay'=>1,
+            'epayname'=>Lang::get('transaction.max_payment'),
+          );
+          $pass = false;
+      }
+
+      if($pass == false)
+      {
+        return response()->json($error);
+      }
+
       $dir = env('APP_UPLOAD').'/payment_method';
 
       $image = $request->image;
@@ -232,17 +310,20 @@ class HomeController extends Controller
       $image_array_2 = explode(",", $image_array_1[1]);
       $data = base64_decode($image_array_2[1]);
 
-      if($payment == 'epayment_1')
+      if($user->epayment_1 == null)
       {
         $filename = Auth::id().'-ep1.jpg';
+        $payment = 'epayment_1';
       }
-      elseif($payment == 'epayment_2')
+      elseif($user->epayment_2 == null)
       {
         $filename = Auth::id().'-ep2.jpg';
+        $payment = 'epayment_2';
       }
       else
       {
         $filename = Auth::id().'-ep3.jpg';
+        $payment = 'epayment_3';
       }
       
       $path = $dir."/".$filename;
@@ -266,11 +347,26 @@ class HomeController extends Controller
     }
 
     // DELETE ELECTRONICS PAYMENT
-    public function delete_epayment(Request $request)
+    public function delete_payment(Request $request)
     {
       $payment = $request->payment;
       $pc = new Price;
       $user = User::find(Auth::id());
+
+      if(self::check_many_payments() == 1)
+      {
+        return response()->json(['err'=>2]);
+      }
+
+      if($payment == 'bank_1')
+      {
+        $user->bank_1 = null;
+      }
+
+      if($payment == 'bank_2')
+      {
+        $user->bank_2 = null;
+      }
 
       if($payment == 'epayment_1')
       {
@@ -291,7 +387,10 @@ class HomeController extends Controller
       try
       {
         $user->save();
-        Storage::disk('s3')->delete($path);
+        if($payment !== 'bank_1' || $payment !== 'bank_2')
+        {
+          Storage::disk('s3')->delete($path);
+        }
         $res['err'] = 0;
       }
       catch(QueryException $e)
@@ -301,6 +400,40 @@ class HomeController extends Controller
       }
       
       return response()->json($res);
+    }
+
+    // COUNT NULL PAYEMNT METHOD ON TABLE USER
+    public static function check_many_payments()
+    {
+        $auth = Auth::user();
+        $t = 5;
+
+        if($auth->bank_1 == null)
+        {
+            $t--;
+        }
+
+        if($auth->bank_2 == null)
+        {
+            $t--;
+        }
+
+        if($auth->epayment_1 == null)
+        {
+            $t--;
+        }
+
+        if($auth->epayment_2 == null)
+        {
+            $t--;
+        }
+
+        if($auth->epayment_3 == null)
+        {
+            $t--;
+        }
+
+        return $t;
     }
 
     // CONNECT TO WATCHERVIEWS TO OBTAIN WATCHERVIEWS ID
