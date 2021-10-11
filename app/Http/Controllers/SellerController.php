@@ -7,10 +7,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Database\QueryException;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\BuyerController AS Buyer;
+use App\Http\Controllers\Admin\AdminController AS adm;
 use App\Models\User;
 use App\Models\Transaction;
+use App\Helpers\Messages;
 use App\Helpers\Price;
 use App\Helpers\Api;
+use App\Mail\BuyerEmail;
 use Carbon\Carbon;
 use Storage, Session;
 
@@ -78,7 +82,7 @@ class SellerController extends Controller
     public function display_sell(Request $request)
     {
     	$data = array();
-    	$tr = Transaction::where('transactions.seller_id','=',Auth::id())->leftJoin('users','transactions.buyer_id','=','users.id')->select('transactions.*','users.name as buyer')->orderBy('transactions.id','desc')->get();
+    	$tr = Transaction::where('transactions.seller_id','=',Auth::id())->leftJoin('users','transactions.buyer_id','=','users.id')->select('transactions.*','users.name as buyer')->orderBy('transactions.updated_at','desc')->get();
 
     	if($tr->count() > 0)
     	{
@@ -100,11 +104,11 @@ class SellerController extends Controller
 	    		}
 	    		elseif($row->status == 1)
 	    		{
-	    			$status = '<span class="text-black">Menunggu konfirmasi pembeli  </span>';
+	    			$status = '<a href="'.url("sell-detail").'/'.$row->id.'" class="btn btn-info">Lihat Request</a>';
 	    		}
                 elseif($row->status == 2)
                 {
-                    $status = $confirm_sell;
+                    $status = '<span class="text-black">Tunggu konfirmasi pembeli</span>';
                 }
                 elseif($row->status == 4)
                 {
@@ -122,6 +126,10 @@ class SellerController extends Controller
 	    		{
 	    			$status = '<span class="text-black-50">Dispute</span>';
 	    		}
+                elseif($row->status == 7)
+                {
+                    $status = $confirm_sell;
+                }
                 else
                 {
                     $status = '<span class="text-black-50">Lunas</span>';
@@ -165,6 +173,164 @@ class SellerController extends Controller
     	}
 
     	return view('seller.sell-content',['data'=>$data]);
+    }
+
+    // DISPLAY DETAIL SELL
+    public function detail_sell($id)
+    {
+        $tr = Transaction::where([['id',$id],['status',1]])->first();
+
+        // TO AVOID IF USER DELIBERATELY PUT HIS PRODUCT
+        if(is_null($tr) || $tr->buyer_id == Auth::id())
+        {
+            return view('error404');
+        }
+
+        $user = User::find($tr->buyer_id);
+        $pc = new Price;
+        $by = new Buyer;
+        $cm = $by::star_rate($tr->buyer_id);
+
+        $check = '<i class="fas fa-check text-danger"></i>';
+        $wrong = '<i class="fas fa-times text-success"></i>';
+
+        if($user->warning == 1)
+        {
+            $warning = $check;
+        }
+        else
+        {
+            $warning = $wrong;
+        }
+
+        if($user->suspend == 1)
+        {
+            $suspend = $check;
+        }
+        else
+        {
+            $suspend = $wrong;
+        }
+
+        $data = [
+            'id'=>$tr->id,
+            'no'=>$tr->no,
+            'star'=>round($cm->star),
+            'buyer'=>$user->name,
+            'warning'=>$warning,
+            'suspend'=>$suspend,
+            'coin'=>$pc->pricing_format($tr->amount),
+            'total'=>Lang::get('custom.currency').' '.$pc->pricing_format($tr->total),
+        ];
+
+        return view('seller.sell-detail',['row'=>$data]);
+    }
+
+    // DECISION FROM SELLER TO BUYER REQUEST
+    public function seller_decision(Request $request)
+    {
+        $id = $request->id;
+        $act = $request->act;
+        $trans = Transaction::where([['seller_id',Auth::id()],['id',$id],['status',1]])->first();
+
+        if(is_null($trans))
+        {
+            return response()->json(['err'=>1]);
+        }
+
+        // act : 1 = accept, 2 = refuse, 3 = block and refuse
+
+        if($act == 1)
+        {
+           // MAIL TO BUYER IF ORDER HAS ACCEPTED
+           $buy = new Buyer;
+           $buy::notify_buyer($trans->no,$trans->buyer_id,$trans->id);
+           return self::save_seller_decision(2,$act,$trans->id);
+        }
+        else
+        {
+           self::notify_refuse_buyer($trans->no,$trans->buyer_id,$trans->id);
+           return self::save_seller_decision(0,$act,$trans->id);
+        }
+    }
+
+    public static function save_seller_decision($status,$act,$id)
+    {
+        $tr = Transaction::find($id);
+       /* $tr->status = $status;
+        $buyer_id = $tr->buyer_id;*/
+        $buyer_id = $tr->buyer_id;
+
+        // IN CASE OF BLOCK AND REFUSE
+        if($act == 2)
+        {
+            $tr->buyer_id = 0;
+            $tr->date_buy = null;
+        }
+
+        // IN CASE OF BLOCK
+        if($act == 3)
+        {
+            $user = User::find(Auth::id());
+            if($user->blocked_buyer !== null)
+            {
+                $blocked = explode("|",$user->blocked_buyer);
+                array_pop($blocked);
+                array_push($blocked,$buyer_id."|");
+                $blocked = implode("|",$blocked);
+            }
+            else
+            {
+                $blocked = $buyer_id."|";
+            }
+           
+            $user->blocked_buyer = $blocked;
+
+            // ALL TRANSACTION CANCELLED
+            $trs = Transaction::where([['seller_id',Auth::id()],['buyer_id',$buyer_id],['status',1]]);
+
+            if($trs->get()->count() > 0)
+            {
+                $btr = [
+                    'buyer_id'=>0,
+                    'date_buy'=>null,
+                    'status'=>0,
+                ];
+                $trs->update($btr);
+            }
+        }
+
+        try
+        {
+            $tr->save();
+            $user->save();
+            $res['err'] = 0;
+        }
+        catch(QueryException $e)
+        {
+            //dd($e->getMessage());
+            $res['err'] = 1;
+        }
+        
+        return response()->json($res);
+    }
+
+    //NOTIFICATION FOR BUYER WHEN SELLER REFUSE REQUEST ORDER
+    public static function notify_refuse_buyer($invoice,$buyer_id)
+    {
+        $msg = new Messages;
+        $msg = $msg::buyer_notification($invoice,null);
+
+        $buyer = User::find($buyer_id);
+        $data = [
+          'message'=>$msg,
+          'phone_number'=>$buyer->phone_number,
+          'email'=>$buyer->email,
+          'obj'=>new BuyerEmail($invoice,null),
+        ];
+
+        $adm = new adm;
+        $adm->notify_user($data);
     }
 
     // CONFIRMATION PAGE

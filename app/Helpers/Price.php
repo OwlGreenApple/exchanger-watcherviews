@@ -138,5 +138,11 @@ class Price
         }
     }
 
+    public static function check_blocked_user($blocked_buyer)
+    {
+        $blocked_list = explode("|",$blocked_buyer);
+        return in_array(Auth::id(), $blocked_list);
+    }
+
 /*end of class*/
 }

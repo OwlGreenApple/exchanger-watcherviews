@@ -37,7 +37,7 @@ class BuyerController extends Controller
 
     	if($src == null)
     	{
-    		$tr = Transaction::where([['transactions.status','=',0],['users.status','>',0],['users.status','<>',3]])->join('users','users.id','=','transactions.seller_id')->select('transactions.*','users.status','users.name');
+    		$tr = Transaction::where([['transactions.status','=',0],['users.status','>',0],['users.status','<>',3]])->join('users','users.id','=','transactions.seller_id')->select('transactions.*','users.status','users.name','users.blocked_buyer');
     	}
     	else
     	{
@@ -47,7 +47,7 @@ class BuyerController extends Controller
     				$query->orWhere('transactions.amount',$src);
     				$query->orWhere('transactions.kurs',$src);
     				$query->orWhere('users.name',$src);
-    			})->select('transactions.*','users.status','users.name');
+    			})->select('transactions.*','users.status','users.name','users.blocked_buyer');
     	}
 
     	// RANGE LOGIC
@@ -83,7 +83,11 @@ class BuyerController extends Controller
     	{
     		$rate = ' ';
     		foreach($tr as $row):
-    			// $seller = User::find($row->seller_id);
+                if($pc::check_blocked_user($row->blocked_buyer) == true)
+                {
+                    continue;
+                }
+
     			$cm = self::star_rate($row->seller_id);
     			$star = round($cm->star);
     			$data[] = [
@@ -169,7 +173,6 @@ class BuyerController extends Controller
     public function detail_buy($id)
     {
     	$tr = Transaction::where([['id',$id],['status',0]])->first();
-
     	// TO AVOID IF USER DELIBERATELY PUT HIS PRODUCT
     	if(is_null($tr) || $tr->seller_id == Auth::id())
     	{
@@ -177,7 +180,17 @@ class BuyerController extends Controller
     	}
 
     	$user = User::find($tr->seller_id);
-    	$pc = new Price;
+        $pc = new Price;
+
+         // FOR BLOCKED BUYER BY SELLER
+        if($user->blocked_buyer !== null)
+        {
+            if($pc::check_blocked_user($user->blocked_buyer) == true)
+            {
+                return view('error404');
+            }
+        }
+
         $cm = self::star_rate($tr->seller_id);
 
     	$data = [

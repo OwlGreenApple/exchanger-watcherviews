@@ -64,10 +64,12 @@ Route::group(['middleware'=>['auth','web','banned']],function()
 	Route::post('selling',[App\Http\Controllers\SellerController::class, 'selling_save'])->middleware(['end_membership','check_sell']);
 	Route::get('sell-list',[App\Http\Controllers\SellerController::class, 'display_sell']);
 	Route::get('sell-del',[App\Http\Controllers\SellerController::class, 'del_sell'])->middleware(['end_membership']);
+	Route::get('sell-detail/{id}',[App\Http\Controllers\SellerController::class, 'detail_sell']);
 	Route::get('sell-confirm/{id}',[App\Http\Controllers\SellerController::class, 'sell_confirm']);
 	Route::get('sell-confirmed',[App\Http\Controllers\SellerController::class, 'confirm_selling']);
 	Route::get('thank-you-sell',[App\Http\Controllers\SellerController::class, 'thank_you']);
 	Route::get('seller-dispute/{id}',[App\Http\Controllers\SellerController::class, 'seller_dispute']);
+	Route::post('seller-decision',[App\Http\Controllers\SellerController::class, 'seller_decision']);
 
 	// SETTINGS
 	// Route::get('trade',[App\Http\Controllers\HomeController::class, 'trade']);
