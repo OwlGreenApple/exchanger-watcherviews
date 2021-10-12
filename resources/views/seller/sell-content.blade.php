@@ -11,6 +11,7 @@
         <th>Tanggal Beli</th>
         <th>Pembayaran</th>
         <th>Trial</th>
+        <th>Rate Pembeli</th>
         <th>&nbsp;</th>
     </thead>
     <tbody>        
@@ -26,6 +27,7 @@
                 <td>{{ $row['date_buy'] }}</td>
                 <td>{{ $row['payment'] }}</td>
                 <td>{{ $row['trial'] }}</td>
+                <td>{!! $row['rate'] !!}</td>
                 <td class="text-center">{!! $row['status'] !!}</td>
             </tr>
     @endforeach

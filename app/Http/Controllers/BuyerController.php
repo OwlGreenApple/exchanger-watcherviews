@@ -99,6 +99,7 @@ class BuyerController extends Controller
     				'seller'=>$row->seller_id,
     				'kurs'=>$row->kurs,
     				'rate'=>$star,
+                    'link'=>''.url('comments').'/'.encrypt($row->seller_id).'',
     			];
     		endforeach;
     	}
@@ -207,7 +208,7 @@ class BuyerController extends Controller
 
     public static function star_rate($seller_id)
     {
-        $cm = Comment::selectRaw('AVG(rate) AS star')->where('seller_id',$seller_id)->first();
+        $cm = Comment::selectRaw('AVG(rate) AS star')->where([['seller_id',$seller_id],['is_seller',0]])->first();
         return $cm;
     }
 
@@ -265,6 +266,8 @@ class BuyerController extends Controller
     	{
     		foreach($tr as $row)
     		{
+                $comments_btn = '<a href="'.url('comments').'/'.encrypt($row->seller_id).'/'.$row->no.'"><i class="far fa-envelope"></i></a>';
+
     			if($row->status == 1)
     			{
     				$status = '<span class="text-info">Tunggu seller</span>';
@@ -278,7 +281,7 @@ class BuyerController extends Controller
 				elseif($row->status == 3)
     			{
     				$status = '<span class="text-black-50">Lunas</span>';
-    				$comments = '<a href="'.url('comments').'/'.$row->no.'"><i class="far fa-envelope"></i></a>';
+    				$comments = $comments_btn;
     			}
                 elseif($row->status == 4)
                 {
@@ -293,6 +296,16 @@ class BuyerController extends Controller
                     }      
                     $comments = '-';
                 } 
+                elseif($row->status == 5)
+                {
+                    $status = '<span class="text-black-50">Dispute - penjual menang</span>';
+                    $comments = $comments_btn;
+                }
+                elseif($row->status == 6)
+                {
+                    $status = '<span class="text-black-50">Dispute Admin</span>';
+                    $comments = $comments_btn;
+                }
                 elseif($row->status == 7)
                 {
                     $status = '<span class="text-primary">Tunggu konfirmasi seller</span>';
@@ -425,21 +438,29 @@ class BuyerController extends Controller
     	return response()->json($data);
     }
 
-    public function comments($invoice)
+    public function comments($user_id,$invoice = null)
     {
-    	$tr = Transaction::where('no',$invoice)->first();
+    	$tr = null;
+        if($invoice !== null)
+        {
+            $tr = Transaction::where('no',$invoice)->first();
+            // TO AVOID IF USER DELIBERATELY PUT HIS PRODUCT
+            if(is_null($tr))
+            {
+                return view('error404');
+            }
+        }
+        
+        $seller = User::find(decrypt($user_id));
+        if(is_null($seller))
+        {
+            return view('error404');
+        }
 
-    	// TO AVOID IF USER DELIBERATELY PUT HIS PRODUCT
-    	if(is_null($tr))
-    	{
-    		return view('error404');
-    	}
-
-        $seller = User::find($tr->seller_id);
-        return view('buyer.comments',['tr'=>$tr,'seller'=>$seller]);
+        return view('buyer.comments',['tr'=>$tr,'user_id'=>$seller->id,'member'=>$seller,'role'=>0,'invoice'=>$invoice]);
     }
 
-    // SAVE COMMENT AND RATE FROM BUYER
+    // SAVE COMMENT AND RATE FROM BUYER / SELLER
     public function save_comments(Request $request)
     {
     	$rule = [
@@ -458,11 +479,26 @@ class BuyerController extends Controller
     		return response()->json($error);
     	}
 
+        // TO DETERMINE WHO MAKES COMMENT
+        if($request->role == 1)
+        {
+            $buyer_id =  $request->user_id;
+            $seller_id = Auth::id();
+            $role = 1;
+        }
+        else
+        {
+            $buyer_id =  Auth::id();
+            $seller_id = $request->user_id;
+            $role = 0;
+        }
+
     	$cm = new Comment;
-    	$cm->buyer_id = Auth::id();
-    	$cm->seller_id = $request->seller_id;
+    	$cm->buyer_id = $buyer_id;
+    	$cm->seller_id = $seller_id;
     	$cm->comments = $request->comments;
     	$cm->rate = $request->rate;
+        $cm->is_seller = $role;
         $cm->no_trans = $request->no_trans;
 
     	try
@@ -482,21 +518,39 @@ class BuyerController extends Controller
     public function display_comments(Request $request)
     {
     	$data = array();
-    	$com = Comment::where('seller_id',$request->seller_id)->get();
+        $role = $request->role;
+
+        if($role == 1)
+        {
+            $user_role = 'buyer_id';
+        }
+        else
+        {
+            $user_role = 'seller_id';
+        }
+
+    	$com = Comment::where([[$user_role,$request->user_id],['is_seller',$role]])->orderBy('id','desc')->get();
 
     	if($com->count() > 0)
     	{
     		foreach($com as $row)
     		{
-    			$buyer = User::find($row->buyer_id);
-    			$seller = User::find($row->seller_id);
+                if($role == 1)
+                {
+                    $user = User::find($row->seller_id);
+                }
+                else
+                {
+                    $user = User::find($row->buyer_id);
+                }
+
     			$data[] = [
-    				'buyer'=>$buyer->name,
-    				'seller'=>$seller->name,
+    				'user'=>$user->name,
                     'no_trans'=>$row->no_trans,
     				'comments'=>$row->comments,
     				'rate'=>$row->rate,
     				'created_at'=>$row->created_at,
+                    'role'=>$role,
     			];
     		}
 

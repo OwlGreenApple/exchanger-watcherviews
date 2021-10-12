@@ -23,7 +23,7 @@
                         <i class="fas fa-star"></i>
                     @endfor <span>|</span>
                 @endif
-                </span><span><a class="mt-2" href=""><i class="far fa-envelope"></i></a></span></div>
+                </span><span><a href="{!! $row['link_comment'] !!}" class="mt-2"><i class="far fa-envelope"></i></a></span></div>
                 <div class="list-group-item">Warning : {!! $row['warning'] !!}</div>
                 <div class="list-group-item">Suspend : {!! $row['suspend'] !!}</div>
                 <div class="list-group-item">Jumlah Coin : {{ $row['coin'] }}</div>

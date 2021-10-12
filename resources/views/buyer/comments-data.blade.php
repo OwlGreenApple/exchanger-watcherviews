@@ -4,7 +4,7 @@
         <div class="post-heading">
             <div class="float-left meta">
                 <div class="title h5">
-                    <b>{{ $row['buyer'] }}</b>
+                    <b>{{ $row['user'] }}</b>
                 </div>
                 <div class="title">{{ $row['no_trans'] }}</div>
                 <div class="py-2">

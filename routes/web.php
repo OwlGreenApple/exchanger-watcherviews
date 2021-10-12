@@ -49,7 +49,7 @@ Route::group(['middleware'=>['auth','web','banned']],function()
 		Route::get('buy-request',[App\Http\Controllers\BuyerController::class, 'buy_request'])->middleware('buyer_limit');
 		Route::get('buy-detail/{invoice}',[App\Http\Controllers\BuyerController::class, 'detail_buy']);
 		Route::get('deal/{id}',[App\Http\Controllers\BuyerController::class, 'deal']);
-		Route::get('comments/{invoice}',[App\Http\Controllers\BuyerController::class, 'comments']);
+		Route::get('comments/{user_id}/{invoice?}',[App\Http\Controllers\BuyerController::class, 'comments']);
 	});
 	Route::get('buy-deal',[App\Http\Controllers\BuyerController::class, 'buyer_deal']);
 	Route::get('buyer-confirm/{id}',[App\Http\Controllers\BuyerController::class, 'buyer_confirm']);
@@ -70,6 +70,9 @@ Route::group(['middleware'=>['auth','web','banned']],function()
 	Route::get('thank-you-sell',[App\Http\Controllers\SellerController::class, 'thank_you']);
 	Route::get('seller-dispute/{id}',[App\Http\Controllers\SellerController::class, 'seller_dispute']);
 	Route::post('seller-decision',[App\Http\Controllers\SellerController::class, 'seller_decision']);
+
+	// SELLER COMMENTS
+	Route::get('comments-seller/{user_id}/{invoice?}',[App\Http\Controllers\SellerController::class,'comments']);
 
 	// SETTINGS
 	// Route::get('trade',[App\Http\Controllers\HomeController::class, 'trade']);

@@ -12,21 +12,25 @@
 <div class="row justify-content-center">
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header bg-primary text-white">
-               Nama Penjual : <b>{{ $seller->name }}</b>
+            <div class="card-header bg-gradient-success text-white">
+                @if($role == 1)
+                    Nama Pembeli : <b>{{ $member->name }}</b>
+                @else
+                    Nama Penjual : <b>{{ $member->name }}</b>
+                @endif
             </div>
 
             <div id="comments" class="card-body">
                 <!-- display table comments -->
             </div>
             
-            @if($tr->status == 3 && (auth()->user()->id == $tr->buyer_id))
+            @if($invoice !== null && ($tr->status == 3 || $tr->status == 5 || $tr->status == 6))
             <div class="card-body">
                 <span id="err_message"><!--  --></span>
                 <div class="form-group">
                      <div class="bg-light p-2">
                         <div class="px-1 py-1">Buat Komentar :</div>
-                        <div class="px-1 py-1"><b>{{ $tr->no }}</b></div>
+                        <div class="px-1 py-1"><b></b></div>
                         <div class="px-1 py-2 text-black-50">
                             <i class="rate fas fa-star"></i>
                             <i class="rate fas fa-star"></i>
@@ -109,7 +113,7 @@
             type : 'POST',
             url : "{{ url('display-comments') }}",
             dataType : 'html',
-            data : {'seller_id' : "{{ $tr->seller_id }}"},
+            data : {'user_id' : "{{ $member->id }}",'role':'{{ $role }}'},
             beforeSend: function()
             {
                $('#loader').show();
@@ -141,8 +145,9 @@
             var data = {
                 'comments' : comments,
                 'rate' : rate,
-                'seller_id' : "{{ $tr->seller_id }}",
-                'no_trans' : "{{ $tr->no }}",
+                'user_id' : "{{ $user_id }}",
+                'no_trans' : "{{ $invoice }}",
+                'role' : "{{ $role }}",
             };
 
             $.ajax({
@@ -176,6 +181,10 @@
                         $("#err_message").html('<div class="alert alert-danger">{{ Lang::get("custom.failed") }}</div>');
                     }
                 },
+                complete : function(x)
+                {
+                    reset();
+                },
                 error : function()
                 {
                     $('#loader').hide();
@@ -183,6 +192,12 @@
                 }
             });
         });
+    }
+
+    function reset()
+    {
+        $("textarea[name='comments']").val('');
+        $(".rate").removeClass('checked');
     }
 
 </script>

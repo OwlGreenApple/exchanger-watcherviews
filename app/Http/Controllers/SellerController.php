@@ -11,6 +11,7 @@ use App\Http\Controllers\BuyerController AS Buyer;
 use App\Http\Controllers\Admin\AdminController AS adm;
 use App\Models\User;
 use App\Models\Transaction;
+use App\Models\Comment;
 use App\Helpers\Messages;
 use App\Helpers\Price;
 use App\Helpers\Api;
@@ -86,7 +87,7 @@ class SellerController extends Controller
 
     	if($tr->count() > 0)
     	{
-
+            $rate = '-';
     		foreach($tr as $row):
                 $confirm_sell = '<a target="_blank" href="'.url("sell-confirm").'/'.$row->id.'" class="btn btn-info btn-sm">Konfirmasi</a>';
                 
@@ -112,6 +113,7 @@ class SellerController extends Controller
                 }
                 elseif($row->status == 4)
                 {
+                    $rate = '-';
                     if($row->seller_dispute_id > 0)
                     {
                         /*$status = '<a target="_blank" href="'.url('chat').'/'.$row->id.'" class="btn btn-outline-primary btn-sm"><i class="far fa-comments"></i>&nbsp;Chat Admin</a>';*/
@@ -125,6 +127,7 @@ class SellerController extends Controller
 	    		elseif($row->status == 5)
 	    		{
 	    			$status = '<span class="text-black-50">Dispute</span>';
+                    $rate = '<a href="'.url('comments-seller').'/'.encrypt($row->buyer_id).'/'.$row->no.'"><i class="fas fa-envelope"></i></a>';
 	    		}
                 elseif($row->status == 7)
                 {
@@ -133,6 +136,7 @@ class SellerController extends Controller
                 else
                 {
                     $status = '<span class="text-black-50">Lunas</span>';
+                    $rate = '<a href="'.url('comments-seller').'/'.encrypt($row->buyer_id).'/'.$row->no.'"><i class="fas fa-envelope"></i></a>';
                 }
 
 	    		if($row->date_buy == null)
@@ -167,6 +171,7 @@ class SellerController extends Controller
     				'date_buy'=>$date_buy,
                     'trial'=>$trial,
                     'payment'=>$row->payment,
+                    'rate'=>$rate,
     				'status'=>$status,
     			];
     		endforeach;
@@ -188,11 +193,10 @@ class SellerController extends Controller
 
         $user = User::find($tr->buyer_id);
         $pc = new Price;
-        $by = new Buyer;
-        $cm = $by::star_rate($tr->buyer_id);
+        $cm = self::buyer_rate($tr->buyer_id);
 
         $check = '<i class="fas fa-check text-danger"></i>';
-        $wrong = '<i class="fas fa-times text-success"></i>';
+        $wrong = '<span class="text-success">-</span>';
 
         if($user->warning == 1)
         {
@@ -212,6 +216,8 @@ class SellerController extends Controller
             $suspend = $wrong;
         }
 
+        
+
         $data = [
             'id'=>$tr->id,
             'no'=>$tr->no,
@@ -221,9 +227,39 @@ class SellerController extends Controller
             'suspend'=>$suspend,
             'coin'=>$pc->pricing_format($tr->amount),
             'total'=>Lang::get('custom.currency').' '.$pc->pricing_format($tr->total),
+            'link_comment'=>''.url('comments-seller').'/'.encrypt($tr->buyer_id).'',
         ];
 
         return view('seller.sell-detail',['row'=>$data]);
+    }
+
+    public static function buyer_rate($buyer_id)
+    {
+        $cm = Comment::selectRaw('AVG(rate) AS star')->where([['buyer_id',$buyer_id],['is_seller',1]])->first();
+        return $cm;
+    }
+
+    // COMMENTS TO RATE BUYER
+    public function comments($user_id,$invoice = null)
+    {
+        $tr = null;
+        if($invoice !== null)
+        {
+            $tr = Transaction::where('no',$invoice)->first();
+            // TO AVOID IF USER DELIBERATELY PUT HIS PRODUCT
+            if(is_null($tr))
+            {
+                return view('error404');
+            }
+        }
+        
+        $buyer = User::find(decrypt($user_id));
+        if(is_null($buyer))
+        {
+            return view('error404');
+        }
+
+        return view('buyer.comments',['tr'=>$tr,'user_id'=>$buyer->id,'member'=>$buyer,'role'=>1,'invoice'=>$invoice]);
     }
 
     // DECISION FROM SELLER TO BUYER REQUEST
@@ -257,8 +293,7 @@ class SellerController extends Controller
     public static function save_seller_decision($status,$act,$id)
     {
         $tr = Transaction::find($id);
-       /* $tr->status = $status;
-        $buyer_id = $tr->buyer_id;*/
+        $tr->status = $status;
         $buyer_id = $tr->buyer_id;
 
         // IN CASE OF BLOCK AND REFUSE
@@ -269,9 +304,9 @@ class SellerController extends Controller
         }
 
         // IN CASE OF BLOCK
+        $user = User::find(Auth::id());
         if($act == 3)
         {
-            $user = User::find(Auth::id());
             if($user->blocked_buyer !== null)
             {
                 $blocked = explode("|",$user->blocked_buyer);

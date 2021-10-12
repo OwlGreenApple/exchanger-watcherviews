@@ -388,7 +388,7 @@
                             }
                             else
                             {
-                                var el = '<div class="mb-2"><button data-value="epayment_3" type="button" class="btn btn-info epay text-capitalize w-100">{{ Lang::get("custom.del") }} <span class="text-uppercase">'+data.epayname+'</span></button></div>';
+                                var el = '<div class="mb-2"><button data-value="'+data.pay+'" type="button" class="btn btn-info delpay text-capitalize w-100">{{ Lang::get("custom.del") }} <span class="text-uppercase">'+data.epayname+'</span></button></div>';
 
                                 if(data.pay == 'epayment_1')
                                 { 
@@ -411,7 +411,8 @@
                         },
                         complete : function()
                         {
-                            $("input[name='payment']").val('');
+                            $("select[name='mpayment'] option:first").prop('selected',true);
+                            $("#e-payment, #dropdown-payment").hide(); 
                         }
                     });
                 };

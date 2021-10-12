@@ -24,7 +24,7 @@
                 @endfor
               @endif
             </td>
-            <td><a href="{{ url('comments') }}/{{ $row['no'] }}"><i class="far fa-envelope"></i></a></td>
+            <td><a href="{!! $row['link'] !!}"><i class="far fa-envelope"></i></a></td>
             <td>{{ $row['kurs'] }}</td>
             <td>{!! $row['coin'] !!}</td>
             <td> 
