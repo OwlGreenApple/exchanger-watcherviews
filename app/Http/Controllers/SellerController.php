@@ -195,7 +195,7 @@ class SellerController extends Controller
         $pc = new Price;
         $cm = self::buyer_rate($tr->buyer_id);
 
-        $check = '<i class="fas fa-check text-danger"></i>';
+        $check = '<i class="fas fa-times text-danger"></i>';
         $wrong = '<span class="text-success">-</span>';
 
         if($user->warning == 1)

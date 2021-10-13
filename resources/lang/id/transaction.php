@@ -36,7 +36,7 @@ return [
     'sell.done'=>'Order berhasil',
     'sell.progress'=>'Order harap segera diproses',
     'sell.status'=>'Menunggu Order',
-    'sell.title'=>'Jual Coin Exchanger views',
+    'sell.title'=>'Jual Coin Watcherviews',
     'seller'=>'Penjual',
     'send'=>'Kirim coin',
     'status'=>'Status',

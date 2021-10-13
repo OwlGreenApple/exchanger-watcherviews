@@ -6,7 +6,7 @@
   <h3 class="page-title">
     <span class="page-title-icon bg-gradient-primary text-white mr-2">
       <i class="mdi mdi-cart-outline"></i>
-    </span> {{ $lang::get('custom.wallet') }} </h3>
+    </span> {{ Lang::get('custom.wallet') }} </h3>
 </div>
 
 <div class="row justify-content-center">
@@ -17,7 +17,7 @@
         @else
         <div class="card">
             <div class="card-header bg-gradient-warning">
-                {{ Lang::get('custom.coin') }} : <b id="coin">{{ $pc->pricing_format(Auth::user()->coin) }}</b>&nbsp;coin
+                {{ Lang::get('transaction.wt') }} <b id="total_coin">{!! $coin !!}</b>&nbsp;coin
             </div>
 
             <div class="col-lg-12" id="msg"><!-- message --></div>
@@ -31,10 +31,10 @@
 
                     <span class="error wallet"><!--  --></span>
                     <div class="form-group row">
-                        <label for="name" class="col-md-4 col-form-label text-md-right">{{ $lang::get('transaction.wt') }}</label>
+                        <label for="name" class="col-6 col-md-4 col-form-label text-md-right">{{ Lang::get('custom.coin') }}:</label>
 
-                        <div class="col-md-6">
-                           <label for="name" class="col-form-label text-md-right"><b id="total_coin">{!! $coin !!}</b>&nbsp;coin</label>
+                        <div class="col-6 col-md-6">
+                           <label for="name" class="col-form-label text-md-right"><b id="coin">{{ $pc->pricing_format(Auth::user()->coin) }}</b>&nbsp;coin</label>
                         </div>
                     </div>
 
@@ -45,7 +45,7 @@
                            <div class="form-check">
                               <input class="form-check-input" type="radio" name="wallet_option" id="flexRadioDefault1" value="1" checked>
                               <label class="form-check-label" for="flexRadioDefault1">
-                                {{ $lang::get('transaction.wd') }} ke wallet&nbsp;(min : <b>100.000</b>)
+                                {{ $lang::get('transaction.wd') }}&nbsp;(min : <b>100.000</b>)
                               </label>
                             </div>
                             <div class="form-check">
@@ -67,7 +67,7 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="name" class="col-md-4 col-form-label text-md-right">Biaya Transaksi (2.5%)</label>
+                        <label for="name" class="col-md-4 col-form-label text-md-right">Coin Fee (2.5%)</label>
 
                         <div class="col-md-6">
                            <div id="fee" class="form-control border-top-0 border-left-0 border-right-0"><!--  --></div>
@@ -75,7 +75,7 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="name" class="col-md-4 col-form-label text-md-right">Total Coin yang di potong</label>
+                        <label for="name" class="col-md-4 col-form-label text-md-right">Total Coin</label>
 
                         <div class="col-md-6">
                            <div id="total_coin_pay" class="form-control border-top-0 border-left-0 border-right-0"><!--  --></div>
@@ -84,7 +84,7 @@
 
                     <div class="form-group row mb-0">
                         <div class="col-md-6 offset-md-4">
-                            <button type="submit" class="btn btn-gradient-danger">
+                            <button type="submit" class="btn btn-gradient-info">
                                 {{ Lang::get('transaction.wallet') }}
                             </button>
                         </div>
@@ -100,7 +100,7 @@
         <!-- HISTORY -->
         @if(auth()->user()->watcherviews_id > 0)
         <div class="card mt-5">
-            <div id="wallet_list" class="card-body table-responsive"><!--  --></div>
+            <div id="wallet_list" class="table-responsive card-body"><!--  --></div>
         </div>
         @endif
         <!--  -->
@@ -113,6 +113,14 @@
         count_logic();
         display_wallet();
     });
+
+    function data_table()
+    {
+        $("#data_transaction").DataTable({
+            "ordering": false,
+            "responsive": true,
+        });
+    }
 
     function display_wallet()
     {
@@ -133,7 +141,7 @@
             {
                 $('#loader').hide();
                 $('.div-loading').removeClass('background-load');
-                $("#data_transaction").DataTable();
+                data_table();
             },
             error : function()
             {

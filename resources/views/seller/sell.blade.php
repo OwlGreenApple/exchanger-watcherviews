@@ -28,7 +28,7 @@
                     <form id="profile">
 
                         <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">Coin di wallet</label>
+                            <label for="name" class="col-md-4 col-form-label text-md-right">Balance Coin</label>
 
                             <div class="col-md-6 py-2">
                                  <span id="wallet_coin">{{ $pc->pricing_format(Auth::user()->coin) }}</span>
@@ -53,7 +53,7 @@
                         </div> 
 
                         <div class="form-group row">
-                            <label class="col-md-4 col-form-label text-md-right">Total coin terpotong</label>
+                            <label class="col-md-4 col-form-label text-md-right">Total Coin</label>
 
                             <div class="col-md-6">
                                 <div id="total_coin_pay" class="form-control border-top-0 border-left-0 border-right-0"><!--  --></div>
@@ -61,7 +61,7 @@
                         </div> 
 
                         <div class="form-group row">
-                            <label class="col-md-4 col-form-label text-md-right">Nilai Transaksi&nbsp;{{ $lang::get('custom.currency') }}</label>
+                            <label class="col-md-4 col-form-label text-md-right">Total&nbsp;{{ $lang::get('custom.currency') }}</label>
 
                             <div class="col-md-6">
                                 <div id="coin" class="form-control border-top-0 border-left-0 border-right-0 font-weight-bold"></div>
@@ -142,7 +142,8 @@
     function data_table()
     {
         $("#sell_list").DataTable({
-            "ordering": false
+            "ordering": false,
+            "responsive": true,
         });
     }
 

@@ -125,9 +125,9 @@ class BuyerController extends Controller
         $notif->type = 1;
         $notif->event_name = 'Invoice : '.$tr->no;
         $notif->message = 'Selamat ada request order atas coin anda';
-        $notif->url = 'sell';
+        $notif->url = 'sell-detail/'.$ts->id;
 
-        $url = '<a href="'.url('sell').'">Respon ke pembeli</a>';
+        $url = '<a href="'.url('sell-detail').'/'.$ts->id.'">Respon ke pembeli</a>';
         $data = [
           'message'=>$msg,
           'phone_number'=>$seller->phone_number,
@@ -217,7 +217,7 @@ class BuyerController extends Controller
     	$tr = Transaction::find($id);
     	$pc = new Price;
 
-    	if(is_null($tr) || $tr->status <> 2)
+    	if(is_null($tr) || $tr->status <> 2 || $tr->seller_id == Auth::id())
     	{
     		return view('error404');
     	}
@@ -342,7 +342,7 @@ class BuyerController extends Controller
     	$tr = Transaction::where([['id',$id],['status',2]])->first();
 
     	// TO AVOID IF USER DELIBERATELY PUT HIS PRODUCT
-    	if(is_null($tr) || $tr->status <> 2)
+    	if(is_null($tr) || $tr->status <> 2 || $tr->seller_id == Auth::id())
     	{
     		return view('error404');
     	}

@@ -1,4 +1,4 @@
-<table class="table table-bordered w-100" style="font-size : 0.65rem" id="data_transaction">
+<table class="table striped table-bordered" style="font-size : 0.65rem" id="data_transaction">
   <thead class="alert-warning">
     <th class="menu-nomobile">
      No

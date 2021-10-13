@@ -14,8 +14,8 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-body card-font-size list-group">
-                <h5 class="alert alert-warning">Koin anda di order oleh pembeli dengan detail :</h5>
-                <div class="list-group-item">No Invoice : <b>{{ $row['no'] }}</b></div>
+                <h5 class="alert alert-warning">Order Pembeli :</h5>
+                <div class="list-group-item">No : <b>{{ $row['no'] }}</b></div>
                 <div class="list-group-item">Pembeli : {{ $row['buyer'] }}</div>
                 <div class="list-group-item">Rating : <span>
                 @if($row['star'] > 0)
@@ -30,9 +30,9 @@
                 <div class="list-group-item">Total : <b>{{ $row['total'] }}</b></div>
 
                 <div class="list-group-item">
-                    <a data-id="{{ $row['id'] }}" data-act="1" class="btn btn-warning sell text-dark">Terima Request</a>
-                    <a data-id="{{ $row['id'] }}" data-act="2" type="button" class="btn btn-warning text-dark sell">Tolak Request</a>
-                    <a data-id="{{ $row['id'] }}" data-act="3" type="button" class="btn btn-danger sell">Block Pembeli</a>
+                    <a data-id="{{ $row['id'] }}" data-act="1" class="btn btn-warning mr-3 sell text-dark">Terima</a>
+                    <a data-id="{{ $row['id'] }}" data-act="2" type="button" class=" text-50-black mr-3 sell"><small>Tolak</small></a>
+                    <a data-id="{{ $row['id'] }}" data-act="3" type="button" class="text-50-black sell"><small>Block</small></a>
                 </div>
             </div>
 
@@ -53,8 +53,8 @@
       <div id="message" class="modal-body"><!--  --></div>
       <!--  -->
       <div class="modal-footer" id="foot">
-        <button id="btn_accept" class="btn btn-info" data-dismiss="modal">
-          {{Lang::get('order.yes')}}
+        <button id="btn_accept" class="btn btn-danger" data-dismiss="modal">
+          Block
         </button>
         <button class="btn" data-dismiss="modal">
           {{Lang::get('custom.close')}}
@@ -157,9 +157,7 @@
     function message_block()
     {
         var msg = '';
-        msg += 'Anda akan memblock pembeli ini,<br>';
-        msg += '<b>Peringatan : </b>Jika anda memblock pembeli ini, maka semua transaksi dengan status <b>Lihat request / belum di setujui</b> oleh anda juga akan <b>di-batalkan</b>.<br>';
-        msg += 'Apakah anda sudah yakin untuk <b>memblock</b> pembeli ini?';
+        msg += '<b>Peringatan : </b>Jika anda memblock pembeli ini, maka semua transaksi yang berhubungan dengan pembeli ini akan di-batalkan.<br>';
         $("#message").html(msg);
     }
 

@@ -20,10 +20,6 @@
                 @endif
             </div>
 
-            <div id="comments" class="card-body">
-                <!-- display table comments -->
-            </div>
-            
             @if($invoice !== null && ($tr->status == 3 || $tr->status == 5 || $tr->status == 6))
             <div class="card-body">
                 <span id="err_message"><!--  --></span>
@@ -50,6 +46,10 @@
             </div>
             @endif
             <!--  -->
+
+            <div id="comments" class="card-body">
+                <!-- display table comments -->
+            </div>
         </div>
     </div>
 </div>

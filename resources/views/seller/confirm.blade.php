@@ -42,7 +42,7 @@
                 </div>
                 
                 <div class="form-group">
-                    <a type="button" class="btn bg-gradient-primary confirm">Konfirmasi</a>
+                    <a type="button" class="btn bg-success text-white confirm">Konfirmasi</a>
 
                     @if($row['status'] == 4)
                         @if($row['seller_dispute_id'] == 0)
@@ -71,11 +71,11 @@
         <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
       </div>
       <div class="modal-body">
-        Apakah anda yakin akan mengkonfirmasi transaksi ini?<br/><b>Perhatian</b> : pastikan bahwa pembeli <b>sudah</b> melakukan pembayaran, Karena coin <b>tidak</b> akan dikembalikan apabila anda sudah menekan tombol <b>Konfirmasi</b>
+        Pastikan anda sudah menerima pembayaran sebelum klik <b>Konfirmasi</b>
       </div>
       <!--  -->
       <div class="modal-footer" id="foot">
-        <button class="btn btn-primary" id="btn-conf" data-dismiss="modal">
+        <button class="btn btn-success text-white" id="btn-conf" data-dismiss="modal">
           {{Lang::get('order.confirm.sell')}}
         </button>
         <button class="btn" data-dismiss="modal">

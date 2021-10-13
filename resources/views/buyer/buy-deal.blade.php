@@ -14,7 +14,7 @@
         <div class="card">
             <div class="card-body col-12 col-md-12 card-font-size">
                 <div class="err_message"><!-- error messages --></div>
-                <h5 class="alert alert-info">Terima kasih atas pembelian koin anda, silahkan lakukan pembayaran</h5>
+                <h5 class="alert alert-info">Silahkan lakukan pembayaran</h5>
 
                 <div class="form-group">
                     <label>No Invoice :</label>
@@ -27,11 +27,13 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Methode Pembayaran :</label>
+                    <label>Pilih Pembayaran :</label>
                     <div class="mb-2">
                         <select name="payment" class="form-control">
-                            @if(($user->bank_1 !== null) || ($user->bank_2 !== null))
+                            @if($user->bank_1 !== null)
                                 <option value="bank_1">Transfer {{ Price::explode_payment($user->bank_1)[0] }}</option>
+                            @endif
+                            @if($user->bank_2 !== null)
                                 <option value="bank_2">Transfer {{ Price::explode_payment($user->bank_2)[0] }}</option>
                             @endif
                             @if($user->epayment_1 !== null)
@@ -51,18 +53,20 @@
                     <div id="bank_1">
                         @if($user->bank_1 !== null)
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item">No Rekening : <b>{{ Price::explode_payment($user->bank_1)[1] }}</b></li>
-                            <li class="list-group-item">Bank : {{ Price::explode_payment($user->bank_1)[0] }}</li>
-                            <li class="list-group-item">A/N : <b>{{ Price::explode_payment($user->bank_1)[2] }}</b></li>
+                            <li class="list-group-item">Segera transfer ke:</li>
+                            <li class="list-group-item">Nama: <b>{{ Price::explode_payment($user->bank_1)[2] }}</b></li>
+                            <li class="list-group-item">No Rekening: <b>{{ Price::explode_payment($user->bank_1)[1] }}</b></li>
+                            <li class="list-group-item">Bank: {{ Price::explode_payment($user->bank_1)[0] }}</li>
                         </ul>
                         @endif
                     </div>
                     <div id="bank_2">
                         @if($user->bank_2 !== null)
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item">No Rekening 2 : <b>{{ Price::explode_payment($user->bank_2)[1] }}</b></li>
-                            <li class="list-group-item">Bank 2 : {{ Price::explode_payment($user->bank_2)[0] }}</li>
-                            <li class="list-group-item">A/N : <b>{{ Price::explode_payment($user->bank_2)[2] }}</b></li>
+                            <li class="list-group-item">Segera transfer ke:</li>
+                            <li class="list-group-item">Nama: <b>{{ Price::explode_payment($user->bank_2)[2] }}</b></li>
+                            <li class="list-group-item">No Rekening: <b>{{ Price::explode_payment($user->bank_2)[1] }}</b></li>
+                            <li class="list-group-item">Bank : {{ Price::explode_payment($user->bank_2)[0] }}</li>
                         </ul>
                         @endif
                     </div>

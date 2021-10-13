@@ -110,10 +110,9 @@ class Messages
       {
         $msg ='';
         $msg .='Selamat, request order anda dengan no invoice *'.$invoice.'*'."\n";
-        $msg .='telah di setujui oleh seller'."\n\n";
-        $msg .='*Harap dicatat* : Apabila anda tidak konfirmasi pembayaran dalam 6 jam, maka order ini akan dianggap batal.'."\n\n";
-        $msg .='Silahkan login di sini untuk konfirmasi :'."\n";
-        $msg .=url('deal').'/'.$trans_id."\n\n";
+        $msg .='telah di setujui oleh seller,'."\n\n";
+        $msg .='Segera bayar order anda di link berikut : '.url('deal').'/'.$trans_id.''."\n";
+        $msg .='*Perhatian* : Apabila anda tidak konfirmasi pembayaran dalam 6 jam, maka order ini akan dianggap batal.'."\n\n";
         $msg .='Terima Kasih'."\n";
         $msg .='Team Exchanger';
       }
