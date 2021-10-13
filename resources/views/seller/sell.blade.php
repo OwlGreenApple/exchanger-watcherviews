@@ -110,7 +110,7 @@
         <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
       </div>
       <div class="modal-body">
-        Apakah anda yakin akan menghapus transaksi ini?<br/>Peringatan : <b>Ini tidak dapat di kembalikan</b>
+        Apakah anda yakin akan menghapus transaksi ini?<br/><b>Peringatan :</b> Jumlah coin yang kembali ke <b>wallet</b> hanya jumlah coin yang dijual <b>(total coin)</b>, <b>tidak</b> termasuk biaya coin <b>(coin fee).</b>
       </div>
       <!--  -->
       <div class="modal-footer" id="foot">

@@ -20,7 +20,7 @@
                 {{ Lang::get('custom.coin') }} : <b id="coin">{{ $pc->pricing_format(Auth::user()->coin) }}</b>&nbsp;coin
             </div>
 
-            <div id="msg"><!-- message --></div>
+            <div class="col-lg-12" id="msg"><!-- message --></div>
 
             <div class="card-body">
                 <form id="wallet_coin">
@@ -186,8 +186,9 @@
                         cur_coin = parseInt(result.wallet_coin);
                         $("#coin").html(formatNumber(cur_coin));
                         $("#total_coin").html(formatNumber(parseInt(result.total_coin)));
-                        $("#msg").html('<div class="alert alert-success text-center">{{ Lang::get("custom.success_coin") }}</div>');
+                        $("#msg").html('<div class="alert alert-success text-center mt-2">{{ Lang::get("custom.success_coin") }}</div>');
                         $("input[name='amount']").val('');
+                        $("#fee, #total_coin_pay").html('');
                     }
                     else if(result.err == 1)
                     {

@@ -18,7 +18,7 @@ return [
     'banned'=>'Maaf, akun anda sudah di banned, karena anda telah ber-ulang-kali melanggar syarat dan ketentuan.',
     'credential'=>'Maaf, password atau email yang anda masukkan salah.',
     'epayname'=>'Nama pembayaran elektronik tidak boleh kosong.',
-    'failed' => 'Identitas tersebut tidak cocok dengan data kami.',
+    'failed' => 'Identitas yang anda masukkan tidak terdaftar.',
     'forgot' => 'Lupa Password',
     'login'=>'Masuk',
     'notes'=>'Hanya diisi jika ingin mengganti password',

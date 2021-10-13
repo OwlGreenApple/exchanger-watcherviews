@@ -573,7 +573,7 @@
 
                     if(result.err == 0)
                     {
-                        $("#connect_api_gui").html('<div class="alert alert-info">{{ Lang::get("auth.api") }} : <b><a id="logout_watcherviews">logout</a>')
+                        $("#connect_api_gui").html(' <div class="alert alert-info"> Silahkan tarik coin anda dari watcherviews <b><a href="{{ url("wallet") }}">disini</a></b></div> <div class="alert alert-info">{{ Lang::get("auth.api") }} : <b><a id="logout_watcherviews">Disconnect API</a>')
                         $("input").val('');
                     }
                     else if(result.err == 1)

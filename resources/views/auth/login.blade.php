@@ -1,17 +1,18 @@
 @extends('layouts.auth')
 
 @section('content')
-                @if (session('error'))
+                 @if(session('error'))
                    <div class="alert alert-danger">
                        {{ session('error') }}
                    </div>
-                @endif
+                 @endif
+
                 <h4>Halo! Selamat Datang</h4>
                 <h6 class="font-weight-light">Masuk untuk melanjutkan.</h6>
                 <form class="pt-3" method="POST" action="{{ route('login') }}">
                   @csrf
                   <div class="form-group">
-                    <input type="email" class="form-control form-control-lg" id="email" placeholder="Email" name="email">
+                    <input type="email" class="form-control form-control-lg @error('email') is-invalid @enderror" id="email" placeholder="Email" name="email">
                     @error('email')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -19,7 +20,7 @@
                     @enderror
                   </div>
                   <div class="form-group">
-                    <input type="password" class="form-control form-control-lg" @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Password">
+                    <input type="password" class="form-control form-control-lg @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Password">
                     @error('password')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
