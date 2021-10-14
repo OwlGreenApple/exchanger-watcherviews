@@ -6,10 +6,12 @@
                 <form class="pt-3 add-contact" id="form-register">
                   <div class="form-group">
                     <input type="text" class="form-control form-control-lg" id="username" placeholder="Input Your Name" name="username">
+                    <span class="error username"><!--  --></span>
                   </div>
 
                   <div class="form-group">
                     <input type="email" class="form-control form-control-lg" id="email" placeholder="Email" required name="email">
+                    <span class="error email"><!--  --></span>
                   </div>
 
                    <div class="form-group">
