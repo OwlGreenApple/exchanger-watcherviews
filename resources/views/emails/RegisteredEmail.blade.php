@@ -4,7 +4,7 @@ Selamat datang di Exchanger<br>
 <strong>Password anda adalah : </strong>: {{ $password }} <br>
 <br>
 <strong>Link login:</strong><br>
-{{ url('/') }}dashboard/login <br>
+{{ url('/') }}/login <br>
 <br>
 Jika anda memerlukan bantuan<br>
 <strong>Silahkan kontak customer kami<br>
