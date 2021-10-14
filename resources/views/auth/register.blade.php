@@ -18,6 +18,7 @@
 
                       <input id="hidden_country_code" type="hidden" class="form-control" name="code_country" />
                      <input name="data_country" type="hidden" /> 
+                     <span class="error code_country"><!--  --></span>
                     </div>
 
                   <div class="form-group row">
