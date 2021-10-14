@@ -10,6 +10,7 @@
     <!-- plugins:css -->
     <link rel="stylesheet" href="{{ asset('assets/template/vendors/mdi/css/materialdesignicons.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/template/vendors/css/vendor.bundle.base.css') }}">
+    <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet">
     <!-- endinject -->
     <!-- Plugin css for this page -->
     <!-- End plugin css for this page -->
@@ -22,6 +23,11 @@
     <!-- Scripts -->
     <script src="{{ asset('assets/js/app.js') }}" defer></script>
     <script src="{{ asset('assets/js/jquery-3.2.1.min.js') }}"></script>
+
+    <!-- Intl Dialing Code -->
+    <link href="{{ asset('assets/intl-tel-input/css/intlTelInput.min.css') }}" rel="stylesheet" />
+    <script type="text/javascript" src="{{ asset('assets/intl-tel-input/js/intlTelInput.js') }}"></script> 
+
   </head>
   <body>
     <div class="container-scroller">

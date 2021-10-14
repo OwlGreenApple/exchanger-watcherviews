@@ -1,22 +1,24 @@
 @extends('layouts.auth')
 
 @section('content')
-                <h4>New here?</h4>
-                <h6 class="font-weight-light">Signing up is easy. It only takes a few steps</h6>
+                <h4>Masih Baru?</h4>
+                <h6 class="font-weight-light">Mari bergabung dengan isi form berikut ini :</h6>
                 <form class="pt-3 add-contact" id="form-register">
                   <div class="form-group">
                     <input type="text" class="form-control form-control-lg" id="username" placeholder="Input Your Name" name="username">
                   </div>
+
                   <div class="form-group">
                     <input type="email" class="form-control form-control-lg" id="email" placeholder="Email" required name="email">
                   </div>
-                  <div class="form-group">
-                    <input type="text" id="phone" name="phone" class="form-control" placeholder="No HP" required/>
-                    <span class="error phone"></span>
 
-                    <input id="hidden_country_code" type="hidden" class="form-control" name="code_country" />
-                   <input name="data_country" type="hidden" /> 
-                  </div>
+                   <div class="form-group">
+                      <input type="text" id="phone" name="phone" class="form-control" required/>
+                      <span class="error phone"></span>
+
+                      <input id="hidden_country_code" type="hidden" class="form-control" name="code_country" />
+                     <input name="data_country" type="hidden" /> 
+                    </div>
 
                   <div class="form-group row">
                     <label class="col-sm-3 col-form-label">Gender*</label>
@@ -36,13 +38,14 @@
                   <div class="mb-4">
                     <div class="form-check">
                       <label class="form-check-label text-muted">
-                        <input type="checkbox" name="agreement" required id="check-terms" class="form-check-input"> I agree to all Terms & Conditions </label>
+                        <input type="checkbox" name="agreement" required id="check-terms" class="form-check-input" />{{ Lang::get('custom.agreement') }}
+                      </label>
                     </div>
                   </div>
                   <div class="mt-3">
-                    <button class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn" id="btn-register" type="button" >SIGN UP</button>
+                    <button class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn" id="btn-register" type="button" >{{ $lang::get('custom.register') }}</button>
                   </div>
-                  <div class="text-center mt-4 font-weight-light"> Already have an account? <a href="{{ url('login')}}" class="text-primary">Login</a>
+                  <div class="text-center mt-4 font-weight-light"> {{ $lang::get('custom.have_account') }} <a href="{{ url('login')}}" class="text-primary">{{ $lang::get('custom.log_in') }}</a>
                   </div>
                 </form>
     

@@ -2,7 +2,7 @@
 return [
     'accept'=>'Dengan meng-click tombol \'Order Now\' berarti anda sudah membaca, mengerti dan setuju :', //summary.blade
     'and'=>'dan :', //summary.blade
-    'agreement'=>'Saya menyetujui semua pernyataan di : ', //checkout.blade
+    'agreement'=>'Saya menyetujui syarat dan ketentuan yang berlaku.', //checkout.blade
     'api'=>'Connect ke akun watcherviews anda', //checkout.blade
     'bank'=>'Bank', //profile.blade
     'bank_customer'=>'Nama Pemilik', //profile.blade

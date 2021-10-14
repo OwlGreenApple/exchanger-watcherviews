@@ -477,7 +477,8 @@
             "serverSide": true,
             "lengthMenu": [ 10, 25, 50, 75, 100, 500 ],
             "ajax": "{{ url('orders') }}",
-            "destroy": true
+            "destroy": true,
+            "responsive": true
         });
 
         $('.dataTables_filter input')
