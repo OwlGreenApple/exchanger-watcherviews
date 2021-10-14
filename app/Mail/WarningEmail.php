@@ -34,7 +34,7 @@ class WarningEmail extends Mailable
     public function build()
     {
         return $this
-        ->from('no-reply@exchanger.com', 'exchanger')
+        ->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))
         ->subject($this->subject_mail)
         ->view('emails.WarningEmail')
         ->with([
