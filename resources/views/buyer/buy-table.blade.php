@@ -1,4 +1,4 @@
-<table id="seller" class="table table-hover shopping-cart-wrap card-body">
+<table id="seller" class="table table-hover shopping-cart-wrap bg-white card-body">
   <thead class="text-muted">
     <tr>
       <th scope="col">{{ Lang::get('transaction.seller') }}</th>
@@ -37,7 +37,7 @@
             @if($row['seller'] == auth()->user()->id)
               -
             @else
-              <a href="{{ url('buy-detail') }}/{{ $row['id'] }}" data-id="{{ $row['id'] }}" class="btn btn-outline-success btn-sm conf request_buy" data-toggle="tooltip" data-original-title="Save to Wishlist">{{ Lang::get('transaction.buy') }}</a>
+              <a href="{{ url('buy-detail') }}/{{ $row['id'] }}" data-id="{{ $row['id'] }}" class="btn btn-outline-success btn-sm conf request_buy" data-toggle="tooltip" data-original-title="Save to Wishlist">{{ Lang::get('transaction.detail') }}</a>
             @endif 
             </td>
         </tr>

@@ -14,7 +14,7 @@
         <div class="card">
             <div class="card-body">
                 <div id="err_message"><!--  --></div>
-                <h5 class="alert alert-warning">Anda akan konfirmasi penjualan koin anda dengan detail :</h5>
+                <h5 class="alert alert-warning">Konfirmasi penjualan koin dengan detail :</h5>
                 <hr/>
                 <div class="form-group">
                     <label>Nama Pembeli :</label>

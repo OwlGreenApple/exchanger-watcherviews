@@ -12,35 +12,17 @@
 
     <div class="col-md-12">
       <form class="table-responsive">
-        <table class="table table-bordered w-100" style="font-size : 0.65rem" id="data_order">
+        <table class="display responsive nowrap w-100" id="data_order">
           <thead>
-            <th class="menu-nomobile">
-             {{$lang::get('order.no')}}
-            </th>
-            <th class="menu-nomobile">
-              {{$lang::get('order.package')}}
-            </th>
-            <th class="menu-nomobile">
-              {{$lang::get('order.price')}}
-            </th>
-            <th class="menu-nomobile">
-              {{$lang::get('order.total')}}
-            </th>
-            <th class="menu-nomobile">
-              {{$lang::get('order.date')}}
-            </th>
-            <th class="menu-nomobile">
-              {{$lang::get('order.date_complete')}}
-            </th>
-            <th class="menu-nomobile">
-              {{$lang::get('order.desc')}}
-            </th>
-            <th class="menu-nomobile">
-              {{$lang::get('order.proof')}}
-            </th>
-            <th class="header" action="status">
-              {{$lang::get('order.status')}}
-            </th>
+            <th>{{$lang::get('order.no')}}</th>
+            <th>{{$lang::get('order.package')}}</th>
+            <th>{{$lang::get('order.price')}}</th>
+            <th>{{$lang::get('order.total')}}</th>
+            <th>{{$lang::get('order.date')}}</th>
+            <th>{{$lang::get('order.date_complete')}}</th>
+            <th>{{$lang::get('order.desc')}}</th>
+            <th>{{$lang::get('order.proof')}}</th>
+            <th>{{$lang::get('order.status')}}</th>
           </thead>
           <tbody></tbody>
         </table>

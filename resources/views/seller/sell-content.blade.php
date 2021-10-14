@@ -1,5 +1,5 @@
 @if(count($data) > 0)
- <table class="table table-striped table-bordered" id="sell_list">
+ <table class="display responsive nowrap" id="sell_list">
     <thead>
         <th>Invoice</th>
         <th>Tanggal</th>

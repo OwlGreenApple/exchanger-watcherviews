@@ -2,11 +2,11 @@
 @if(Auth::user()->status == 3)
     <div class="card col-md-12"><div class="alert alert-danger mt-3">{{ Lang::get('auth.suspend') }}</div></div>
 @else
-<div class="card-body">
-    <div class="row justify-content-center">
+<div class="card card-body mb-2">
+    <div class="row mx-auto">
         <span class="err_buy"><!--  --></span>
-        <div class="col-12 col-md-10 col-lg-9">
-            <form class="card card-sm">
+        <div class="col-md-12 col-lg-12 px-0">
+            <form class="card-sm">
                 <div class="px-3 py-3 mx-auto my-auto row no-gutters align-items-center">
                     <div class="col-auto">
                         <i class="fas fa-search h4 text-body"></i>
@@ -45,7 +45,7 @@
     </div>
 </div>
 
-<div id="seller_list" class="card table-responsive">
+<div id="seller_list" class="table-responsive mb-4">
     <!-- buyer table -->
 </div>
 @endif

@@ -24,8 +24,8 @@
                     @endfor <span>|</span>
                 @endif
                 </span><span><a href="{!! $row['link_comment'] !!}" class="mt-2"><i class="far fa-envelope"></i></a></span></div>
-                <div class="list-group-item">Warning : {!! $row['warning'] !!}</div>
-                <div class="list-group-item">Suspend : {!! $row['suspend'] !!}</div>
+                <div class="list-group-item">Warning <i class="fas fa-question-circle w-tool"></i>&nbsp;: {!! $row['warning'] !!}</div>
+                <div class="list-group-item">Suspend <i class="fas fa-question-circle s-tool"></i>&nbsp;: {!! $row['suspend'] !!}</div>
                 <div class="list-group-item">Jumlah Coin : {{ $row['coin'] }}</div>
                 <div class="list-group-item">Total : <b>{{ $row['total'] }}</b></div>
 
@@ -68,7 +68,19 @@
 <script type="text/javascript">
     $(document).ready(function(){
         request_buy();
+        display_tooltip();
     });
+
+    function display_tooltip()
+    {
+        $(".w-tool").tooltip({
+            'title' : '{!! Lang::get("auth.warning") !!}'
+        });
+
+        $(".s-tool").tooltip({
+            'title' : '{!! Lang::get("auth.suspend-tooltip") !!}'
+        });
+    }
 
     function request_buy()
     {

@@ -3,7 +3,6 @@
 <link href="{{ asset('assets/css/order.css') }}" rel="stylesheet" />
 <link href="{{ asset('assets/css/account.css') }}" rel="stylesheet" />
 
-
 @section('content')
     <div class="page-header">
       <h3 class="page-title">
@@ -117,6 +116,7 @@
         add_payment();
         display_detail_payment();
         save_bank_method();
+        popup_payment();
     });
 
     function add_payment()
@@ -660,10 +660,19 @@
         });
     }
 
+    function popup_payment()
+    {
+      $( "body" ).on( "click", ".popup-newWindow", function()
+      {
+        event.preventDefault();
+        window.open($(this).attr("href"), "popupWindow", "width=600,height=600,scrollbars=yes");
+      });
+    }
+
   /**/
+
   $( "body" ).on( "click", ".view-details", function() {
     var id = $(this).attr('data-id');
-
     $('.details-'+id).toggleClass('d-none');
   });
   
@@ -680,11 +689,7 @@
     var total = parseInt($(this).attr('data-total'));
     $('#mod-total').html('Rp. ' + total.toLocaleString());
     $('#mod-purchased_view').html(parseInt($(this).attr('data-purchased-view')).toLocaleString()); 
-    /*var diskon = parseInt($(this).attr('data-discount'));
-        if (diskon == 0 ) {
-            $("#div-discount").hide();
-        }
-    $('#mod-discount').html('Rp. ' + diskon.toLocaleString());*/
+   
     $('#mod-date').html($(this).attr('data-date'));
 
     var keterangan = '-';
@@ -694,17 +699,6 @@
     }
 
     $('#mod-keterangan').html(keterangan);
-  });
-
-  // $( "body" ).on( "click", "#btn-confirm-ok", function() 
-  // {
-    // confirm_payment();
-  // });
-
-  $( "body" ).on( "click", ".popup-newWindow", function()
-  {
-    event.preventDefault();
-    window.open($(this).attr("href"), "popupWindow", "width=600,height=600,scrollbars=yes");
   });
 
   $( "body" ).on( "click", ".btn-delete", function() {

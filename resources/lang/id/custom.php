@@ -15,7 +15,6 @@ return [
     'check'=>'Harap centang, syarat dan ketentuan yang berlaku', //register.blade//summary.blade
     'choose_pay'=>'Pilih Metode Pembayaran', //profile.blade
     'close'=>'Tutup',
-    'currency'=>'Rp', //navigation
     'coin'=>'My Wallet', //wallet.blade
     'conf_order'=>'Order konfirmasi anda akan di email ke : ', //summary.blade
     'connect'=>'Sambungkan ke watcherviews', //connect_api.blade

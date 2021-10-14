@@ -53,20 +53,20 @@
                     <div id="bank_1">
                         @if($user->bank_1 !== null)
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Segera transfer ke:</li>
-                            <li class="list-group-item">Nama: <b>{{ Price::explode_payment($user->bank_1)[2] }}</b></li>
-                            <li class="list-group-item">No Rekening: <b>{{ Price::explode_payment($user->bank_1)[1] }}</b></li>
-                            <li class="list-group-item">Bank: {{ Price::explode_payment($user->bank_1)[0] }}</li>
+                            <li class="list-unstyled"><h5>Segera transfer ke:</h5></li>
+                            <li class="list-unstyled">Nama: <b>{{ Price::explode_payment($user->bank_1)[2] }}</b></li>
+                            <li class="list-unstyled">No Rekening: <b>{{ Price::explode_payment($user->bank_1)[1] }}</b></li>
+                            <li class="list-unstyled">Bank: {{ Price::explode_payment($user->bank_1)[0] }}</li>
                         </ul>
                         @endif
                     </div>
                     <div id="bank_2">
                         @if($user->bank_2 !== null)
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Segera transfer ke:</li>
-                            <li class="list-group-item">Nama: <b>{{ Price::explode_payment($user->bank_2)[2] }}</b></li>
-                            <li class="list-group-item">No Rekening: <b>{{ Price::explode_payment($user->bank_2)[1] }}</b></li>
-                            <li class="list-group-item">Bank : {{ Price::explode_payment($user->bank_2)[0] }}</li>
+                            <li class="list-unstyled"><h5>Segera transfer ke:</h5></li>
+                            <li class="list-unstyled">Nama: <b>{{ Price::explode_payment($user->bank_2)[2] }}</b></li>
+                            <li class="list-unstyled">No Rekening: <b>{{ Price::explode_payment($user->bank_2)[1] }}</b></li>
+                            <li class="list-unstyled">Bank : {{ Price::explode_payment($user->bank_2)[0] }}</li>
                         </ul>
                         @endif
                     </div>
@@ -89,7 +89,7 @@
                 <div class="mt-4 form-group">
                     <label><u>Lakukan konfirmasi apabila sudah melakukan pembayaran disini :</u></label>
 
-                    <div class="border-top-0 border-left-0 border-right-0"><a id="conf" data-id="{{ $row['id'] }}" class="btn btn-info">Konfirmasi</a></div>
+                    <div class="border-top-0 border-left-0 border-right-0"><a id="conf" data-id="{{ $row['id'] }}" class="btn btn-success text-white">{{ Lang::get('transaction.confirm') }}</a></div>
                 </div>
 
             <!-- end card body -->

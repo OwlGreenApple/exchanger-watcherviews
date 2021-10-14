@@ -14,17 +14,23 @@
             <div class="card-body">
                 <div id="err_message"><!--  --></div>
                 <form id="proof">
-                  <div class="form-group">
-                    <label for="email">No Invoice:</label>
-                    <div class="form-control">{{ $row->no }}</div>
+                  <div class="form-inline form-group">
+                    <div class="mr-2" for="email">No Invoice:</div>
+                    <div>{{ $row->no }}</div>
                   </div>
+
+                  <div class="form-inline form-group">
+                    <div class="mr-2" for="total">Total:</div>
+                    <div>{{ Lang::get('custom.currency') }}&nbsp;<b>{{ $pc->pricing_format($row->total) }}</b></div>
+                  </div>
+                  
                   <div class="form-group">
-                    <label for="fl">Upload Bukti Bayar</label>
-                    <input type="file" class="form-control" name="bukti" id="fl">
+                    <label for="fl">Upload Bukti Bayar:</label>
+                    <input type="file" class="form-control col-lg-6 col-md-12 col-12" name="bukti" id="fl">
                     <span class="error bukti"><!--  --></span>
                   </div>
                 
-                  <button id="submit" type="button" class="btn btn-success">Kirim</button>
+                  <button id="submit" type="button" class="btn btn-success">{{ Lang::get('transaction.confirm') }}</button>
                 </form>
             </div>
 

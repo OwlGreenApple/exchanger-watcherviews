@@ -217,7 +217,7 @@ class BuyerController extends Controller
     	$tr = Transaction::find($id);
     	$pc = new Price;
 
-    	if(is_null($tr) || $tr->status <> 2 || $tr->seller_id == Auth::id())
+    	if(is_null($tr) || $tr->status <> 2 || $tr->buyer_id !== Auth::id() || $tr->seller_id == Auth::id())
     	{
     		return view('error404');
     	}
@@ -275,7 +275,7 @@ class BuyerController extends Controller
     			}
 				elseif($row->status == 2)
     			{
-                    $status = '<a target="_blank" href="'.url('deal').'/'.$row->id.'" class="btn btn-primary btn-sm">Konfirmasi</a>';
+                    $status = '<a target="_blank" href="'.url('deal').'/'.$row->id.'" class="btn btn-success btn-sm">Konfirmasi</a>';
     				$comments = '-';
     			}
 				elseif($row->status == 3)
@@ -339,15 +339,16 @@ class BuyerController extends Controller
 
     public function buyer_confirm($id)
     {
+        $pc = new Price;
     	$tr = Transaction::where([['id',$id],['status',2]])->first();
 
     	// TO AVOID IF USER DELIBERATELY PUT HIS PRODUCT
-    	if(is_null($tr) || $tr->status <> 2 || $tr->seller_id == Auth::id())
+    	if(is_null($tr) || $tr->status <> 2 || $tr->buyer_id !== Auth::id() || $tr->seller_id == Auth::id())
     	{
     		return view('error404');
     	}
 
-        return view('buyer.buyer-confirm',['row'=>$tr]);
+        return view('buyer.buyer-confirm',['row'=>$tr,'pc'=>$pc]);
     }
 
     // UPDATE TRANSACTION PAYMENT METHOD

@@ -240,7 +240,6 @@
             {
                $('#loader').show();
                $('.div-loading').addClass('background-load');
-               $(".error").hide();
             },
             success : function(result)
             {
