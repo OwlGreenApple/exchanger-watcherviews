@@ -24,10 +24,16 @@ return [
         'token' => env('POSTMARK_TOKEN'),
     ],
 
-    'ses' => [
+    /* default laravel 'ses' => [
         'key' => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+    ],*/
+    'ses' => [
+        'key' => env('SES_KEY'),
+        'secret' => env('SES_SECRET'),
+        'region' => env('SES_REGION', 'us-east-1'),
     ],
+    
 
 ];
