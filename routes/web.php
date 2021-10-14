@@ -24,6 +24,7 @@ Route::get('summary',[App\Http\Controllers\OrderController::class, 'summary']);
 Route::post('offer',[App\Http\Controllers\Auth\RegisterController::class, 'offer_upgrade']);
 Route::get('register-redirect',[App\Http\Controllers\Auth\RegisterController::class, 'register_redirect']);
 Route::post('loginajax',[App\Http\Controllers\Auth\LoginController::class, 'loginAjax']);// user login via ajax
+Route::get('logs-8877', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
 Auth::routes();
 
