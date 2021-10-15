@@ -45,7 +45,7 @@
     </div>
 </div>
 
-<div id="seller_list" class="table-responsive mb-4">
+<div id="seller_list" class="mb-4">
     <!-- buyer table -->
 </div>
 @endif

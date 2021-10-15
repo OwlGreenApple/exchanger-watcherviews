@@ -60,3 +60,61 @@ var {
 	  display: none;
 	}
 }  
+
+/* MARKET CART */
+
+#seller>tbody>tr>td, #seller>tfoot>tr>td{
+    vertical-align: middle;
+}
+
+table#seller .username { 
+        overflow:hidden; 
+        white-space:nowrap; 
+        text-overflow: ellipsis;
+        max-width : 159px;
+        display: inline-block;
+}
+
+@media(min-width: 300px) and (max-width: 320px) {
+    table#seller tbody tr td:first-child {max-width : 194px}
+}
+
+@media screen and (max-width: 600px) {
+    table#seller tbody td .form-control{
+        width:20%;
+        display: inline !important;
+        background-color : #fff !important;
+    }
+    .actions .btn{
+        width:36%;
+        margin:1.5em 0;
+    }
+    
+    .actions .btn-info{
+        float:left;
+    }
+    .actions .btn-danger{
+        float:right;
+    }
+    
+    table#seller thead { display: none; }
+    table#seller tbody td { 
+        display: block; 
+        padding: .6rem; 
+        min-width:267px;
+    }
+    table#seller tbody tr td:first-child { 
+        background: #a55fff; 
+        color: #fff; 
+    }
+
+    table#seller tbody tr { 
+        margin-bottom : 0.25rem;
+    }
+
+    table#seller tbody td:before {
+        text-align : left;
+        content: attr(data-th); font-weight: bold;
+        display: inline-block; width: 8rem;
+    } 
+}

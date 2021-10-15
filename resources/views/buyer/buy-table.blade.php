@@ -7,15 +7,16 @@
       <th scope="col">{{ Lang::get('transaction.rate') }}</th>
       <th scope="col">{{ Lang::get('transaction.qty') }}</th>
       <th scope="col">{{ Lang::get('transaction.price') }}</th>
-      <th scope="col" class="text-right">Action</th>
+      <th scope="col">Action</th>
     </tr>
   </thead>
   <tbody>
       @if(count($data) > 0)
         @foreach($data as $row)
         <tr>
-            <td><h6 class="title text-truncate">{{ $row['seller_name'] }}</h6></td>
-            <td>
+            <td data-th="{{ Lang::get('transaction.seller') }}"><span class="title text-truncate"><div class="username">{{ $row['seller_name'] }}</div></span>
+            </td>
+            <td data-th="{{ Lang::get('transaction.star') }}">
               @if($row['rate'] == 0)
                 -
               @else
@@ -24,16 +25,12 @@
                 @endfor
               @endif
             </td>
-            <td><a href="{!! $row['link'] !!}"><i class="far fa-envelope"></i></a></td>
-            <td>{{ $row['kurs'] }}</td>
-            <td>{!! $row['coin'] !!}</td>
-            <td> 
-                <div class="price-wrap"> 
-                    <var class="price">{{ $row['price'] }}</var> 
-                   <!--  <small class="text-muted">(USD5 each)</small>  -->
-                </div> <!-- price-wrap .// -->
+            <td data-th="{{ Lang::get('transaction.comments') }}"><a href="{!! $row['link'] !!}"><i class="far fa-envelope"></i></a></td>
+            <td data-th="{{ Lang::get('transaction.rate') }}">{{ $row['kurs'] }}</td>
+            <td data-th="{{ Lang::get('transaction.qty') }}">{!! $row['coin'] !!}</td>
+            <td data-th="{{ Lang::get('transaction.price') }}"><span class="price-wrap text-success"><b>{{ $row['price'] }}</b></span>
             </td>
-            <td class="text-right"> 
+            <td data-th="Action"> 
             @if($row['seller'] == auth()->user()->id)
               -
             @else

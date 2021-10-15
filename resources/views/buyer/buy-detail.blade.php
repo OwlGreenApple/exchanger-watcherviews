@@ -24,8 +24,8 @@
                 <div class="list-group-item">Total : <b>{{ $row['total'] }}</b></div>
 
                 <div class="list-group-item">
-                    <a data-id="{{ $row['id'] }}" class="btn btn-gradient-info request_buy">Request Beli</a>
-                    <a href="{{ url('buy') }}" type="button" class="btn btn-gradient-info">Kembali</a>
+                    <a data-id="{{ $row['id'] }}" class="btn btn-gradient-info btn-sm request_buy">Request Beli</a>
+                    <a href="{{ url('buy') }}" type="button" class="btn btn-gradient-info btn-sm">Kembali</a>
                 </div>
             </div>
 

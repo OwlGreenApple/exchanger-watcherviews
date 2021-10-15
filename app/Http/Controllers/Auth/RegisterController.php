@@ -108,7 +108,7 @@ class RegisterController extends Controller
     protected function ajax_validator(array $data)
     {
         $validator = Validator::make($data, [
-            'username' => ['required','string','min:4','max:255'],
+            'username' => ['required','string','min:4','max:30'],
             'email' => ['required','string', 'email', 'max:255', 'unique:users'],
             'code_country' => ['required',new CheckPlusCode,new CheckCallCode],
             'phone' => ['required','numeric','digits_between:6,18',new InternationalTel,new CheckUserPhone($data['code_country'],null), new CheckUniquePhone($data['code_country'],$data['phone'])]
