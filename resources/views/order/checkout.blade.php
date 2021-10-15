@@ -3,7 +3,7 @@
 @section('content')
 <link rel="stylesheet" href="{{asset('assets/css/checkout.css')}}">
 
-<div class="container" style="margin-top:50px; margin-bottom:100px">
+<div class="container" style="margin-bottom:100px">
   <div class="row justify-content-center">
     <div class="col-md-8 col-12">
       <div class="card-custom">
@@ -69,8 +69,8 @@
 
               <div class="form-group mt-4">
                 <div class="col-12 col-md-12">
-                  <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" required/>
-                  <label for="agree-term" class="label-agree-term text">{{ $lang::get('custom.agreement') }}<a href="{{ env('APP_URL') }}terms-of-services/" class="term-service" target="_blank">{{ $lang::get('custom.terms') }}</a></label>
+                  <input type="checkbox" name="agree-term" id="agree-term" class="agree-term mr-1" required/>
+                  <label for="agree-term" class="label-agree-term text">{{ $lang::get('custom.agreement.checkout') }}<a href="{{ env('APP_URL') }}terms-of-services/" class="term-service" target="_blank">{{ $lang::get('custom.terms') }}</a></label>
                 </div>
               </div>
               <div class="form-group">
