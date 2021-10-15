@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Rules\CheckPlusCode;
 use App\Rules\CheckCallCode;
@@ -109,7 +110,7 @@ class RegisterController extends Controller
     {
         $validator = Validator::make($data, [
             'username' => ['required','string','min:4','max:30'],
-            'email' => ['required','string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required','string', 'email', 'max:60', 'unique:users'],
             'code_country' => ['required',new CheckPlusCode,new CheckCallCode],
             'phone' => ['required','numeric','digits_between:6,18',new InternationalTel,new CheckUserPhone($data['code_country'],null), new CheckUniquePhone($data['code_country'],$data['phone'])]
         ]);
@@ -194,6 +195,44 @@ class RegisterController extends Controller
             'success' => 1,
             'email' => $signup->email,
         ]);
+    }
+
+     // SEND PASSWORD TO FORGOT EMAIL
+    public function reset(Request $request)
+    {
+      $email = strip_tags($request->email);
+
+      $validator = Validator::make($request->all(), [
+        'email' => 'required|email|max:60', 
+      ]);
+
+      if($validator->fails() == true)
+      {
+        return redirect()->back()->withErrors($validator)->withInput();
+      }
+
+      $user = User::where([['email',$email],['status','>',0]])->first();
+
+      if(is_null($user))
+      {
+        return redirect('password/reset')->with('error_email',Lang::get('auth.banned'));
+      }
+
+      $generated_password = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'),0,10);
+
+      $u_user = User::find($user->id);
+      $u_user->password = Hash::make($generated_password);
+
+      try
+      {
+        $u_user->save();
+         Mail::to($user->email)->send(new RegisteredEmail($generated_password,$user->username,'forgot'));
+        return redirect('password/reset')->with('status',Lang::get('auth.success'));
+      }
+      catch(QueryException $e)
+      {
+        return redirect('password/reset')->with('error_email',Lang::get('custom.failed'));
+      }
     }
 
 /**/

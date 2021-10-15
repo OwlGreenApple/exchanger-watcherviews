@@ -19,11 +19,13 @@ class RegisteredEmail extends Mailable
 
     public $password;
     public $name;
+    public $destination;
 
-    public function __construct($password,$name)
+    public function __construct($password,$name,$destination = null)
     {
         $this->name = $name;
         $this->password = $password;
+        $this->destination = $destination;
     }
 
     /**
@@ -40,6 +42,7 @@ class RegisteredEmail extends Mailable
         ->with([
           'password' => $this->password,
           'name' => $this->name,
+          'destination' => $this->destination,
         ]);
     }
 }

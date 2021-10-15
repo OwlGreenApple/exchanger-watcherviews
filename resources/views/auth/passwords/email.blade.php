@@ -7,8 +7,15 @@
                         {{ session('status') }}
                     </div>
                 @endif
+
+                @if (session('error_email'))
+                    <div class="alert alert-danger" role="alert">
+                        {{ session('error_email') }}
+                    </div>
+                @endif
                 <h6 class="font-weight-light">Reset Password Anda Disini.</h6>
-                <form class="pt-3" method="POST" action="{{ route('password.email') }}">
+                <!-- <form class="pt-3" method="POST" action="route('password.email')"> -->
+                <form class="pt-3" method="POST" action="{{ route('pass-reset') }}">
                   @csrf
                   <div class="form-group">
                     <input type="email" class="form-control form-control-lg @error('email') is-invalid @enderror" id="email" placeholder="Email" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>

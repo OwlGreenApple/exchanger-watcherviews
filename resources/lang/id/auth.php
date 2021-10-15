@@ -23,6 +23,7 @@ return [
     'login'=>'Masuk',
     'notes'=>'Hanya diisi jika ingin mengganti password',
     'remember' => 'Ingat saya',
+    'success' => 'Password anda telah di reset, silahkan cek email anda.',
     'suspend' => 'Akun anda ter-suspend selama 1 minggu, karena anda telah melanggar syarat dan ketentuan.',
     'suspend-tooltip' => 'Peringatan kepada user karena telah melanggar ketentuan sebanyak 2x, tanda (x) user pernah melanggar, tanda (-) user belum pernah melanggar.',
     'suspend-time' => 'Akun anda ter-suspend hingga : ',
