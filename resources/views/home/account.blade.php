@@ -52,7 +52,7 @@
                 </div>
             </div>
 
-            @if(Auth::user()->status !== 3)
+            @if(Auth::user()->status !== 3 && Auth::user()->is_admin == 0)
             <!-- UPGRADE PACKAGE -->
             <div id="settings_target_2" class="card target_hide d-none">
                 <div class="card-body bg-white text-black-50 border-bottom"><h5 class="mb-0"><b>Upgrade</b></h5></div>

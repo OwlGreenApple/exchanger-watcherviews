@@ -14,6 +14,7 @@ return [
     'buy.no'=>'No Invoice',
     'buy.status'=>'Transaksi pembelian sedang di proses',
     'buy.title'=>'Beli coin Exchanger Views',
+    'coin.buy'=>'Beli Coin',
     'coin.sell'=>'Total coin yang akan di jual',
     'conf'=>'Konfirmasi pembelian Coin',
     'confirm'=>'Konfirmasi',

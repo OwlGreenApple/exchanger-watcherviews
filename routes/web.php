@@ -33,7 +33,7 @@ Auth::routes();
 Route::group(['middleware'=>['auth','web','banned']],function()
 {
 	Route::get('thankyou',[App\Http\Controllers\OrderController::class,'thankyou']);
-	Route::get('home', [App\Http\Controllers\HomeController::class, 'index']);
+	Route::get('home', [App\Http\Controllers\HomeController::class, 'index'])->middleware('is_user');
 	Route::get('end', [App\Http\Controllers\HomeController::class, 'end_membership']);
 	Route::get('event/{id}', [App\Http\Controllers\HomeController::class, 'event_page']);
 	Route::get('change-event', [App\Http\Controllers\HomeController::class, 'change_event']);

@@ -70,6 +70,7 @@
 
     <!-- PAYMENT METHOD -->
 
+    @if(Auth::user()->is_admin == 0)
     <div align="center" class="mb-3 alert alert-secondary"><b>Metode Pembayaran</b></div>
 
     <span id="crop_save"><!-- message success if crop saved --></span>
@@ -181,6 +182,7 @@
             </span>
         </div>
     </div>
+    @endif
 </form>
 
 <!-- Modal Confirm -->

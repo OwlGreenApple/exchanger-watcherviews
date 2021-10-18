@@ -6,7 +6,7 @@
           <li class="nav-item">
               <a class="nav-link" href="{{ url('buy') }}">
                 <i class="mdi mdi-cart-outline"></i> &nbsp;
-                Beli Koin
+                {{ Lang::get('transaction.coin.buy') }}
               </a>
           </li>
 

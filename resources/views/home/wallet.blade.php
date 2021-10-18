@@ -26,7 +26,7 @@
                 <form id="wallet_coin">
                 
                     @if(auth()->user()->watcherviews_id == 0)
-                      <div class="alert alert-secondary">Silahkan hubungkan akun watcherviews anda di link ini <a href="{{ url('account') }}/wallet">Connect Wallet</a></div>
+                      <div class="alert alert-secondary">Silahkan hubungkan akun watcherviews anda di link ini <a href="{{ url('account') }}/wallet">Connect API</a></div>
                     @else
 
                     <span class="error wallet"><!--  --></span>
