@@ -32,12 +32,11 @@ class SellerController extends Controller
     {
         $pc = new Price;
     	$coin = $pc::convert_number($request->tr_coin);
-
         $fee = $pc->check_type(Auth::user()->membership)['fee'];
-        $rate = $pc::get_rate();
+        
         $coin_fee = ($coin * $fee)/100;
         $total_coin = $coin + $coin_fee;
-        $total_price = round($rate * $coin);
+        $total_price = $coin;
         $seller_name = Auth::user()->name;
         $invoice_name = self::get_name($seller_name);
 
@@ -48,7 +47,6 @@ class SellerController extends Controller
         $order_number = self::get_order_invoice($str);
         $tr->seller_id = Auth::id();
         $tr->no = $order_number;
-        $tr->kurs = $rate;
         $tr->coin_fee = $coin_fee;
         $tr->amount = $coin;
         $tr->total = $total_price;
@@ -83,13 +81,17 @@ class SellerController extends Controller
     public function display_sell(Request $request)
     {
     	$data = array();
+        $price = new Price;
+        $kurs = $price::get_rate();
     	$tr = Transaction::where('transactions.seller_id','=',Auth::id())->leftJoin('users','transactions.buyer_id','=','users.id')->select('transactions.*','users.name as buyer')->orderBy('transactions.updated_at','desc')->get();
+
 
     	if($tr->count() > 0)
     	{
             $rate = '-';
     		foreach($tr as $row):
-                $confirm_sell = '<a target="_blank" href="'.url("sell-confirm").'/'.$row->id.'" class="btn btn-info btn-sm">Konfirmasi</a>';
+                $total_price = $row->total;
+                $confirm_sell = '<a target="_blank" href="'.url("sell-confirm").'/'.$row->id.'" class="btn btn-success btn-sm">Konfirmasi</a>';
                 
     			if($row->status == 0)
 	    		{
@@ -102,6 +104,7 @@ class SellerController extends Controller
                     {
                         $status = '<a data-id="'.$row->id.'" class="text-danger del_sell"><i class="fas fa-trash-alt"></i></a>';
                     }
+                    $total_price = round($kurs * $row->total);
 	    		}
 	    		elseif($row->status == 1)
 	    		{
@@ -158,7 +161,6 @@ class SellerController extends Controller
                     $trial = '-';
                 }
 
-	    		$price = new Price;
     			$data[] = [
     				'id'=>$row->id,
     				'no'=>$row->no,
@@ -166,7 +168,7 @@ class SellerController extends Controller
     				'amount'=>$price->pricing_format($row->amount),
     				'coin_fee'=>$price->pricing_format($row->coin_fee),
     				'kurs'=>$row->kurs,
-    				'total'=>'Rp '.$price->pricing_format($row->total),
+    				'total'=>'Rp '.$price->pricing_format($total_price),
     				'created_at'=>$row->created_at,
     				'date_buy'=>$date_buy,
                     'trial'=>$trial,
@@ -280,7 +282,7 @@ class SellerController extends Controller
         {
            // MAIL TO BUYER IF ORDER HAS ACCEPTED
            $buy = new Buyer;
-           $buy::notify_buyer($trans->no,$trans->buyer_id,$trans->id);
+           $buy::notify_buyer($trans->no,$trans->buyer_id,$trans->id,$trans->amount,$trans->total);
            return self::save_seller_decision(2,$act,$trans->id);
         }
         else
@@ -300,6 +302,8 @@ class SellerController extends Controller
         if($act == 2)
         {
             $tr->buyer_id = 0;
+            $tr->kurs = 0;
+            $tr->total = $tr->amount;
             $tr->date_buy = null;
         }
 
@@ -321,17 +325,20 @@ class SellerController extends Controller
            
             $user->blocked_buyer = $blocked;
 
-            // ALL TRANSACTION CANCELLED
+            // ALL TRANSACTION CANCELLED IF SELLER BLOCK BUYER
             $trs = Transaction::where([['seller_id',Auth::id()],['buyer_id',$buyer_id],['status',1]]);
 
             if($trs->get()->count() > 0)
             {
-                $btr = [
-                    'buyer_id'=>0,
-                    'date_buy'=>null,
-                    'status'=>0,
-                ];
-                $trs->update($btr);
+                foreach($trs->get() as $col):
+                    $tru = Transaction::find($col->id);
+                    $tru->buyer_id = 0;
+                    $tru->kurs = 0;
+                    $tru->date_buy = null;
+                    $tru->total = $tru->amount;
+                    $tru->status = 0;
+                    $tru->save();
+                endforeach;
             }
         }
 

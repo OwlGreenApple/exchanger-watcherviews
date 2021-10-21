@@ -3,6 +3,11 @@
 	telah di order
 	<br>
 	<br>
+	Jumlah Coin : <b>{{ $coin }}</b>
+	<br>
+	Total : <b>{{ $total }}</b>
+	<br>
+	<br>
 	Anda dapat menerima / menolak request order ini.
 	<br>
 	Harap <b>dicatat</b> : Apabila anda tidak merespon entah itu <b>menerima</b> atau <b>menolak</b> dalam 1x24 jam, maka system akan menganggap anda <b>menerima</b> order tersebut.
@@ -18,6 +23,10 @@
 	pembeli coin anda dengan no invoice <b>{{ $invoice }}</b>.
 	<br/>
 	telah upload bukti bayar
+	<br/>
+	Jumlah Coin : <b>{{ $coin }}</b>
+	<br>
+	Total : <b>{{ $total }}</b>
 	<br>
 	<br>
 	<b>Harap</b> segera di konfirmasi di sini :
@@ -29,4 +38,4 @@
 <br> 
 Terima kasih, 
 <br>
-Team Exchanger
+Team Watchermarket

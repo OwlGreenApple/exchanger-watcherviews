@@ -1,15 +1,24 @@
-Halo {{$name}},<br>
+Halo {{$name}},
 <br>
-Terimakasih atas order anda,<br>
-Detail order anda : <br>
 <br>
-No Order : <b>{{$no}}</b><br>
-Paket : {{$package}}<br>
-Harga : Rp.{{ $pc->pricing_format($price) }}<br>
-Total : Rp.<b>{{ $pc->pricing_format($total) }}</b><br>
+Terimakasih atas order anda,
+<br>
+Detail order anda : 
+<br>
+<br>
+No Order : <b>{{$no}}</b>
+<br>
+Paket : {{$package}}
+<br>
+Harga : Rp.{{ $pc->pricing_format($price) }}
+<br>
+Total : Rp.<b>{{ $pc->pricing_format($total) }}</b>
+<br>
 <br/>
 Transfer ke BCA : <b>{{ env('NO_REK') }}</b> Sugiarto Lasjim<br>
-Langkah sesudah transfer :<br>
+Langkah sesudah transfer :
+<br>
+Silahkan upload bukti pembayaran anda di link ini : <a href="{{ url('account') }}/1">Upload Butki Bayar</a>
 <br>
 Jika anda memerlukan bantuan<br>
 <strong>Silahkan kontak customer kami<br>
@@ -17,8 +26,8 @@ Telegram</strong>: @activomni_cs<br>
 <br>
 <br> Terima kasih, 
 <br>
-Team Exchanger<br>
-<span style="font-style: italic;">*Exchanger adalah bagian dari Activomni.com</span>
+Team Watchermarket<br>
+<span style="font-style: italic;">*Watchermarket adalah bagian dari Activomni.com</span>
 <br>
 <br>
 Jika ada yang ingin ditanyakan,<br>

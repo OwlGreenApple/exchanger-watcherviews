@@ -69,6 +69,8 @@ class CheckTransaction extends Command
                 if(Carbon::now()->gte($cancel_order) && $row->status == 2):
                     $str->buyer_id = 0;
                     $str->date_buy = null;
+                    $str->kurs = 0;
+                    $str->total = $str->amount;
                     $str->status = 0;
                     $str->save();
                 endif;

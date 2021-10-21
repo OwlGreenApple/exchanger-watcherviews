@@ -28,6 +28,7 @@
 
     $(document).ready(function()
     {
+       display_seller();
        search_seller();
        pagination();
        history();

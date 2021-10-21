@@ -18,7 +18,7 @@ class Messages
 
       $msg .='Mohon perhatian dan kerja sama dari anda.'."\n\n";
       $msg .='Terima Kasih'."\n";
-      $msg .='Team Exchanger';
+      $msg .='Team Watchermarket';
 
       return $msg;
     }
@@ -37,7 +37,7 @@ class Messages
 
       $msg .='Mohon perhatian dan kerja sama dari anda.'."\n\n";
       $msg .='Terima Kasih'."\n";
-      $msg .='Team Exchanger';
+      $msg .='Team Watchermarket';
 
       return $msg;
     }
@@ -55,7 +55,7 @@ class Messages
 
       $msg .='Mohon pengertian anda.'."\n\n";
       $msg .='Terima Kasih'."\n";
-      $msg .='Team Exchanger';
+      $msg .='Team Watchermarket';
 
       return $msg;
     }
@@ -72,7 +72,7 @@ class Messages
 
       $msg .='Mohon perhatian dan kerja sama dari anda.'."<br/><br/>";
       $msg .='Terima Kasih'."<br/>";
-      $msg .='Team Exchanger';
+      $msg .='Team Watchermarket';
 
       return $msg;
     }
@@ -90,12 +90,12 @@ class Messages
 
       $msg .='Mohon perhatian dan kerja sama dari anda.'."<br/><br/>";
       $msg .='Terima Kasih'."<br/>";
-      $msg .='Team Exchanger';
+      $msg .='Team Watchermarket';
 
       return $msg;
     }
 
-    public static function buyer_notification($invoice,$trans_id = null)
+    public static function buyer_notification($invoice,$trans_id = null,$coin = null, $total = null)
     {
       if($trans_id == null)
       {
@@ -104,47 +104,84 @@ class Messages
         $msg .='telah di tolak oleh seller'."\n\n";
         $msg .='Di-mohon agar anda mencari penjual yang lain di market.'."\n\n";
         $msg .='Terima Kasih'."\n";
-        $msg .='Team Exchanger';
+        $msg .='Team Watchermarket';
       }
       else
       {
         $msg ='';
         $msg .='Selamat, request order anda dengan no invoice *'.$invoice.'*'."\n";
         $msg .='telah di setujui oleh seller,'."\n\n";
+        $msg .='Jumlah Coin : *'.$coin.'*,'."\n";
+        $msg .='Total : *'.$total.'*,'."\n";
         $msg .='Segera bayar order anda di link berikut : '.url('deal').'/'.$trans_id.''."\n";
         $msg .='*Perhatian* : Apabila anda tidak konfirmasi pembayaran dalam 6 jam, maka order ini akan dianggap batal.'."\n\n";
         $msg .='Terima Kasih'."\n";
-        $msg .='Team Exchanger';
+        $msg .='Team Watchermarket';
       }
 
       return $msg;
     }
 
-    public static function seller_notification($invoice,$tr_id = null)
+    public static function seller_notification($invoice,$tr_id = null,$coin = null, $total = null)
     {
       $msg ='';
       if($tr_id == null)
       {
         $msg .='Selamat, coin anda dengan no invoice *'.$invoice.'*'."\n";
         $msg .='telah di order'."\n\n";
+        $msg .='Jumlah Coin : *'.$coin.'*'."\n";
+        $msg .='Total : *'.$total.'*'."\n\n";
         $msg .='Anda dapat menerima / menolak request order ini.'."\n";
         $msg .='*Harap dicatat* : Apabila anda tidak merespon entah itu *menerima* atau *menolak* dalam 1x24 jam, maka system akan menganggap anda *menerima* order tersebut.'."\n\n";
         $msg .='Silahkan login di sini untuk merespon :'."\n";
         $msg .=url('sell')."\n\n";
         $msg .='Terima Kasih'."\n";
-        $msg .='Team Exchanger';
+        $msg .='Team Watchermarket';
       }
       else
       {
         $msg .='Mohon perhatian,'."\n\n";
         $msg .='pembeli coin anda dengan no invoice *'.$invoice.'*'."\n";
         $msg .='telah upload bukti bayar'."\n\n";
+        $msg .='Jumlah Coin : *'.$coin.'*'."\n";
+        $msg .='Total : *'.$total.'*'."\n";
         $msg .='*Harap* segera di konfirmasi di sini :'."\n";
         $msg .=url('sell-confirm').'/'.$tr_id."\n\n";
         $msg .='Terima Kasih'."\n";
-        $msg .='Team Exchanger';
+        $msg .='Team Watchermarket';
       }
 
+      return $msg;
+    }
+
+    public static function forgot($password,$name)
+    {
+      $msg ='';
+      $msg .='Halo '.$name.','."\n\n";
+      $msg .='Anda telah me-reset password anda, password anda yang baru adalah :'."\n";
+      $msg .='*'.$password.'*'."\n\n";
+      $msg .='Jika anda memerlukan bantuan'."\n";
+      $msg .='*Silahkan kontak customer kami*'."\n";
+      $msg .='Telegram : @activomni_cs'."\n\n";
+      $msg .='Terima Kasih'."\n";
+      $msg .='Team Watchermarket';
+
+      return $msg;
+    }
+
+    public static function registered($password,$name)
+    {
+      $msg ='';
+      $msg .='Halo '.$name.','."\n\n";
+      $msg .='Selamat datang di Watchermarket,'."\n";
+      $msg .='*Password anda adalah* : '.$password.' '."\n\n";
+      $msg .='*Link login:*'."\n";
+      $msg .=url('/').'/login'."\n\n";
+      $msg .='Jika anda memerlukan bantuan'."\n";
+      $msg .='*Silahkan kontak customer kami*'."\n";
+      $msg .='*Telegram* :  @activomni_cs'."\n\n";
+      $msg .='Terima Kasih'."\n";
+      $msg .='Team Watchermarket';
       return $msg;
     }
 /*end of class*/

@@ -53,8 +53,8 @@
       <div id="message" class="modal-body"><!--  --></div>
       <!--  -->
       <div class="modal-footer" id="foot">
-        <button id="btn_accept" class="btn btn-danger" data-dismiss="modal">
-          Block
+        <button id="btn_accept" class="btn" data-dismiss="modal">
+          <!-- text -->
         </button>
         <button class="btn" data-dismiss="modal">
           {{Lang::get('custom.close')}}
@@ -157,6 +157,9 @@
         var msg = '';
         msg += 'Apakah anda yakin untuk <b>menerima</b> request order ini?';
         $("#message").html(msg);
+        $("#btn_accept").html('Terima');
+        $("#btn_accept").removeClass('btn-danger text-white');
+        $("#btn_accept").addClass('btn-warning text-dark');
     }
 
     function message_refuse()
@@ -164,13 +167,19 @@
         var msg = '';
         msg += 'Apakah anda yakin untuk <b>menolak</b> request order ini?';
         $("#message").html(msg);
+        $("#btn_accept").html('Tolak');
+        $("#btn_accept").removeClass('btn-warning text-dark');
+        $("#btn_accept").addClass('btn-danger text-white');
     }
 
     function message_block()
     {
         var msg = '';
-        msg += '<b>Peringatan : </b>Jika anda memblock pembeli ini, maka semua transaksi yang berhubungan dengan pembeli ini akan di-batalkan.<br>';
+        msg += '<b>Peringatan : </b>Jika anda memblock pembeli ini, maka semua transaksi yang berhubungan dengan pembeli ini dengan status <i>belum disetujui oleh anda</i> akan di-batalkan.<br>';
         $("#message").html(msg);
+        $("#btn_accept").html('Block');
+        $("#btn_accept").removeClass('btn-warning text-dark');
+        $("#btn_accept").addClass('btn-danger text-white');
     }
 
 </script>

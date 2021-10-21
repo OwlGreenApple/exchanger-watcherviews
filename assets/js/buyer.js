@@ -1,15 +1,31 @@
+function display_seller()
+{
+    display_buy_list();
+}
+
+
 function search_seller()
 {
     $("#btn-src").click(function(){
-        var src = $("#search").val();
-        var sort = $("select[name='sort']").val();
-        var range = $("select[name='range']").val();
-        display_buy_list(src,sort,range)
+        display_buy_list()
+    });
+
+    // SEARCH IF USER PRESS ENTER
+    $("#search").keypress(function(e){
+       var code = e.keyCode || e.which;
+       if(code == 13) { 
+         e.preventDefault();
+         display_buy_list();
+       }
     });
 }
 
-function display_buy_list(src,sort,range)
+function display_buy_list()
 {
+   var src = $("#search").val();
+   var sort = $("select[name='sort']").val();
+   var range = $("select[name='range']").val();
+
    $.ajax({
       // headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
       type : 'GET',

@@ -33,58 +33,67 @@ Auth::routes();
 Route::group(['middleware'=>['auth','web','banned']],function()
 {
 	Route::get('thankyou',[App\Http\Controllers\OrderController::class,'thankyou']);
-	Route::get('home', [App\Http\Controllers\HomeController::class, 'index'])->middleware('is_user');
 	Route::get('end', [App\Http\Controllers\HomeController::class, 'end_membership']);
-	Route::get('event/{id}', [App\Http\Controllers\HomeController::class, 'event_page']);
-	Route::get('change-event', [App\Http\Controllers\HomeController::class, 'change_event']);
-	Route::post('save-dispute', [App\Http\Controllers\HomeController::class, 'save_dispute'])->middleware('check_dispute');
-	Route::get('page-dispute', [App\Http\Controllers\HomeController::class, 'dispute_page']);
 	Route::get('error',[App\Http\Controllers\HomeController::class, 'error']);
+	Route::get('connectapi',[App\Http\Controllers\HomeController::class, 'connectapi']);
 
-	//BUY 
-	// Route::get('test-wa',[App\Http\Controllers\BuyerController::class, 'test_wa']);
-	Route::get('buy',[App\Http\Controllers\BuyerController::class, 'buying_page']);
-	Route::get('buy-list',[App\Http\Controllers\BuyerController::class, 'buyer_table']);
-
-	Route::group(['middleware'=>['suspend']],function()
+	Route::group(['middleware'=>['connect_api']],function()
 	{
-		Route::get('buy-request',[App\Http\Controllers\BuyerController::class, 'buy_request'])->middleware('buyer_limit');
-		Route::get('buy-detail/{invoice}',[App\Http\Controllers\BuyerController::class, 'detail_buy']);
-		Route::get('deal/{id}',[App\Http\Controllers\BuyerController::class, 'deal']);
-		Route::get('comments/{user_id}/{invoice?}',[App\Http\Controllers\BuyerController::class, 'comments']);
+		Route::get('home', [App\Http\Controllers\HomeController::class, 'index'])->middleware('is_user');
+		Route::get('event/{id}', [App\Http\Controllers\HomeController::class, 'event_page']);
+		Route::get('change-event', [App\Http\Controllers\HomeController::class, 'change_event']);
+		Route::post('save-dispute', [App\Http\Controllers\HomeController::class, 'save_dispute'])->middleware('check_dispute');
+		Route::get('page-dispute', [App\Http\Controllers\HomeController::class, 'dispute_page']);
+		//BUY 
+		// Route::get('test-wa',[App\Http\Controllers\BuyerController::class, 'test_wa']);
+		Route::get('buy',[App\Http\Controllers\BuyerController::class, 'buying_page']);
+		Route::get('buy-list',[App\Http\Controllers\BuyerController::class, 'buyer_table']);
+
+		Route::group(['middleware'=>['suspend']],function()
+		{
+			Route::get('buy-request',[App\Http\Controllers\BuyerController::class, 'buy_request'])->middleware('buyer_limit');
+			Route::get('buy-detail/{invoice}',[App\Http\Controllers\BuyerController::class, 'detail_buy']);
+			Route::get('deal/{id}',[App\Http\Controllers\BuyerController::class, 'deal']);
+			Route::get('comments/{user_id}/{invoice?}',[App\Http\Controllers\BuyerController::class, 'comments']);
+		});
+		Route::get('buy-deal',[App\Http\Controllers\BuyerController::class, 'buyer_deal']);
+		Route::get('buyer-confirm/{id}',[App\Http\Controllers\BuyerController::class, 'buyer_confirm']);
+		Route::get('buy-history',[App\Http\Controllers\BuyerController::class, 'buyer_history']);
+		Route::post('buyer-proof',[App\Http\Controllers\BuyerController::class, 'buyer_proof'])->middleware('check_proof');
+		Route::post('display-comments',[App\Http\Controllers\BuyerController::class, 'display_comments']);
+		Route::post('save-comments',[App\Http\Controllers\BuyerController::class, 'save_comments']);
+		Route::get('buyer-dispute/{id}',[App\Http\Controllers\BuyerController::class, 'buyer_dispute']);
+
+		//SELL
+		Route::get('sell',[App\Http\Controllers\SellerController::class, 'selling_page']);
+		Route::post('selling',[App\Http\Controllers\SellerController::class, 'selling_save'])->middleware(['end_membership','check_sell']);
+		Route::get('sell-list',[App\Http\Controllers\SellerController::class, 'display_sell']);
+		Route::get('sell-del',[App\Http\Controllers\SellerController::class, 'del_sell'])->middleware(['end_membership']);
+		Route::get('sell-detail/{id}',[App\Http\Controllers\SellerController::class, 'detail_sell']);
+		Route::get('sell-confirm/{id}',[App\Http\Controllers\SellerController::class, 'sell_confirm']);
+		Route::get('sell-confirmed',[App\Http\Controllers\SellerController::class, 'confirm_selling']);
+		Route::get('thank-you-sell',[App\Http\Controllers\SellerController::class, 'thank_you']);
+		Route::get('seller-dispute/{id}',[App\Http\Controllers\SellerController::class, 'seller_dispute']);
+		Route::post('seller-decision',[App\Http\Controllers\SellerController::class, 'seller_decision']);
+
+		// SELLER COMMENTS
+		Route::get('comments-seller/{user_id}/{invoice?}',[App\Http\Controllers\SellerController::class,'comments']);
+
+		// WALLET
+		Route::get('wallet',[App\Http\Controllers\HomeController::class,'wallet']);
+		Route::post('wallet-transaction',[App\Http\Controllers\HomeController::class,'wallet_transaction'])->middleware(['end_membership','check_coin']);
+		Route::get('wallet-list',[App\Http\Controllers\HomeController::class,'display_wallet']);
+
+		// CHAT
+		Route::get('chat/{trans_id}',[App\Http\Controllers\ChatController::class, 'room']);
+		Route::get('display_chat',[App\Http\Controllers\ChatController::class, 'display_chat']);
+		Route::post('save-chats',[App\Http\Controllers\ChatController::class, 'save_chat']);
 	});
-	Route::get('buy-deal',[App\Http\Controllers\BuyerController::class, 'buyer_deal']);
-	Route::get('buyer-confirm/{id}',[App\Http\Controllers\BuyerController::class, 'buyer_confirm']);
-	Route::get('buy-history',[App\Http\Controllers\BuyerController::class, 'buyer_history']);
-	Route::post('buyer-proof',[App\Http\Controllers\BuyerController::class, 'buyer_proof'])->middleware('check_proof');
-	Route::post('display-comments',[App\Http\Controllers\BuyerController::class, 'display_comments']);
-	Route::post('save-comments',[App\Http\Controllers\BuyerController::class, 'save_comments']);
-	Route::get('buyer-dispute/{id}',[App\Http\Controllers\BuyerController::class, 'buyer_dispute']);
-
-	//SELL
-	Route::get('sell',[App\Http\Controllers\SellerController::class, 'selling_page']);
-	Route::post('selling',[App\Http\Controllers\SellerController::class, 'selling_save'])->middleware(['end_membership','check_sell']);
-	Route::get('sell-list',[App\Http\Controllers\SellerController::class, 'display_sell']);
-	Route::get('sell-del',[App\Http\Controllers\SellerController::class, 'del_sell'])->middleware(['end_membership']);
-	Route::get('sell-detail/{id}',[App\Http\Controllers\SellerController::class, 'detail_sell']);
-	Route::get('sell-confirm/{id}',[App\Http\Controllers\SellerController::class, 'sell_confirm']);
-	Route::get('sell-confirmed',[App\Http\Controllers\SellerController::class, 'confirm_selling']);
-	Route::get('thank-you-sell',[App\Http\Controllers\SellerController::class, 'thank_you']);
-	Route::get('seller-dispute/{id}',[App\Http\Controllers\SellerController::class, 'seller_dispute']);
-	Route::post('seller-decision',[App\Http\Controllers\SellerController::class, 'seller_decision']);
-
-	// SELLER COMMENTS
-	Route::get('comments-seller/{user_id}/{invoice?}',[App\Http\Controllers\SellerController::class,'comments']);
 
 	// SETTINGS
 	// Route::get('trade',[App\Http\Controllers\HomeController::class, 'trade']);
 	Route::post('connect-api',[App\Http\Controllers\HomeController::class, 'connect_api'])->middleware('check_connection');
 	Route::get('logout-watcherviews',[App\Http\Controllers\SettingController::class, 'logout_watcherviews']);
-
-	// WITHDRAW COIN TO WALLET OR SEND COIN TO WATCHERVIEWS
-	Route::get('wallet',[App\Http\Controllers\HomeController::class,'wallet']);
-	Route::post('wallet-transaction',[App\Http\Controllers\HomeController::class,'wallet_transaction'])->middleware(['end_membership','check_coin']);
-	Route::get('wallet-list',[App\Http\Controllers\HomeController::class,'display_wallet']);
 	
 	// ACCOUNT
 	Route::get('orders',[App\Http\Controllers\HomeController::class, 'order_list']);
@@ -94,11 +103,6 @@ Route::group(['middleware'=>['auth','web','banned']],function()
 	Route::get('account/{conf?}', [App\Http\Controllers\HomeController::class, 'account']);
 	Route::post('payment-upload', [App\Http\Controllers\HomeController::class, 'payment_upload']);
 	Route::get('delete-payment', [App\Http\Controllers\HomeController::class, 'delete_payment']);
-
-	// CHAT
-	Route::get('chat/{trans_id}',[App\Http\Controllers\ChatController::class, 'room']);
-	Route::get('display_chat',[App\Http\Controllers\ChatController::class, 'display_chat']);
-	Route::post('save-chats',[App\Http\Controllers\ChatController::class, 'save_chat']);
 });
 
 /*ADMIN*/

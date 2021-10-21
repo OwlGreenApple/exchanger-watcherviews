@@ -122,6 +122,7 @@ class Price
         return $result;
     }
 
+    // limit user buy daily
     public static function buyer_limit_day($total_transaction)
     {
         if($total_transaction <= 10)

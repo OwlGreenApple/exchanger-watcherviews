@@ -1,21 +1,29 @@
 @if($destination == null)
 
-	Halo {{$name}},<br>
+	Halo {{$name}},
 	<br>
-	Selamat datang di Exchanger<br>
-	<strong>Password anda adalah : </strong>: {{ $password }} <br>
 	<br>
-	<strong>Link login:</strong><br>
-	{{ url('/') }}/login <br>
+	Selamat datang di Watchermarket
 	<br>
-	Jika anda memerlukan bantuan<br>
-	<strong>Silahkan kontak customer kami<br>
-	Telegram</strong>: @activomni_cs<br>
+	<strong>Password anda adalah : </strong>: {{ $password }} 
+	<br>
+	<br>
+	<strong>Link login:</strong>
+	<br>
+	{{ url('/') }}/login 
+	<br>
+	<br>
+	Jika anda memerlukan bantuan
+	<br>
+	<strong>Silahkan kontak customer kami
+	<br>
+	Telegram</strong>: @activomni_cs
+	<br>
 	<br>
 	<br> Terima kasih, 
 	<br>
-	Team Exchanger<br>
-	<span style="font-style: italic;">*Exchanger adalah bagian dari Activomni.com</span>
+	Team Watchermarket<br>
+	<span style="font-style: italic;">*Watchermarket adalah bagian dari Activomni.com</span>
 	<br>
 	<br>
 	Jika ada yang ingin ditanyakan,<br>
@@ -43,7 +51,7 @@
 	<br> 
 	Terima kasih, 
 	<br>
-	Team Exchanger
+	Team Watchermarket
 @endif
 
 

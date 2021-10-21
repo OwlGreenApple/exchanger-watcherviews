@@ -36,8 +36,7 @@ class CheckBuyerLimit
         $buyer_id = Auth::id();
         $pc = new Price;
         $tr = Transaction::where([['buyer_id',$buyer_id],['status',3]])->get();
-        // $total_success = $tr->count();
-        $total_success = 51;
+        $total_success = $tr->count();
 
         $limit = $pc::buyer_limit_day($total_success);
 

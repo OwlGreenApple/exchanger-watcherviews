@@ -19,11 +19,15 @@ class BuyerEmail extends Mailable
 
     public $invoice;
     public $url;
+    public $coin;
+    public $total;
 
-    public function __construct($invoice,$url)
+    public function __construct($invoice,$url,$coin,$total)
     {
         $this->invoice = $invoice;
         $this->url = $url;
+        $this->coin = $coin;
+        $this->total = $total;
     }
 
     /**
@@ -40,6 +44,8 @@ class BuyerEmail extends Mailable
         ->with([
           'invoice' => $this->invoice,
           'url' => $this->url,
+          'coin' => $this->coin,
+          'total' => $this->total,
         ]);
     }
 }

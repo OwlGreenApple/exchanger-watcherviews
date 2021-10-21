@@ -47,7 +47,21 @@
     </div>
 
     @if(session::get('reg') !== null)
-        <div align="center"><a class="text-black-50" href="{{ url('register-redirect') }}">{{ Lang::get('order.later') }}</a></div>
+        <div class="border rounded bg-white row py-3" align="center">
+            <div class="col-lg-4 text-justify pb-2">
+                <div>Tidak yakin untuk memilih?<br/>Silahkan coba</div>
+                <div><b>Free</b></div>
+                <div><b>{{ Lang::get('custom.currency') }} 0</b></div>
+            </div>
+            <div class="col-lg-4 text-justify">
+                <ul class="list-unstyled">
+                    <li>{{ Lang::get('order.month_sell') }} : {{ Lang::get('custom.currency') }}&nbsp;<b>{{ $pc->pricing_format($pc->get_price()[0]['max_sell']) }}</b></li>
+                    <li>{{ Lang::get('order.coin_fee') }} <b>{{ $pc->get_price()[0]['fee'] }}</b>%</li>
+                    <li>{{ Lang::get('order.selling') }} : <b>{{ $pc->get_price()[0]['sell'] }}</b> {{ Lang::get('order.max_trans') }}</li>
+                </ul>
+            </div>
+            <div class="col-lg-4 text-justify"><a class="btn btn-primary" href="{{ url('register-redirect') }}">{{ Lang::get('order.order') }}</a></div>
+        </div>
     @endif
 </div>
 @endsection

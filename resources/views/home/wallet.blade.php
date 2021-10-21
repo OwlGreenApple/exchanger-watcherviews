@@ -16,9 +16,7 @@
 
         @else
         <div class="card">
-            <div class="card-header bg-gradient-warning">
-                {{ Lang::get('transaction.wt') }} <b id="total_coin">{!! $coin !!}</b>&nbsp;coin
-            </div>
+            <!-- <div class="card-header bg-gradient-warning"></div> -->
 
             <div class="col-lg-12" id="msg"><!-- message --></div>
 
@@ -30,6 +28,14 @@
                     @else
 
                     <span class="error wallet"><!--  --></span>
+                    <div class="form-group row">
+                        <label for="name" class="col-6 col-md-4 col-form-label text-md-right">{{ Lang::get('transaction.wt') }}</label>
+
+                        <div class="col-6 col-md-6">
+                           <label for="name" class="col-form-label text-md-right"><b id="total_coin">{!! $coin !!}</b>&nbsp;coin</label>
+                        </div>
+                    </div>
+
                     <div class="form-group row">
                         <label for="name" class="col-6 col-md-4 col-form-label text-md-right">{{ Lang::get('custom.coin') }}:</label>
 

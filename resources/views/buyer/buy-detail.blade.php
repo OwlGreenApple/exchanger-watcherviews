@@ -20,12 +20,13 @@
                     <i class="fas fa-star"></i>
                 @endfor
                 </span></div>
+                <div class="list-group-item">Metode Pembayaran : {{ $row['paymethod'] }}</div>
                 <div class="list-group-item">Jumlah Coin : {{ $row['coin'] }}</div>
                 <div class="list-group-item">Total : <b>{{ $row['total'] }}</b></div>
 
                 <div class="list-group-item">
-                    <a data-id="{{ $row['id'] }}" class="btn btn-gradient-info btn-sm request_buy">Request Beli</a>
-                    <a href="{{ url('buy') }}" type="button" class="btn btn-gradient-info btn-sm">Kembali</a>
+                    <a data-id="{{ $row['id'] }}" class="btn btn-gradient-info btn-sm request_buy mr-1">Request Beli</a>
+                    <a href="{{ url('buy') }}" class="text-black-50">Kembali</a>
                 </div>
             </div>
 

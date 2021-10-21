@@ -4,10 +4,10 @@
         <th>Invoice</th>
         <th>Penjual</th>
         <th>Total Coin</th>
-        <th>Kurs</th>
+        <th>{{ Lang::get('transaction.rate') }}</th>
         <th>Harga</th>
         <th>Pembayaran</th>
-        <th>Action</th>
+        <th>Status</th>
         <th>Penilaian</th>
     </thead>
     <tbody>

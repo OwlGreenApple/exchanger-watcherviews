@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\AdminController as adm;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -20,6 +21,7 @@ use App\Rules\CheckUserPhone;
 use App\Rules\CheckUniquePhone;
 use App\Mail\RegisteredEmail;
 use App\Helpers\Price;
+use App\Helpers\Messages;
 use Session;
 
 class RegisterController extends Controller
@@ -101,7 +103,20 @@ class RegisterController extends Controller
             $col['trial'] = 0;
         }
 
-        Mail::to($data['email'])->send(new RegisteredEmail($generated_password,$data['username']));
+        $msg = new Messages;
+        $msg = $msg::registered($generated_password,$data['username']);
+
+        $data = [
+          'message'=>$msg,
+          'phone_number'=>$phone,
+          'email'=>$data['email'],
+          'obj'=>new RegisteredEmail($generated_password,$data['username']),
+        ];
+
+        $adm = new adm;
+        $adm->notify_user($data);
+
+        // Mail::to($data['email'])->send(new RegisteredEmail($generated_password,$data['username']));
 
         return User::create($col);
     }
@@ -226,13 +241,30 @@ class RegisterController extends Controller
       try
       {
         $u_user->save();
-         Mail::to($user->email)->send(new RegisteredEmail($generated_password,$user->username,'forgot'));
+        $msg = new Messages;
+        $msg = $msg::forgot($generated_password,$user->username);
+
+        self::send_notify($user->id,$msg,new RegisteredEmail($generated_password,$user->username,'forgot'));
         return redirect('password/reset')->with('status',Lang::get('auth.success'));
       }
       catch(QueryException $e)
       {
         return redirect('password/reset')->with('error_email',Lang::get('custom.failed'));
       }
+    }
+
+    private static function send_notify($user_id,$msg,$email)
+    {
+      $user = User::find($user_id);
+      $data = [
+        'message'=>$msg,
+        'phone_number'=>$user->phone_number,
+        'email'=>$user->email,
+        'obj'=>$email,
+      ];
+
+      $adm = new adm;
+      $adm->notify_user($data);
     }
 
 /**/

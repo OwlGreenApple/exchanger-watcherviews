@@ -29,6 +29,7 @@ return [
     'name'=>'Transaksi',
     'no'=>'No Transaksi',
     'no_transaction'=>'Maaf, untuk sementara saat ini belum ada user yang menjual coin.',
+    'no_transaction_find'=>'Maaf, belum ada user yang menjual : ',
     'placeholder'=>'Contoh : Jual murah coin watcherviews',
     'price'=>'Harga',
     'proof'=>'Maaf foto yang di upload oleh anda corrupt',

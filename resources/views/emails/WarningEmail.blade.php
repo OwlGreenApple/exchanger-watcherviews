@@ -8,11 +8,6 @@ dengan link di bawah ini :
 <br>
 <br>
 <a href="{{ url('chat') }}/{{ $pos }}">Chat Room</a>
-<br>
-<br>
-Terima Kasih
-<br>
-Team Exchanger
 
 @elseif($subject == 'Warning Email')
 
@@ -27,11 +22,6 @@ maka akun anda akan di-<b>suspend</b> , sehingga anda tidak dapat melakukkan tra
 <br>
 <br>
 Mohon perhatian dan kerja sama dari anda.
-<br>
-<br>
-Terima kasih, 
-<br>
-Team Exchanger
 
 @elseif($subject == 'Suspend Email')
 
@@ -49,11 +39,6 @@ maka akun anda akan di-<b>non-aktifkan</b>.
 <br>
 <br>
 Mohon perhatian dan kerja sama dari anda.
-<br>
-<br>
-Terima kasih, 
-<br>
-Team Exchanger
 
 @else
 
@@ -66,10 +51,10 @@ Maka dengan demikian anda tidak dapat melakukan segala aktifitas di situs kami, 
 <br/>
 <br/>
 Mohon pengertian anda.
+@endif
+
 <br>
 <br>
 Terima kasih, 
 <br>
-Team Exchanger
-
-@endif
+Team Watchermarket

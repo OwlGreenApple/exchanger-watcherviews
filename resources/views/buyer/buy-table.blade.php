@@ -4,7 +4,6 @@
       <th scope="col">{{ Lang::get('transaction.seller') }}</th>
       <th scope="col">{{ Lang::get('transaction.star') }}</th>
       <th scope="col">{{ Lang::get('transaction.comments') }}</th>
-      <th scope="col">{{ Lang::get('transaction.rate') }}</th>
       <th scope="col">{{ Lang::get('transaction.qty') }}</th>
       <th scope="col">{{ Lang::get('transaction.price') }}</th>
       <th scope="col">Action</th>
@@ -12,6 +11,9 @@
   </thead>
   <tbody>
       @if(count($data) > 0)
+        @if($find !== null)
+          <tr><td colspan="7"><div class="alert alert-secondary">{{ Lang::get('transaction.no_transaction_find') }}<b>{{ $find }}</b> Coin</div></td></tr>
+        @endif
         @foreach($data as $row)
         <tr>
             <td data-th="{{ Lang::get('transaction.seller') }}"><span class="title text-truncate"><div class="username">{{ $row['seller_name'] }}</div></span>
@@ -26,7 +28,6 @@
               @endif
             </td>
             <td data-th="{{ Lang::get('transaction.comments') }}"><a href="{!! $row['link'] !!}"><i class="far fa-envelope"></i></a></td>
-            <td data-th="{{ Lang::get('transaction.rate') }}">{{ $row['kurs'] }}</td>
             <td data-th="{{ Lang::get('transaction.qty') }}">{!! $row['coin'] !!}</td>
             <td data-th="{{ Lang::get('transaction.price') }}"><span class="price-wrap text-success"><b>{{ $row['price'] }}</b></span>
             </td>

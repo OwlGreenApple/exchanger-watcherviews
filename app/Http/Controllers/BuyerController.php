@@ -35,17 +35,17 @@ class BuyerController extends Controller
     	$range = $request->range;
     	$pc = new Price;
 
+        $logic = Transaction::where([['transactions.status','=',0],['users.status','>',0],['users.status','<>',3]])->join('users','users.id','=','transactions.seller_id')->select('transactions.*','users.status','users.name','users.blocked_buyer');
+
     	if($src == null)
     	{
-    		$tr = Transaction::where([['transactions.status','=',0],['users.status','>',0],['users.status','<>',3]])->join('users','users.id','=','transactions.seller_id')->select('transactions.*','users.status','users.name','users.blocked_buyer');
+    		$tr = $logic;
     	}
     	else
     	{
     		$tr = Transaction::where([['transactions.status','=',0],['users.status','>',0],['users.status','<>',3]])->join('users','users.id','=','transactions.seller_id')
     			->where(function($query) use ($src) {
-    				$query->where('transactions.total',$src);
     				$query->orWhere('transactions.amount',$src);
-    				$query->orWhere('transactions.kurs',$src);
     				$query->orWhere('users.name',$src);
     			})->select('transactions.*','users.status','users.name','users.blocked_buyer');
     	}
@@ -79,46 +79,75 @@ class BuyerController extends Controller
     	}
 
     	$data = array();
+        $find = false;
+
     	if($tr->count() > 0)
     	{
-    		$rate = ' ';
-    		foreach($tr as $row):
-                if($pc::check_blocked_user($row->blocked_buyer) == true)
-                {
-                    continue;
-                }
-
-    			$cm = self::star_rate($row->seller_id);
-    			$star = round($cm->star);
-    			$data[] = [
-    				'id'=>$row->id,
-    				'no'=>$row->no,
-    				'price'=>Lang::get('custom.currency').' '.$pc->pricing_format($row->total),
-    				'coin'=>$pc->pricing_format($row->amount),
-    				'seller_name'=>$row->name,
-    				'seller'=>$row->seller_id,
-    				'kurs'=>$row->kurs,
-    				'rate'=>$star,
-                    'link'=>''.url('comments').'/'.encrypt($row->seller_id).'',
-    			];
-    		endforeach;
+    		$data = self::seller_result($tr,$pc);
+            $find = null;
     	}
+        else
+        {
+            $tr = $logic;
+            $tr = $tr->orderBy('transactions.id',$order)->paginate($paginate);
+            $data = self::seller_result($tr,$pc);
+            $find = $src;
+        }
 
-    	return view('buyer.buy-table',['data'=>$data,'paginate'=>$tr]);
+    	return view('buyer.buy-table',['data'=>$data,'find'=>$find,'paginate'=>$tr]);
+    }
+
+    // LOGIC ON ABOVE
+    private static function seller_result($tr,$pc)
+    {
+        $rate = ' ';
+        $kurs = $pc::get_rate();
+
+        foreach($tr as $row):
+            if($pc::check_blocked_user($row->blocked_buyer) == true)
+            {
+                continue;
+            }
+
+            $cm = self::star_rate($row->seller_id);
+            $star = round($cm->star);
+            $total_price = $kurs * $row->total;
+            $data[] = [
+                'id'=>$row->id,
+                'no'=>$row->no,
+                'price'=>Lang::get('custom.currency').' '.$pc->pricing_format($total_price),
+                'coin'=>$pc->pricing_format($row->amount),
+                'seller_name'=>$row->name,
+                'seller'=>$row->seller_id,
+                'rate'=>$star,
+                'link'=>''.url('comments').'/'.encrypt($row->seller_id).'',
+            ];
+        endforeach;
+
+        return $data;
     }
 
     // REQUEST BUY TO SELLER
     public function buy_request(Request $request)
     {
+        $pc = new Price;
         $tr = Transaction::where([['id',$request->id],['status',0]])->first();
+
+        if(is_null($tr))
+        {
+            return view('error404');
+        }
+
         $ts = Transaction::find($tr->id);
         $ts->buyer_id = Auth::id();
         $ts->date_buy = Carbon::now();
+        $ts->kurs = $pc::get_rate();
+        $ts->total = round($pc::get_rate() * $ts->total);
         $ts->status = 1;
 
         $seller = User::find($tr->seller_id);
         $msg = new Messages;
-        $msg = $msg::seller_notification($tr->no);
+        $msg = $msg::seller_notification($ts->no,null,$pc->pricing_format($ts->amount),$pc->pricing_format($ts->total));
 
         $notif = new Event;
         $notif->user_id = $seller->id;
@@ -132,7 +161,7 @@ class BuyerController extends Controller
           'message'=>$msg,
           'phone_number'=>$seller->phone_number,
           'email'=>$seller->email,
-          'obj'=>new SellerEmail($tr->no,$url),
+          'obj'=>new SellerEmail($tr->no,$url,null,$pc->pricing_format($ts->amount),$pc->pricing_format($ts->total)),
         ]; 
 
         try
@@ -153,18 +182,18 @@ class BuyerController extends Controller
     }
 
     //NOTIFICATION FOR BUYER WHEN SELLER ACCEPT REQUEST ORDER
-    public static function notify_buyer($invoice,$buyer_id,$trans_id)
+    public static function notify_buyer($invoice,$buyer_id,$trans_id,$coin,$total)
     {
-        $url = '<a href="'.url('deal').'/'.$trans_id.'">Konfirmasi Pembayaran</a>';
+        $url = '<a href="'.url('deal').'/'.$trans_id.'">Bayar Sekarang</a>';
         $msg = new Messages;
-        $msg = $msg::buyer_notification($invoice,$trans_id);
+        $msg = $msg::buyer_notification($invoice,$trans_id,$coin,$total);
 
         $buyer = User::find($buyer_id);
         $data = [
           'message'=>$msg,
           'phone_number'=>$buyer->phone_number,
           'email'=>$buyer->email,
-          'obj'=>new BuyerEmail($invoice,$url),
+          'obj'=>new BuyerEmail($invoice,$url,$coin,$total),
         ];
 
         $adm = new adm;
@@ -174,7 +203,7 @@ class BuyerController extends Controller
     public function detail_buy($id)
     {
     	$tr = Transaction::where([['id',$id],['status',0]])->first();
-    	// TO AVOID IF USER DELIBERATELY PUT HIS PRODUCT
+    	// TO AVOID IF USER DELIBERATELY PUT THIS PRODUCT FROM URL
     	if(is_null($tr) || $tr->seller_id == Auth::id())
     	{
     		return view('error404');
@@ -182,6 +211,7 @@ class BuyerController extends Controller
 
     	$user = User::find($tr->seller_id);
         $pc = new Price;
+        $kurs = $pc::get_rate();
 
          // FOR BLOCKED BUYER BY SELLER
         if($user->blocked_buyer !== null)
@@ -194,13 +224,27 @@ class BuyerController extends Controller
 
         $cm = self::star_rate($tr->seller_id);
 
+        $paymethod = '';
+        if($user->bank_1 !== null || $user->bank_2 !== null)
+        {
+            $paymethod .= 'Transfer Bank';
+        }
+
+        ($user->epayment_1 !== null)?$paymethod.=" ,".$pc::explode_payment($user->epayment_1)[0] : $paymethod.= null;
+
+        ($user->epayment_2 !== null)?$paymethod.=" ,".$pc::explode_payment($user->epayment_2)[0] : $paymethod.= null;
+
+        ($user->epayment_3 !== null)?$paymethod.=" ,".$pc::explode_payment($user->epayment_3)[0] : $paymethod.= null;
+        
+        $total = $tr->total * $kurs;
     	$data = [
     		'id'=>$tr->id,
     		'no'=>$tr->no,
             'star'=>round($cm->star),
     		'seller'=>$user->name,
     		'coin'=>$pc->pricing_format($tr->amount),
-    		'total'=>Lang::get('custom.currency').' '.$pc->pricing_format($tr->total),
+            'paymethod'=>$paymethod,
+    		'total'=>Lang::get('custom.currency').' '.$pc->pricing_format($total),
     	];
 
         return view('buyer.buy-detail',['row'=>$data]);
@@ -275,7 +319,7 @@ class BuyerController extends Controller
     			}
 				elseif($row->status == 2)
     			{
-                    $status = '<a target="_blank" href="'.url('deal').'/'.$row->id.'" class="btn btn-success btn-sm">Konfirmasi</a>';
+                    $status = '<a target="_blank" href="'.url('deal').'/'.$row->id.'" class="btn btn-success btn-sm">Bayar Sekarang</a>';
     				$comments = '-';
     			}
 				elseif($row->status == 3)
@@ -405,7 +449,7 @@ class BuyerController extends Controller
          /* notification to seller */
         $adm = new adm;
         $msg = new Messages;
-        $msg = $msg::seller_notification($tr->no,$tr->id);
+        $msg = $msg::seller_notification($tr->no,$tr->id,$tr->amount,$tr->total);
 
         $notif = new Event;
         $notif->user_id = $user->id;
@@ -419,7 +463,7 @@ class BuyerController extends Controller
           'message'=>$msg,
           'phone_number'=>$user->phone_number,
           'email'=>$user->email,
-          'obj'=>new SellerEmail($tr->no,$url,$tr->id),
+          'obj'=>new SellerEmail($tr->no,$url,$tr->id,$tr->amount,$tr->total),
         ]; 
 
     	try

@@ -138,6 +138,12 @@ class HomeController extends Controller
       return view('error404');
     }
 
+    // DISPLAYING CONECT API PAGE IF USER 
+    public function connectapi()
+    {
+      return view('connectapi');
+    }
+
     public function end_membership()
     {
         return view('auth.trial',['lang'=>new Lang]);
@@ -276,7 +282,7 @@ class HomeController extends Controller
       $epayname = strip_tags($request->epayname);
 
       $rules = [
-            'epayname' => ['bail','required',new CheckSpecialChar,'string','max:20'],
+            'epayname' => ['bail','required',new CheckSpecialChar,'string','max:16'],
       ];
 
       $validator = Validator::make($request->all(),$rules);

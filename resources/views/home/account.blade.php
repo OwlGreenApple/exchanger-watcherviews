@@ -329,6 +329,7 @@
             $("input[name='payment']").val('');
         });
 
+        var success = false;
         var $modal = $('#modal');
         var image = document.getElementById('sample_image');
         var cropper;
@@ -415,12 +416,16 @@
                                 }
 
                                 $("#crop_save").html('<div class="alert alert-success">{{ Lang::get("custom.success") }}</div>')
+                                success = true;
                             }
                         },
                         complete : function()
                         {
-                            $("select[name='mpayment'] option:first").prop('selected',true);
-                            $("#e-payment, #dropdown-payment").hide(); 
+                            if(success == true)
+                            {
+                                $("select[name='mpayment'] option:first").prop('selected',true);
+                                $("#e-payment, #dropdown-payment").hide(); 
+                            }
                         }
                     });
                 };

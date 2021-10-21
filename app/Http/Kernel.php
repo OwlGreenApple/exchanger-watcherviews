@@ -67,6 +67,7 @@ class Kernel extends HttpKernel
         'is_admin' => \App\Http\Middleware\AdminUser::class,
         'is_user' => \App\Http\Middleware\MemberUser::class,
         'check_coin' => \App\Http\Middleware\CheckMaxCoin::class,
+        'connect_api' => \App\Http\Middleware\CheckConnectApi::class,
         'end_membership' => \App\Http\Middleware\CheckEndMembership::class,
         'check_connection' => \App\Http\Middleware\CheckValidConnect::class,
         'check_sell' => \App\Http\Middleware\CheckSelling::class,

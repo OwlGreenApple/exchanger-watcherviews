@@ -31,7 +31,7 @@ class CheckSelling
         $coin = (int)$coin;
 
         $api = new Price;
-        $kurs = $api->get_rate();
+        $kurs = $api::get_rate();
         $total = $kurs * $coin;
 
         $rules = [
@@ -117,6 +117,7 @@ class CheckMaxSell implements Rule
     public function check_trans_day($trans,$total)
     {
         $pc = new Price;
+        $kurs = $pc::get_rate();
         $err_msg = 'Anda hanya dapat menjual coin maksimal Rp '.$pc->pricing_format($trans).' per hari';
         if($total > $trans)
         {
@@ -126,7 +127,8 @@ class CheckMaxSell implements Rule
 
         $tr = Transaction::selectRaw('SUM(total) AS total_sell_day')->whereRaw('DATE(created_at) = CURDATE()')->where('seller_id',Auth::id())->first();
 
-        $total_sell = $tr->total_sell_day + $total;
+        $total_sell_day = $kurs * $tr->total_sell_day;
+        $total_sell = $total_sell_day + $total;
 
         if($total_sell > $trans)
         {
@@ -159,9 +161,12 @@ class CheckMaxSell implements Rule
     public function check_trans_month($max_sell,$total)
     {
         $pc = new Price;
+        $kurs = $pc::get_rate();
         $tr = Transaction::where('seller_id',Auth::id())->whereRaw('MONTH(date_buy) = MONTH(CURRENT_DATE())')->selectRaw('SUM(total) as total_sell_month')->orWhere('status',0)->first();
 
-        $max_sell_month = $tr->total_sell_month + $total;
+        $total_sell_month = $kurs * $tr->total_sell_month;
+        $max_sell_month = $total_sell_month + $total;
+
         if($max_sell_month > $max_sell)
         {
             $this->msg = 'Kesempatan anda untuk menjual coin hanya '.Lang::get('custom.currency').' '.$pc->pricing_format($max_sell).' per bulan';

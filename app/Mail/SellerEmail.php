@@ -20,12 +20,16 @@ class SellerEmail extends Mailable
     public $invoice;
     public $url;
     public $trans_id;
+    public $coin;
+    public $total;
 
-    public function __construct($invoice,$url,$trans_id = null)
+    public function __construct($invoice,$url,$trans_id = null,$coin = null,$total = null)
     {
         $this->invoice = $invoice;
         $this->url = $url;
         $this->trans_id = $trans_id;
+        $this->coin = $coin;
+        $this->total = $total;
     }
 
     /**
@@ -43,6 +47,8 @@ class SellerEmail extends Mailable
           'invoice' => $this->invoice,
           'url' => $this->url,
           'trans_id' => $this->trans_id,
+          'coin' => $this->coin,
+          'total' => $this->total,
         ]);
     }
 }

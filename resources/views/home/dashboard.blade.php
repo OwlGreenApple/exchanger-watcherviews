@@ -150,6 +150,7 @@
   var url_global = "{{ url('buy-list') }}";
   $(document).ready(function()
   {
+      display_seller();
       search_seller();
       pagination();
   });
