@@ -140,11 +140,15 @@
         <!-- upload form -->
         <div class="form-group row">
             <label class="col-md-4 col-form-label text-md-right">&nbsp;</label>
-
+ 
             <div class="col-md-6">
                 <input type="text" class="form-control mb-2" placeholder="{{ Lang::get('custom.epay') }}" name="epayname" />
                 <span class="error epayname"><!--  --></span>
-                <input type="file" class="form-control upload_payment" name="payment" />
+
+                <div class="d-flex">
+                    <input type="file" class="form-control upload_payment mr-2" name="payment" />
+                    <span class="pay-notes py-2 text-black-50"><i style="font-size : 16px" class="far fa-question-circle"></i></span>
+                </div>
             </div>
         </div>
         <!-- end e-payment -->

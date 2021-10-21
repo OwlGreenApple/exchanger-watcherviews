@@ -117,7 +117,15 @@
         display_detail_payment();
         save_bank_method();
         popup_payment();
+        payment_tooltip();
     });
+
+    function payment_tooltip()
+    {
+        $(".pay-notes").tooltip({
+            title : 'Silahkan screenshot qr-code payment anda dan upload di form ini'
+        });
+    }
 
     function add_payment()
     {
