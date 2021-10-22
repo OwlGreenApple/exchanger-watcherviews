@@ -84,8 +84,11 @@
                     @else
                         <div class="msg"><!--  --></div>
                         @if($user->watcherviews_id > 0)
-                             <div class="alert alert-info"> Silahkan tarik coin anda dari watcherviews <b><a href="{{ url('wallet') }}">disini</a></b></div>
                             <div class="alert alert-info">{{ Lang::get('auth.api') }} : <u><a id="logout_watcherviews">Disconnect API</a></u></div>
+
+                            <div class="mb-2"><a class="btn btn-gradient-success" href="{{ url('buy') }}">Beli Coin</a></div>
+
+                            <div><a class="btn btn-gradient-warning text-dark" href="{{ url('wallet') }}">Jual Coin</a></div>
                         @else
                             @include('home.connect_api')
                         @endif
@@ -587,18 +590,18 @@
 
                     if(result.err == 0)
                     {
-                        $("#connect_api_gui").html(' <div class="alert alert-info"> Silahkan tarik coin anda dari watcherviews <b><a href="{{ url("wallet") }}">disini</a></b></div> <div class="alert alert-info">{{ Lang::get("auth.api") }} : <b><a id="logout_watcherviews">Disconnect API</a>')
+                        $("#connect_api_gui").html('<div class="alert alert-info">{{ Lang::get("auth.api") }} : <b><a id="logout_watcherviews">Disconnect API</a></div><div class="mb-2"><a class="btn btn-gradient-success" href="{{ url("buy") }}">Beli Coin</a></div><div><a class="btn btn-gradient-warning text-dark" href="{{ url("wallet") }}">Jual Coin</a></div>')
                         $("input").val('');
                     }
                     else if(result.err == 1)
                     {
                         $(".error").show();
-                        $(".wallet").html('<div class="alert alert-danger">{{ $lang::get("auth.credential") }}</div>');
+                        $(".wallet").html('<div class="alert alert-danger">{{ Lang::get("auth.credential") }}</div>');
                     }
                     else if(result.err == 2)
                     {
                         $(".error").show();
-                        $(".wallet").html('<div class="alert alert-danger">{{ $lang::get("custom.failed") }}</div>');
+                        $(".wallet").html('<div class="alert alert-danger">{{ Lang::get("custom.failed") }}</div>');
                     }
                     else if(result.err == 3)
                     {
@@ -649,7 +652,6 @@
             {
                $('#loader').show();
                $('.div-loading').addClass('background-load');
-               $(".error").hide();
             },
             success : function(result)
             {
@@ -659,13 +661,10 @@
                 }
                 else
                 {
+                    $('#loader').hide();
+                    $('.div-loading').removeClass('background-load');
                     $(".wallet").html('<div class="alert alert-danger">'+result.err+'</div>');
                 }
-            },
-            complete : function()
-            {
-               $('#loader').hide();
-               $('.div-loading').removeClass('background-load');
             },
             error: function(){
                $('#loader').hide();

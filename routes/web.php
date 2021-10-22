@@ -56,6 +56,8 @@ Route::group(['middleware'=>['auth','web','banned']],function()
 			Route::get('deal/{id}',[App\Http\Controllers\BuyerController::class, 'deal']);
 			Route::get('comments/{user_id}/{invoice?}',[App\Http\Controllers\BuyerController::class, 'comments']);
 		});
+
+		Route::get('buy-request-message',[App\Http\Controllers\BuyerController::class, 'request_buy_message']);
 		Route::get('buy-deal',[App\Http\Controllers\BuyerController::class, 'buyer_deal']);
 		Route::get('buyer-confirm/{id}',[App\Http\Controllers\BuyerController::class, 'buyer_confirm']);
 		Route::get('buy-history',[App\Http\Controllers\BuyerController::class, 'buyer_history']);

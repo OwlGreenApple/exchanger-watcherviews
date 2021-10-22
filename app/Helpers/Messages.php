@@ -1,6 +1,7 @@
 <?php
 namespace App\Helpers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Lang;
 use Carbon\Carbon;
 
 class Messages
@@ -112,7 +113,7 @@ class Messages
         $msg .='Selamat, request order anda dengan no invoice *'.$invoice.'*'."\n";
         $msg .='telah di setujui oleh seller,'."\n\n";
         $msg .='Jumlah Coin : *'.$coin.'*,'."\n";
-        $msg .='Total : *'.$total.'*,'."\n";
+        $msg .='Total : '.Lang::get('custom.currency').'.*'.$total.'*,'."\n";
         $msg .='Segera bayar order anda di link berikut : '.url('deal').'/'.$trans_id.''."\n";
         $msg .='*Perhatian* : Apabila anda tidak konfirmasi pembayaran dalam 6 jam, maka order ini akan dianggap batal.'."\n\n";
         $msg .='Terima Kasih'."\n";
@@ -130,9 +131,9 @@ class Messages
         $msg .='Selamat, coin anda dengan no invoice *'.$invoice.'*'."\n";
         $msg .='telah di order'."\n\n";
         $msg .='Jumlah Coin : *'.$coin.'*'."\n";
-        $msg .='Total : *'.$total.'*'."\n\n";
+        $msg .='Total : '.Lang::get('custom.currency').'.*'.$total.'*'."\n\n";
         $msg .='Anda dapat menerima / menolak request order ini.'."\n";
-        $msg .='*Harap dicatat* : Apabila anda tidak merespon entah itu *menerima* atau *menolak* dalam 1x24 jam, maka system akan menganggap anda *menerima* order tersebut.'."\n\n";
+        $msg .='*Perhatian* : Apabila anda tidak merespon entah itu *menerima* atau *menolak* dalam 1x24 jam, maka system akan menganggap anda *menerima* order tersebut.'."\n\n";
         $msg .='Silahkan login di sini untuk merespon :'."\n";
         $msg .=url('sell')."\n\n";
         $msg .='Terima Kasih'."\n";
@@ -144,7 +145,7 @@ class Messages
         $msg .='pembeli coin anda dengan no invoice *'.$invoice.'*'."\n";
         $msg .='telah upload bukti bayar'."\n\n";
         $msg .='Jumlah Coin : *'.$coin.'*'."\n";
-        $msg .='Total : *'.$total.'*'."\n";
+        $msg .='Total : '.Lang::get('custom.currency').'.*'.$total.'*'."\n";
         $msg .='*Harap* segera di konfirmasi di sini :'."\n";
         $msg .=url('sell-confirm').'/'.$tr_id."\n\n";
         $msg .='Terima Kasih'."\n";

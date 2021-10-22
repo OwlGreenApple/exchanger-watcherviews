@@ -409,10 +409,18 @@ class HomeController extends Controller
       return response()->json($res);
     }
 
-    // COUNT NULL PAYEMNT METHOD ON TABLE USER
-    public static function check_many_payments()
+    // COUNT NULL PAYMENT METHOD ON TABLE USER
+    public static function check_many_payments($seller_id = null)
     {
-        $auth = Auth::user();
+        if($seller_id == null)
+        {
+          $auth = Auth::user();
+        }
+        else
+        {
+          $auth = User::find($seller_id);
+        }
+        
         $t = 5;
 
         if($auth->bank_1 == null)

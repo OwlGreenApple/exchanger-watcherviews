@@ -11,6 +11,7 @@ return [
     'back'=>'Kembali.',
     'cancel'=>'Batal',
     'coin_fee'=>'Biaya Koin Per Transaksi',
+    'continue'=>'Lanjutkan',
     'complete'=>'Selesai',
     'confirm'=>'Upload',
     'confirm.sell'=>'Konfirmasi',

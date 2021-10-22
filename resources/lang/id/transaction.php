@@ -35,6 +35,7 @@ return [
     'proof'=>'Maaf foto yang di upload oleh anda corrupt',
     'qty'=>'Coin',
     'rate'=>'Kurs',
+    'reputation'=>'Rating dan coment dari penjual lain yang pernah bertransaksi dengan pembeli ini',
     'sell'=>'Jual',
     'sell.act'=>'Jual',
     'sell.done'=>'Order berhasil',
@@ -55,6 +56,6 @@ return [
     'wallet.send'=>'Pengiriman',
     'wallet.return'=>'Pengembalian dari dispute',
     'withdraw'=>'Penarikan coin',
-    'wd'=>'Tarik coin',
+    'wd'=>'Tarik coin ke wallet',
     'wt'=>'Watcherviews : ',
 ];

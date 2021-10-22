@@ -41,8 +41,8 @@
                   <div class="mb-4">
                     <div class="form-check">
                       <label class="form-check-label text-muted">
-                        <input type="checkbox" name="agreement" required id="check-terms" class="form-check-input" />{{ Lang::get('custom.agreement') }}
-                      </label>
+                        <input type="checkbox" name="agreement" required id="check-terms" class="form-check-input" />{{ Lang::get('custom.agreement') }} 
+                      </label><a href="https://watchermarket.com/syarat-ketentuan/">Klik Disini</a>
                     </div>
                   </div>
                   <div class="mt-3">

@@ -27,9 +27,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Pilih Pembayaran :</label>
+                    <label>Pilih Pembayaran ({{ $row['total_payment'] }}) :</label>
                     <div class="mb-2">
-                        <select name="payment" class="form-control">
+                        <select style="color :#212529; border-color: #ced4da" name="payment" class="form-control">
                             @if($user->bank_1 !== null)
                                 <option value="bank_1">Transfer {{ Price::explode_payment($user->bank_1)[0] }}</option>
                             @endif

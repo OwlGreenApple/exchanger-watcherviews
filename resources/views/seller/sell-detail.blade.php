@@ -17,15 +17,24 @@
                 <h5 class="alert alert-warning">Order Pembeli :</h5>
                 <div class="list-group-item">No : <b>{{ $row['no'] }}</b></div>
                 <div class="list-group-item">Pembeli : {{ $row['buyer'] }}</div>
-                <div class="list-group-item">Rating : <span>
-                @if($row['star'] > 0)
-                    @for($x=1;$x<=$row['star'];$x++)
-                        <i class="fas fa-star"></i>
-                    @endfor <span>|</span>
-                @endif
-                </span><span><a href="{!! $row['link_comment'] !!}" class="mt-2"><i class="far fa-envelope"></i></a></span></div>
-                <div class="list-group-item">Warning <i class="fas fa-question-circle w-tool"></i>&nbsp;: {!! $row['warning'] !!}</div>
-                <div class="list-group-item">Suspend <i class="fas fa-question-circle s-tool"></i>&nbsp;: {!! $row['suspend'] !!}</div>
+
+                <div data-toggle="collapse" data-target="#collapseReputation" aria-expanded="false" aria-controls="collapseReputation" class="list-group-item">Reputasi : <i class="fas fa-question-circle reputation"></i>&nbsp; 
+                    <i style="font-size : 20px" class="fas fa-caret-down float-right"></i>
+                    <div class="clearfix"><!--  --></div>
+                </div>
+                <span id="collapseReputation" class="collapse list-group-item">
+                    <!-- collapse -->
+                    <div class="list-group-item">Rating : <span>
+                    @if($row['star'] > 0)
+                        @for($x=1;$x<=$row['star'];$x++)
+                            <i class="fas fa-star"></i>
+                        @endfor <span>|</span>
+                    @endif
+                    </span><span><a href="{!! $row['link_comment'] !!}" class="mt-2"><i class="far fa-envelope"></i></a></span></div>
+                    <div class="list-group-item">Warning <i class="fas fa-question-circle w-tool"></i>&nbsp;: {!! $row['warning'] !!}</div>
+                    <div class="list-group-item">Suspend <i class="fas fa-question-circle s-tool"></i>&nbsp;: {!! $row['suspend'] !!}</div>
+                    <!-- end collapse -->
+                </span>
                 <div class="list-group-item">Jumlah Coin : {{ $row['coin'] }}</div>
                 <div class="list-group-item">Total : <b>{{ $row['total'] }}</b></div>
 
@@ -79,6 +88,10 @@
 
         $(".s-tool").tooltip({
             'title' : '{!! Lang::get("auth.suspend-tooltip") !!}'
+        });
+
+        $(".reputation").tooltip({
+            'title' : '{!! Lang::get("transaction.reputation") !!}'
         });
     }
 
@@ -175,7 +188,7 @@
     function message_block()
     {
         var msg = '';
-        msg += '<b>Peringatan : </b>Jika anda memblock pembeli ini, maka semua transaksi yang berhubungan dengan pembeli ini dengan status <i>belum disetujui oleh anda</i> akan di-batalkan.<br>';
+        msg += '<b>Peringatan : </b>Jika anda memblock pembeli ini, maka semua transaksi yang berhubungan dengan pembeli ini akan di-batalkan.<br>';
         $("#message").html(msg);
         $("#btn_accept").html('Block');
         $("#btn_accept").removeClass('btn-warning text-dark');

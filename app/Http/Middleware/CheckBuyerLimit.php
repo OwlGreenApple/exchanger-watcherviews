@@ -38,11 +38,13 @@ class CheckBuyerLimit
         $tr = Transaction::where([['buyer_id',$buyer_id],['status',3]])->get();
         $total_success = $tr->count();
 
+        $current_transaction = $pc::get_rate() * $current_transaction;
         $limit = $pc::buyer_limit_day($total_success);
 
         // count total transaction by buyer / day
         $current_day = Carbon::now()->toDateString();
         $trs = Transaction::where([['buyer_id',$buyer_id],['status','>',0]])->whereRaw("DATE(date_buy) = CURDATE()")->selectRaw('COALESCE(SUM(total),0) AS total_money')->first();
+
         $total_money = $trs->total_money + $current_transaction;
 
         if($total_money > $limit)

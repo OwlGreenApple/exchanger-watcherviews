@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Database\QueryException;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Admin\AdminController as adm;
+use App\Http\Controllers\HomeController as Home;
 use App\Models\User;
 use App\Models\Comment;
 use App\Models\Transaction;
@@ -181,6 +182,11 @@ class BuyerController extends Controller
         return response()->json($res);
     }
 
+    public function request_buy_message()
+    {
+        return view('buy-request');
+    }
+
     //NOTIFICATION FOR BUYER WHEN SELLER ACCEPT REQUEST ORDER
     public static function notify_buyer($invoice,$buyer_id,$trans_id,$coin,$total)
     {
@@ -260,6 +266,7 @@ class BuyerController extends Controller
     {
     	$tr = Transaction::find($id);
     	$pc = new Price;
+        $hm = new Home;
 
     	if(is_null($tr) || $tr->status <> 2 || $tr->buyer_id !== Auth::id() || $tr->seller_id == Auth::id())
     	{
@@ -294,6 +301,7 @@ class BuyerController extends Controller
             'epay_2'=>$epay_2,
             'epay_3'=>$epay_3,
     		'coin'=>$pc->pricing_format($tr->amount),
+            'total_payment'=>$hm::check_many_payments($seller_id),
     		'total'=>Lang::get('custom.currency').' '.$pc->pricing_format($tr->total),
     	];
 

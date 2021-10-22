@@ -89,7 +89,7 @@
                 {
                     if(result.err == 0)
                     {
-                       location.href="{{ url('buy') }}";
+                       location.href="{{ url('buy-request-message') }}";
                     }
                     else if(result.err == 1)
                     {

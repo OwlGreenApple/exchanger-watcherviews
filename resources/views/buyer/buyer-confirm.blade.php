@@ -20,6 +20,11 @@
                   </div>
 
                   <div class="form-inline form-group">
+                    <div class="mr-2" for="total">Jumlah Coin:</div>
+                    <div><b>{{ $pc->pricing_format($row->amount) }}</b></div>
+                  </div>
+
+                  <div class="form-inline form-group">
                     <div class="mr-2" for="total">Total:</div>
                     <div>{{ Lang::get('custom.currency') }}&nbsp;<b>{{ $pc->pricing_format($row->total) }}</b></div>
                   </div>

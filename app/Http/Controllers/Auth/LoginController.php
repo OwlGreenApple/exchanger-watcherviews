@@ -80,8 +80,8 @@ class LoginController extends Controller
     public function loginAjax(Request $request)
     {
         // dd($request->all());
-        $email = $request->email;
-        $password = $request->password;
+        $email = strip_tags($request->email);
+        $password = strip_tags($request->password);
 
         // check email / password valid / tidak
         if(Auth::guard('web')->attempt(['email' => $email, 'password' => $password])) 
