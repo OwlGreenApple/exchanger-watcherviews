@@ -79,19 +79,15 @@
 
                 <div id="connect_api_gui" class="card-body">
                     <span class="wallet mb-2"><!--  --></span>
-                    @if($membership == 'free' && $trial == 0)
-                        <a class="settings text-bold alert-warning" data_target="2">{!! Lang::get('custom.trial') !!} {{ Lang::get('custom.here') }}</a>
+                    <div class="msg"><!--  --></div>
+                    @if($user->watcherviews_id > 0)
+                        <div class="alert alert-info">{{ Lang::get('auth.api') }} : <u><a id="logout_watcherviews">Disconnect API</a></u></div>
+
+                        <div class="mb-2"><a class="btn btn-gradient-success" href="{{ url('buy') }}">Beli Coin</a></div>
+
+                        <div><a class="btn btn-gradient-warning text-dark" href="{{ url('wallet') }}">Jual Coin</a></div>
                     @else
-                        <div class="msg"><!--  --></div>
-                        @if($user->watcherviews_id > 0)
-                            <div class="alert alert-info">{{ Lang::get('auth.api') }} : <u><a id="logout_watcherviews">Disconnect API</a></u></div>
-
-                            <div class="mb-2"><a class="btn btn-gradient-success" href="{{ url('buy') }}">Beli Coin</a></div>
-
-                            <div><a class="btn btn-gradient-warning text-dark" href="{{ url('wallet') }}">Jual Coin</a></div>
-                        @else
-                            @include('home.connect_api')
-                        @endif
+                        @include('home.connect_api')
                     @endif
                 </div>
             </div>
