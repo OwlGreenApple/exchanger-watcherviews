@@ -145,7 +145,7 @@ class Messages
         $msg .='pembeli coin anda dengan no invoice *'.$invoice.'*'."\n";
         $msg .='telah upload bukti bayar'."\n\n";
         $msg .='Jumlah Coin : *'.$coin.'*'."\n";
-        $msg .='Total : '.Lang::get('custom.currency').'.*'.$total.'*'."\n";
+        $msg .='Total : '.Lang::get('custom.currency').'.*'.$total.'*'."\n\n";
         $msg .='*Harap* segera di konfirmasi di sini :'."\n";
         $msg .=url('sell-confirm').'/'.$tr_id."\n\n";
         $msg .='Terima Kasih'."\n";

@@ -24,6 +24,7 @@
 	<br/>
 	telah upload bukti bayar
 	<br/>
+	<br/>
 	Jumlah Coin : <b>{{ $coin }}</b>
 	<br>
 	Total : {{ Lang::get('custom.currency') }}.<b>{{ $total }}</b>

@@ -12,7 +12,7 @@
 
     <div class="col-md-12">
       <form class="table-responsive">
-        <table class="display responsive nowrap w-100" id="data_order">
+        <table class="display responsive nowrap" id="data_order">
           <thead>
             <th>{{$lang::get('order.no')}}</th>
             <th>{{$lang::get('order.package')}}</th>

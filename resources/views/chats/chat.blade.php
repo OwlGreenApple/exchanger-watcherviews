@@ -2,13 +2,18 @@
 <link href="{{ asset('assets/css/comments.css') }}" rel="stylesheet" />
 
 @section('content')
+
+<div class="page-header">
+  <h3 class="page-title">
+    <span class="page-title-icon bg-gradient-primary text-white mr-2">
+      <i class="mdi mdi-cart-outline"></i>
+    </span>Chat invoice : {{ $invoice }}</h3>
+</div>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-9">
             <div class="card">
-                <div class="card-header bg-primary text-white">
-                    Chat invoice : {{ $invoice }}
-                </div>
 
                 <div id="chats" class="card-body">
                     <!-- display table comments -->

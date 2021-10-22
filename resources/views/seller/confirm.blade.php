@@ -71,7 +71,8 @@
         <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
       </div>
       <div class="modal-body">
-        Pastikan anda sudah menerima pembayaran sebelum klik <b>Konfirmasi</b>
+        Pastikan anda <b>sudah menerima pembayaran</b> sebelum klik Konfirmasi,<br/>
+        setelah konfirmasi transaksi tidak dapat dibatalkan.
       </div>
       <!--  -->
       <div class="modal-footer" id="foot">
@@ -79,7 +80,7 @@
           {{Lang::get('order.confirm.sell')}}
         </button>
         <button class="btn" data-dismiss="modal">
-          {{Lang::get('order.cancel')}}
+          {{Lang::get('order.back')}}
         </button>
       </div>
     </div>

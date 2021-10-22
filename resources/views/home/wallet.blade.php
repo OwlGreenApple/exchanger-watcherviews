@@ -73,7 +73,7 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="name" class="col-md-4 col-form-label text-md-right">Coin Fee (2.5%)</label>
+                        <label for="name" class="col-md-4 col-form-label text-md-right">Coin Tx Fee (2.5%)</label>
 
                         <div class="col-md-6">
                            <div id="fee" class="form-control border-top-0 border-left-0 border-right-0"><!--  --></div>

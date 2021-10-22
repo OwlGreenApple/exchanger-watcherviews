@@ -99,7 +99,7 @@
     <!-- end justify -->
 
 <script src="{{ asset('/assets/intl-tel-input/callback.js') }}" type="text/javascript"></script>
-<script src="{{ asset('/assets/js/custom.js') }}" type="text/javascript"></script>
+<script defer src="{{ asset('/assets/js/custom.js') }}" type="text/javascript"></script>
 
 <script type="text/javascript">
     var segment = "{{ $conf }}";
@@ -107,7 +107,6 @@
     $(document).ready(function(){
         crop();
         data_tabs();
-        load_page();
         save_profile();
         connect_api();
         logout_watcherviews();
@@ -117,7 +116,39 @@
         save_bank_method();
         popup_payment();
         payment_tooltip();
+
+        setTimeout(function(){
+            load_page();
+        },500);
     });
+
+     function load_page()
+      {
+        $("#data_order").DataTable({
+            "processing": true,
+            "serverSide": true,
+            "lengthMenu": [ 10, 25, 50, 75, 100, 500 ],
+            "ajax": "{{ url('orders') }}",
+            "destroy": true,
+            "responsive": {
+                "details": {
+                   renderer: function (api,rowIdx ) {
+                      var data = api.cells(rowIdx,':hidden').eq(0).map(function( cell) {
+                      var header = $(api.column(cell.column).header());
+                      return '<p style="color:green"   '+header.text()+' : '+api.cell(cell).data()+'</p>';
+                      }).toArray().join('');
+                      return data ? $('<table/>').append(data) : false;
+                  }
+               }
+            }
+        });
+
+        $('.dataTables_filter input')
+         .off()
+         .on('keyup', delay(function() {
+            $('#data_order').DataTable().search(this.value.trim(), false, false).draw();
+         },1000));    
+    }
 
     function payment_tooltip()
     {
@@ -468,6 +499,11 @@
                 $(".mn").removeClass('active');
                 $(".mn_"+target).addClass('active');
             }
+
+            if(target == 3)
+            {
+                load_page();
+            }
         });
     }
 
@@ -480,24 +516,6 @@
         $(".mn").removeClass('collapsed');
         $("#collapseExample").removeClass('collapse');
         $("#collapseExample").addClass('collapse show');
-    }
-
-    function load_page()
-      {
-        $("#data_order").DataTable({
-            "processing": true,
-            "serverSide": true,
-            "lengthMenu": [ 10, 25, 50, 75, 100, 500 ],
-            "ajax": "{{ url('orders') }}",
-            "destroy": true,
-            "responsive": true
-        });
-
-        $('.dataTables_filter input')
-         .off()
-         .on('keyup', delay(function() {
-            $('#data_order').DataTable().search(this.value.trim(), false, false).draw();
-         },1000));    
     }
 
     function delay(callback, ms) {

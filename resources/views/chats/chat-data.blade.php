@@ -10,7 +10,7 @@
                     <h6 class="text-muted time">{{ $row->created_at }}</h6>
                 </div>
             </div> 
-            <div class="post-description"> 
+            <div class="post-description-chat"> 
                 <p>{{ $row->comments }}</p>
             </div>
         </div>

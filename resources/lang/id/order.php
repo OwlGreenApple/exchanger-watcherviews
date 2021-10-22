@@ -8,7 +8,7 @@
 return [
     'admin'=>'Admin akan mengkonfirmasi pembayaran anda.',
     'admin_24'=>'Admin kami akan membantu anda max 1x24 jam.',
-    'back'=>'Kembali.',
+    'back'=>'Kembali',
     'cancel'=>'Batal',
     'coin_fee'=>'Biaya Koin Per Transaksi',
     'continue'=>'Lanjutkan',

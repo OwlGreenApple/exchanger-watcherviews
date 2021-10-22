@@ -17,7 +17,7 @@
 
                 @if(auth()->user()->bank_1 == null  && auth()->user()->bank_2 == null && auth()->user()->epayment_1 == null  && auth()->user()->epayment_2 == null  && auth()->user()->epayment_3 == null)
 
-                <div class="alert mt-3">Mohon isi metode pembayaran anda <b><a href="{{ url('account') }}">disini</a></b></div>
+                <div class="alert mt-3">Mohon isi metode pembayaran anda, <b><a href="{{ url('account') }}">klik disini</a></b></div>
 
                 @elseif(Auth::user()->status == 3)
 

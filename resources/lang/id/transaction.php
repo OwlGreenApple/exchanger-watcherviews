@@ -28,7 +28,7 @@ return [
     'min'=>'Min 100.000 coin',
     'name'=>'Transaksi',
     'no'=>'No Transaksi',
-    'no_transaction'=>'Maaf, untuk sementara saat ini belum ada user yang menjual coin.',
+    'no_transaction'=>'Maaf, untuk saat ini belum ada yang menjual coin.',
     'no_transaction_find'=>'Maaf, belum ada user yang menjual : ',
     'placeholder'=>'Contoh : Jual murah coin watcherviews',
     'price'=>'Harga',

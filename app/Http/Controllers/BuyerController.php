@@ -103,6 +103,7 @@ class BuyerController extends Controller
     {
         $rate = ' ';
         $kurs = $pc::get_rate();
+        $data = array();
 
         foreach($tr as $row):
             if($pc::check_blocked_user($row->blocked_buyer) == true)
@@ -435,6 +436,7 @@ class BuyerController extends Controller
     public function buyer_proof(Request $request)
     {
     	$tr = Transaction::find($request->id);
+        $pc = new Price;
 
     	// TO AVOID IF USER DELIBERATELY PUT HIS PRODUCT
     	if(is_null($tr))
@@ -460,7 +462,9 @@ class BuyerController extends Controller
          /* notification to seller */
         $adm = new adm;
         $msg = new Messages;
-        $msg = $msg::seller_notification($tr->no,$tr->id,$tr->amount,$tr->total);
+        $coin = $pc->pricing_format($tr->amount);
+        $total_money = $pc->pricing_format($tr->total);
+        $msg = $msg::seller_notification($tr->no,$tr->id,$coin,$total_money);
 
         $notif = new Event;
         $notif->user_id = $user->id;
@@ -474,7 +478,7 @@ class BuyerController extends Controller
           'message'=>$msg,
           'phone_number'=>$user->phone_number,
           'email'=>$user->email,
-          'obj'=>new SellerEmail($tr->no,$url,$tr->id,$tr->amount,$tr->total),
+          'obj'=>new SellerEmail($tr->no,$url,$tr->id,$coin,$total_money),
         ]; 
 
     	try
