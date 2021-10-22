@@ -190,7 +190,7 @@ class BuyerController extends Controller
     //NOTIFICATION FOR BUYER WHEN SELLER ACCEPT REQUEST ORDER
     public static function notify_buyer($invoice,$buyer_id,$trans_id,$coin,$total)
     {
-        $url = '<a href="'.url('deal').'/'.$trans_id.'">Bayar Sekarang</a>';
+        $url = '<a href="'.url('deal').'/'.$trans_id.'">Bayar Order</a>';
         $msg = new Messages;
         $msg = $msg::buyer_notification($invoice,$trans_id,$coin,$total);
 
@@ -313,6 +313,7 @@ class BuyerController extends Controller
     	$data = array();
     	$tr = Transaction::where('buyer_id',Auth::id())->orderBy('updated_at','desc')->get();
     	$pc = new Price;
+        $action = "-";
 
     	if($tr->count() > 0)
     	{
@@ -327,7 +328,8 @@ class BuyerController extends Controller
     			}
 				elseif($row->status == 2)
     			{
-                    $status = '<a target="_blank" href="'.url('deal').'/'.$row->id.'" class="btn btn-success btn-sm">Bayar Sekarang</a>';
+                    $status = '<span class="text-info">Lakukan Pembayaran</span>';
+                    $action = '<a target="_blank" href="'.url('deal').'/'.$row->id.'" class="btn btn-success btn-sm">Bayar Sekarang</a>';
     				$comments = '-';
     			}
 				elseif($row->status == 3)
@@ -380,6 +382,7 @@ class BuyerController extends Controller
     				'payment'=>$row->payment,
                     'comments'=>$comments,
     				'status'=>$status,
+                    'action'=>$action,
     			];
     		}
 

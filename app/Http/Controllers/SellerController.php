@@ -267,8 +267,9 @@ class SellerController extends Controller
     // DECISION FROM SELLER TO BUYER REQUEST
     public function seller_decision(Request $request)
     {
-        $id = $request->id;
-        $act = $request->act;
+        $pc = new Price;
+        $id = strip_tags($request->id);
+        $act = strip_tags($request->act);
         $trans = Transaction::where([['seller_id',Auth::id()],['id',$id],['status',1]])->first();
 
         if(is_null($trans))
@@ -282,7 +283,7 @@ class SellerController extends Controller
         {
            // MAIL TO BUYER IF ORDER HAS ACCEPTED
            $buy = new Buyer;
-           $buy::notify_buyer($trans->no,$trans->buyer_id,$trans->id,$trans->amount,$trans->total);
+           $buy::notify_buyer($trans->no,$trans->buyer_id,$trans->id,$pc->pricing_format($trans->amount),$pc->pricing_format($trans->total));
            return self::save_seller_decision(2,$act,$trans->id);
         }
         else

@@ -66,7 +66,7 @@
 
     function data_table()
     {
-      $("#selling").DataTable({'ordering' : false});
+      $("#selling").DataTable({'ordering' : false,'responsive':true});
     }
 
 </script>

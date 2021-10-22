@@ -143,7 +143,10 @@ class RegisterController extends Controller
             return response()->json($errors);
         }
 
-        if(!isset($data['free']))
+        return $this->register_ajax($data);
+
+        // UNCOMMENT IF REGISTERED USER NEED TO REDIRECT INTO PACKAGE PAGE
+        /*if(!isset($data['free']))
         {
             return $this->register_ajax($data);
         }
@@ -151,7 +154,7 @@ class RegisterController extends Controller
         {
             session::flash('reg',$data);
             return response()->json(['success'=>1]);
-        }
+        }*/
     }
 
     public function offer_upgrade(Request $request)

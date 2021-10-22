@@ -1,4 +1,4 @@
-<table class="table stripe" id="selling">
+<table class="display responsive nowrap" id="selling">
     <thead>
         <th>Tanggal</th>
         <th>Invoice</th>
@@ -9,6 +9,7 @@
         <th>Pembayaran</th>
         <th>Status</th>
         <th>Penilaian</th>
+        <th>Action</th>
     </thead>
     <tbody>
         @if(count($data) > 0)
@@ -23,6 +24,7 @@
                     <td>{{ $row['payment'] }}</td>
                     <td>{!! $row['status'] !!}</td>
                     <td>{!! $row['comments'] !!}</td>
+                    <td>{!! $row['action'] !!}</td>
                 </tr>
             @endforeach
         @endif

@@ -113,7 +113,7 @@ class Messages
         $msg .='Selamat, request order anda dengan no invoice *'.$invoice.'*'."\n";
         $msg .='telah di setujui oleh seller,'."\n\n";
         $msg .='Jumlah Coin : *'.$coin.'*,'."\n";
-        $msg .='Total : '.Lang::get('custom.currency').'.*'.$total.'*,'."\n";
+        $msg .='Total : '.Lang::get('custom.currency').'.*'.$total.'*,'."\n\n";
         $msg .='Segera bayar order anda di link berikut : '.url('deal').'/'.$trans_id.''."\n";
         $msg .='*Perhatian* : Apabila anda tidak konfirmasi pembayaran dalam 6 jam, maka order ini akan dianggap batal.'."\n\n";
         $msg .='Terima Kasih'."\n";

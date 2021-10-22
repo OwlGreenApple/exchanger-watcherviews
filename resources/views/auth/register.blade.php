@@ -28,22 +28,24 @@
                     <div class="col-sm-4">
                       <div class="form-check">
                         <label class="form-check-label">
-                          <input type="radio" class="form-check-input" name="gender" id="membershipRadios1" value="" checked=""> {{ $lang::get('custom.male') }} <i class="input-helper"></i></label>
+                          <input type="radio" class="form-check-input" name="gender" id="membershipRadios1" value="{{ $lang::get('custom.male') }}" checked="checked"> {{ $lang::get('custom.male') }} <i class="input-helper"></i></label>
                       </div>
                     </div>
                     <div class="col-sm-5">
                       <div class="form-check">
                         <label class="form-check-label">
-                          <input type="radio" class="form-check-input" name="gender" id="membershipRadios2" value="option2"> {{ $lang::get('custom.female') }} <i class="input-helper"></i></label>
+                          <input type="radio" class="form-check-input" name="gender" id="membershipRadios2" value="{{ $lang::get('custom.female') }}"> {{ $lang::get('custom.female') }} <i class="input-helper"></i></label>
                       </div>
                     </div>
                   </div>
                   <div class="mb-4">
-                    <div class="form-check">
-                      <label class="form-check-label text-muted">
-                        <input type="checkbox" name="agreement" required id="check-terms" class="form-check-input" />{{ Lang::get('custom.agreement') }} 
-                      </label><a href="https://watchermarket.com/syarat-ketentuan/">Klik Disini</a>
+                    <div class="form-inline">
+                      <span class="text-muted">
+                        <input type="checkbox" name="agreement" required id="check-terms" class="form-check-input mr-2" />{{ Lang::get('custom.agreement') }} 
+                        <a class="text-primary" target="_blank" rel="noopener noreferrer" href="https://watchermarket.com/syarat-ketentuan/">Klik Disini</a>
+                      </span>
                     </div>
+                    <small class="text-danger terms"><!-- error --></small>
                   </div>
                   <div class="mt-3">
                     <button class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn" id="btn-register" type="button" >{{ $lang::get('custom.register') }}</button>
@@ -67,8 +69,9 @@ $(function(){
     $("#btn-register").click(function(){
       var val= $("input[name=agreement]").val();
 
-      if(val == 'on'){
-        alert('{{ $lang::get("custom.check") }}');
+      if(val == 'on')
+      {
+        $(".terms").html('{{ Lang::get("custom.check") }}');
         return false;
       }
 
@@ -80,14 +83,13 @@ $(function(){
         },
         data: $("#form-register").serializeArray(),
         dataType: 'json',
-        beforeSend: function() {
+        beforeSend: function() 
+        {
             $('#loader').show();
             $('.div-loading').addClass('background-load');
         },
-        success: function(data) {
-            $('#loader').hide();
-            $('.div-loading').removeClass('background-load');
-
+        success: function(data) 
+        {
             if (data.success == 1) 
             {
                 $(".error").hide();
@@ -95,6 +97,8 @@ $(function(){
             } 
             else 
             {
+                 $('#loader').hide();
+                 $('.div-loading').removeClass('background-load');
                  $(".error").show();
                  $(".username").html(data.username);
                  $(".email").html(data.email);

@@ -11,7 +11,8 @@
 	<br>
 	Jumlah Coin : <b>{{ $coin }}</b>
 	<br/>
-	Total : {{ Lang::get('custom.curency') }}.<b>{{ $total }}</b>
+	Total : {{ Lang::get('custom.currency') }}.<b>{{ $total }}</b>
+	<br/>
 	<br/>
 	Segera bayar order anda di link berikut : {!! $url !!} 
 	<br>
