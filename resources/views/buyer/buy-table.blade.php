@@ -22,9 +22,18 @@
               @if($row['rate'] == 0)
                 -
               @else
-                @for($x=0;$x<$row['rate'];$x++)
+                @if($row['rate'] > 0)
+                @for($x=1;$x<=$row['rate'];$x++)
                   <i class="fas fa-star"></i>
+                  @if($x == $row['rate'] && $row['rate'] < 5)
+                    @if($row['star_float'] == 0)
+                      <i class="fas fa-star"></i>
+                    @else
+                      <i class="fas fa-star-half"></i>
+                    @endif
+                  @endif
                 @endfor
+                @endif
               @endif
             </td>
             <td data-th="{{ Lang::get('transaction.comments') }}"><a href="{!! $row['link'] !!}"><i class="far fa-envelope"></i></a></td>

@@ -16,9 +16,18 @@
                 <h5 class="alert alert-info">Anda akan membeli koin dengan detail :</h5>
                 <div class="list-group-item">No Invoice : <b>{{ $row['no'] }}</b></div>
                 <div class="list-group-item">Penjual : {{ $row['seller'] }}&nbsp;<span>
-                @for($x=1;$x<=$row['star'];$x++)
-                    <i class="fas fa-star"></i>
-                @endfor
+                @if($row['rate'] > 0)
+                     @for($x=1;$x<=$row['rate'];$x++)
+                      <i class="fas fa-star"></i>
+                      @if($x == $row['rate'] && $row['rate'] < 5)
+                        @if($row['star_float'] == 0)
+                          <i class="fas fa-star"></i>
+                        @else
+                          <i class="fas fa-star-half"></i>
+                        @endif
+                      @endif
+                    @endfor
+                @endif
                 </span></div>
                 <div class="list-group-item">Metode Pembayaran : {{ $row['paymethod'] }}</div>
                 <div class="list-group-item">Jumlah Coin : {{ $row['coin'] }}</div>

@@ -123,7 +123,7 @@ class Messages
       return $msg;
     }
 
-    public static function seller_notification($invoice,$tr_id = null,$coin = null, $total = null)
+    public static function seller_notification($invoice,$tr_id = null,$coin = null, $total = null,$trans_id = null)
     {
       $msg ='';
       if($tr_id == null)
@@ -135,7 +135,7 @@ class Messages
         $msg .='Anda dapat menerima / menolak request order ini.'."\n";
         $msg .='*Perhatian* : Apabila anda tidak merespon entah itu *menerima* atau *menolak* dalam 1x24 jam, maka system akan menganggap anda *menerima* order tersebut.'."\n\n";
         $msg .='Silahkan login di sini untuk merespon :'."\n";
-        $msg .=url('sell')."\n\n";
+        $msg .=url('sell-detail')."/".$trans_id."\n\n";
         $msg .='Terima Kasih'."\n";
         $msg .='Team Watchermarket';
       }

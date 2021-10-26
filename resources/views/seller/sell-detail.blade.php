@@ -25,10 +25,17 @@
                 <span id="collapseReputation" class="collapse list-group-item">
                     <!-- collapse -->
                     <div class="list-group-item">Rating : <span>
-                    @if($row['star'] > 0)
-                        @for($x=1;$x<=$row['star'];$x++)
-                            <i class="fas fa-star"></i>
-                        @endfor <span>|</span>
+                    @if($row['rate'] > 0)
+                        @for($x=1;$x<=$row['rate'];$x++)
+                          <i class="fas fa-star"></i>
+                          @if($x == $row['rate'] && $row['rate'] < 5)
+                            @if($row['star_float'] == 0)
+                              <i class="fas fa-star"></i>
+                            @else
+                              <i class="fas fa-star-half"></i>
+                            @endif
+                          @endif
+                        @endfor<span>|</span>
                     @endif
                     </span><span><a href="{!! $row['link_comment'] !!}" class="mt-2"><i class="far fa-envelope"></i></a></span></div>
                     <div class="list-group-item">Warning <i class="fas fa-question-circle w-tool"></i>&nbsp;: {!! $row['warning'] !!}</div>

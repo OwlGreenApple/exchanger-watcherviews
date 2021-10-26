@@ -104,7 +104,7 @@ class BuyerController extends Controller
         $rate = ' ';
         $kurs = $pc::get_rate();
         $data = array();
-
+        
         foreach($tr as $row):
             if($pc::check_blocked_user($row->blocked_buyer) == true)
             {
@@ -112,7 +112,9 @@ class BuyerController extends Controller
             }
 
             $cm = self::star_rate($row->seller_id);
-            $star = round($cm->star);
+            $star = $cm['star'];
+            $star_float = $cm['star_float'];
+            
             $total_price = $kurs * $row->total;
             $data[] = [
                 'id'=>$row->id,
@@ -122,6 +124,7 @@ class BuyerController extends Controller
                 'seller_name'=>$row->name,
                 'seller'=>$row->seller_id,
                 'rate'=>$star,
+                'star_float'=>$star_float,
                 'link'=>''.url('comments').'/'.encrypt($row->seller_id).'',
             ];
         endforeach;
@@ -149,12 +152,12 @@ class BuyerController extends Controller
 
         $seller = User::find($tr->seller_id);
         $msg = new Messages;
-        $msg = $msg::seller_notification($ts->no,null,$pc->pricing_format($ts->amount),$pc->pricing_format($ts->total));
+        $msg = $msg::seller_notification($ts->no,null,$pc->pricing_format($ts->amount),$pc->pricing_format($ts->total),$ts->id);
 
         $notif = new Event;
         $notif->user_id = $seller->id;
         $notif->type = 1;
-        $notif->event_name = 'Invoice : '.$tr->no;
+        $notif->event_name = 'Invoice : '.$ts->no;
         $notif->message = 'Selamat ada request order atas coin anda';
         $notif->url = 'sell-detail/'.$ts->id;
 
@@ -247,7 +250,8 @@ class BuyerController extends Controller
     	$data = [
     		'id'=>$tr->id,
     		'no'=>$tr->no,
-            'star'=>round($cm->star),
+            'rate'=>$cm['star'],
+            'star_float'=>$cm['star_float'],
     		'seller'=>$user->name,
     		'coin'=>$pc->pricing_format($tr->amount),
             'paymethod'=>$paymethod,
@@ -260,7 +264,21 @@ class BuyerController extends Controller
     public static function star_rate($seller_id)
     {
         $cm = Comment::selectRaw('AVG(rate) AS star')->where([['seller_id',$seller_id],['is_seller',0]])->first();
-        return $cm;
+
+        $star_float = 0;
+        $star = number_format((int)$cm->star, 1, '.', '');
+
+        if(is_float($cm->star) == true)
+        {
+            $star_float = number_format((float)$cm->star, 1, '.', '');
+            $star_float = $star_float - $star;
+        }
+
+        $data = [
+            'star'=>$star,
+            'star_float'=>$star_float,
+        ];
+        return $data;
     }
 
     public function deal($id)

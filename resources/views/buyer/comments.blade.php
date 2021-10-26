@@ -66,26 +66,60 @@
         $(".rate").click(function(){
             var pos = $(".rate").index(this);
             var check = $(this).hasClass( "checked" );
+            var star = $(this).hasClass( "fas fa-star" );
 
             if(check == true)
             {
-                 $(this).removeClass('checked');
-                 star_min(pos)
+                // full star
+                if(star == true)
+                {
+                    $(this).removeClass('checked');
+                }
+                else
+                {
+                    // half star
+                    $(this).removeClass('fas fa-star-half');
+                    $(this).addClass('fas fa-star');
+                    $(this).addClass('checked');
+                }
+                star_min(pos,star)
             }
             else
             {
-                 $(this).addClass('checked');
-                 star_plus(pos)
+                 // full star
+                if(star == true)
+                {
+                    $(this).addClass('checked');
+                    $(this).removeClass('fas fa-star');
+                    $(this).addClass('fas fa-star-half');
+                }
+                else
+                {
+                    // half star
+                    $(this).removeClass('checked');
+                }
+                star_plus(pos,star)
             }
         })
     }
 
-    function star_plus(pos)
+    function star_plus(pos,star)
     {
+        /* $(this).removeClass('checked');
+                 $(this).removeClass('fas fa-star-half');
+                 $(this).addClass('fas fa-star');*/
+        // star = full star
         if(pos == 0)
         {
             for(x=1;x<5;x++)
             {
+                var check_star = $(".rate").eq(x).hasClass( "fas fa-star" );
+
+                if(check_star == false)
+                {
+                    $(".rate").eq(x).removeClass('fas fa-star-half');
+                    $(".rate").eq(x).addClass('fas fa-star');
+                }
                 $(".rate").eq(x).removeClass('checked');
             }
         }
@@ -93,6 +127,13 @@
         {
             for(x=0;x<pos;x++)
             {
+                var check_star = $(".rate").eq(x).hasClass( "fas fa-star" );
+
+                if(check_star == false)
+                {
+                    $(".rate").eq(x).removeClass('fas fa-star-half');
+                    $(".rate").eq(x).addClass('fas fa-star');
+                }
                 $(".rate").eq(x).addClass('checked');
             }
         }
@@ -102,6 +143,13 @@
     {
         for(x=4;x>pos;x--)
         {
+            var check_star = $(".rate").eq(x).hasClass( "fas fa-star" );
+
+            if(check_star == false)
+            {
+                $(".rate").eq(x).removeClass('fas fa-star-half');
+                $(".rate").eq(x).addClass('fas fa-star');
+            }
             $(".rate").eq(x).removeClass('checked');
         }
     }
@@ -141,7 +189,10 @@
     {
         $("#save_comments").click(function(){
             var comments = $('textarea[name="comments"]').val();
-            var rate = $(".checked").length;
+            var rate_full = $(".fa-star.checked").length;
+            var rate_half = $(".fa-star-half.checked").length/2;
+            var rate = rate_full+rate_half;
+
             var data = {
                 'comments' : comments,
                 'rate' : rate,
@@ -198,6 +249,9 @@
     {
         $("textarea[name='comments']").val('');
         $(".rate").removeClass('checked');
+        $(".rate").removeClass('fas fa-star-half');
+        $(".rate").removeClass('fas fa-star');
+        $(".rate").addClass('fas fa-star');
     }
 
 </script>
