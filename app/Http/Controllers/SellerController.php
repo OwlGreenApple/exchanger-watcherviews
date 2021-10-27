@@ -240,19 +240,8 @@ class SellerController extends Controller
     {
         $cm = Comment::selectRaw('AVG(rate) AS star')->where([['buyer_id',$buyer_id],['is_seller',1]])->first();
         
-        $star_float = 0;
-        $star = number_format((int)$cm->star, 1, '.', '');
-
-        if(is_float($cm->star) == true)
-        {
-            $star_float = number_format((float)$cm->star, 1, '.', '');
-            $star_float = $star_float - $star;
-        }
-
-        $data = [
-            'star'=>$star,
-            'star_float'=>$star_float,
-        ];
+        $by = new Buyer;
+        $data = Buyer::float_fix($cm->star);
         return $data;
     }
 

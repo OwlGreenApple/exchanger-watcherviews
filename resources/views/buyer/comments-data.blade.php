@@ -8,9 +8,18 @@
                 </div>
                 <div class="title">{{ $row['no_trans'] }}</div>
                 <div class="py-2">
-                    @for($x= 0; $x < $row['rate']; $x++ )
-                        <i class="fas fa-star gold"></i>
-                    @endfor
+                    @if($row['rate'] > 0)
+                        @for($x=1;$x<=$row['rate'];$x++)
+                          <i class="fas fa-star gold"></i>
+                          @if($x == $row['rate'] && $row['rate'] < 5)
+                            @if($row['star_float'] == 0)
+                              <i class="fas fa-star gold"></i>
+                            @else
+                              <i class="fas fa-star-half"></i>
+                            @endif
+                          @endif
+                        @endfor
+                    @endif
                 </div>
                 <h6 class="text-muted time">{{ $row['created_at'] }}</h6>
             </div>

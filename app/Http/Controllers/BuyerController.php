@@ -265,12 +265,19 @@ class BuyerController extends Controller
     {
         $cm = Comment::selectRaw('AVG(rate) AS star')->where([['seller_id',$seller_id],['is_seller',0]])->first();
 
-        $star_float = 0;
-        $star = number_format((int)$cm->star, 1, '.', '');
+        
+        $data = self::float_fix($cm->star);
+        return $data;
+    }
 
-        if(is_float($cm->star) == true)
+    public static function float_fix($rate)
+    {
+        $star_float = 0;
+        $star = number_format((int)$rate, 1, '.', '');
+
+        if(is_float($rate) == true)
         {
-            $star_float = number_format((float)$cm->star, 1, '.', '');
+            $star_float = number_format((float)$rate, 1, '.', '');
             $star_float = $star_float - $star;
         }
 
@@ -278,6 +285,7 @@ class BuyerController extends Controller
             'star'=>$star,
             'star_float'=>$star_float,
         ];
+
         return $data;
     }
 
@@ -622,11 +630,13 @@ class BuyerController extends Controller
                     $user = User::find($row->buyer_id);
                 }
 
+                $rate = self::float_fix($row->rate);
     			$data[] = [
     				'user'=>$user->name,
                     'no_trans'=>$row->no_trans,
     				'comments'=>$row->comments,
-    				'rate'=>$row->rate,
+    				'rate'=>$rate['star'],
+                    'star_float'=>$rate['star_float'],
     				'created_at'=>$row->created_at,
                     'role'=>$role,
     			];
