@@ -15,7 +15,7 @@
                             @if($row['star_float'] == 0)
                               <i class="fas fa-star gold"></i>
                             @else
-                              <i class="fas fa-star-half"></i>
+                              <i class="fas fa-star-half gold"></i>
                             @endif
                           @endif
                         @endfor
