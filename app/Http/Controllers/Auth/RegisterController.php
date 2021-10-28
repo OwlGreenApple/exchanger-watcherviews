@@ -85,15 +85,35 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $generated_password = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'),0,10);
-        $name = $data['username'];
-        $phone = $data['code_country'].$data['phone'];
+       
+        // to avoid error if data not coming from API
+        if(!isset($data['is_promote']))
+        {
+          $is_promote = 0;
+        }
+        else
+        {
+          $is_promote = $data['is_promote'];
+        }
+
+        // to avoid error if data not coming from API
+        if(!isset($data['phone_api']))
+        {
+          $phone = $data['code_country'].$data['phone'];
+          $phone_number = strip_tags($phone);
+        }
+        else
+        {
+          $phone_number = $data['phone_api'];
+        }
 
         $col = [
           'name' => strip_tags($data['username']),
           'email' => strip_tags($data['email']),
-          'phone_number'=>strip_tags($data['code_country'].$data['phone']),
+          'phone_number'=>$phone_number,
           'password' => Hash::make($generated_password),
           'gender'=>strip_tags($data['gender']),
+          'is_promote'=>$is_promote,
         ];
 
         // PREMIUM MEMBERSHIP
@@ -104,13 +124,13 @@ class RegisterController extends Controller
         }
 
         $msg = new Messages;
-        $msg = $msg::registered($generated_password,$data['username']);
+        $msg = $msg::registered($generated_password,strip_tags($data['username']));
 
         $data = [
           'message'=>$msg,
-          'phone_number'=>$phone,
+          'phone_number'=>$phone_number,
           'email'=>$data['email'],
-          'obj'=>new RegisteredEmail($generated_password,$data['username']),
+          'obj'=>new RegisteredEmail($generated_password,strip_tags($data['username'])),
         ];
 
         $adm = new adm;
@@ -229,9 +249,16 @@ class RegisterController extends Controller
         return redirect()->back()->withErrors($validator)->withInput();
       }
 
-      $user = User::where([['email',$email],['status','>',0]])->first();
+      $user = User::where('email',$email)->first();
 
       if(is_null($user))
+      {
+        return redirect('password/reset')->with('error_email',Lang::get('auth.failed'));
+      }
+
+      $banned_user = User::where([['email',$email],['status','>',0]])->first();
+
+      if(is_null($banned_user))
       {
         return redirect('password/reset')->with('error_email',Lang::get('auth.banned'));
       }

@@ -41,6 +41,7 @@ class User extends Authenticatable
         'trial',
         'end_membership',
         'gender',
+        'is_promote',
         'status',
     ];
 

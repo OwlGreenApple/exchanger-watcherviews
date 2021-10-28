@@ -24,7 +24,6 @@ class CheckSelling
      */
     public function handle(Request $request, Closure $next)
     {
-
         // get string
         $coin = $request->tr_coin;
         $coin = str_replace(".","",$coin);
@@ -119,16 +118,22 @@ class CheckMaxSell implements Rule
         $pc = new Price;
         $kurs = $pc::get_rate();
         $err_msg = 'Anda hanya dapat menjual coin maksimal Rp '.$pc->pricing_format($trans).' per hari';
+        
         if($total > $trans)
         {
             $this->msg = $err_msg;
             return false;
         }
 
-        $tr = Transaction::selectRaw('SUM(total) AS total_sell_day')->whereRaw('DATE(created_at) = CURDATE()')->where('seller_id',Auth::id())->first();
+        $tr = Transaction::selectRaw('SUM(total) AS total_sell_day')->where([['seller_id',Auth::id()],['status',0]])->whereRaw('DATE(created_at) = CURDATE()')->first();
 
-        $total_sell_day = $kurs * $tr->total_sell_day;
-        $total_sell = $total_sell_day + $total;
+        $tr_sold = Transaction::selectRaw('SUM(total) AS total_sell_day')->whereRaw('DATE(created_at) = CURDATE()')->where([['seller_id',Auth::id()],['status','>',0]])->first();
+
+        $total_sell_day = $kurs * $tr->total_sell_day; //status = 0
+        $total_sold_day = $tr_sold->total_sell_day; //status > 0
+
+        $total_sold = $total_sell_day + $total_sold_day;
+        $total_sell = $total_sold + $total;
 
         if($total_sell > $trans)
         {
@@ -162,10 +167,16 @@ class CheckMaxSell implements Rule
     {
         $pc = new Price;
         $kurs = $pc::get_rate();
-        $tr = Transaction::where('seller_id',Auth::id())->whereRaw('MONTH(date_buy) = MONTH(CURRENT_DATE())')->selectRaw('SUM(total) as total_sell_month')->orWhere('status',0)->first();
 
-        $total_sell_month = $kurs * $tr->total_sell_month;
-        $max_sell_month = $total_sell_month + $total;
+        $tr = Transaction::where([['seller_id',Auth::id()],['status',0]])->selectRaw('SUM(total) as total_sell_month')->first();
+
+        $tr_sold = Transaction::where([['seller_id',Auth::id()],['status','>',0]])->whereRaw('MONTH(date_buy) = MONTH(CURRENT_DATE())')->selectRaw('SUM(total) as total_sold_month')->first();
+
+        $total_sell_month = $kurs * $tr->total_sell_month; //status = 0
+        $total_sold_month = $tr_sold->total_sold_month; //status > 0
+
+        $total_sold = $total_sell_month + $total_sold_month;
+        $max_sell_month = $total_sold + $total;
 
         if($max_sell_month > $max_sell)
         {

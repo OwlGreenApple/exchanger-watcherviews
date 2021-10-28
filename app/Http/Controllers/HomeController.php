@@ -50,11 +50,11 @@ class HomeController extends Controller
         $data_penjualan = Transaction::where('seller_id',Auth::id())->select('created_at','total')->get()->toArray();
         $data_penjualan = json_encode($data_penjualan);
 
-        $total_penjualan = Transaction::where('seller_id',Auth::id())->selectRaw('SUM(total) AS total_penjualan')->first()->total_penjualan;
+        $total_penjualan = Transaction::where([['seller_id',Auth::id()],['status','=',3]])->selectRaw('SUM(total) AS total_penjualan')->first()->total_penjualan;
 
-        $total_penjualan_previous = Transaction::where('seller_id',Auth::id())->selectRaw('SUM(total) AS total_penjualan')->whereRaw("MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) = MONTH(STR_TO_DATE(date_buy, '%Y-%m-%d'))")->first()->total_penjualan;
+        $total_penjualan_previous = Transaction::where([['seller_id',Auth::id()],['status','=',3]])->selectRaw('SUM(total) AS total_penjualan')->whereRaw("MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) = MONTH(STR_TO_DATE(date_buy, '%Y-%m-%d'))")->first()->total_penjualan;
 
-        $total_penjualan_current = Transaction::where('seller_id',Auth::id())->selectRaw('SUM(total) AS total_penjualan')->whereRaw('MONTH(date_buy) = MONTH(CURRENT_DATE())')->first()->total_penjualan;
+        $total_penjualan_current = Transaction::where([['seller_id',Auth::id()],['status','=',3]])->selectRaw('SUM(total) AS total_penjualan')->whereRaw('MONTH(date_buy) = MONTH(CURRENT_DATE())')->first()->total_penjualan;
 
         $seller_diff = $total_penjualan_current - $total_penjualan_previous;
 
@@ -75,11 +75,11 @@ class HomeController extends Controller
         $data_pembelian = Transaction::where('buyer_id',Auth::id())->select('created_at','total')->get()->toArray();
         $data_pembelian = json_encode($data_pembelian);
 
-        $total_pembelian = Transaction::where('buyer_id',Auth::id())->selectRaw('SUM(total) AS total_pembelian')->first()->total_pembelian;
+        $total_pembelian = Transaction::where('buyer_id',Auth::id())->whereIn('status',[3,6])->selectRaw('SUM(total) AS total_pembelian')->first()->total_pembelian;
 
-        $total_pembelian_previous = Transaction::where('buyer_id',Auth::id())->selectRaw('SUM(total) AS total_pembelian')->whereRaw("MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) = MONTH(STR_TO_DATE(date_buy, '%Y-%m-%d'))")->first()->total_pembelian;
+        $total_pembelian_previous = Transaction::where('buyer_id',Auth::id())->whereIn('status',[3,6])->selectRaw('SUM(total) AS total_pembelian')->whereRaw("MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) = MONTH(STR_TO_DATE(date_buy, '%Y-%m-%d'))")->first()->total_pembelian;
 
-        $total_pembelian_current = Transaction::where('buyer_id',Auth::id())->selectRaw('SUM(total) AS total_pembelian')->whereRaw('MONTH(date_buy) = MONTH(CURRENT_DATE())')->first()->total_pembelian;
+        $total_pembelian_current = Transaction::where('buyer_id',Auth::id())->whereIn('status',[3,6])->selectRaw('SUM(total) AS total_pembelian')->whereRaw('MONTH(date_buy) = MONTH(CURRENT_DATE())')->first()->total_pembelian;
 
         $buyer_diff = $total_pembelian_current - $total_pembelian_previous;
 
