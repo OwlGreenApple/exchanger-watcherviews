@@ -22,7 +22,7 @@ class BuyerEmail extends Mailable
     public $coin;
     public $total;
 
-    public function __construct($invoice,$url,$coin,$total)
+    public function __construct($invoice,$url,$coin = null,$total = null)
     {
         $this->invoice = $invoice;
         $this->url = $url;
