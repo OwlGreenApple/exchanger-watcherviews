@@ -22,6 +22,7 @@ use App\Rules\CheckUniquePhone;
 use App\Mail\RegisteredEmail;
 use App\Helpers\Price;
 use App\Helpers\Messages;
+use Carbon\Carbon;
 use Session;
 
 class RegisterController extends Controller
@@ -90,21 +91,17 @@ class RegisterController extends Controller
         if(!isset($data['is_promote']))
         {
           $is_promote = 0;
+          $phone = $data['code_country'].$data['phone'];
+          $phone_number = strip_tags($phone);
+          $membership = 'free';
+          $end_membership = null;
         }
         else
         {
           $is_promote = $data['is_promote'];
-        }
-
-        // to avoid error if data not coming from API
-        if(!isset($data['phone_api']))
-        {
-          $phone = $data['code_country'].$data['phone'];
-          $phone_number = strip_tags($phone);
-        }
-        else
-        {
           $phone_number = $data['phone_api'];
+          $membership = 'starter';
+          $end_membership = Carbon::now()->addMonth();
         }
 
         $col = [
@@ -112,6 +109,9 @@ class RegisterController extends Controller
           'email' => strip_tags($data['email']),
           'phone_number'=>$phone_number,
           'password' => Hash::make($generated_password),
+          'gender'=>strip_tags($data['gender']),
+          'membership'=>$membership,
+          'end_membership'=>$end_membership,
           'gender'=>strip_tags($data['gender']),
           'is_promote'=>$is_promote,
         ];
