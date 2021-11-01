@@ -17,6 +17,7 @@
                 <div class="font-weight-bold">
                     <a class="settings text-black-50 border-bottom mn_1 active" data_target="1"><i class="far fa-user text-primary"></i>&nbsp;Profile</a>
 
+                    <!-- non admin && non suspended user -->
                     @if(Auth::user()->is_admin == 0 && Auth::user()->status !== 3)
                     <a class="text-black-50 d-block border-bottom mn" data-toggle="collapse" href="#collapseExample"><i class="fas fa-receipt text-warning"></i>&nbsp;Billing&nbsp;<i align="right" class="fas fa-caret-down float-right mt-1"></i></a>
                         <span class="clearfix"><!--  --></span>
@@ -28,6 +29,8 @@
                     <!--  -->
                     
                     <a class="settings text-black-50 border-bottom mn_4" data_target="4"><i class="fas fa-plug text-danger"></i>&nbsp;Connect API</a>
+
+                    <a class="settings text-black-50 border-bottom mn_5" data_target="5"><i class="fas fa-exchange-alt text-success"></i>&nbsp;Tukar Coin</a>
                     @endif
 
                     <a class="settings text-info border-bottom" href="{{ route('logout') }}"
@@ -92,6 +95,16 @@
                 </div>
             </div>
             @endif
+
+            <!-- EXCHANGE COIN -->
+            <div id="settings_target_5" class="card target_hide d-none">
+                <div class="card-body bg-white text-black-50 border-bottom"><h5 class="mb-0"><b>Tukar Coin dengan kode kupon diskon</b></h5></div>
+
+                <div class="card-body">
+                    @include('exchange')
+                </div>
+            </div>
+
             <!-- end col -->
         </div> 
     </div> 
@@ -116,11 +129,79 @@
         save_bank_method();
         popup_payment();
         payment_tooltip();
-
-        setTimeout(function(){
-            load_page();
-        },500);
+        redeem_coin();
     });
+
+    function redeem_coin()
+    {
+        $(".exc").click(function()
+        {
+            var data;
+            var diskon_value;
+            var id = $(this).attr('id');
+
+            if(id == 'o_exc')
+            {
+                diskon_value = $("input[name='o_exchange']").val();
+                data = {"api":"omn","diskon_value":diskon_value};
+            }
+            else
+            {
+                diskon_value = $("input[name='a_exchange']").val();
+                data = {"api":"act","diskon_value":diskon_value};
+            }
+
+            exchange_coin(data)
+        });
+    }
+
+    function exchange_coin(data)
+    {
+        $.ajax({
+            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            type : 'POST',
+            url : "{{ route('exc') }}",
+            dataType : 'json',
+            data : data,
+            beforeSend: function()
+            {
+               $('#loader').show();
+               $('.div-loading').addClass('background-load');
+            },
+            success : function(result)
+            {
+                // omnilinks
+                if(result.coupon !== 0)
+                {
+                    $("#omn_coupon").val(result.coupon);
+                }
+                else
+                {
+                    $(".omn_coupon").html('<div class="alert alert-danger">{{ Lang::get("custom.failed") }}</div>');
+                }
+
+                // activrespon
+                if(result.act_coupon == 0)
+                {
+                    $(".act_coupon").html('<div class="alert alert-danger">{{ Lang::get("custom.failed") }}</div>');
+                }
+                else
+                {
+                    $("#act_coupon").val(result.act_coupon);
+                }
+            },
+            complete : function()
+            {
+                $('#loader').hide();
+                $('.div-loading').removeClass('background-load');
+            },
+            error : function()
+            {
+                $('#loader').hide();
+                $('.div-loading').removeClass('background-load');
+            }
+        });
+    }
 
      function load_page()
       {
