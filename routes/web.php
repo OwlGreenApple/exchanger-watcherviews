@@ -117,6 +117,8 @@ Route::group(['middleware'=>['auth','web','is_admin','banned']],function()
 	Route::get('dispute-notify-users',[App\Http\Controllers\Admin\AdminController::class,'dispute_notify_user']);
 
 	Route::get('kurs-admin',[App\Http\Controllers\Admin\AdminController::class,'trade']);
+	Route::get('atm-coupon-list',[App\Http\Controllers\Admin\AdminController::class,'atm_coupons']);
+	Route::get('import-coupon',[App\Http\Controllers\Admin\AdminController::class,'import_coupon']);
 	Route::get('user-list',[App\Http\Controllers\Admin\AdminController::class,'user_list']);
 	Route::get('user-fetch',[App\Http\Controllers\Admin\AdminController::class,'fetch_user']);
 	Route::get('user-ban',[App\Http\Controllers\Admin\AdminController::class,'ban_user']);

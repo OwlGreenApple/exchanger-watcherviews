@@ -63,7 +63,38 @@
             </div>
         </div>
     </div>
+
+    <!-- ACTIVTEMPLATE -->
+    <div class="col-lg-6 card-pricing shadow text-center px-3 mb-4">
+        <div style="height:75px;" class="bg-transparent card-header pt-4 border-0">
+            <a target="_blank" rel="noopener noreferrer" href="https://activtemplate.com/"><img src="{{ asset('assets/img/activtemplate-logo.png') }}" /></a>
+            <br/>
+        </div>
+        <!--  -->
+        <div class="card-body pt-0">
+            <div class="form-check">
+              <label for="radio1">
+                <input type="radio" class="form-check-input" id="radio1" name="atm_exchange" value="1" checked>{{ Lang::get('transaction.mil_1') }}
+              </label>
+            </div>
+            <div class="form-check">
+              <label for="radio2">
+                <input type="radio" class="form-check-input" id="radio2" name="atm_exchange" value="2">{{ Lang::get('transaction.mil_2') }}
+              </label>
+            </div>
+            <a id="atm_exc" class="btn btn-primary mb-3 exc">{{ Lang::get('transaction.exc') }}</a>
+            <span class="atm_coin"><!--  --></span>
+            <div class="atm_coupon">
+                <div class="d-flex">
+                    <input readonly="readonly" id="atm_coupon" class="form-control" />
+                    <button data-code="atm_coupon" type="button" class="btn btn-success btn-sm btn-copy">Copy</button>
+                </div>
+                <span class="display_atm_coupon"><!-- show copy message --></span>
+                <div class="mt-3"><a class="btn btn-warning btn-sm text-dark" target="_blank" rel="noopener noreferrer" href="https://activtemplate.com/ACTMP/paket-super">Gunakan Kupon</a></div>
+            </div>
+        </div>
+    </div>
             
-       <!--  -->
+    <!--  -->
     </div>
 </div>

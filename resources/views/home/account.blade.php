@@ -143,13 +143,20 @@
 
             if(id == 'o_exc')
             {
-                diskon_value = $("input[name='o_exchange']").val();
+                diskon_value = $("input[name='o_exchange':checked]").val();
                 data = {"api":"omn","diskon_value":diskon_value,"user_id":"{{ encrypt(Auth::id()) }}"};
             }
-            else
+            
+            if(id == 'a_exc')
             {
-                diskon_value = $("input[name='a_exchange']").val();
+                diskon_value = $("input[name='a_exchange':checked]").val();
                 data = {"api":"act","diskon_value":diskon_value,"user_id":"{{ encrypt(Auth::id()) }}"};
+            }
+
+            if(id == 'atm_exc')
+            {
+                diskon_value = $("input[name='atm_exchange']:checked").val();
+                data = {"api":"atm","diskon_value":diskon_value,"user_id":"{{ encrypt(Auth::id()) }}"};
             }
 
             exchange_coin(data)
@@ -204,26 +211,26 @@
                         $(".act_coin").html('<div class="text-danger mt-2">{{ Lang::get("transaction.total.incoin") }}</div>');
                     }
 
+                    if(result.api == 'atm')
+                    {
+                        $(".atm_coin").html('<div class="text-danger mt-2">{{ Lang::get("transaction.total.incoin") }}</div>');
+                    }
+
                     return false;
                 }
 
                 // omnilinks
-                if(result.coupon !== 0)
+                if(result.coupon !== undefined)
                 {
-                    if(result.act_coupon == undefined)
-                    {
-                        $("#omn_coupon").val(result.coupon);
-                        $(".omn_coupon").show();
-                    }
-
-                    if(result.coin !== 0)
-                    {
-                        $("#cur_coin").html(result.coin)
-                    }
+                    $("#omn_coupon").val(result.coupon);
+                    $(".omn_coupon").show();
                 }
                 else
                 {
-                    $(".omn_coupon").html('<div class="alert alert-danger">{{ Lang::get("custom.failed") }}</div>');
+                    if(result.coupon == 0)
+                    {
+                        $(".omn_coupon").html('<div class="alert alert-danger">{{ Lang::get("custom.failed") }}</div>');
+                    }
                 }
 
                 // activrespon
@@ -233,16 +240,30 @@
                 }
                 else 
                 {
-                    if(result.coupon == undefined)
+                    if(result.act_coupon !== undefined)
                     {
                         $("#act_coupon").val(result.act_coupon);
                         $(".act_coupon").show();
                     }
+                }
 
-                    if(result.coin !== 0)
+                // activetemplate
+                if(result.atm_coupon == 0)
+                {
+                    $(".atm_coupon").html('<div class="alert alert-danger">{{ Lang::get("custom.failed") }}</div>');
+                }
+                else 
+                {
+                    if(result.atm_coupon !== undefined)
                     {
-                        $("#cur_coin").html(result.coin)
+                        $("#atm_coupon").val(result.atm_coupon);
+                        $(".atm_coupon").show();
                     }
+                }
+
+                if(result.coin !== 0)
+                {
+                    $("#cur_coin").html(result.coin)
                 }
             },
             complete : function()

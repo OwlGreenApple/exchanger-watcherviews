@@ -29,6 +29,11 @@
     </a>
   </li>
   <li class="nav-item nav-logout d-none d-lg-block">
+    <a class="nav-link" href="{{ url('atm-coupon-list') }}">
+      Activtemplate Kupon
+    </a>
+  </li>
+  <li class="nav-item nav-logout d-none d-lg-block">
     <a class="nav-link" href="{{ url('user-list') }}">
       User List
     </a>

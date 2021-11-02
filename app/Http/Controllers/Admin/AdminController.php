@@ -18,6 +18,7 @@ use App\Models\Transaction;
 use App\Models\Kurs;
 use App\Models\Event;
 use App\Models\Wallet;
+use App\Models\Atcoupons;
 use App\Helpers\Api;
 use App\Helpers\Price;
 use App\Helpers\Messages;
@@ -435,6 +436,18 @@ class AdminController extends Controller
     public function index()
     {
     	return view('admin.order.index');
+    }
+
+    /** ACTIVTEMPLATE COUPON **/
+    public function atm_coupons()
+    {
+      $atm = Atcoupons::join('users','users.id','=','atcoupons.user_id')->select("atcoupons.*","users.name")->orderBy('id','desc')->get();
+      return view('admin.order.atm-coupons',['data'=>$atm]);
+    }
+
+    public function import_coupon(Request $request)
+    {
+      $file = $request->file('upload_coupon');
     }
 
     /*** -- USER -- ***/
