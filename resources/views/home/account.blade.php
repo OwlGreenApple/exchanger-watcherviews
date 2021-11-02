@@ -98,7 +98,7 @@
 
             <!-- EXCHANGE COIN -->
             <div id="settings_target_5" class="card target_hide d-none">
-                <div class="card-body bg-white text-black-50 border-bottom"><h5 class="mb-0"><b>Tukar Coin dengan kode kupon diskon</b></h5></div>
+                <div class="card-body bg-white text-black-50 border-bottom"><h5 class="mb-0"><b>Tukar Coin dengan voucher kupon</b></h5></div>
 
                 <div class="card-body">
                     @include('exchange')
@@ -130,6 +130,7 @@
         popup_payment();
         payment_tooltip();
         redeem_coin();
+        copy_coupon();
     });
 
     function redeem_coin()
@@ -143,16 +144,36 @@
             if(id == 'o_exc')
             {
                 diskon_value = $("input[name='o_exchange']").val();
-                data = {"api":"omn","diskon_value":diskon_value};
+                data = {"api":"omn","diskon_value":diskon_value,"user_id":"{{ encrypt(Auth::id()) }}"};
             }
             else
             {
                 diskon_value = $("input[name='a_exchange']").val();
-                data = {"api":"act","diskon_value":diskon_value};
+                data = {"api":"act","diskon_value":diskon_value,"user_id":"{{ encrypt(Auth::id()) }}"};
             }
 
             exchange_coin(data)
         });
+    }
+
+    function copy_coupon(){
+      $( "body" ).on("click",".btn-copy",function(e) 
+      {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var code = $(this).attr("data-code");
+        var link = $("#"+code).val();
+        var tempInput = document.createElement("input");
+        tempInput.style = "position: absolute; left: -1000px; top: -1000px";
+        tempInput.value = link;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+        $(".display_"+code).html('<div class="text-success mt-2">Code kupon telah di salin</div>');
+        setTimeout(function(){$(".display_"+code).html("")},3000)
+      });
     }
 
     function exchange_coin(data)
@@ -170,10 +191,35 @@
             },
             success : function(result)
             {
+                //validation coin
+                if(result.api !== undefined)
+                {
+                    if(result.api == 'omn')
+                    {
+                        $(".omn_coin").html('<div class="text-danger mt-2">{{ Lang::get("transaction.total.incoin") }}</div>');
+                    }
+
+                    if(result.api == 'act')
+                    {
+                        $(".act_coin").html('<div class="text-danger mt-2">{{ Lang::get("transaction.total.incoin") }}</div>');
+                    }
+
+                    return false;
+                }
+
                 // omnilinks
                 if(result.coupon !== 0)
                 {
-                    $("#omn_coupon").val(result.coupon);
+                    if(result.act_coupon == undefined)
+                    {
+                        $("#omn_coupon").val(result.coupon);
+                        $(".omn_coupon").show();
+                    }
+
+                    if(result.coin !== 0)
+                    {
+                        $("#cur_coin").html(result.coin)
+                    }
                 }
                 else
                 {
@@ -185,9 +231,18 @@
                 {
                     $(".act_coupon").html('<div class="alert alert-danger">{{ Lang::get("custom.failed") }}</div>');
                 }
-                else
+                else 
                 {
-                    $("#act_coupon").val(result.act_coupon);
+                    if(result.coupon == undefined)
+                    {
+                        $("#act_coupon").val(result.act_coupon);
+                        $(".act_coupon").show();
+                    }
+
+                    if(result.coin !== 0)
+                    {
+                        $("#cur_coin").html(result.coin)
+                    }
                 }
             },
             complete : function()
@@ -216,7 +271,7 @@
                    renderer: function (api,rowIdx ) {
                       var data = api.cells(rowIdx,':hidden').eq(0).map(function( cell) {
                       var header = $(api.column(cell.column).header());
-                      return '<p style="color:green"   '+header.text()+' : '+api.cell(cell).data()+'</p>';
+                      return '<p '+header.text()+' : '+api.cell(cell).data()+'</p>';
                       }).toArray().join('');
                       return data ? $('<table/>').append(data) : false;
                   }

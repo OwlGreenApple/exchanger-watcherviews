@@ -1,11 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Http\Controllers\Auth\RegisterController as Reg;
+use Illuminate\Support\Facades\Auth;
+use App\Helpers\Price;
 
-class ApiController extends RegisterController
+class ApiController extends Controller
 {
 
 	// if user from watcherviews buy package
@@ -35,7 +38,8 @@ class ApiController extends RegisterController
  				'gender'=>$gender,
  				'is_promote'=>1,
  			];
- 			$this->create($data);
+ 			$reg = new Reg;
+ 			$reg->create($data);
  		}
  		else
  		{
@@ -51,6 +55,10 @@ class ApiController extends RegisterController
  	// user redeem coin to activrespon and omnilinks
  	public function exchange_coin(Request $request)
  	{
+ 		$user_id = $request->user_id;
+        $user = User::find(decrypt($user_id));
+        $pc = new Price;
+
  		if($request->api == 'omn')
  		{
  			// omnilinks
@@ -67,10 +75,18 @@ class ApiController extends RegisterController
  		if($request->diskon_value == 2)
  		{
  			$discount = 200000;
+            $coin = 2000000;
  		}
  		else
  		{
  			$discount = 100000;
+            $coin = 1000000;
+ 		}
+
+ 		if($user->coin <= $coin)
+ 		{
+            $ret['api'] = $request->api;
+ 			return response()->json($ret);
  		}
 
  		$data = [
@@ -102,8 +118,45 @@ class ApiController extends RegisterController
         curl_close($ch);
 
         $response = json_decode($result,true);
+
+        if(isset($response['coupon']))
+        {
+            if($response['coupon'] !== 0)
+            {
+                $svcoin = self::save_coin($user,$coin);
+                $response['coin'] = $pc->pricing_format($svcoin);
+            }
+        }
+
+        if(isset($response['act_coupon']))
+        {
+            if($response['act_coupon'] !== 0)
+            {
+                $svcoin = self::save_coin($user,$coin);
+                $response['coin'] = $pc->pricing_format($svcoin);
+            }
+        }
+
         return $response;
  	}
+
+    private static function save_coin($user,$coin)
+    {
+        $user->coin -= $coin;
+
+        try
+        {
+            $user->save();
+            $coin_remain = $user->coin;
+        }
+        catch(QueryException $e)
+        {
+            // $e->getMessage();
+            $coin_remain = 0;
+        }
+
+        return $coin_remain;
+    }
 
 /*end class*/
 }

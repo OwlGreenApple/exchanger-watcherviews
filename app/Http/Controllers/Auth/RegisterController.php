@@ -297,5 +297,10 @@ class RegisterController extends Controller
       $adm->notify_user($data);
     }
 
+    public static function user_log()
+    {
+       return Auth::user();
+    }
+
 /**/
 }

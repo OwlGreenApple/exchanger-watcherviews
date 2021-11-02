@@ -1,4 +1,5 @@
 <div class="container mb-2 mt-2">
+    <h6>Jumlah Coin : <b id="cur_coin">{{ $pc->pricing_format($user->coin) }}</b></h6>
     <div class="pricing card-deck row">
         
     <!-- OMNILINKS -->
@@ -20,18 +21,22 @@
               </label>
             </div>
             <a id="o_exc" class="btn btn-primary mb-3 exc">{{ Lang::get('transaction.exc') }}</a>
-            <div class="omn_coupon d-flex">
-                <input readonly="readonly" id="omn_coupon" class="form-control" />
-                <button type="button" class="btn btn-success btn-sm">Copy</button>
+            <span class="omn_coin"><!--  --></span>
+            <div class="omn_coupon">
+                <div class="d-flex">
+                    <input readonly="readonly" id="omn_coupon" class="form-control" />
+                    <button data-code="omn_coupon" type="button" class="btn btn-success btn-sm btn-copy">Copy</button>
+                </div>
+                <span class="display_omn_coupon"><!-- show copy message --></span>
+                <div class="mt-3"><a class="btn btn-warning btn-sm text-dark" target="_blank" rel="noopener noreferrer" href="https://omnilinkz.com/dashboard/checkout/2">Gunakan Kupon</a></div>
             </div>
-            <div class="omn_coupon mt-2"><a target="_blank" rel="noopener noreferrer" href="https://omnilinkz.com/dashboard/checkout/2">Gunakan Kupon</a></div>
         </div>
     </div>
 
     <!-- ACTIVRESPON -->
     <div class="col-lg-6 card-pricing shadow text-center px-3 mb-4">
         <div style="height:75px;" class="bg-transparent card-header pt-4 border-0">
-            <a target="_blank" rel="noopener noreferrer" href="https://activrespon.com"><img style="background-color : #30307c" src="{{ asset('assets/img/activrespon.png') }}" /></a>
+            <a target="_blank" rel="noopener noreferrer" href="https://activrespon.com"><img style="background-color : #30307c; padding:6px 10px" src="{{ asset('assets/img/activrespon.png') }}" /></a>
             <br/>
         </div>
         <!--  -->
@@ -47,11 +52,15 @@
               </label>
             </div>
             <a id="a_exc" class="btn btn-primary mb-3 exc">{{ Lang::get('transaction.exc') }}</a>
-            <div class="act_coupon d-flex">
-                <input readonly="readonly" id="act_coupon" class="form-control" />
-                <button type="button" class="btn btn-success btn-sm">Copy</button>
+            <span class="act_coin"><!--  --></span>
+            <div class="act_coupon">
+                <div class="d-flex">
+                    <input readonly="readonly" id="act_coupon" class="form-control" />
+                    <button data-code="act_coupon" type="button" class="btn btn-success btn-sm btn-copy">Copy</button>
+                </div>
+                <span class="display_act_coupon"><!-- show copy message --></span>
+                <div class="mt-3"><a class="btn btn-warning btn-sm text-dark" target="_blank" rel="noopener noreferrer" href="https://activrespon.com/dashboard/checkout/2">Gunakan Kupon</a></div>
             </div>
-            <div class="act_coupon mt-2"><a target="_blank" rel="noopener noreferrer" href="https://activrespon.com/dashboard/checkout/2">Gunakan Kupon</a></div>
         </div>
     </div>
             

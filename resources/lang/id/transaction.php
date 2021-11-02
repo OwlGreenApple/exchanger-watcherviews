@@ -51,6 +51,7 @@ return [
     'star'=>'Rating',
     'total'=>'Total',
     'total.coin'=>'Jumlah Coin',
+    'total.incoin'=>'Jumlah Coin anda tidak cukup',
     'trade'=>'Kurs',
     'trans.fee'=>'Biaya Transaksi',
     'type'=>'Tipe Transaksi',
