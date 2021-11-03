@@ -42,10 +42,7 @@ class CheckTransaction extends Command
      */
     public function handle()
     {
-        $tr = Transaction::where(function($query){
-            $query->where('status','>',0);
-            $query->where('status','<',3);
-        })->get();
+        $tr = Transaction::whereIn('status',[1,2,7])->get();
 
         if($tr->count() > 0)
         {
