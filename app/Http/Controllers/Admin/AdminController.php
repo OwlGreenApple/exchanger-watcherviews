@@ -24,6 +24,8 @@ use App\Helpers\Price;
 use App\Helpers\Messages;
 use App\Mail\NotifyEmail;
 use App\Mail\WarningEmail;
+use App\Imports\AtCouponsImport;
+use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use Storage, Validator, DB;
 
@@ -441,13 +443,64 @@ class AdminController extends Controller
     /** ACTIVTEMPLATE COUPON **/
     public function atm_coupons()
     {
-      $atm = Atcoupons::join('users','users.id','=','atcoupons.user_id')->select("atcoupons.*","users.name")->orderBy('id','desc')->get();
-      return view('admin.order.atm-coupons',['data'=>$atm]);
+      return view('admin.order.atm-coupons');
+    }
+
+    public function atm_coupons_table()
+    {
+      $atm = Atcoupons::leftJoin('users','users.id','=','atcoupons.user_id')->select("atcoupons.*","users.name")->orderBy('id','desc')->get();
+      return view('admin.order.atm-coupons-table',['data'=>$atm]);
     }
 
     public function import_coupon(Request $request)
     {
       $file = $request->file('upload_coupon');
+      $data = Excel::toArray(new AtCouponsImport,$file);
+      $voucher_1 = $voucher_2 = array();
+
+      foreach($data as $col)
+      {
+        $voucher_1 = array_column($col,0);
+        $voucher_2 = array_column($col,1);
+      }
+
+      // voucher 100.000
+      if(count($voucher_1) > 0)
+      {
+        array_shift($voucher_1);
+        self::import_voucher_activtemplate($voucher_1,1);
+      }
+
+      // voucher 200.000
+      if(count($voucher_2) > 0)
+      {
+        array_shift($voucher_2);
+        self::import_voucher_activtemplate($voucher_2,2);
+      }
+
+      return response()->json(['response'=>1]);
+    }
+
+    private static function import_voucher_activtemplate($voucher,$type)
+    {
+      foreach($voucher as $row):
+        $check = Atcoupons::where('code',$row)->first();
+
+        if(is_null($check))
+        {
+          $at = new Atcoupons;
+          $at->user_id = 0;
+          $at->code = $row;
+          $at->date_used = null;
+          $at->type = $type;
+          $at->is_used = 0;
+          $at->save();
+        }
+        else
+        {
+          continue;
+        }
+      endforeach;
     }
 
     /*** -- USER -- ***/

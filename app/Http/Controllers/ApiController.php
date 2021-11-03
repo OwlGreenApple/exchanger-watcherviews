@@ -56,8 +56,7 @@ class ApiController extends Controller
  	// user redeem coin to activrespon and omnilinks
  	public function exchange_coin(Request $request)
  	{
- 		$user_id = $request->user_id;
-        $user = User::find(decrypt($user_id));
+        $user = User::find(Auth::id());
         $pc = new Price;
 
  		if($request->diskon_value == 2)
@@ -71,7 +70,7 @@ class ApiController extends Controller
             $coin = 1000000;
  		}
 
- 		if($user->coin <= $coin)
+ 		if($user->coin < $coin)
  		{
             $ret['api'] = $request->api;
  			return response()->json($ret);

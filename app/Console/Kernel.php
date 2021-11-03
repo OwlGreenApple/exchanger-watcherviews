@@ -30,6 +30,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('check:transaction')->hourly();
         $schedule->command('check:user')->cron('0 */12 * * *');
         $schedule->command('check:warning')->dailyAt('02:00');
+        $schedule->command('check:atm_coupon')->everyTwoHours();
     }
 
     /**

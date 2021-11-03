@@ -12,15 +12,15 @@
         <div class="card-body pt-0">
             <div class="form-check">
               <label for="radio1">
-                <input type="radio" class="form-check-input" id="radio1" name="o_exchange" value="1" checked>{{ Lang::get('transaction.mil_1') }}
+                <input type="radio" class="form-check-input" name="o_exchange" value="1" checked>{{ Lang::get('transaction.mil_1') }}
               </label>
             </div>
             <div class="form-check">
               <label for="radio2">
-                <input type="radio" class="form-check-input" id="radio2" name="o_exchange" value="2">{{ Lang::get('transaction.mil_2') }}
+                <input type="radio" class="form-check-input" name="o_exchange" value="2">{{ Lang::get('transaction.mil_2') }}
               </label>
             </div>
-            <a id="o_exc" class="btn btn-primary mb-3 exc">{{ Lang::get('transaction.exc') }}</a>
+            <a id="o_exc" class="btn btn-primary mb-3 open">{{ Lang::get('transaction.exc') }}</a>
             <span class="omn_coin"><!--  --></span>
             <div class="omn_coupon">
                 <div class="d-flex">
@@ -42,16 +42,16 @@
         <!--  -->
         <div class="card-body pt-0">
             <div class="form-check">
-              <label for="radio1">
-                <input type="radio" class="form-check-input" id="radio1" name="a_exchange" value="1" checked>{{ Lang::get('transaction.mil_1') }}
+              <label for="radio3">
+                <input type="radio" class="form-check-input" name="a_exchange" value="1" checked>{{ Lang::get('transaction.mil_1') }}
               </label>
             </div>
             <div class="form-check">
-              <label for="radio2">
-                <input type="radio" class="form-check-input" id="radio2" name="a_exchange" value="2">{{ Lang::get('transaction.mil_2') }}
+              <label for="radio4">
+                <input type="radio" class="form-check-input" name="a_exchange" value="2">{{ Lang::get('transaction.mil_2') }}
               </label>
             </div>
-            <a id="a_exc" class="btn btn-primary mb-3 exc">{{ Lang::get('transaction.exc') }}</a>
+            <a id="a_exc" class="btn btn-primary mb-3 open">{{ Lang::get('transaction.exc') }}</a>
             <span class="act_coin"><!--  --></span>
             <div class="act_coupon">
                 <div class="d-flex">
@@ -73,16 +73,16 @@
         <!--  -->
         <div class="card-body pt-0">
             <div class="form-check">
-              <label for="radio1">
-                <input type="radio" class="form-check-input" id="radio1" name="atm_exchange" value="1" checked>{{ Lang::get('transaction.mil_1') }}
+              <label for="radio5">
+                <input type="radio" class="form-check-input" name="atm_exchange" value="1" checked>{{ Lang::get('transaction.mil_1') }}
               </label>
             </div>
             <div class="form-check">
-              <label for="radio2">
-                <input type="radio" class="form-check-input" id="radio2" name="atm_exchange" value="2">{{ Lang::get('transaction.mil_2') }}
+              <label for="radio6">
+                <input type="radio" class="form-check-input" name="atm_exchange" value="2">{{ Lang::get('transaction.mil_2') }}
               </label>
             </div>
-            <a id="atm_exc" class="btn btn-primary mb-3 exc">{{ Lang::get('transaction.exc') }}</a>
+            <a id="atm_exc" class="btn btn-primary mb-3 open">{{ Lang::get('transaction.exc') }}</a>
             <span class="atm_coin"><!--  --></span>
             <div class="atm_coupon">
                 <div class="d-flex">
@@ -97,4 +97,28 @@
             
     <!--  -->
     </div>
+</div>
+
+<!-- Modal Confirm -->
+<div class="modal fade" id="modal_exc" role="dialog">
+  <div class="modal-dialog">
+    
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modaltitle">
+          Apakah anda mau menukar coin?
+        </h5>
+      </div>
+      <div class="modal-footer" id="foot">
+        <button class="btn btn-primary exc" data-dismiss="modal">
+          Ya
+        </button>
+        <button class="btn" data-dismiss="modal">
+          Tidak
+        </button>
+      </div>
+    </div>
+      
+  </div>
 </div>

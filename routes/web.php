@@ -105,6 +105,9 @@ Route::group(['middleware'=>['auth','web','banned']],function()
 	Route::get('account/{conf?}', [App\Http\Controllers\HomeController::class, 'account']);
 	Route::post('payment-upload', [App\Http\Controllers\HomeController::class, 'payment_upload']);
 	Route::get('delete-payment', [App\Http\Controllers\HomeController::class, 'delete_payment']);
+
+	// API
+	Route::post('exchange-coin', [App\Http\Controllers\ApiController::class, 'exchange_coin'])->name('exc');
 });
 
 /*ADMIN*/
@@ -118,7 +121,8 @@ Route::group(['middleware'=>['auth','web','is_admin','banned']],function()
 
 	Route::get('kurs-admin',[App\Http\Controllers\Admin\AdminController::class,'trade']);
 	Route::get('atm-coupon-list',[App\Http\Controllers\Admin\AdminController::class,'atm_coupons']);
-	Route::get('import-coupon',[App\Http\Controllers\Admin\AdminController::class,'import_coupon']);
+	Route::get('display-atm-coupon',[App\Http\Controllers\Admin\AdminController::class,'atm_coupons_table']);
+	Route::post('import-coupon',[App\Http\Controllers\Admin\AdminController::class,'import_coupon']);
 	Route::get('user-list',[App\Http\Controllers\Admin\AdminController::class,'user_list']);
 	Route::get('user-fetch',[App\Http\Controllers\Admin\AdminController::class,'fetch_user']);
 	Route::get('user-ban',[App\Http\Controllers\Admin\AdminController::class,'ban_user']);

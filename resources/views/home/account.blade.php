@@ -135,52 +135,39 @@
 
     function redeem_coin()
     {
-        $(".exc").click(function()
+        $(".open").click(function(){
+            var id = $(this).attr('id');
+            $(".exc").attr('id',id);
+            $("#modal_exc").modal();
+        });
+
+        // EXECUTE
+        $("body").on("click",".exc",function()
         {
             var data;
             var diskon_value;
             var id = $(this).attr('id');
-
+           
             if(id == 'o_exc')
             {
-                diskon_value = $("input[name='o_exchange':checked]").val();
-                data = {"api":"omn","diskon_value":diskon_value,"user_id":"{{ encrypt(Auth::id()) }}"};
+                diskon_value = $("input[name='o_exchange']:checked").val();
+                data = {"api":"omn","diskon_value":diskon_value};
             }
             
             if(id == 'a_exc')
             {
-                diskon_value = $("input[name='a_exchange':checked]").val();
-                data = {"api":"act","diskon_value":diskon_value,"user_id":"{{ encrypt(Auth::id()) }}"};
+                diskon_value = $("input[name='a_exchange']:checked").val();
+                data = {"api":"act","diskon_value":diskon_value};
             }
 
             if(id == 'atm_exc')
             {
                 diskon_value = $("input[name='atm_exchange']:checked").val();
-                data = {"api":"atm","diskon_value":diskon_value,"user_id":"{{ encrypt(Auth::id()) }}"};
+                data = {"api":"atm","diskon_value":diskon_value};
             }
 
             exchange_coin(data)
         });
-    }
-
-    function copy_coupon(){
-      $( "body" ).on("click",".btn-copy",function(e) 
-      {
-        e.preventDefault();
-        e.stopPropagation();
-
-        var code = $(this).attr("data-code");
-        var link = $("#"+code).val();
-        var tempInput = document.createElement("input");
-        tempInput.style = "position: absolute; left: -1000px; top: -1000px";
-        tempInput.value = link;
-        document.body.appendChild(tempInput);
-        tempInput.select();
-        document.execCommand("copy");
-        document.body.removeChild(tempInput);
-        $(".display_"+code).html('<div class="text-success mt-2">Code kupon telah di salin</div>');
-        setTimeout(function(){$(".display_"+code).html("")},3000)
-      });
     }
 
     function exchange_coin(data)
@@ -279,6 +266,26 @@
         });
     }
 
+    function copy_coupon(){
+      $( "body" ).on("click",".btn-copy",function(e) 
+      {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var code = $(this).attr("data-code");
+        var link = $("#"+code).val();
+        var tempInput = document.createElement("input");
+        tempInput.style = "position: absolute; left: -1000px; top: -1000px";
+        tempInput.value = link;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+        $(".display_"+code).html('<div class="text-success mt-2">Code kupon telah di salin</div>');
+        setTimeout(function(){$(".display_"+code).html("")},3000)
+      });
+    }
+
      function load_page()
       {
         $("#data_order").DataTable({
@@ -286,18 +293,7 @@
             "serverSide": true,
             "lengthMenu": [ 10, 25, 50, 75, 100, 500 ],
             "ajax": "{{ url('orders') }}",
-            "destroy": true,
-            "responsive": {
-                "details": {
-                   renderer: function (api,rowIdx ) {
-                      var data = api.cells(rowIdx,':hidden').eq(0).map(function( cell) {
-                      var header = $(api.column(cell.column).header());
-                      return '<p '+header.text()+' : '+api.cell(cell).data()+'</p>';
-                      }).toArray().join('');
-                      return data ? $('<table/>').append(data) : false;
-                  }
-               }
-            }
+            "destroy": true
         });
 
         $('.dataTables_filter input')

@@ -40,7 +40,7 @@ maka akun anda akan di-<b>non-aktifkan</b>.
 <br>
 Mohon perhatian dan kerja sama dari anda.
 
-@else
+@elseif($subject == 'Banned Email')
 
 Mohon perhatian
 <br>
@@ -51,6 +51,12 @@ Maka dengan demikian anda tidak dapat melakukan segala aktifitas di situs kami, 
 <br/>
 <br/>
 Mohon pengertian anda.
+
+@else
+
+Jumlah kupon activtemplate {{$invoice}} kurang dari 20, segera generate dan import disini :<br/>
+<a href="{{ url('atm-coupon-list') }}">Import Activtemplate Kupon</a>
+
 @endif
 
 <br>
