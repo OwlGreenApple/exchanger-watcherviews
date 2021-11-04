@@ -55,7 +55,7 @@ class ApiController extends Controller
         if($user->membership == 'free')
         {
           $user->membership = 'starter';
-          $user->end_membership = Carbon::now()->toDateTimeString();
+          $user->end_membership = Carbon::now()->addMonth()->toDateTimeString();
         }
         $user->is_promote = 1;
  				$user->save();
