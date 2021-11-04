@@ -28,6 +28,11 @@ class ApiController extends Controller
  		$phone_number = $request->phone_number;
  		$gender = $request->gender;
 
+    /*$email = "apitest@mail.com";
+    $name = "aaaapi";
+    $phone_number = "62899999";
+    $gender = "male";*/
+
  		$user = User::where('email',$email)->first();
 
  		if(is_null($user))
@@ -40,14 +45,14 @@ class ApiController extends Controller
  				'is_promote'=>1,
  			];
  			$reg = new Reg;
- 			$reg->create($data);
+ 			$reg->register_api($data);
  		}
  		else
  		{
- 			// REGISTERED USER BUT DIDN'T GET PROMOTE
+ 			// REGISTERED USER DIDN'T GET PROMOTE
  			if($user->status > 0 && $user->is_promote == 0)
  			{
- 				$user->is_promote = 1;
+        $user->is_promote = 1;
  				$user->save();
  			}
  		}
