@@ -41,7 +41,7 @@
           <div class="row flex-grow">
             <div class="col-lg-4 mx-auto">
               <div class="auth-form-light text-left p-5">
-                <div class="brand-logo">
+                <div class="brand-logo text-center">
                   <img src="{{url('assets/img/logo.png')}}">
                 </div>
                 @yield('content')
