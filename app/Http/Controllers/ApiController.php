@@ -43,6 +43,7 @@ class ApiController extends Controller
  				'phone_api'=>$phone_number,
  				'gender'=>$gender,
  				'is_promote'=>1,
+        'key'=>$key
  			];
  			$reg = new Reg;
  			$reg->register_api($data);

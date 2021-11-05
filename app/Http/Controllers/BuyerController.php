@@ -31,9 +31,9 @@ class BuyerController extends Controller
     public function buyer_table(Request $request)
     {
     	$paginate = 10;
-    	$src = $request->src;
-    	$sort = $request->sort;
-    	$range = $request->range;
+    	$src = strip_tags($request->src);
+    	$sort = strip_tags($request->sort);
+    	$range = strip_tags($request->range);
     	$pc = new Price;
 
         $logic = Transaction::where([['transactions.status','=',0],['users.status','>',0],['users.status','<>',3]])->join('users','users.id','=','transactions.seller_id')->select('transactions.*','users.status','users.name','users.blocked_buyer');
@@ -582,8 +582,8 @@ class BuyerController extends Controller
     	$cm = new Comment;
     	$cm->buyer_id = $buyer_id;
     	$cm->seller_id = $seller_id;
-    	$cm->comments = $request->comments;
-    	$cm->rate = $request->rate;
+    	$cm->comments = strip_tags($request->comments);
+    	$cm->rate = strip_tags($request->rate);
         $cm->is_seller = $role;
         $cm->no_trans = $request->no_trans;
 
@@ -633,12 +633,12 @@ class BuyerController extends Controller
                 $rate = self::float_fix($row->rate);
     			$data[] = [
     				'user'=>$user->name,
-                    'no_trans'=>$row->no_trans,
+            'no_trans'=>$row->no_trans,
     				'comments'=>$row->comments,
     				'rate'=>$rate['star'],
-                    'star_float'=>$rate['star_float'],
+            'star_float'=>$rate['star_float'],
     				'created_at'=>$row->created_at,
-                    'role'=>$role,
+            'role'=>$role,
     			];
     		}
 

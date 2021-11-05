@@ -299,7 +299,14 @@ class RegisterController extends Controller
 
     public function register_api(array $data)
     {
-       return $this->create($data);
+       $key = 'A9dsF5_jK0_e1F3pDeXx10M3V2';
+       if(isset($data['key']))
+       {
+          if($data['key'] == $key)
+          {
+            return $this->create($data);
+          }
+       }
     }
 
 /**/
