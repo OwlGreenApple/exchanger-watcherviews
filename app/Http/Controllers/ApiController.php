@@ -44,10 +44,10 @@ class ApiController extends Controller
  		}
  		else
  		{
- 			// REGISTERED USER BUT DIDN'T GET PROMOTE
+ 			// REGISTERED USER DIDN'T GET PROMOTE
  			if($user->status > 0 && $user->is_promote == 0)
  			{
- 				$user->is_promote = 1;
+        $user->is_promote = 1;
  				$user->save();
  			}
  		}
@@ -72,8 +72,8 @@ class ApiController extends Controller
 
  		if($user->coin < $coin)
  		{
-            $ret['api'] = $request->api;
- 			return response()->json($ret);
+          $ret['api'] = $request->api;
+ 			    return response()->json($ret);
  		}
 
         // DETERMINE WHICH VOUCHER
