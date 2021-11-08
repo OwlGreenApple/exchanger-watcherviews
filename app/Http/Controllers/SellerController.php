@@ -373,7 +373,7 @@ class SellerController extends Controller
           'message'=>$msg,
           'phone_number'=>$buyer->phone_number,
           'email'=>$buyer->email,
-          'obj'=>new BuyerEmail($invoice,null),
+          'obj'=>new BuyerEmail($invoice,null,null,null),
         ];
 
         $adm = new adm;
