@@ -28,6 +28,11 @@ class ApiController extends Controller
  		$phone_number = $request->phone_number;
  		$gender = $request->gender;
 
+    /*$email = "apitest@mail.com";
+    $name = "aaaapi";
+    $phone_number = "62899999";
+    $gender = "male";*/
+
  		$user = User::where('email',$email)->first();
 
  		if(is_null($user))
@@ -38,16 +43,22 @@ class ApiController extends Controller
  				'phone_api'=>$phone_number,
  				'gender'=>$gender,
  				'is_promote'=>1,
+        'key'=>$key
  			];
  			$reg = new Reg;
- 			$reg->create($data);
+ 			$reg->register_api($data);
  		}
  		else
  		{
- 			// REGISTERED USER BUT DIDN'T GET PROMOTE
+ 			// REGISTERED USER DIDN'T GET PROMOTE
  			if($user->status > 0 && $user->is_promote == 0)
  			{
- 				$user->is_promote = 1;
+        if($user->membership == 'free')
+        {
+          $user->membership = 'starter';
+          $user->end_membership = Carbon::now()->addMonth()->toDateTimeString();
+        }
+        $user->is_promote = 1;
  				$user->save();
  			}
  		}
@@ -72,8 +83,8 @@ class ApiController extends Controller
 
  		if($user->coin < $coin)
  		{
-            $ret['api'] = $request->api;
- 			return response()->json($ret);
+          $ret['api'] = $request->api;
+ 			    return response()->json($ret);
  		}
 
         // DETERMINE WHICH VOUCHER

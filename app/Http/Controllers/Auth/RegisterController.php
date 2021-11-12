@@ -297,9 +297,16 @@ class RegisterController extends Controller
       $adm->notify_user($data);
     }
 
-    public static function user_log()
+    public function register_api(array $data)
     {
-       return Auth::user();
+       $key = 'A9dsF5_jK0_e1F3pDeXx10M3V2';
+       if(isset($data['key']))
+       {
+          if($data['key'] == $key)
+          {
+            return $this->create($data);
+          }
+       }
     }
 
 /**/
