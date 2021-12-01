@@ -50,12 +50,12 @@
           <p class="card-text">
             {{$lang::get('order.step')}}
           </p> 
-          <h2>{{ env('NO_REK') }}</h2>
+          <h2>{!! Config::get('view.no_rek') !!}</h2>
           <p class="card-text">
-            {{ env('BANK_NAME') }} <b>Sugiarto Lasjim</b>
+            {!! Config::get('view.bank_name') !!} <b>{!! Config::get('view.bank_owner') !!}</b>
           </p>
           <p class="card-text">
-            {!! $lang::get('order.step_next') !!}<br> {{$lang::get('order.step_next_1')}} <b>{{ env('EMAIL_ADMIN') }}</b> <br>
+            {!! $lang::get('order.step_next') !!}<br> {{$lang::get('order.step_next_1')}} <b>{{ Config::get('view.email_admin') }}</b> <br>
             {{$lang::get('order.admin_24')}}
           </p>
 

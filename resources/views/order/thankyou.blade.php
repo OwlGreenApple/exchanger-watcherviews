@@ -9,12 +9,12 @@
           <p class="card-text">
             Silahkan melakukan Transfer Bank ke
           </p> 
-          <h2>8290-336-261</h2>
+          <h2>{!! Config::get('view.no_rek') !!}</h2>
           <p class="card-text">
-            BCA <b>Sugiarto Lasjim</b>
+            {!! Config::get('view.bank_name') !!} <b>{!! Config::get('view.bank_owner') !!}</b>
           </p>
           <p class="card-text">
-            Setelah Transfer, silahkan Klik tombol konfirmasi di bawah ini <br> atau Email bukti Transfer anda ke <b>{{ env('EMAIL_ADMIN') }}</b> <br>
+            Setelah Transfer, silahkan Klik tombol konfirmasi di bawah ini <br> atau Email bukti Transfer anda ke <b>{{ Config::get('view.email_admin') }}</b> <br>
             Admin kami akan membantu anda max 1x24 jam
           </p>
           <p class="card-text">
