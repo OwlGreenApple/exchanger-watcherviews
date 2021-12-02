@@ -33,6 +33,8 @@
                     <a class="settings text-black-50 border-bottom mn_5" data_target="5"><i class="fas fa-exchange-alt text-success"></i>&nbsp;Tukar Coin</a>
                     @endif
 
+                    <a target="_blank" rel="noopener noreferrer" href="https://play.google.com/store/apps/dev?id=5168871764586057901" class="settings text-black-50 border-bottom mn_1" data_target="1">Watcherviews</a>
+
                     <a class="settings text-info border-bottom" href="{{ route('logout') }}"
                                    onclick="event.preventDefault();
                                                  document.getElementById('logout-form').submit();"><i class="mdi mdi-logout text-primary"></i>&nbsp;Log Out&nbsp;</a>
@@ -88,7 +90,9 @@
 
                         <div class="mb-2"><a class="btn btn-gradient-success" href="{{ url('buy') }}">Beli Coin</a></div>
 
-                        <div><a class="btn btn-gradient-warning text-dark" href="{{ url('wallet') }}">Jual Coin</a></div>
+                        <div class="mb-2"><a class="btn btn-gradient-warning text-dark" href="{{ url('wallet') }}">Jual Coin</a></div>
+
+                        <div><a target="_blank" rel="noopener noreferrer" class="btn btn-gradient-danger text-white" href="https://play.google.com/store/apps/dev?id=5168871764586057901">Download Watcherviews</a></div>
                     @else
                         @include('home.connect_api')
                     @endif
@@ -757,7 +761,7 @@
 
                     if(result.err == 0)
                     {
-                        $("#connect_api_gui").html('<div class="alert alert-info">{{ Lang::get("auth.api") }} : <b><a id="logout_watcherviews">Disconnect API</a></div><div class="mb-2"><a class="btn btn-gradient-success" href="{{ url("buy") }}">Beli Coin</a></div><div><a class="btn btn-gradient-warning text-dark" href="{{ url("wallet") }}">Jual Coin</a></div>')
+                        $("#connect_api_gui").html('<div class="alert alert-info">{{ Lang::get("auth.api") }} : <b><a id="logout_watcherviews">Disconnect API</a></div><div class="mb-2"><a class="btn btn-gradient-success" href="{{ url("buy") }}">Beli Coin</a></div><div class="mb-2"><a class="btn btn-gradient-warning text-dark" href="{{ url("wallet") }}">Jual Coin</a></div><div><a target="_blank" rel="noopener noreferrer" class="btn btn-gradient-danger text-white" href="https://play.google.com/store/apps/dev?id=5168871764586057901">Download Watcherviews</a></div>')
                         $("input").val('');
                     }
                     else if(result.err == 1)
