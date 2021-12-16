@@ -520,30 +520,27 @@ class AdminController extends Controller
       if($src == null)
       {
          $db = User::orderBy('id','desc')->skip($start)->limit($length)->get();
+         $total = User::count(); //use this instead of ->count(), this cause error when in case large amount data.
       }
       else
       {
-        if(preg_match("/^ACT[a-zA-Z0-9]/i",$src))
+        if(preg_match("/[\@]/i",$src))
         {
-          $db = Orders::where('no_order','LIKE',"%".$src."%");
-        }
-        elseif(preg_match("/[a-zA-Z]/i",$src))
-        {
-          $db = Orders::where('package','LIKE',"%".$src."%");
+          $db = User::where('email','LIKE',"%".$src."%");
         }
         elseif(preg_match("/[\-]/i",$src))
         {
-          $db = Orders::where('created_at','LIKE','%'.$src.'%');
+          $db = User::where('created_at','LIKE','%'.$src.'%');
         }
         else
         {
-          $db = Orders::where('notes','LIKE',"%".$src."%");
+          $db = User::where('name','LIKE',"%".$src."%");
         }
 
         $db = $db->orderBy('created_at','desc')->get();
+        $total = $db->count();
       }
 
-      $total = User::count(); //use this instead of ->count(), this cause error when in case large amount data.
       $data['draw'] = $request->draw;
       $data['recordsTotal']=$total;
       $data['recordsFiltered']=$total;

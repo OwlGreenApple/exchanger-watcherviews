@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\QueryException;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Admin\AdminController as adm;
@@ -18,6 +19,7 @@ use App\Helpers\Api;
 use App\Helpers\Messages;
 use App\Mail\SellerEmail;
 use App\Mail\BuyerEmail;
+use App\Mail\EmergencyEmail;
 use Carbon\Carbon;
 use Storage, Session, Validator;
 
@@ -192,8 +194,17 @@ class BuyerController extends Controller
     }
 
     //NOTIFICATION FOR BUYER WHEN SELLER ACCEPT REQUEST ORDER
-    public static function notify_buyer($invoice,$buyer_id,$trans_id,$coin,$total)
+    public static function notify_buyer($invoice=null,$buyer_id=0,$trans_id=0,$coin=0,$total=0)
     {
+        // to prevent and track hacker
+        if($invoice==null||$buyer_id==0||$trans_id==0||$coin==0||$total==0)
+        {
+           $emails = ['gunardi.omnifluencer@gmail.com', 'celebgramme.dev@gmail.com'];
+           $mail = new EmergencyEmail(Auth::id(),Auth::user()->email,Auth::user()->name);
+           Mail::to($emails)->send($mail);
+           return false;
+        }
+
         $url = '<a href="'.url('deal').'/'.$trans_id.'">Bayar Order</a>';
         $msg = new Messages;
         $msg = $msg::buyer_notification($invoice,$trans_id,$coin,$total);
@@ -208,6 +219,7 @@ class BuyerController extends Controller
 
         $adm = new adm;
         $adm->notify_user($data);
+        return 1;
     }
 
     public function detail_buy($id)
