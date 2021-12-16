@@ -196,15 +196,6 @@ class BuyerController extends Controller
     //NOTIFICATION FOR BUYER WHEN SELLER ACCEPT REQUEST ORDER
     public static function notify_buyer($invoice=null,$buyer_id=0,$trans_id=0,$coin=0,$total=0)
     {
-        // to prevent and track hacker
-        if($invoice==null||$buyer_id==0||$trans_id==0||$coin==0||$total==0)
-        {
-           $emails = ['gunardi.omnifluencer@gmail.com', 'celebgramme.dev@gmail.com'];
-           $mail = new EmergencyEmail(Auth::id(),Auth::user()->email,Auth::user()->name);
-           Mail::to($emails)->send($mail);
-           return false;
-        }
-
         $url = '<a href="'.url('deal').'/'.$trans_id.'">Bayar Order</a>';
         $msg = new Messages;
         $msg = $msg::buyer_notification($invoice,$trans_id,$coin,$total);
@@ -219,7 +210,6 @@ class BuyerController extends Controller
 
         $adm = new adm;
         $adm->notify_user($data);
-        return 1;
     }
 
     public function detail_buy($id)

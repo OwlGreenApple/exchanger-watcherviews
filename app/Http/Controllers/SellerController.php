@@ -287,17 +287,8 @@ class SellerController extends Controller
         {
            // MAIL TO BUYER IF ORDER HAS ACCEPTED
            $buy = new Buyer;
-           $mailto = $buy::notify_buyer($trans->no,$trans->buyer_id,$trans->id,$pc->pricing_format($trans->amount),$pc->pricing_format($trans->total));
-
-           // to avoid hacker
-           if($mailto == 1)
-           {
-              return self::save_seller_decision(2,$act,$trans->id);
-           }
-           else
-           {
-              return response()->json(['err'=>1]);
-           }
+           $buy::notify_buyer($trans->no,$trans->buyer_id,$trans->id,$pc->pricing_format($trans->amount),$pc->pricing_format($trans->total));
+           return self::save_seller_decision(2,$act,$trans->id);
         }
         else
         {
