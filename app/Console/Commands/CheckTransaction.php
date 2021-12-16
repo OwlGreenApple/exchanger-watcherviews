@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AdminController as adm;
 use App\Http\Controllers\BuyerController;
 use App\Models\Transaction;
 use App\Helpers\Messages;
+use App\Helpers\Price;
 use Carbon\Carbon;
 
 class CheckTransaction extends Command
@@ -43,6 +44,7 @@ class CheckTransaction extends Command
     public function handle()
     {
         $tr = Transaction::whereIn('status',[1,2,7])->get();
+        $pc = new Price;
 
         if($tr->count() > 0)
         {
@@ -59,7 +61,7 @@ class CheckTransaction extends Command
 
                     // MAIL TO BUYER IF ORDER HAS ACCEPTED
                     $buy = new BuyerController;
-                    $buy::notify_buyer($row->no,$row->buyer_id,$row->id);
+                    $buy::notify_buyer($row->no,$row->buyer_id,$row->id,$pc->pricing_format($row->amount),$pc->pricing_format($row->total));
                 endif;
 
                 // in case to buyer doesn't make confirmation
