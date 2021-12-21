@@ -94,6 +94,15 @@ $(function(){
             {
                 $(".error").hide();
                 bool = true;
+                (function(w,n) {
+                if (typeof(w[n]) == 'undefined'){ob=n+'Obj';w[ob]=[];w[n]=function(){w[ob].push(arguments);};
+                d=document.createElement('script');d.type = 'text/javascript';d.async=1;
+                d.src='https://s3.amazonaws.com/provely-public/w/provely-2.0.js';x=document.getElementsByTagName('script')[0];x.parentNode.insertBefore(d,x);}
+                })(window, 'provelys', '');
+                provelys('config', 'baseUrl', 'app.provely.io');
+                provelys('config', 'https', 1);
+                provelys('data', 'campaignId', '31367');
+                provelys('config', 'track', 1);                
             } 
             else 
             {
