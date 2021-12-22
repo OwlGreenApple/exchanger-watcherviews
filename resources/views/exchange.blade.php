@@ -94,6 +94,18 @@
             </div>
         </div>
     </div>
+
+    <!-- TERMS -->
+    <div class="col-lg-6 card-pricing shadow text-center px-3 mb-4">
+        <h5 class="mt-2">Peraturan Voucher Watchermarket</h5>
+        <ul class="list-group list-group-flush text-justify">
+          <li class="list-group-item">1 Voucher hanya bisa digunakan untuk satu kali pembelian</li>
+          <li class="list-group-item">Voucher yang didapat hanya bisa digunakan untuk pembelian yang dipilih</li>
+          <li class="list-group-item">Voucher <b>TIDAK</b> dapat di uangkan</li>
+          <li class="list-group-item">Jika harga paket kurang dari voucher yang didapatkan, jumlah sisa harga tidak dapat di uangkan atau ditukar kembali. Misal : Jika membeli paket seharga 195ribu dengan voucher 200ribu, maka sisa voucher tidak dapat di uangkan.</li>
+          <li class="list-group-item">Pembelian dengan voucher <b>tidak dapat di refund</b></li>
+        </ul>
+    </div>
             
     <!--  -->
     </div>
