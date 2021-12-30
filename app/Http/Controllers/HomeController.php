@@ -17,6 +17,7 @@ use App\Models\Chat;
 use App\Models\Event;
 use App\Helpers\Price;
 use App\Helpers\Api;
+use App\Mail\UserBuyEmail;
 use Carbon\Carbon;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -837,7 +838,7 @@ class HomeController extends Controller
       echo json_encode($data);
     }
 
-    //upload bukti TT 
+    //upload bukti bayar (user)
       public function confirm_payment_order(Request $request)
       {
         $user = Auth::user();
@@ -857,6 +858,7 @@ class HomeController extends Controller
 
           if($request->hasFile('buktibayar'))
           {
+
             $dir = env('APP_UPLOAD').'/bukti_bayar/'.explode(' ',trim($user->name))[0].'-'.$user->id;
             $filename = $order->no_order.'.jpg';
             Storage::disk('s3')->put($dir."/".$filename, file_get_contents($request->file('buktibayar')), 'public');
@@ -867,6 +869,9 @@ class HomeController extends Controller
           }  
           $order->notes = $request->keterangan;
           $order->save();
+
+          // send mail to admin
+          Mail::to(env('EMAIL_ADMIN'))->send(new UserBuyEmail($order,Auth::user()->name));
         } 
         else 
         {
