@@ -24,6 +24,7 @@ use App\Helpers\Price;
 use App\Helpers\Messages;
 use App\Mail\NotifyEmail;
 use App\Mail\WarningEmail;
+use App\Mail\UserBuyEmail;
 use App\Imports\AtCouponsImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
@@ -734,6 +735,9 @@ class AdminController extends Controller
         $check_active_membership = $this->check_term_membership($user);
 
         // dd($user->id);
+
+        // send mail to user
+        Mail::to($user->email)->send(new UserBuyEmail($order,$user->name));
 
         if($check_active_membership == 'active')
         {

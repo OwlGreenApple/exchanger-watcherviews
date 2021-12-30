@@ -18,16 +18,13 @@ class UserBuyEmail extends Mailable
      * @return void
      */
 
-    public $no;
-    public $name;
-    public $package;
-    public $price;
-    public $total;
+    public $order;
+    public $case;
 
-    public function __construct($order,$name)
+    public function __construct($order,$case)
     {
         $this->order = $order;
-        $this->name = $name;
+        $this->case = $case;
     }
 
     /**
@@ -39,11 +36,11 @@ class UserBuyEmail extends Mailable
     {
         return $this
         ->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))
-        ->subject('Pembelian paket watchermarket')
+        ->subject('[Watchermarket] Konfirmasi Order')
         ->view('emails.UserBuyEmail')
         ->with([
           'order' => $this->order,
-          'name' => $this->name,
+          'case' => $this->case,
           'pc' => new Price,
         ]);
     }
