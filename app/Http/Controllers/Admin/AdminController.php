@@ -666,7 +666,7 @@ class AdminController extends Controller
           $db = self::trlogic(['seller.name','LIKE',"%".$src."%"])->orWhere('buyer.name','LIKE',"%".$src."%");
         }
 
-        $db = $db->orderBy('transactions.created_at','desc')->get();
+        $db = $db->orderBy('transactions.created_at','desc')->skip($start)->limit($length)->get();
         $total = $db->count();
       }
 
