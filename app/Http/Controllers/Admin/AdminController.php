@@ -667,6 +667,8 @@ class AdminController extends Controller
         }
 
         $db = $db->orderBy('transactions.created_at','desc')->skip($start)->limit($length)->get();
+        
+        $total = $db->orderBy('transactions.created_at','desc')->get();
         $total = $db->count();
       }
 
