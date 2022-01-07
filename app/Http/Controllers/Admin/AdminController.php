@@ -621,7 +621,7 @@ class AdminController extends Controller
       {
          $db = self::trlogic(null)->orderBy('transactions.id','desc')->skip($start)->limit($length)->get();
 
-         $total = $db->count();
+         $total = self::trlogic(null)->count();
       }
       else
       {
