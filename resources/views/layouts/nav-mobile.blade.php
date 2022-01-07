@@ -25,14 +25,14 @@
           </li>
         @else
           <li class="nav-item">
-            <a class="nav-link" href="{{ url('kurs-admin') }}">
-              Kurs Coin
+            <a class="nav-link" href="{{ url('atm-coupon-list') }}">
+               Kupon
             </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="{{ url('atm-coupon-list') }}">
-              Activtemplate Kupon
+            <a class="nav-link" href="{{ url('user-to-user') }}">
+               Transaksi
             </a>
           </li>
 
@@ -54,11 +54,6 @@
             </a>
           </li>
 
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url('wa-message') }}">
-              WA Message
-            </a>
-          </li>
         @endif
       </ul>
     </nav>

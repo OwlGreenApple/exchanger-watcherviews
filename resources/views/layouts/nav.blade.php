@@ -40,18 +40,25 @@
                 </a>
                 <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
                   <a class="dropdown-item" href="{{ url('account') }}">
-                    <i class="mdi mdi-cached mr-2 text-success"></i> Account </a>
+                    <i class="mdi mdi-account mr-2 text-primary"></i> Account </a>
+
+                  @if(Auth::user()->is_admin == 1)
+                    <a class="dropdown-item" href="{{ url('kurs-admin') }}"><i class="mdi mdi-cached mr-2 text-warning"></i> Kurs Coin</a>
+                    <a class="dropdown-item" href="{{ url('wa-message') }}"><i class="fab fa-whatsapp text-success mr-2"></i>WA Message</a>
+                  @endif
+      
+                  <!-- dropdown -->
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="{{ url('logout') }}" onclick="event.preventDefault();
                                                    document.getElementById('logout-form').submit();">
-                    <i class="mdi mdi-logout mr-2 text-primary"></i> Log out </a>
-                  <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
+                    <i class="mdi mdi-logout mr-2 text-danger"></i> Log out </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
 
                 </div>
               </li>
 
               <li class="nav-item dropdown">
-                  <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+                  <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" data-toggle="dropdown">
                     <i class="mdi mdi-bell-outline"></i>
                     @if(Price::events()['total'] > 0)
                       <span class="count-symbol bg-danger"></span>

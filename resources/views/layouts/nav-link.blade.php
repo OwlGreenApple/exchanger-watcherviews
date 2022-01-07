@@ -24,13 +24,13 @@
   </li>
 @else
   <li class="nav-item nav-logout d-none d-lg-block">
-    <a class="nav-link" href="{{ url('kurs-admin') }}">
-      Kurs Coin
+    <a class="nav-link" href="{{ url('atm-coupon-list') }}">
+      Kupon
     </a>
   </li>
   <li class="nav-item nav-logout d-none d-lg-block">
-    <a class="nav-link" href="{{ url('atm-coupon-list') }}">
-      Activtemplate Kupon
+    <a class="nav-link" href="{{ url('user-to-user') }}">
+       Transaksi
     </a>
   </li>
   <li class="nav-item nav-logout d-none d-lg-block">
@@ -46,11 +46,6 @@
   <li class="nav-item nav-logout d-none d-lg-block">
     <a class="nav-link" href="{{ url('dispute-admin') }}">
       @if(Price::total_dispute()['new'] == 1) <u>Dispute</u> @else Dispute @endif &nbsp;<span class="badge badge-warning">{{ Price::total_dispute()['total']  }}</span>
-    </a>
-  </li>
-  <li class="nav-item nav-logout d-none d-lg-block">
-    <a class="nav-link" href="{{ url('wa-message') }}">
-      WA Message
     </a>
   </li>
 @endif

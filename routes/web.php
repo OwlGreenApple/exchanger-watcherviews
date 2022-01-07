@@ -130,6 +130,8 @@ Route::group(['middleware'=>['auth','web','is_admin','banned']],function()
 	Route::get('order-load',[App\Http\Controllers\Admin\AdminController::class,'order']);
 	Route::get('order-confirm',[App\Http\Controllers\Admin\AdminController::class,'confirm_order']);
 	Route::post('save-rate',[App\Http\Controllers\Admin\AdminController::class,'save_rate']);
+  Route::get('user-to-user',[App\Http\Controllers\Admin\AdminController::class,'user_transaction']);
+  Route::get('transaction-fetch',[App\Http\Controllers\Admin\AdminController::class,'fetch_transaction']);
 
 	// WA MESSAGE
 	Route::get('wa-message',[App\Http\Controllers\Admin\AdminController::class,'set_order_message']);

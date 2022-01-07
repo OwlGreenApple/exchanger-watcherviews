@@ -603,6 +603,140 @@ class AdminController extends Controller
       return response()->json($data);
     }
 
+    // USER TO USER TRANSACTION
+    public function user_transaction()
+    {
+      return view('admin.order.transaction');
+    }
+
+    public function fetch_transaction(Request $request)
+    {
+      $start = $request->start;
+      $length = $request->length;
+      $search = $request->search;
+      $src = $search['value'];
+      $data['data'] = array();
+
+      if($src == null)
+      {
+         $db = self::trlogic(null)->orderBy('transactions.id','desc')->skip($start)->limit($length)->get();
+
+         $total = Transaction::count(); //use this instead of ->count(), this cause error when in case large amount data.
+      }
+      else
+      {
+        if(self::check_invoice($src) == true)
+        {
+          $db = self::trlogic(['transactions.no','LIKE',"%".$src."%"]);
+        }
+        elseif(is_numeric($src) == true)
+        {
+          $db = self::trlogic(['transactions.total','=',$src]);
+        }
+        elseif(strtotime($src) == true)
+        {
+          $db = self::trlogic(['transactions.date_buy','LIKE',"%".$src."%"]);
+        }
+        else
+        {
+          $db = self::trlogic(['seller.name','LIKE',"%".$src."%"])->orWhere('buyer.name','LIKE',"%".$src."%");
+        }
+
+        $db = $db->orderBy('transactions.created_at','desc')->get();
+        $total = $db->count();
+      }
+
+      $data['draw'] = $request->draw;
+      $data['recordsTotal']=$total;
+      $data['recordsFiltered']=$total;
+      $api = new Price;
+
+      if($db->count())
+      {
+        $no = 1;
+        foreach($db as $row)
+        {
+          
+          if($row->status == 1)
+          {
+            $status = '<span>Request Pembeli</span>';
+          }
+          else if($row->status == 2)
+          {
+            $status = '<span class="text-info">Penjual Setuju</span>';
+          }
+          else if($row->status == 3)
+          {
+             $status = '<span class="text-success">Transaksi Berhasil</span>';
+          }
+          else if($row->status == 4)
+          {
+             $status = '<span style="color:#ff6a00">Dispute</span>';
+          }
+          else if($row->status == 5)
+          {
+             $status = '<span class="text-success">Penjual Menang</span>';
+          }
+          else if($row->status == 6)
+          {
+             $status = '<span class="text-danger">Dispute ditutup admin</span>';
+          }
+          else if($row->status == 7)
+          {
+             $status = '<span class="text-primary">Pembeli sudah konfirmasi ke Penjual</span>';
+          }
+          else
+          {
+            $status = 'Tidak ada transaksi';
+          }
+
+          $data['data'][] = [
+            0=>$no++,
+            1=>$row->seller_name,
+            2=>$row->buyer_name,
+            3=>$row->no,
+            4=>"Rp.".$api->pricing_format($row->total),
+            5=>$row->date_buy,
+            6=>$status
+          ];
+        }
+      }
+     
+      echo json_encode($data);
+    }
+
+    private static function trlogic($logic)
+    {
+      if(is_null($logic))
+      {
+        $cond = [['transactions.buyer_id','>',0]];
+      }
+      else
+      {
+        $cond = [['transactions.buyer_id','>',0],$logic];
+      }
+
+      $db = Transaction::where($cond)->join('users AS seller','seller.id','=','transactions.seller_id')->join('users AS buyer','buyer.id','=','transactions.buyer_id')->select("seller.name AS seller_name","buyer.name AS buyer_name","transactions.id","transactions.no","transactions.total","transactions.date_buy","transactions.status");
+
+      return $db;
+    }
+
+    private static function check_invoice($no)
+    {
+      $no = explode("-",$no);
+      $no = count($no);
+
+      if($no == 2)
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+      
+    }
+
     /*** ORDER ***/
     public function order(Request $request)
     {
