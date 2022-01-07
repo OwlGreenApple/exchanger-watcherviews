@@ -621,7 +621,7 @@ class AdminController extends Controller
       {
          $db = self::trlogic(null)->orderBy('transactions.id','desc')->skip($start)->limit($length)->get();
 
-         $total = Transaction::count(); //use this instead of ->count(), this cause error when in case large amount data.
+         $total = $db->count();
       }
       else
       {
