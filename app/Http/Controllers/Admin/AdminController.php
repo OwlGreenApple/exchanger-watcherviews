@@ -615,7 +615,18 @@ class AdminController extends Controller
       $length = $request->length;
       $search = $request->search;
       $src = $search['value'];
-      $data['data'] = array();
+      $data['data'] = $matches = array();
+
+      $msg_status = [
+            'Tidak ada transaksi',
+            'Request Pembeli',
+            'Penjual Setuju',
+            'Transaksi Berhasil',
+            'Dispute',
+            'Penjual Menang',
+            'Dispute ditutup admin',
+            'Pembeli sudah konfirmasi ke Penjual'
+      ];
 
       if($src == null)
       {
@@ -625,7 +636,20 @@ class AdminController extends Controller
       }
       else
       {
-        if(self::check_invoice($src) == true)
+        // search according on status
+        $st = null;
+        foreach($msg_status as $k=>$v) {
+          if(preg_match("/^$src$/i", $v)) {
+              $matches[$k] = $v;
+              $st = $k;
+          }
+        }
+
+        if(count($matches) > 0)
+        {
+          $db = self::trlogic(['transactions.status','=',$st]);
+        }
+        elseif(self::check_invoice($src) == true)
         {
           $db = self::trlogic(['transactions.no','LIKE',"%".$src."%"]);
         }
@@ -659,35 +683,35 @@ class AdminController extends Controller
           
           if($row->status == 1)
           {
-            $status = '<span>Request Pembeli</span>';
+            $status = '<span>'.$msg_status[$row->status].'</span>';
           }
           else if($row->status == 2)
           {
-            $status = '<span class="text-info">Penjual Setuju</span>';
+            $status = '<span class="text-info">'.$msg_status[$row->status].'</span>';
           }
           else if($row->status == 3)
           {
-             $status = '<span class="text-success">Transaksi Berhasil</span>';
+             $status = '<span class="text-success">'.$msg_status[$row->status].'</span>';
           }
           else if($row->status == 4)
           {
-             $status = '<span style="color:#ff6a00">Dispute</span>';
+             $status = '<span style="color:#ff6a00">'.$msg_status[$row->status].'</span>';
           }
           else if($row->status == 5)
           {
-             $status = '<span class="text-success">Penjual Menang</span>';
+             $status = '<span class="text-success">'.$msg_status[$row->status].'</span>';
           }
           else if($row->status == 6)
           {
-             $status = '<span class="text-danger">Dispute ditutup admin</span>';
+             $status = '<span class="text-danger">'.$msg_status[$row->status].'</span>';
           }
           else if($row->status == 7)
           {
-             $status = '<span class="text-primary">Pembeli sudah konfirmasi ke Penjual</span>';
+             $status = '<span class="text-primary">'.$msg_status[$row->status].'</span>';
           }
           else
           {
-            $status = 'Tidak ada transaksi';
+            $status = $msg_status[0];
           }
 
           $data['data'][] = [
