@@ -766,15 +766,35 @@ class AdminController extends Controller
     /*** ORDER ***/
     public function order(Request $request)
     {
+      // dd($request->all());
       $start = $request->start;
       $length = $request->length;
       $search = $request->search;
       $src = $search['value'];
       $data['data'] = array();
+      $ord = $request->order;
+      $sort = 'created_at';
+      $pos = $ord[0]['dir'];
+
+      if($ord == 1)
+      {
+        $sort = 'package';
+      }
+
+      if($ord == 7)
+      {
+        $sort = 'date_confirm';
+      }
+
+      if($ord == 8)
+      {
+        $sort = 'status';
+      }
 
       if($src == null)
       {
-         $orders = Orders::orderBy('created_at','desc')->skip($start)->limit($length)->get();
+         $orders = Orders::orderBy($sort,$pos)->skip($start)->limit($length)->get();
+         $total = Orders::count(); //use this instead of ->count(), this cause error when in case large amount data.
       }
       else
       {
@@ -795,10 +815,11 @@ class AdminController extends Controller
           $order = Orders::where('notes','LIKE',"%".$src."%");
         }
 
-        $orders = $order->orderBy('created_at','desc')->get();
+        $orders = $order->orderBy($sort,$pos);
+        $total = $orders->get()->count();
+        $orders = $orders->skip($start)->limit($length)->get();
       }
 
-      $total = Orders::count(); //use this instead of ->count(), this cause error when in case large amount data.
       $data['draw'] = $request->draw;
       $data['recordsTotal']=$total;
       $data['recordsFiltered']=$total;

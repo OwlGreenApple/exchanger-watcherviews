@@ -278,7 +278,7 @@
         {
           $('#loader').hide();
           $('.div-loading').removeClass('background-load');
-          $("#dispute_list").DataTable({"aaSorting" : []});
+          dataTable();
         },
         error : function(xhr)
         {
@@ -288,6 +288,33 @@
         }
       });
       /**/
+  }
+
+  function dataTable()
+  {
+    // Setup - add a text input to each footer cell
+      $('#dispute_list tfoot th').each( function () {
+          var title = $(this).text();
+          $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+      });
+
+      $("#dispute_list").DataTable({
+          "aaSorting" : [],
+          initComplete : function () {
+            // Apply the search
+            this.api().columns().every( function () {
+                var that = this;
+ 
+                $( 'input', this.footer() ).on( 'keyup change clear', function () {
+                    if ( that.search() !== this.value ) {
+                        that
+                            .search( this.value )
+                            .draw();
+                    }
+                } );
+            } );
+          }
+      });
   }
 
   function popup_new_window()
