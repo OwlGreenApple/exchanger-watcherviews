@@ -293,9 +293,19 @@
   function dataTable()
   {
     // Setup - add a text input to each footer cell
-      $('#dispute_list tfoot th').each( function () {
+      $('#dispute_list tfoot th').each( function (i) {
           var title = $(this).text();
-          $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+          var eligible = true;
+
+          if(i == 7 || i == 6 || i == 5 || i == 4 || i == 1 || i == 0)
+          {
+            eligible = false;
+          }
+
+          if(eligible == true)
+          {
+            $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+          }
       });
 
       $("#dispute_list").DataTable({
