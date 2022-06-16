@@ -41,7 +41,7 @@ class CheckPurchasing extends Command
      */
     public function handle()
     {
-        $orders = Orders::where('orders.status','<',2)->leftJoin('users','users.id','=','orders.user_id')->select('orders.*','users.phone_number')->get();
+        $orders = Orders::where([['orders.status','<',2],['orders.proof','=',null]])->leftJoin('users','users.id','=','orders.user_id')->select('orders.*','users.phone_number')->get();
         $api = new Api;
         $otc = new OrderController;
 

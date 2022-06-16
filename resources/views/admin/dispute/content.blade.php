@@ -86,6 +86,18 @@
           @endif
         </tr>
       @endforeach
+      <tfoot>
+        <tr>
+          <th><!-- No --></th>
+          <th><!-- Tanggal Beli --></th>
+          <th>Tanggal Dispute</th>
+          <th>Invoice</th>
+          <th><!-- Pembeli --></th>
+          <th><!-- Penjual --></th>
+          <th><!-- Chat --></th>
+          <th><!-- Keputusan --></th>
+        </tr>
+    </tfoot>
     @endif
   </tbody>
 </table>

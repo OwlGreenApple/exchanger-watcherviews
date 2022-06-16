@@ -278,7 +278,7 @@
         {
           $('#loader').hide();
           $('.div-loading').removeClass('background-load');
-          $("#dispute_list").DataTable({"aaSorting" : []});
+          dataTable();
         },
         error : function(xhr)
         {
@@ -288,6 +288,43 @@
         }
       });
       /**/
+  }
+
+  function dataTable()
+  {
+    // Setup - add a text input to each footer cell
+      $('#dispute_list tfoot th').each( function (i) {
+          var title = $(this).text();
+          var eligible = true;
+
+          if(i == 7 || i == 6 || i == 5 || i == 4 || i == 1 || i == 0)
+          {
+            eligible = false;
+          }
+
+          if(eligible == true)
+          {
+            $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+          }
+      });
+
+      $("#dispute_list").DataTable({
+          "aaSorting" : [],
+          initComplete : function () {
+            // Apply the search
+            this.api().columns().every( function () {
+                var that = this;
+ 
+                $( 'input', this.footer() ).on( 'keyup change clear', function () {
+                    if ( that.search() !== this.value ) {
+                        that
+                            .search( this.value )
+                            .draw();
+                    }
+                } );
+            } );
+          }
+      });
   }
 
   function popup_new_window()
