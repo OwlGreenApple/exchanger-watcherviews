@@ -912,7 +912,7 @@ class AdminController extends Controller
         else
         {
           $user->membership = $order->package;
-          $user->end_membership = $today->addMonths(1);
+          $user->end_membership = $today->addMonths(12);
           $user->status = 2;
           $user->save();
         }

@@ -53,12 +53,12 @@ class ApiController extends Controller
  			// REGISTERED USER DIDN'T GET PROMOTE
  			if($user->status > 0 && $user->is_promote == 0)
  			{
-        if($user->membership == 'free')
-        {
-          $user->membership = 'starter';
-          $user->end_membership = Carbon::now()->addMonth()->toDateTimeString();
-        }
-        $user->is_promote = 1;
+                if($user->membership == 'free')
+                {
+                    $user->membership = 'starter';
+                    $user->end_membership = Carbon::now()->addMonth()->toDateTimeString();
+                }
+                $user->is_promote = 1;
  				$user->save();
  			}
  		}
