@@ -627,6 +627,7 @@
         if(segment == 1)
         {
            open_billing(3);
+           load_page();
         }
 
         if(segment == 'wallet')

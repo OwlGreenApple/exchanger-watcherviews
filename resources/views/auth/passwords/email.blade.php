@@ -28,7 +28,7 @@
                   <div class="mt-3">
                     <button type="submit" class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn">{{ __('Kirim Password Reset Link') }}</button>
                   </div>
-                  <div class="text-center mt-4 font-weight-light"> Belum punya akun? Silahkan daftar disini <a href="{{url('register')}}" class="text-primary">Daftar</a>
+                  <div class="text-center mt-4 font-weight-light"> Belum punya akun? Silahkan daftar disini <a href="{{url('register')}}" class="text-primary">Daftar</a> atau masuk disini <a href="{{url('login')}}" class="text-primary">Login</a> 
                   </div>
                 </form>
 @endsection

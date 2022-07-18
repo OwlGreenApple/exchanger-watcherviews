@@ -42,7 +42,7 @@ class MemebershipEmail extends Mailable
     {
         return $this
         ->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))
-        ->subject($this->subject)
+        ->subject('Membership Email')
         ->view('emails.MembershipEmail')
         ->with([
           'no' => $this->no,
